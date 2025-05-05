@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pydantic import BaseModel, Field
 from pydantic import PostgresDsn
 from pydantic_settings import (
@@ -45,6 +47,19 @@ class CookieConfig(BaseModel):
     cookie_samesite: Literal["lax", "strict", "none"] = "lax"
 
 
+class AuthConfig(BaseModel):
+    jwt_private_key_path: Path = Path("/secrets/private_key.pem")
+    jwt_public_key_path: Path = Path("/secrets/public_key.pem")
+    jwt_private_key: str = ""
+    jwt_public_key: str = ""
+
+    def model_post_init(self, __context) -> None:
+        if self.jwt_private_key_path.exists():
+            self.jwt_private_key = self.jwt_private_key_path.read_text()
+        if self.jwt_public_key_path.exists():
+            self.jwt_public_key = self.jwt_public_key_path.read_text()
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env.template", ".env"),
@@ -56,6 +71,7 @@ class Settings(BaseSettings):
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig
     cookie: CookieConfig = CookieConfig()
+    auth_config: AuthConfig
 
 
 settings = Settings()
