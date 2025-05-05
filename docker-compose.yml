@@ -3,9 +3,9 @@ services:
   pg:
     image: postgres
     environment:
-      POSTGRES_DB: shop
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: sneaker_shop
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: meteor906587
     ports:
       - "5432:5432"
 
