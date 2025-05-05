@@ -1,9 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from pydantic import PostgresDsn
 from pydantic_settings import (
     BaseSettings,
     SettingsConfigDict,
 )
+from typing import Literal
 
 
 class RunConfig(BaseModel):
@@ -35,6 +36,14 @@ class DatabaseConfig(BaseModel):
         "pk": "pk_%(table_name)s",
     }
 
+class CookieConfig(BaseModel):
+    cookie_name: str = Field(default="jwt_session_cookie", pattern=r"^[a-zA-Z0-9_-]+$")
+    cookie_max_age: int = Field(default=3600, ge=60)
+    cookie_path: str = "/"
+    cookie_secure: bool = False    # при продакшене заменить на True
+    cookie_httponly: bool = True
+    cookie_samesite: Literal["lax", "strict", "none"] = "lax"
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -46,6 +55,7 @@ class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig
+    cookie: CookieConfig = CookieConfig()
 
 
 settings = Settings()
