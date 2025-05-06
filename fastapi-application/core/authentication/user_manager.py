@@ -18,39 +18,39 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
     reset_password_token_secret = settings.access_token.reset_password_token_secret
     verification_token_secret = settings.access_token.verification_token_secret
 
-    async def validate_password(
-        self,
-        password: str,
-        user: Union[UserCreate, User],
-    ) -> None:
-        if len(password) < 8:
-            raise InvalidPasswordException(
-                reason="Password less than 8 characters",
-            )
-
-        if not (
-            any(c.islower() for c in password) and any(c.isupper() for c in password)
-        ):
-            raise InvalidPasswordException(
-                reason="The password must contain at least one uppercase and one lowercase letter."
-            )
-
-        if not (
-                any(c.isdigit() for c in password)
-        ):
-            raise InvalidPasswordException(
-                reason="The password must contain at least one digit."
-            )
-
-        if not re.search(r'[!@#$%^&*()_+\-=\[\]{};\'\\:"|,.<>/?]', password):
-            raise InvalidPasswordException(
-                reason="The password must contain at least one special character (!@#$%^&*)"
-            )
-
-        if isinstance(user, UserCreate) and user.email.lower() in password.lower():
-            raise InvalidPasswordException(
-                reason="The password must not contain your email."
-            )
+    # async def validate_password(
+    #     self,
+    #     password: str,
+    #     user: Union[UserCreate, User],
+    # ) -> None:
+    #     if len(password) < 8:
+    #         raise InvalidPasswordException(
+    #             reason="Password less than 8 characters",
+    #         )
+    #
+    #     if not (
+    #         any(c.islower() for c in password) and any(c.isupper() for c in password)
+    #     ):
+    #         raise InvalidPasswordException(
+    #             reason="The password must contain at least one uppercase and one lowercase letter."
+    #         )
+    #
+    #     if not (
+    #             any(c.isdigit() for c in password)
+    #     ):
+    #         raise InvalidPasswordException(
+    #             reason="The password must contain at least one digit."
+    #         )
+    #
+    #     if not re.search(r'[!@#$%^&*()_+\-=\[\]{};\'\\:"|,.<>/?]', password):
+    #         raise InvalidPasswordException(
+    #             reason="The password must contain at least one special character (!@#$%^&*)"
+    #         )
+    #
+    #     if isinstance(user, UserCreate) and user.email.lower() in password.lower():
+    #         raise InvalidPasswordException(
+    #             reason="The password must not contain your email."
+    #         )
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         print(f"User {user.id} has registered.")
