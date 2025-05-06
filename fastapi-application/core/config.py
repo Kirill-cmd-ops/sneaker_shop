@@ -60,6 +60,12 @@ class AuthConfig(BaseModel):
             self.jwt_public_key = self.jwt_public_key_path.read_text()
 
 
+class AccessToken(BaseModel):
+    lifetime_seconds: int = 3600
+    reset_password_token_secret: str
+    verification_token_secret: str
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env.template", ".env"),
@@ -72,6 +78,7 @@ class Settings(BaseSettings):
     db: DatabaseConfig
     cookie: CookieConfig = CookieConfig()
     auth_config: AuthConfig
+    access_token: AccessToken
 
 
 settings = Settings()
