@@ -5,6 +5,7 @@ from core.authentication.backends import auth_backend
 from core.config import settings
 from core.dependencies.user_manager import get_user_manager
 from core.models import User
+from core.schemas.user import UserRead, UserCreate
 from core.types.user_id import UserIdType
 
 fastapi_users = FastAPIUsers[User, UserIdType](
@@ -19,4 +20,11 @@ router = APIRouter(
 
 router.include_router(
     router=fastapi_users.get_auth_router(auth_backend),
+)
+
+router.include_router(
+    router=fastapi_users.get_register_router(
+        UserRead,
+        UserCreate,
+    ),
 )
