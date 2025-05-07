@@ -10,6 +10,11 @@ from alembic import context
 from auth.config import settings
 from auth.models import Base
 
+from core.models.brand import Brand
+from core.models.sneaker import Sneaker
+from core.models.size import Size
+from core.models.sneaker_size import SneakerSizeAssociation
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
