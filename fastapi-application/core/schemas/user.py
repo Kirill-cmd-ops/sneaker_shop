@@ -1,3 +1,4 @@
+from typing import Optional
 
 from fastapi_users import schemas
 
@@ -5,12 +6,15 @@ from core.types.user_id import UserIdType
 
 
 class UserRead(schemas.BaseUser[UserIdType]):
-    pass
+    first_name: str
+    last_name: str
 
 
 class UserCreate(schemas.BaseUserCreate):
-    pass
+    first_name: str
+    last_name: str
 
 
 class UserUpdate(schemas.BaseUserUpdate):
-    pass
+    first_name: Optional[str]
+    last_name: Optional[str]
