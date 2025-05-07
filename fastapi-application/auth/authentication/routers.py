@@ -1,12 +1,12 @@
 from fastapi import APIRouter
 from fastapi_users import FastAPIUsers
 
-from core.authentication.backends import auth_backend
-from core.config import settings
-from core.dependencies.user_manager import get_user_manager
-from core.models import User
-from core.schemas.user import UserRead, UserCreate
-from core.types.user_id import UserIdType
+from auth.authentication.backends import auth_backend
+from auth.config import settings
+from auth.dependencies.user_manager import get_user_manager
+from auth.models import User
+from auth.schemas.user import UserRead, UserCreate
+from auth.types.user_id import UserIdType
 
 fastapi_users = FastAPIUsers[User, UserIdType](
     get_user_manager,

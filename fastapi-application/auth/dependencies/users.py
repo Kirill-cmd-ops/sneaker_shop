@@ -5,7 +5,7 @@ from typing import (
 
 from fastapi import Depends
 
-from core.models import (
+from auth.models import (
     db_helper,
     User,
 )

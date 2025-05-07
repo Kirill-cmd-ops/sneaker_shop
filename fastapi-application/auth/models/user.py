@@ -8,7 +8,7 @@ from sqlalchemy import String
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
 
-from core.types.user_id import UserIdType
+from auth.types.user_id import UserIdType
 from .base import Base
 from .mixins.int_id_pk import IntIdPkMixin
 
