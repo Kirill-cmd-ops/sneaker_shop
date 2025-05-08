@@ -19,6 +19,7 @@ async def get_sneaker_details(
     name: Optional[str] = None,
     min_price: Optional[int] = None,
     max_price: Optional[int] = None,
+    gender: Optional[str] = None,
     brand_name: Optional[str] = None,
     size: Optional[float] = None,
     min_size: Optional[float] = None,
@@ -46,6 +47,10 @@ async def get_sneaker_details(
 
     if max_price is not None:
         stmt = stmt.filter(Sneaker.price <= max_price)
+
+    valid_genders = {"Male", "Female", "Unisex"}
+    if gender and gender in valid_genders:
+        stmt = stmt.filter(Sneaker.gender == gender)
 
     if brand_name:
         stmt = stmt.filter(Brand.name.ilike(f"%{brand_name}%"))
