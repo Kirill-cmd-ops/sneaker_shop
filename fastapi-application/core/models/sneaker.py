@@ -28,10 +28,9 @@ class Sneaker(Base):
 
     size_associations: Mapped[list["SneakerSizeAssociation"]] = relationship(
         back_populates="sneaker",
-        overlaps="sizes",
     )
+
     sizes: Mapped[list["Size"]] = relationship(
-        secondary="sneaker_size_association",
-        back_populates="sneakers",
-        overlaps="size_associations",
+        secondary="sneaker_size_associations",
+        viewonly=True,
     )
