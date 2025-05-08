@@ -7,13 +7,12 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-from auth.config import settings
-from auth.models import Base
-
-from core.models.brand import Brand
-from core.models.sneaker import Sneaker
-from core.models.size import Size
-from core.models.sneaker_size import SneakerSizeAssociation
+from backend.auth.config import settings
+from backend.auth.models import Base
+from backend.core.models.brand import Brand
+from backend.core.models.sneaker import Sneaker
+from backend.core.models.size import Size
+from backend.core.models.sneaker_size import SneakerSizeAssociation
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
