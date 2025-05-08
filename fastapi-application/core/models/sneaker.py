@@ -1,8 +1,7 @@
-import enum
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import String, CheckConstraint, Numeric, ForeignKey, func, Enum
+from sqlalchemy import String, CheckConstraint, Numeric, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from auth.models.base import Base
@@ -12,11 +11,6 @@ if TYPE_CHECKING:
     from .size import Size
     from .sneaker_size import SneakerSizeAssociation
 
-
-class GenderEnum(enum.Enum):
-    MALE = "male"
-    FEMALE = "female"
-    UNISEX = "unisex"
 
 class Sneaker(Base):
     __table_args__ = (CheckConstraint("price > 0", name="check_price_positive"),)
@@ -29,6 +23,7 @@ class Sneaker(Base):
     image_url: Mapped[str] = mapped_column(String(200), nullable=False)
     is_active: Mapped[bool] = mapped_column(default=True)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, nullable=False, server_default=func.now())
+    gender: Mapped[str] = mapped_column(String(10), default="Unisex")
 
     brand: Mapped["Brand"] = relationship(
         back_populates="sneakers",
