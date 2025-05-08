@@ -8,18 +8,20 @@ from core.models import Sneaker
 
 router = APIRouter()
 
-@router.get("/sneakers/{sneaker_id}")
-async def get_sneaker_details(sneaker_id: int, session: AsyncSession = Depends(db_helper.session_getter)):
-    stmt = select(Sneaker).filter(Sneaker.id == sneaker_id).options(
-        joinedload(Sneaker.brand), selectinload(Sneaker.sizes)
+@router.get("/sneakers/")
+async def get_sneaker_details(session: AsyncSession = Depends(db_helper.session_getter)):
+    stmt = select(Sneaker).options(
+        joinedload(Sneaker.brand),
+        selectinload(Sneaker.sizes)
     )
     result = await session.execute(stmt)
-    sneaker = result.scalar_one_or_none()
+    sneakers = result.scalars().all()
 
-    if not sneaker:
+    if not sneakers:
         return {"error": "Кроссовок не найден"}
 
-    return {
+    return [
+        {
         "id": sneaker.id,
         "name": sneaker.name,
         "description": sneaker.description,
@@ -30,4 +32,6 @@ async def get_sneaker_details(sneaker_id: int, session: AsyncSession = Depends(d
             "image_url": sneaker.brand.image_url,
         },
         "sizes": [{"id": size.id, "eu_size": size.eu_size} for size in sneaker.sizes],
-    }
+        }
+        for sneaker in sneakers
+    ]
