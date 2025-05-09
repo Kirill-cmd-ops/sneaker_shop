@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
-from auth.config import settings
+from backend.auth.config import settings
 
 from api import router as api_router
 from auth.models import db_helper
