@@ -42,7 +42,7 @@ async def get_sneaker_details(
     if max_price is not None:
         stmt = stmt.filter(Sneaker.price <= max_price)
 
-    valid_genders = {"Male", "Female", "Unisex"}
+    valid_genders = {"Мужские", "Женские", "Унисекс"}
     if gender and gender in valid_genders:
         stmt = stmt.filter(Sneaker.gender == gender)
 

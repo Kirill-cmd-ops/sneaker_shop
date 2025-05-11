@@ -23,7 +23,7 @@ class Sneaker(Base):
     image_url: Mapped[str] = mapped_column(String(200), nullable=False)
     is_active: Mapped[bool] = mapped_column(default=True)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, nullable=False, server_default=func.now())
-    gender: Mapped[str] = mapped_column(String(10), default="Unisex")
+    gender: Mapped[str] = mapped_column(String(10), default="Унисекс")
 
     brand: Mapped["Brand"] = relationship(
         back_populates="sneakers",
