@@ -9,6 +9,7 @@ class SneakerRead(BaseModel):
     name: str = Field(max_length=100)
     description: str = Field(max_length=400)
     price: float = Field(gt=0)
+    gender: str = Field(max_length=10, default="Unisex")
     image_url: str = Field(max_length=200)
     is_active: bool = Field(default=True)
 
