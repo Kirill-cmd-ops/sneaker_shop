@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
+from .middlewares import add_middleware
 
 from backend.auth.config import settings
 
@@ -22,9 +23,13 @@ main_app = FastAPI(
     default_response_class=ORJSONResponse,
     lifespan=lifespan,
 )
+
+add_middleware(main_app)
+
 main_app.include_router(
     api_router,
 )
+
 
 if __name__ == "__main__":
     uvicorn.run(
