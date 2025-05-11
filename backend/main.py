@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
-from .middlewares import add_middleware
+from backend.middlewares import add_middleware
 
 from backend.auth.config import settings
 
