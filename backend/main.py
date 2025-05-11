@@ -3,8 +3,9 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
-from backend.middlewares import add_middleware
+from fastapi.staticfiles import StaticFiles
 
+from backend.middlewares import add_middleware
 from backend.auth.config import settings
 
 from api import router as api_router
@@ -23,6 +24,11 @@ main_app = FastAPI(
     default_response_class=ORJSONResponse,
     lifespan=lifespan,
 )
+
+
+main_app.mount("/uploads/sneakers", StaticFiles(directory="static/uploads/sneakers"), name="sneakers")
+main_app.mount("/uploads/brands", StaticFiles(directory="static/uploads/brands"), name="brands")
+
 
 add_middleware(main_app)
 
