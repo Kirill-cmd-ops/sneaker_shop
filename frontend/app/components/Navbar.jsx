@@ -9,7 +9,7 @@ export default function Navbar() {
 
             <li className="ml-1">
                 <button className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75">
-                    <img src="/home.svg" alt="Логотип" className="h-7 w-7" style={{ filter: "invert(1)" }} />
+                    <img src="/SONIK.png" alt="Логотип" className="h-7 w-7"/>
                 </button>
           </li>
 
