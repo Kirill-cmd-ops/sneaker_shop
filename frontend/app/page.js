@@ -1,17 +1,37 @@
 "use client";
 import { useState, useEffect } from "react";
+import SneakerGrid from "./components/SneakerGrid";
+
 
 export default function Home() {
-  const [sneakers, setSneakers] = useState([]);
+  const [newsneakers, setNewSneakers] = useState([]);
+  const [nikesneakers, setNikeSneakers] = useState([]);
+  const [pumasneakers, setPumaSneakers] = useState([]);
+  const [vanssneakers, setVansSneakers] = useState([]);
+  const [adidassneakers, setAdidasSneakers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch("http://localhost:8000/api/v1/sneakers/?page=1&limit=10&sort_by=created_at&order=desc")
-      .then((res) => res.json())
-      .then((data) => setSneakers(data))
-      .catch((error) => console.error("Ошибка загрузки данных:", error))
-      .finally(() => setLoading(false));
+  const fetchSneakers = async (url, setter) => {
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    setter(Array.isArray(data) ? data : []);
+  } catch (error) {
+    console.error("Ошибка загрузки данных:", error);
+  }
+};
+
+useEffect(() => {
+  setLoading(true);
+Promise.all([
+      fetchSneakers("http://localhost:8000/api/v1/sneakers/?page=1&limit=10&sort_by=created_at&order=desc", setNewSneakers),
+      fetchSneakers("http://localhost:8000/api/v1/sneakers/?page=1&limit=8&brand_name=nike&order=asc", setNikeSneakers),
+      fetchSneakers("http://localhost:8000/api/v1/sneakers/?page=1&limit=8&brand_name=puma&order=asc", setPumaSneakers),
+      fetchSneakers("http://localhost:8000/api/v1/sneakers/?page=1&limit=8&brand_name=vans&order=asc", setVansSneakers),
+      fetchSneakers("http://localhost:8000/api/v1/sneakers/?page=1&limit=8&brand_name=adidas&order=asc", setAdidasSneakers),
+    ]).then(() => setLoading(false)); // Отключаем загрузку после всех запросов
   }, []);
+
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-white text-black">
@@ -21,36 +41,16 @@ export default function Home() {
             <img
               src="/home_banner.jpg"
               alt="Каталог кроссовок"
-              className="w-full object-cove shadow-md"
+              className="w-full object-cover shadow-md"
             />
             <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </div>
 
           <h1 className="text-4xl font-bold text-neutral-600 mt-7 mb-6">Новинки</h1>
 
+          <h1 className="text-4xl font-bold text-neutral-600">Новинки</h1>
+<SneakerGrid sneakers={newsneakers} cols="grid-cols-5" />
 
-<div className="grid grid-cols-5 gap-6 mt-6">
-  {sneakers.map(({ id, name, price, brand, gender, image_url }) => (
-    <div key={id} className="w-[450px] h-[500px] text-center transition-transform duration-300 hover:scale-105">
-      {/* Добавили плавное увеличение */}
-      <img
-        src={`http://localhost:8000${image_url}`}
-        alt={name}
-        className="w-120 h-80 object-cover mx-auto"
-      />
-      <h2 className="text-3xl text-gray-500 mt-3">{brand.name}</h2>
-      <h2 className="text-3xl text-gray-500 mt-2">{name}</h2>
-
-      <p className="text-3xl text-gray-600 mt-2">
-        <span className="font-bold text-black">{price}</span> Br
-      </p>
-    </div>
-  ))}
-</div>
-
-
-
-          {/* Кнопка */}
           <button
             className="mt-8 mb-[200px] px-8 py-3 text-lg font-semibold text-black rounded-full border-2 border-black
                        bg-white hover:bg-neutral-200 transition-colors duration-300"
@@ -58,27 +58,30 @@ export default function Home() {
             Показать больше
           </button>
 
-<div className="w-full flex flex-col gap-20 pl-[100px] mb-[200px]">
-  <div className="relative w-[600px] h-[900px] group">
-    <img src="/home_banner_nike.jpg" alt="Каталог кроссовок" className="w-full h-full object-cover  shadow-md" />
-    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 "></div>
-  </div>
+<div className="w-full flex flex-col gap-12 items-start pl-[100px]">
+  {[
+    { src: "/home_banner_nike.jpg", brand: "Nike", sneakers: nikesneakers },
+    { src: "/home_banner_puma.jpg", brand: "Puma", sneakers: pumasneakers },
+    { src: "/home_banner_vans.jpg", brand: "Vans", sneakers: vanssneakers },
+    { src: "/home_banner_adidas.jpg", brand: "Adidas", sneakers: adidassneakers },
+  ].map(({ src, brand, sneakers }) => (
+    <div key={brand} className="flex w-full gap-12 items-start">
+      {/* Левая колонка: баннер */}
+      <div className="relative w-[600px] h-[900px]">
+        <img src={src} alt={`Каталог кроссовок ${brand}`} className="w-full h-full object-cover shadow-md" />
+        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      </div>
 
-  <div className="relative w-[600px] h-[900px] group">
-    <img src="/home_banner_puma.jpg" alt="Каталог кроссовок" className="w-full h-full object-cover  shadow-md" />
-    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-  </div>
-
-  <div className="relative w-[600px] h-[900px] group">
-    <img src="/home_banner_vans.jpg" alt="Каталог кроссовок" className="w-full h-full object-cover shadow-md" />
-    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-  </div>
-
-  <div className="relative w-[600px] h-[900px] group">
-    <img src="/home_banner_adidas.jpg" alt="Каталог кроссовок" className="w-full h-full object-cover shadow-md" />
-    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-  </div>
+      {/* Правая колонка: заголовок и карточки кроссовок */}
+      <div className="flex-1 flex flex-col">
+        <h1 className="text-5xl font-bold text-black mb-6">{brand}</h1>
+        <SneakerGrid sneakers={sneakers} cols="grid-cols-4" />
+      </div>
+    </div>
+  ))}
 </div>
+
+
 
         </>
       )}
