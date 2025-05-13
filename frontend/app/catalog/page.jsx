@@ -2,18 +2,16 @@
 import { useState, useEffect } from "react";
 import SneakerGrid from "../components/SneakerGrid";
 import SortDropdown from "../components/SortDropdown";
-import FilterSidebar from "../components/FilterSidebar"; // ✅ Импорт бокового меню фильтрации
+import FilterSidebar from "../components/FilterSidebar";
 
 export default function CatalogPage() {
-  // ✅ Состояния страницы
   const [sneakers, setSneakers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortType, setSortType] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // ✅ Управляет открытием фильтров
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // ✅ Функция загрузки данных
   const fetchSneakers = async () => {
     try {
       setLoading(true);
@@ -48,12 +46,12 @@ export default function CatalogPage() {
   };
 
   const applyFilters = (filters) => {
-    console.log("Фильтры:", filters); // ✅ Здесь добавим запрос к API
+    console.log("Фильтры:", filters);
     setIsSidebarOpen(false);
   };
 
   return (
-    <main className="relative flex flex-col items-center min-h-screen bg-white text-black p-6">
+    <main className="relative flex flex-col items-center min-h-screen bg-white text-black p-10">
       <h1 className="text-5xl font-bold text-neutral-600 mt-16 mb-6">Каталог</h1>
 
 <div className="w-full flex fle x-row gap-6 mt-[100px] justify-start">
@@ -63,7 +61,7 @@ export default function CatalogPage() {
   >
     Фильтры
   </button>
-  <SortDropdown onChange={handleSortChange} />
+  <SortDropdown setSneakers={setSneakers} />
 </div>
 
 
@@ -73,14 +71,12 @@ export default function CatalogPage() {
         applyFilters={applyFilters}
       />
 
-      {/* ✅ Вывод товаров */}
       {loading ? (
         <p className="text-lg text-gray-500 mt-6">Загрузка...</p>
       ) : (
         <SneakerGrid sneakers={sneakers} cols="grid-cols-5" />
       )}
 
-      {/* ✅ Пагинация */}
       <div className="flex gap-3 mt-8">
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <button
