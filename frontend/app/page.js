@@ -37,16 +37,23 @@ export default function Home() {
         <p className="text-xl text-gray-600">Загрузка...</p>
       ) : (
         <>
-          <div className="relative w-full my-6 group">
-            <img src="/home_banner.jpg" alt="Каталог кроссовок" className="w-full object-cover shadow-md" />
-          </div>
+
+          <a href="/catalog" className="relative w-full my-6 group block">
+  <img src="/home_banner.jpg" alt="Каталог кроссовок" className="w-full object-cover shadow-md" />
+  <div className="absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+</a>
+
+
 
           <h1 className="text-4xl font-bold text-neutral-600 mt-7 mb-6">Новинки</h1>
           <SneakerGrid sneakers={newsneakers} cols="grid-cols-5" />
 
-          <button className="mt-8 mb-[200px] px-8 py-3 text-lg font-semibold text-black rounded-full border-2 border-black bg-white hover:bg-neutral-200 transition-colors duration-300">
-            Показать больше
-          </button>
+
+          <a href="/catalog" className="mt-8 mb-[200px] px-8 py-3 text-lg font-semibold text-black rounded-full border-2 border-black bg-white hover:bg-neutral-200 transition-colors duration-300 text-center block">
+  Показать больше
+</a>
+
+
 
           <div className="w-full flex flex-col gap-16 items-start pl-[100px] mb-[150px]">
             {[
@@ -57,10 +64,11 @@ export default function Home() {
             ].map(({ src, brand, sneakers }) => (
               <div key={brand} className="flex w-full gap-12 items-start mb-[100px]">
 
-                <div className="relative w-[600px] h-[900px]">
+                <div className="relative w-[600px] h-[900px] group">
                   <img src={src} alt={`Каталог кроссовок ${brand}`} className="w-full h-full object-cover shadow-md" />
-                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
                 </div>
+
 
                 <div className="flex-1 flex flex-col">
                   <h1 className="text-5xl font-bold text-black mb-6">{brand}</h1>

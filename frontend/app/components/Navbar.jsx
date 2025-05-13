@@ -8,10 +8,11 @@ export default function Navbar() {
         <ul className="flex justify-between w-full items-center">
 
             <li className="ml-1">
-                <button className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75">
-                    <img src="/Lemon.png" alt="Логотип" className="h-7 w-7"/>
-                </button>
-          </li>
+  <a href="/" className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75">
+    <img src="/Lemon.png" alt="Логотип" className="h-7 w-7"/>
+  </a>
+</li>
+
 
           <div className="flex space-x-4 text-xl">
               <li className="text-center">
