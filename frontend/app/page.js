@@ -68,7 +68,6 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
       </div>
 
-      {/* ✅ Заголовок теперь `text-neutral-600` вместо `text-black` */}
       <div className="flex-1 flex flex-col">
         <h1 className="text-5xl font-bold text-neutral-600 mb-6">{brand}</h1>
         <SneakerGrid sneakers={sneakers} cols="grid-cols-4" />
