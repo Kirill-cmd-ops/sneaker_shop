@@ -6,9 +6,11 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar, apply
   const [sneakerName, setSneakerName] = useState("");
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedGenders, setSelectedGenders] = useState([]);
 
   const availableSizes = ["40", "41", "42", "43", "44", "45"];
   const availableBrands = ["Nike", "Adidas", "Puma", "Reebok", "New Balance"];
+  const availableGenders = ["Мужской", "Женский", "Унисекс"];
 
   const toggleSizeSelection = (size) => {
     setSelectedSizes((prevSizes) =>
@@ -19,6 +21,12 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar, apply
   const toggleBrandSelection = (brand) => {
     setSelectedBrands((prevBrands) =>
       prevBrands.includes(brand) ? prevBrands.filter((b) => b !== brand) : [...prevBrands, brand]
+    );
+  };
+
+  const toggleGenderSelection = (gender) => {
+    setSelectedGenders((prevGenders) =>
+      prevGenders.includes(gender) ? prevGenders.filter((g) => g !== gender) : [...prevGenders, gender]
     );
   };
 
@@ -50,43 +58,46 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar, apply
             onChange={(e) => setSneakerName(e.target.value)}
           />
 
-          {/* ✅ Поля ввода минимальной и максимальной цены */}
-          <label className="block text-sm font-medium text-gray-600 mt-5">Цена (мин.)</label>
-          <input
-            type="number"
-            className={`w-full mt-3 p-2 border rounded transition ${
-              minPrice.length > 0 ? "border-yellow-500" : "border-gray-300"
-            }`}
-            placeholder="От 0$"
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
-          />
+{/* ✅ Поля ввода минимальной и максимальной цены */}
+<label className="block text-sm font-medium text-gray-600 mt-5">Цена (мин.)</label>
+<input
+  type="number"
+  className={`w-full mt-3 p-2 border rounded transition ${
+    minPrice.length > 0 ? "border-yellow-500" : "border-gray-300"
+  }`}
+  placeholder="От 0$"
+  value={minPrice}
+  onChange={(e) => setMinPrice(e.target.value)}
+  min="0" // ✅ Ограничение ввода чисел ниже 0
+/>
 
-          <label className="block text-sm font-medium text-gray-600 mt-5">Цена (макс.)</label>
-          <input
-            type="number"
-            className={`w-full mt-3 p-2 border rounded transition ${
-              maxPrice.length > 0 ? "border-yellow-500" : "border-gray-300"
-            }`}
-            placeholder="До 500$"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-          />
+<label className="block text-sm font-medium text-gray-600 mt-5">Цена (макс.)</label>
+<input
+  type="number"
+  className={`w-full mt-3 p-2 border rounded transition ${
+    maxPrice.length > 0 ? "border-yellow-500" : "border-gray-300"
+  }`}
+  placeholder="До 500$"
+  value={maxPrice}
+  onChange={(e) => setMaxPrice(e.target.value)}
+  min="0" // ✅ Ограничение ввода чисел ниже 0
+/>
 
-          {/* ✅ Выбор размера (можно выбрать несколько) */}
-          <label className="block text-sm font-medium text-gray-600 mt-5">Размер</label>
-          <div className="flex gap-2 mt-3 flex-wrap">
-            {availableSizes.map((size) => (
+
+                    {/* ✅ Выбор пола (можно выбрать несколько) */}
+          <label className="block text-sm font-medium text-gray-600 mt-5">Пол</label>
+          <div className="flex gap-2 mt-3">
+            {availableGenders.map((gender) => (
               <button
-                key={size}
-                className={`px-3 py-1 border rounded-md transition-all ${
-                  selectedSizes.includes(size)
+                key={gender}
+                className={`px-4 py-2 border rounded-md transition-all ${
+                  selectedGenders.includes(gender)
                     ? "bg-yellow-500 text-white font-bold border-yellow-600"
                     : "bg-gray-200 text-gray-600 hover:bg-gray-300"
                 }`}
-                onClick={() => toggleSizeSelection(size)}
+                onClick={() => toggleGenderSelection(gender)}
               >
-                {size}
+                {gender}
               </button>
             ))}
           </div>
@@ -111,6 +122,24 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar, apply
                   {selectedBrands.includes(brand) && <span className="text-black font-bold">✓</span>}
                 </button>
               </div>
+            ))}
+          </div>
+
+                    {/* ✅ Выбор размера (можно выбрать несколько) */}
+          <label className="block text-sm font-medium text-gray-600 mt-5">Размер</label>
+          <div className="flex gap-2 mt-3 flex-wrap">
+            {availableSizes.map((size) => (
+              <button
+                key={size}
+                className={`px-3 py-1 border rounded-md transition-all ${
+                  selectedSizes.includes(size)
+                    ? "bg-yellow-500 text-white font-bold border-yellow-600"
+                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                }`}
+                onClick={() => toggleSizeSelection(size)}
+              >
+                {size}
+              </button>
             ))}
           </div>
 
