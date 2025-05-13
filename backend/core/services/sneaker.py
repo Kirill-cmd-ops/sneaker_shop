@@ -58,12 +58,9 @@ async def get_sneaker_details(
     if max_size:
         stmt = stmt.filter(Size.eu_size <= max_size)
 
-    valid_sort_columns = {"price", "name", "created_at", "brand_name"}
+    valid_sort_columns = {"price", "created_at"}
     if sort_by and sort_by in valid_sort_columns:
-        if sort_by == "brand_name":
-            sort_column = Brand.name
-        else:
-            sort_column = getattr(Sneaker, sort_by, None)
+        sort_column = getattr(Sneaker, sort_by, None)
 
         if sort_column:
             stmt = stmt.order_by(
