@@ -2,14 +2,18 @@
 import { useState, useEffect } from "react";
 import SneakerGrid from "../components/SneakerGrid";
 import SortDropdown from "../components/SortDropdown";
+import FilterSidebar from "../components/FilterSidebar"; // ✅ Импорт бокового меню фильтрации
 
 export default function CatalogPage() {
+  // ✅ Состояния страницы
   const [sneakers, setSneakers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortType, setSortType] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 10;
+  const [totalPages, setTotalPages] = useState(10);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // ✅ Управляет открытием фильтров
 
+  // ✅ Функция загрузки данных
   const fetchSneakers = async () => {
     try {
       setLoading(true);
@@ -35,52 +39,57 @@ export default function CatalogPage() {
     setCurrentPage(page);
   };
 
-  const getPageNumbers = () => {
-    const pages = [];
-    if (totalPages <= 7) {
-      for (let i = 1; i <= totalPages; i++) pages.push(i);
-    } else {
-      pages.push(1);
-      if (currentPage > 3) pages.push("...");
-      for (let i = Math.max(2, currentPage - 2); i <= Math.min(totalPages - 1, currentPage + 2); i++) {
-        pages.push(i);
-      }
-      if (currentPage < totalPages - 2) pages.push("...");
-      pages.push(totalPages);
-    }
-    return pages;
+  const handleOpenSidebar = () => {
+    setIsSidebarOpen(true);
+  };
+
+  const handleCloseSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
+  const applyFilters = (filters) => {
+    console.log("Фильтры:", filters); // ✅ Здесь добавим запрос к API
+    setIsSidebarOpen(false);
   };
 
   return (
-    <main className="flex flex-col items-center justify-start min-h-screen bg-white text-black p-6">
+    <main className="relative flex flex-col items-center min-h-screen bg-white text-black p-6">
       <h1 className="text-5xl font-bold text-neutral-600 mt-16 mb-6">Каталог</h1>
 
-<div className="w-full flex flex-row gap-6 mt-[100px] justify-start">
-  <button className="px-9 py-4 bg-yellow-500 text-black font-semibold rounded-full transition-all duration-300 hover:bg-yellow-600 hover:shadow-lg hover:brightness-75">
-    Фильтры
-  </button>
+      {/* ✅ Кнопка "Фильтры" + сортировка */}
+      <div className="w-full flex flex-row gap-6 mt-[100px] justify-start">
+        <button
+          className="px-9 py-4 bg-yellow-500 text-black font-semibold rounded-full hover:bg-yellow-600 shadow-md transition"
+          onClick={handleOpenSidebar}
+        >
+          Фильтры
+        </button>
+        <SortDropdown onChange={handleSortChange} />
+      </div>
 
-  <SortDropdown onChange={handleSortChange} />
-</div>
+      {/* ✅ Подключаем боковое меню фильтрации */}
+      <FilterSidebar
+        isSidebarOpen={isSidebarOpen}
+        handleCloseSidebar={handleCloseSidebar}
+        applyFilters={applyFilters}
+      />
 
-
-
-
+      {/* ✅ Вывод товаров */}
       {loading ? (
         <p className="text-lg text-gray-500 mt-6">Загрузка...</p>
       ) : (
         <SneakerGrid sneakers={sneakers} cols="grid-cols-5" />
       )}
 
+      {/* ✅ Пагинация */}
       <div className="flex gap-3 mt-8">
-        {getPageNumbers().map((page, index) => (
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <button
-            key={index}
-            onClick={() => typeof page === "number" && handlePageChange(page)}
+            key={page}
+            onClick={() => setCurrentPage(page)}
             className={`px-4 py-2 rounded-md transition-all ${
               currentPage === page ? "bg-yellow-500 text-black font-bold" : "bg-gray-200 text-gray-600 hover:bg-gray-300"
             }`}
-            disabled={page === "..."}
           >
             {page}
           </button>
