@@ -8,9 +8,9 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar, apply
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedGenders, setSelectedGenders] = useState([]);
 
-  const availableSizes = ["40", "41", "42", "43", "44", "45"];
+  const availableSizes = Array.from({ length: 36 }, (_, i) => i + 15);
   const availableBrands = ["Nike", "Adidas", "Puma", "Reebok", "New Balance"];
-  const availableGenders = ["Мужской", "Женский", "Унисекс"];
+  const availableGenders = ["Мужские", "Женские", "Унисекс"];
 
   const toggleSizeSelection = (size) => {
     setSelectedSizes((prevSizes) =>
@@ -147,7 +147,7 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar, apply
           <div className="flex-1 flex items-end justify-end">
             <button
               className="px-6 py-3 border border-yellow-500 text-yellow-500 bg-white rounded-md hover:bg-yellow-500 hover:text-white transition-all"
-              onClick={() => applyFilters({ sneakerName, minPrice, maxPrice, selectedSizes, selectedBrands })}
+              onClick={() => applyFilters({ sneakerName, minPrice, maxPrice, selectedSizes, selectedBrands, selectedGenders})}
             >
               Применить
             </button>
