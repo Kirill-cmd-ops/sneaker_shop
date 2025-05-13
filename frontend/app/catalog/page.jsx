@@ -56,10 +56,9 @@ export default function CatalogPage() {
     <main className="relative flex flex-col items-center min-h-screen bg-white text-black p-6">
       <h1 className="text-5xl font-bold text-neutral-600 mt-16 mb-6">Каталог</h1>
 
-{/* ✅ Кнопка "Фильтры" + сортировка */}
 <div className="w-full flex fle x-row gap-6 mt-[100px] justify-start">
   <button
-    className="px-8 py-1 border border-yellow-500 text-yellow-500 bg-white rounded-md hover:bg-yellow-500 hover:text-white transition-all"
+    className="px-8 h-[45px] mt-4 border border-yellow-500 text-yellow-500 bg-white rounded-md hover:bg-yellow-500 hover:text-white transition-all"
     onClick={handleOpenSidebar}
   >
     Фильтры
@@ -68,7 +67,6 @@ export default function CatalogPage() {
 </div>
 
 
-      {/* ✅ Подключаем боковое меню фильтрации */}
       <FilterSidebar
         isSidebarOpen={isSidebarOpen}
         handleCloseSidebar={handleCloseSidebar}
