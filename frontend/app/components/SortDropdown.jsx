@@ -18,7 +18,7 @@ const SortDropdown = ({ onChange }) => {
       <select
         value={selected}
         onChange={handleSelect}
-        className="w-full px-4 py-2 bg-yellow-500 border border-yellow-600 rounded-lg shadow-md text-black font-semibold cursor-pointer focus:outline-none hover:bg-yellow-600 transition-all"
+        className="w-full px-6 py-3 border border-yellow-500 text-yellow-500 bg-white rounded-md hover:bg-yellow-500 hover:text-white shadow-md font-semibold cursor-pointer transition-all focus:outline-none"
       >
         {sortOptions.map((option) => (
           <option key={option.value} value={option.value}>
@@ -29,6 +29,5 @@ const SortDropdown = ({ onChange }) => {
     </div>
   );
 };
-
 
 export default SortDropdown;
