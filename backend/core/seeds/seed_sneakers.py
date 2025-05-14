@@ -10,7 +10,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=215.99,
             brand_id=1,
-            image_url="/uploads/sneakers/nike_air_max.jpg",
+            image_url="/uploads/sneakers/nike_air_max.png",
         ),
         Sneaker(
             name="Yellow",
