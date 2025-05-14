@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const SortDropdown = ({ setSneakers }) => {
+const SortDropdown = ({ setSortBy, setOrder }) => {
   const [selected, setSelected] = useState("default");
 
   const sortOptions = [
@@ -10,20 +10,11 @@ const SortDropdown = ({ setSneakers }) => {
     { value: "price-desc", label: "Цена (по убыванию)", sortBy: "price", order: "desc" },
   ];
 
-  const fetchSneakers = async (sortBy, order) => {
-    try {
-      const res = await fetch(`http://localhost:8000/api/v1/sneakers/?sort_by=${sortBy}&order=${order}&limit=30`);
-      const data = await res.json();
-      setSneakers(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error("Ошибка загрузки данных:", error);
-    }
-  };
-
   const handleSelect = (event) => {
     const selectedOption = sortOptions.find(option => option.value === event.target.value);
     setSelected(event.target.value);
-    fetchSneakers(selectedOption.sortBy, selectedOption.order);
+    setSortBy(selectedOption.sortBy);
+    setOrder(selectedOption.order);
   };
 
   return (
