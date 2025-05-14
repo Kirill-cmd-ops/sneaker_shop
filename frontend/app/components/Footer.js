@@ -3,8 +3,7 @@ export default function Footer() {
     <footer className="bg-neutral-900 text-white py-6 mt-auto border-t border-neutral-700">
       <div className="container mx-auto flex justify-between items-start text-sm px-6">
 
-        {/* ✅ Колонка 1: Телефон + Email */}
-        <div className="flex flex-col space-y-2">
+        <div className="flex flex-col space-y-2 self-center">
           <p className="text-lg font-semibold">Контактная информация:</p>
           <p>
             📞 Телефон:
@@ -26,7 +25,6 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* ✅ Колонка 2: Время работы + Адреса (теперь центрировано) */}
         <div className="flex flex-col space-y-4 items-center text-center">
           <p className="text-lg font-semibold">Время работы:</p>
           <p className="font-medium">10:00 - 20:00 (без выходных)</p>
@@ -46,7 +44,6 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* ✅ Колонка 3: Социальные сети (опущена ниже) */}
         <div className="flex flex-col items-center space-y-4 mt-6">
           <p className="text-lg font-semibold">Мы в соцсетях:</p>
           <div className="flex gap-6">
