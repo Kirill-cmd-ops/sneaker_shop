@@ -5,24 +5,23 @@ import SortDropdown from "../components/SortDropdown";
 import FilterSidebar from "../components/FilterSidebar";
 
 export default function CatalogPage() {
-  const [sneakers, setSneakers] = useState([]);
+  const [sneakersData, setSneakersData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState("");  // Исправлено: теперь передаём сортировку по ключу
-  const [order, setOrder] = useState("");    // Исправлено: теперь передаём порядок сортировки
+  const [sortBy, setSortBy] = useState("");
+  const [order, setOrder] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState(null);
 
-  /** Общая функция для загрузки данных */
   const fetchSneakers = async (page, sortBy, order, filters) => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
         page,
         limit: 30,
-        sort_by: sortBy, // Передаём ключ сортировки
-        order: order,    // Передаём направление сортировки
+        sort_by: sortBy,
+        order: order,
       });
 
       if (filters) {
@@ -39,8 +38,8 @@ export default function CatalogPage() {
 
       console.log("Загруженные данные:", data);
 
-      setSneakers(Array.isArray(data) ? data : []);
-      setTotalPages(data.totalPages || 1);
+      setSneakersData(data || { total_count: 0, items: [] });
+      setTotalPages(Math.ceil((data.total_count || 1) / 30));
       setLoading(false);
     } catch (error) {
       console.error("Ошибка загрузки данных:", error);
@@ -48,16 +47,13 @@ export default function CatalogPage() {
     }
   };
 
-  /** Загружаем данные при изменении страницы, сортировки или фильтров */
   useEffect(() => {
     fetchSneakers(currentPage, sortBy, order, activeFilters);
   }, [sortBy, order, currentPage, activeFilters]);
 
-  /** Открытие/закрытие сайдбара */
   const handleOpenSidebar = () => setIsSidebarOpen(true);
   const handleCloseSidebar = () => setIsSidebarOpen(false);
 
-  /** Применение фильтров */
   const applyFilters = (filters) => {
     setActiveFilters(filters);
     setCurrentPage(1);
@@ -88,8 +84,8 @@ export default function CatalogPage() {
         <p className="text-lg text-gray-500 mt-6">Загрузка...</p>
       ) : (
         <>
-          {sneakers.length > 0 ? (
-            <SneakerGrid sneakers={sneakers} cols="grid-cols-5" />
+          {sneakersData?.items?.length > 0 ? (
+            <SneakerGrid data={sneakersData} cols="grid-cols-5" />
           ) : (
             <p className="text-lg text-gray-500 mt-6">Кроссовки не найдены</p>
           )}

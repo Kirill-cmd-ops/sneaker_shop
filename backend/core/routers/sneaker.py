@@ -12,7 +12,7 @@ from backend.core.services.sneaker import get_sneaker_details
 router = APIRouter()
 
 
-@router.get("/sneakers/", response_model=list[SneakerRead])
+@router.get("/sneakers/")
 async def call_get_sneaker_details(
     session: AsyncSession = Depends(db_helper.session_getter),
     page: Optional[int] = 1,
@@ -23,8 +23,6 @@ async def call_get_sneaker_details(
     gender: Optional[str] = None,
     brand_name: Optional[str] = None,
     size: Optional[float] = None,
-    min_size: Optional[float] = None,
-    max_size: Optional[float] = None,
     sort_by: Optional[str] = None,
     order: Optional[str] = "asc"):
 
@@ -38,8 +36,6 @@ async def call_get_sneaker_details(
     gender=gender,
     brand_name=brand_name,
     size=size,
-    min_size=min_size,
-    max_size=max_size,
     sort_by=sort_by,
     order=order,
     )

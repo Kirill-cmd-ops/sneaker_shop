@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
 
@@ -17,8 +17,6 @@ async def get_sneaker_details(
     gender: Optional[str] = None,
     brand_name: Optional[str] = None,
     size: Optional[float] = None,
-    min_size: Optional[float] = None,
-    max_size: Optional[float] = None,
     sort_by: Optional[str] = None,
     order: Optional[str] = "asc",
 ):
@@ -52,12 +50,6 @@ async def get_sneaker_details(
     if size:
         stmt = stmt.filter(Size.eu_size == size)
 
-    if min_size:
-        stmt = stmt.filter(Size.eu_size >= min_size)
-
-    if max_size:
-        stmt = stmt.filter(Size.eu_size <= max_size)
-
     valid_sort_columns = {"price", "created_at"}
     if sort_by and sort_by in valid_sort_columns:
         sort_column = getattr(Sneaker, sort_by, None)
@@ -67,6 +59,13 @@ async def get_sneaker_details(
                 sort_column.desc() if order == "desc" else sort_column.asc()
             )
 
+    count_stmt = stmt.with_only_columns(
+        func.count(func.distinct(Sneaker.id))
+    ).order_by(None)
+
+    result = await session.execute(count_stmt)
+    total_count = result.scalar_one_or_none()
+
     stmt = stmt.offset(offset).limit(limit).options(
         joinedload(Sneaker.brand), selectinload(Sneaker.sizes)
     )
@@ -74,4 +73,7 @@ async def get_sneaker_details(
     result = await session.execute(stmt)
     sneakers = result.scalars().all()
 
-    return sneakers
+    return {
+        "total_count": total_count,
+        "items": sneakers,
+    }
