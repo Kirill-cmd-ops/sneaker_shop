@@ -7,20 +7,40 @@ import FilterSidebar from "../components/FilterSidebar";
 export default function CatalogPage() {
   const [sneakers, setSneakers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortType, setSortType] = useState("default");
+  const [sortBy, setSortBy] = useState("");  // Исправлено: теперь передаём сортировку по ключу
+  const [order, setOrder] = useState("");    // Исправлено: теперь передаём порядок сортировки
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState(null);
 
-  const fetchSneakers = async () => {
+  /** Общая функция для загрузки данных */
+  const fetchSneakers = async (page, sortBy, order, filters) => {
     try {
       setLoading(true);
-      const res = await fetch(
-        `http://localhost:8000/api/v1/sneakers/?page=${currentPage}&limit=30&order=${sortType}`
-      );
+      const params = new URLSearchParams({
+        page,
+        limit: 30,
+        sort_by: sortBy, // Передаём ключ сортировки
+        order: order,    // Передаём направление сортировки
+      });
+
+      if (filters) {
+        if (filters.sneakerName) params.append("name", filters.sneakerName);
+        if (filters.minPrice) params.append("min_price", filters.minPrice);
+        if (filters.maxPrice) params.append("max_price", filters.maxPrice);
+        if (filters.selectedSizes?.length) params.append("size", filters.selectedSizes.join(","));
+        if (filters.selectedBrands?.length) params.append("brand_name", filters.selectedBrands.join(","));
+        if (filters.selectedGenders?.length) params.append("gender", filters.selectedGenders.join(","));
+      }
+
+      const res = await fetch(`http://localhost:8000/api/v1/sneakers/?${params.toString()}`);
       const data = await res.json();
+
+      console.log("Загруженные данные:", data);
+
       setSneakers(Array.isArray(data) ? data : []);
+      setTotalPages(data.totalPages || 1);
       setLoading(false);
     } catch (error) {
       console.error("Ошибка загрузки данных:", error);
@@ -28,63 +48,20 @@ export default function CatalogPage() {
     }
   };
 
-  const fetchFilteredSneakers = async (filters) => {
-    try {
-      setLoading(true);
-
-      const params = new URLSearchParams({
-        page: currentPage,
-        limit: 30,
-        order: sortType,
-      });
-
-      if (filters.sneakerName) params.append("name", filters.sneakerName);
-      if (filters.minPrice) params.append("min_price", filters.minPrice);
-      if (filters.maxPrice) params.append("max_price", filters.maxPrice);
-      if (filters.selectedSizes && filters.selectedSizes.length > 0)
-        params.append("size", filters.selectedSizes.join(","));
-      if (filters.selectedBrands && filters.selectedBrands.length > 0)
-        params.append("brand_name", filters.selectedBrands.join(","));
-      if (filters.selectedGenders && filters.selectedGenders.length > 0)
-        params.append("gender", filters.selectedGenders.join(","));
-
-      const res = await fetch(`http://localhost:8000/api/v1/sneakers/?${params.toString()}`);
-      const data = await res.json();
-      setSneakers(Array.isArray(data) ? data : []);
-      setLoading(false);
-      setActiveFilters(filters);
-    } catch (error) {
-      console.error("Ошибка загрузки данных фильтра:", error);
-      setLoading(false);
-    }
-  };
-
-
+  /** Загружаем данные при изменении страницы, сортировки или фильтров */
   useEffect(() => {
-    if (activeFilters) {
-      fetchFilteredSneakers(activeFilters);
-    } else {
-      fetchSneakers();
-    }
-  }, [sortType, currentPage, activeFilters]);
+    fetchSneakers(currentPage, sortBy, order, activeFilters);
+  }, [sortBy, order, currentPage, activeFilters]);
 
-  const handleSortChange = (newSortType) => {
-    setSortType(newSortType);
-    setActiveFilters(null);
-  };
+  /** Открытие/закрытие сайдбара */
+  const handleOpenSidebar = () => setIsSidebarOpen(true);
+  const handleCloseSidebar = () => setIsSidebarOpen(false);
 
-  const handleOpenSidebar = () => {
-    setIsSidebarOpen(true);
-  };
-
-  const handleCloseSidebar = () => {
-    setIsSidebarOpen(false);
-  };
-
-
+  /** Применение фильтров */
   const applyFilters = (filters) => {
+    setActiveFilters(filters);
+    setCurrentPage(1);
     setIsSidebarOpen(false);
-    fetchFilteredSneakers(filters);
   };
 
   return (
@@ -98,7 +75,7 @@ export default function CatalogPage() {
         >
           Фильтры
         </button>
-        <SortDropdown setSneakers={setSneakers} onChange={handleSortChange} />
+        <SortDropdown setSortBy={setSortBy} setOrder={setOrder} />
       </div>
 
       <FilterSidebar
@@ -110,7 +87,13 @@ export default function CatalogPage() {
       {loading ? (
         <p className="text-lg text-gray-500 mt-6">Загрузка...</p>
       ) : (
-        <SneakerGrid sneakers={sneakers} cols="grid-cols-5" />
+        <>
+          {sneakers.length > 0 ? (
+            <SneakerGrid sneakers={sneakers} cols="grid-cols-5" />
+          ) : (
+            <p className="text-lg text-gray-500 mt-6">Кроссовки не найдены</p>
+          )}
+        </>
       )}
 
       <div className="flex gap-3 mt-8">
