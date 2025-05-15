@@ -1,114 +1,110 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function SneakerDetails() {
+const SneakerDetails = () => {
   const searchParams = useSearchParams();
   const sneakerId = searchParams.get("sneakerId");
 
   const [sneaker, setSneaker] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [quantity, setQuantity] = useState(1); // ✅ Добавлено состояние для количества
+  const [error, setError] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [addedToCart, setAddedToCart] = useState(false);
 
-  /** Загружаем информацию о кроссовке */
   useEffect(() => {
     if (!sneakerId) return;
 
-    setLoading(true);
-    fetch(`http://localhost:8000/api/v1/sneakers/?sneakerId=${sneakerId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        const sneakerData = data.items?.find((s) => s.id.toString() === sneakerId);
-        setSneaker(sneakerData || null);
-        setLoading(false);
-      })
-      .catch((error) => {
+    const fetchSneakerDetails = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/v1/sneaker/${sneakerId}`);
+        if (!response.ok) throw new Error("Ошибка загрузки данных");
+
+        const data = await response.json();
+        setSneaker(data);
+      } catch (error) {
+        setError(error.message);
         console.error("Ошибка загрузки:", error);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchSneakerDetails();
   }, [sneakerId]);
 
-  /** Уменьшение количества */
-  const decreaseQuantity = () => {
-    if (quantity > 1) setQuantity(quantity - 1);
+  const handleAddToCart = () => {
+    if (!selectedSize) return;
+
+    setAddedToCart(true);
+    setTimeout(() => setAddedToCart(false), 3000);
   };
 
-  /** Увеличение количества */
-  const increaseQuantity = () => {
-    setQuantity(quantity + 1);
-  };
-
-  if (loading) {
-    return <p className="text-xl text-gray-600">Загрузка...</p>;
-  }
-
-  if (!sneaker) {
-    return <p className="text-xl text-red-500">Кроссовок не найден.</p>;
-  }
+  if (loading) return <p>Загрузка...</p>;
+  if (error) return <p className="text-red-500">Ошибка: {error}</p>;
+  if (!sneaker) return <p>Кроссовки не найдены.</p>;
 
   return (
-    <main className="relative flex flex-col min-h-screen bg-white text-black p-10">
-      {/* Заголовок товара */}
-      <h1 className="text-5xl font-bold text-neutral-600 mb-6">{sneaker.name}</h1>
+    <div className="max-w-7xl mx-auto mt-40 flex gap-20 items-start">
+      <div className="w-3/5">
+        <img
+          src={`http://127.0.0.1:8000${sneaker.image_url}`}
+          alt={sneaker.name}
+          className="w-full h-[500px] object-cover rounded-md"
+        />
 
-      <div className="flex">
-        {/* ✅ Изображение стало шире и закреплено слева */}
-        <div className="absolute top-10 left-10">
-          <img
-            src={`http://localhost:8000${sneaker.image_url}`}
-            alt={sneaker.name}
-            className="w-[600px] h-auto object-cover rounded-md shadow-lg"
-          />
-        </div>
+        <p className="text-xl font-semibold text-gray-700 mt-6">Размеры в наличии:</p>
 
-        {/* Описание товара */}
-        <div className="flex-1 pl-[650px]">
-            <p className="text-2xl text-gray-600 mt-4">{sneaker.name}</p>
-          <p className="text-2xl text-gray-600 mt-4">{sneaker.description}</p>
-          <p className="text-3xl font-bold text-black mt-2">{sneaker.price} Br</p>
-
-          {/* ✅ Бренд и пол */}
-          <p className="text-xl text-gray-500 mt-4">
-            <span className="font-semibold text-black">Бренд:</span> {sneaker.brand.name}
-          </p>
-          <p className="text-xl text-gray-500 mt-2">
-            <span className="font-semibold text-black">Пол:</span> {sneaker.gender}
-          </p>
-
-<p className="text-xl text-gray-500 mt-2">
-  <span className="font-semibold text-black">Размеры:</span>{" "}
-  {Array.isArray(sneaker.sizes) && sneaker.sizes.length > 0
-    ? sneaker.sizes.map((s) => s.value).join(", ")
-    : "Нет в наличии"}
-</p>
-
-
-
-          {/* ✅ Блок выбора количества */}
-          <div className="flex items-center gap-6 mt-8">
+        <div className="mt-4 flex flex-wrap gap-3">
+          {sneaker.sizes?.map((size) => (
             <button
-              onClick={decreaseQuantity}
-              className="w-12 h-12 text-2xl font-bold border-2 border-yellow-500 bg-white hover:bg-yellow-500 hover:text-white rounded-md transition-all"
+              key={size.id}
+              onClick={() => setSelectedSize(size.eu_size)}
+              className={`px-6 py-2 rounded-md text-lg font-medium ${
+                selectedSize === size.eu_size ? "bg-yellow-500 text-black" : "bg-gray-200 text-black"
+              } transition-colors duration-200 hover:bg-yellow-500 hover:text-black`}
             >
-              -
+              {size.eu_size}
             </button>
-            <span className="text-3xl font-bold w-12 text-center">{quantity}</span>
-            <button
-              onClick={increaseQuantity}
-              className="w-12 h-12 text-2xl font-bold border-2 border-yellow-500 bg-white hover:bg-yellow-500 hover:text-white rounded-md transition-all"
-            >
-              +
-            </button>
-          </div>
-
-          {/* ✅ Кнопка "В корзину" */}
-          <button
-            className="mt-8 px-6 py-3 text-lg font-semibold text-black rounded-md border-2 border-yellow-500 bg-white hover:bg-yellow-500 hover:text-white transition-all"
-          >
-            В корзину
-          </button>
+          )) || <span className="text-gray-400 text-lg">Размеры отсутствуют</span>}
         </div>
       </div>
-    </main>
+
+      <div className="w-2/5 mt-6">
+        <h1 className="text-6xl font-bold text-gray-900">{sneaker.brand?.name} {sneaker.name}</h1>
+        <p className="text-2xl font-semibold text-gray-800 mt-4">{sneaker.gender || "Не указан"} кроссовки</p>
+        <p className="text-2xl font-semibold text-gray-800 mt-4">Страна производства: <strong>{sneaker.country?.name || "Не указано"}</strong></p>
+
+        <p className="text-2xl font-bold text-gray-800 mt-6">Цвета:</p>
+        <div className="flex flex-wrap gap-3 mt-2">
+          {sneaker.colors?.map((color) => (
+            <span key={color.id} className="px-5 py-2 bg-gray-300 rounded-md text-lg">{color.name}</span>
+          )) || <span className="text-gray-500 text-lg">Не указаны</span>}
+        </div>
+
+        <p className="text-2xl font-bold text-gray-800 mt-6">Материалы:</p>
+        <div className="flex flex-wrap gap-3 mt-2">
+          {sneaker.materials?.map((material) => (
+            <span key={material.id} className="px-5 py-2 bg-gray-300 rounded-md text-lg">{material.name}</span>
+          )) || <span className="text-gray-500 text-lg">Не указаны</span>}
+        </div>
+
+        <p className="text-2xl font-bold text-gray-800 mt-6">Описание:</p>
+        <p className="text-xl text-gray-700 mt-2">{sneaker.description || "Описание отсутствует."}</p>
+
+        <p className="text-5xl font-bold text-black mt-8">{sneaker.price} Br</p>
+
+        <button
+          onClick={handleAddToCart}
+          className={`w-full mt-6 px-6 py-3 rounded-md text-lg font-bold ${
+            addedToCart ? "bg-yellow-500 text-black" : "bg-gray-800 text-white hover:bg-gray-900"
+          } transition-colors duration-200`}
+        >
+          {selectedSize ? (addedToCart ? "Добавлено в корзину" : "В корзину") : "Выберите размер"}
+        </button>
+      </div>
+    </div>
   );
-}
+};
+
+export default SneakerDetails;
