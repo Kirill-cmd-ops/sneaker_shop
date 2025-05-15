@@ -5,9 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.auth.models import db_helper
 
-from backend.core.schemas.sneaker import SneakerRead
-
-from backend.core.services.sneaker import get_sneaker_details
+from backend.core.services.sneakers import get_sneaker_details
 
 router = APIRouter()
 

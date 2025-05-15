@@ -1,11 +1,10 @@
 from typing import Optional
 
-from pygments.styles.dracula import selection
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
 
-from backend.core.models import Sneaker, Brand, SneakerSizeAssociation, Size, Country
+from backend.core.models import Sneaker, Brand, SneakerSizeAssociation, Size
 
 
 async def get_sneaker_details(
@@ -73,9 +72,6 @@ async def get_sneaker_details(
         .options(
             joinedload(Sneaker.brand),
             selectinload(Sneaker.sizes),
-            selectinload(Sneaker.country),
-            selectinload(Sneaker.colors),
-            selectinload(Sneaker.materials)
         )
     )
 
