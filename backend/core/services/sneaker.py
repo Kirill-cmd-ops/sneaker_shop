@@ -1,10 +1,11 @@
 from typing import Optional
 
+from pygments.styles.dracula import selection
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
 
-from backend.core.models import Sneaker, Brand, SneakerSizeAssociation, Size
+from backend.core.models import Sneaker, Brand, SneakerSizeAssociation, Size, Country
 
 
 async def get_sneaker_details(
@@ -59,15 +60,23 @@ async def get_sneaker_details(
                 sort_column.desc() if order == "desc" else sort_column.asc()
             )
 
-    count_stmt = stmt.with_only_columns(
-        func.count(func.distinct(Sneaker.id))
-    ).order_by(None)
+    count_stmt = stmt.with_only_columns(func.count(func.distinct(Sneaker.id))).order_by(
+        None
+    )
 
     result = await session.execute(count_stmt)
     total_count = result.scalar_one_or_none()
 
-    stmt = stmt.offset(offset).limit(limit).options(
-        joinedload(Sneaker.brand), selectinload(Sneaker.sizes)
+    stmt = (
+        stmt.offset(offset)
+        .limit(limit)
+        .options(
+            joinedload(Sneaker.brand),
+            selectinload(Sneaker.sizes),
+            selectinload(Sneaker.country),
+            selectinload(Sneaker.colors),
+            selectinload(Sneaker.materials)
+        )
     )
 
     result = await session.execute(stmt)
