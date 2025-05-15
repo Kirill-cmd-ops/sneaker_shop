@@ -13,6 +13,9 @@ from backend.core.models.brand import Brand
 from backend.core.models.sneaker import Sneaker
 from backend.core.models.size import Size
 from backend.core.models.sneaker_size import SneakerSizeAssociation
+from backend.core.models.country import Country
+from backend.core.models.color import Color
+from backend.core.models.sneaker_color import SneakerColorAssociation
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

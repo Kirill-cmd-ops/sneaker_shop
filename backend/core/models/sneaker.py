@@ -10,7 +10,9 @@ if TYPE_CHECKING:
     from .country import Country
     from .brand import Brand
     from .size import Size
+    from .color import Color
     from .sneaker_size import SneakerSizeAssociation
+    from .sneaker_color import SneakerColorAssociation
 
 
 class Sneaker(Base):
@@ -41,7 +43,17 @@ class Sneaker(Base):
         back_populates="sneaker",
     )
 
+    color_associations: Mapped[list["SneakerColorAssociation"]] = relationship(
+        back_populates="sneaker",
+    )
+
     sizes: Mapped[list["Size"]] = relationship(
         secondary="sneaker_size_associations",
         viewonly=True,
     )
+
+    colors: Mapped[list["Color"]] = relationship(
+        secondary="sneaker_color_associations",
+        viewonly=True,
+    )
+
