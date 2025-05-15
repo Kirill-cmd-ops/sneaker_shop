@@ -1,7 +1,14 @@
+"use client";
 import { useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation"; // ✅ App Router для управления URL
 
-const SortDropdown = ({ setSortBy, setOrder }) => {
-  const [selected, setSelected] = useState("default");
+const SortDropdown = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const currentSortBy = searchParams.get("sort_by") || "";
+  const currentOrder = searchParams.get("order") || "";
+  const [selected, setSelected] = useState(currentSortBy ? `${currentSortBy}-${currentOrder}` : "default");
 
   const sortOptions = [
     { value: "default", label: "По умолчанию", sortBy: "", order: "" },
@@ -13,8 +20,18 @@ const SortDropdown = ({ setSortBy, setOrder }) => {
   const handleSelect = (event) => {
     const selectedOption = sortOptions.find(option => option.value === event.target.value);
     setSelected(event.target.value);
-    setSortBy(selectedOption.sortBy);
-    setOrder(selectedOption.order);
+
+    const newParams = new URLSearchParams(searchParams.toString());
+
+    if (selectedOption.sortBy) {
+      newParams.set("sort_by", selectedOption.sortBy);
+      newParams.set("order", selectedOption.order);
+    } else {
+      newParams.delete("sort_by");
+      newParams.delete("order");
+    }
+
+    router.push(`/catalog${newParams.toString() ? "?" + newParams.toString() : ""}`);
   };
 
   return (
