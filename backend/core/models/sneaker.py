@@ -7,6 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from backend.auth.models.base import Base
 
 if TYPE_CHECKING:
+    from .country import Country
     from .brand import Brand
     from .size import Size
     from .sneaker_size import SneakerSizeAssociation
@@ -20,10 +21,17 @@ class Sneaker(Base):
     description: Mapped[str] = mapped_column(String(400))
     price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     brand_id: Mapped[int] = mapped_column(ForeignKey("brands.id"), index=True)
+    country_id: Mapped[int] = mapped_column(ForeignKey("countries.id"), index=True)
     image_url: Mapped[str] = mapped_column(String(200), nullable=False)
     is_active: Mapped[bool] = mapped_column(default=True)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, nullable=False, server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        default=datetime.utcnow, nullable=False, server_default=func.now()
+    )
     gender: Mapped[str] = mapped_column(String(10), default="Унисекс")
+
+    country: Mapped["Country"] = relationship(
+        back_populates="sneakers",
+    )
 
     brand: Mapped["Brand"] = relationship(
         back_populates="sneakers",
