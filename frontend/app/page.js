@@ -74,29 +74,32 @@ export default function Home() {
           </a>
 
           <div className="w-full flex flex-col gap-16 items-start pl-[100px] mb-[150px]">
-            {[
-              { src: "/home_banner_nike.jpg", brand: "Nike", sneakers: nikesneakers },
-              { src: "/home_banner_puma.jpg", brand: "Puma", sneakers: pumasneakers },
-              { src: "/home_banner_vans.jpg", brand: "Vans", sneakers: vanssneakers },
-              { src: "/home_banner_adidas.jpg", brand: "Adidas", sneakers: adidassneakers },
-            ].map(({ src, brand, sneakers }) => (
-              <div key={brand} className="flex w-full gap-12 items-start mb-[100px]">
-                <div className="relative w-[600px] h-[900px] group">
-                  <img
-                    src={src}
-                    alt={`Каталог кроссовок ${brand}`}
-                    className="w-full h-full object-cover shadow-md"
-                  />
-                  <div className="absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                </div>
+  {[
+    { src: "/home_banner_nike.jpg", brand: "Nike", sneakers: nikesneakers },
+    { src: "/home_banner_puma.jpg", brand: "Puma", sneakers: pumasneakers },
+    { src: "/home_banner_vans.jpg", brand: "Vans", sneakers: vanssneakers },
+    { src: "/home_banner_adidas.jpg", brand: "Adidas", sneakers: adidassneakers },
+  ].map(({ src, brand, sneakers }) => (
+    <div key={brand} className="flex w-full gap-12 items-start mb-[100px]">
+      {/* ✅ Баннер с переходом на каталог */}
+      <a href={`/catalog?brand_name=${brand}`} className="relative w-[600px] h-[900px] group block">
+        <img
+          src={src}
+          alt={`Каталог кроссовок ${brand}`}
+          className="w-full h-full object-cover shadow-md"
+        />
+        <div className="absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+      </a>
 
-                <div className="flex-1 flex flex-col">
-                  <h1 className="text-5xl font-bold text-neutral-600 mb-6">{brand}</h1>
-                  <SneakerGrid data={sneakers} cols="grid-cols-4" />
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* Товары бренда */}
+      <div className="flex-1 flex flex-col">
+        <h1 className="text-5xl font-bold text-neutral-600 mb-6">{brand}</h1>
+        <SneakerGrid data={sneakers} cols="grid-cols-4" />
+      </div>
+    </div>
+  ))}
+</div>
+
         </>
       )}
     </main>
