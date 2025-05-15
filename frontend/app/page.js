@@ -67,7 +67,7 @@ export default function Home() {
           <SneakerGrid data={newsneakers} cols="grid-cols-5" />
 
           <a
-            href="/catalog"
+            href="/catalog?sort_by=created_at&order=desc"
             className="mt-8 mb-[200px] px-8 py-3 text-lg font-semibold text-black rounded-full border-2 border-black bg-white hover:bg-neutral-200 transition-colors duration-300 text-center block"
           >
             Показать больше

@@ -1,14 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation"; // ✅ App Router для управления URL
 
 const SortDropdown = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  // ✅ Берём текущую сортировку из URL
   const currentSortBy = searchParams.get("sort_by") || "";
   const currentOrder = searchParams.get("order") || "";
-  const [selected, setSelected] = useState(currentSortBy ? `${currentSortBy}-${currentOrder}` : "default");
+  const [selected, setSelected] = useState("default");
 
   const sortOptions = [
     { value: "default", label: "По умолчанию", sortBy: "", order: "" },
@@ -17,8 +18,16 @@ const SortDropdown = () => {
     { value: "price-desc", label: "Цена (по убыванию)", sortBy: "price", order: "desc" },
   ];
 
+  // ✅ Автоматически обновляем `selected`, если меняется URL
+  useEffect(() => {
+    const matchedOption = sortOptions.find(
+      (option) => option.sortBy === currentSortBy && option.order === currentOrder
+    );
+    setSelected(matchedOption ? matchedOption.value : "default");
+  }, [currentSortBy, currentOrder]); // Обновляем при изменении параметров
+
   const handleSelect = (event) => {
-    const selectedOption = sortOptions.find(option => option.value === event.target.value);
+    const selectedOption = sortOptions.find((option) => option.value === event.target.value);
     setSelected(event.target.value);
 
     const newParams = new URLSearchParams(searchParams.toString());
