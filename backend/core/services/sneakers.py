@@ -7,7 +7,7 @@ from sqlalchemy.orm import joinedload, selectinload
 from backend.core.models import Sneaker, Brand, SneakerSizeAssociation, Size
 
 
-async def get_sneaker_details(
+async def get_sneakers_details(
     session: AsyncSession,
     page: Optional[int] = 1,
     limit: Optional[int] = 30,

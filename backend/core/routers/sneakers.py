@@ -5,13 +5,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.auth.models import db_helper
 
-from backend.core.services.sneakers import get_sneaker_details
+from backend.core.services.sneakers import get_sneakers_details
 
 router = APIRouter()
 
 
 @router.get("/sneakers/")
-async def call_get_sneaker_details(
+async def call_get_sneakers_details(
     session: AsyncSession = Depends(db_helper.session_getter),
     page: Optional[int] = 1,
     limit: Optional[int] = 30,
@@ -24,7 +24,7 @@ async def call_get_sneaker_details(
     sort_by: Optional[str] = None,
     order: Optional[str] = "asc"):
 
-    sneakers_info = await get_sneaker_details(
+    sneakers_info = await get_sneakers_details(
     session=session,
     page=page,
     limit=limit,
