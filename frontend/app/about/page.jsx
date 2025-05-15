@@ -4,7 +4,6 @@ import React from "react";
 export default function AboutPage() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-12">
-      {/* ✅ Логотип по центру (увеличен) */}
       <img
         src="/lemon_logo.png"
         alt="Логотип магазина"
@@ -13,7 +12,6 @@ export default function AboutPage() {
 
       <h1 className="text-6xl font-bold text-white mb-8 tracking-wide">О нас</h1>
 
-      {/* ✅ Увеличенный текст */}
       <section className="max-w-3xl text-center text-2xl text-gray-300 leading-relaxed">
         <p>Мы — новый магазин, который предлагает оригинальные кроссовки от мировых брендов.</p>
         <p className="mt-6">Наши цены приятно удивляют, ведь стиль и качество должны быть доступными каждому.</p>
@@ -23,10 +21,8 @@ export default function AboutPage() {
         </p>
       </section>
 
-      {/* ✅ Жёлтая полоса, смещенная ниже */}
       <div className="w-full h-[5px] bg-yellow-500 mt-40"></div>
 
-      {/* ✅ Социальные сети */}
       <div className="flex gap-8 mt-10">
         <button className="cursor-pointer transition duration-300 ease-in-out p-3 hover:brightness-75">
           <img
