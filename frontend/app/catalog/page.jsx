@@ -1,37 +1,28 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation"; // ✅ Next.js App Router
 import SneakerGrid from "../components/SneakerGrid";
 import SortDropdown from "../components/SortDropdown";
 import FilterSidebar from "../components/FilterSidebar";
 
 export default function CatalogPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [sneakersData, setSneakersData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState("");
-  const [order, setOrder] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState(searchParams.get("sort_by") || "");
+  const [order, setOrder] = useState(searchParams.get("order") || "");
+  const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
   const [totalPages, setTotalPages] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeFilters, setActiveFilters] = useState(null);
 
-  const fetchSneakers = async (page, sortBy, order, filters) => {
+  const fetchSneakers = async () => {
     try {
       setLoading(true);
-      const params = new URLSearchParams({
-        page,
-        limit: 30,
-        sort_by: sortBy,
-        order: order,
-      });
+      const params = new URLSearchParams(searchParams.toString()); // ✅ Берём параметры из URL
 
-      if (filters) {
-        if (filters.sneakerName) params.append("name", filters.sneakerName);
-        if (filters.minPrice) params.append("min_price", filters.minPrice);
-        if (filters.maxPrice) params.append("max_price", filters.maxPrice);
-        if (filters.selectedSizes?.length) params.append("size", filters.selectedSizes.join(","));
-        if (filters.selectedBrands?.length) params.append("brand_name", filters.selectedBrands.join(","));
-        if (filters.selectedGenders?.length) params.append("gender", filters.selectedGenders.join(","));
-      }
+      params.set("limit", "30"); // ✅ Ограничение на количество товаров
 
       const res = await fetch(`http://localhost:8000/api/v1/sneakers/?${params.toString()}`);
       const data = await res.json();
@@ -48,17 +39,29 @@ export default function CatalogPage() {
   };
 
   useEffect(() => {
-    fetchSneakers(currentPage, sortBy, order, activeFilters);
-  }, [sortBy, order, currentPage, activeFilters]);
+    fetchSneakers();
+  }, [searchParams]); // ✅ Обновляем данные при изменении URL
 
   const handleOpenSidebar = () => setIsSidebarOpen(true);
   const handleCloseSidebar = () => setIsSidebarOpen(false);
 
   const applyFilters = (filters) => {
-    setActiveFilters(filters);
-    setCurrentPage(1);
-    setIsSidebarOpen(false);
-  };
+  const newParams = new URLSearchParams();
+
+  if (filters.sneakerName) newParams.set("name", filters.sneakerName);
+  if (filters.minPrice) newParams.set("min_price", filters.minPrice);
+  if (filters.maxPrice) newParams.set("max_price", filters.maxPrice);
+  if (filters.selectedSizes?.length) newParams.set("size", filters.selectedSizes.join(","));
+  if (filters.selectedBrands?.length) newParams.set("brand_name", filters.selectedBrands.join(","));
+  if (filters.selectedGenders?.length) newParams.set("gender", filters.selectedGenders.join(","));
+
+  newParams.set("page", "1"); // ✅ Сбрасываем страницу на первую при фильтрации
+
+  // ✅ Обновляем URL только с актуальными параметрами (без пустых)
+  router.push(`/catalog${newParams.toString() ? "?" + newParams.toString() : ""}`);
+  setIsSidebarOpen(false);
+};
+
 
   return (
     <main className="relative flex flex-col items-center min-h-screen bg-white text-black p-10">
@@ -96,7 +99,7 @@ export default function CatalogPage() {
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <button
             key={page}
-            onClick={() => setCurrentPage(page)}
+            onClick={() => router.push(`/catalog?page=${page}`)} // ✅ Меняем страницу через URL
             className={`px-4 py-2 rounded-md transition-all ${
               currentPage === page
                 ? "bg-yellow-500 text-black font-bold"
