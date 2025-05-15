@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.core.models.country import Country
 
-async def seed_brands(db: AsyncSession):
+async def seed_countries(db: AsyncSession):
     countries = [
         Country(name="Argentina"),
         Country(name="China"),
@@ -18,4 +18,3 @@ async def seed_brands(db: AsyncSession):
     db.add_all(countries)
     await db.flush()
     await db.commit()
-# обновить сиды таблицы sneakers

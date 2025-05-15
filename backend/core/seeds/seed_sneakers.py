@@ -10,6 +10,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=215.99,
             brand_id=1,
+            country_id=2,
             image_url="/uploads/sneakers/nike_air_max.png",
         ),
         Sneaker(
@@ -17,6 +18,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=134.50,
             brand_id=1,
+            country_id=2,
             image_url="/uploads/sneakers/nike_yellow.jpg",
         ),
         Sneaker(
@@ -24,6 +26,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=489.99,
             brand_id=1,
+            country_id=2,
             image_url="/uploads/sneakers/nike_al8.png",
         ),
         Sneaker(
@@ -31,6 +34,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=310.75,
             brand_id=1,
+            country_id=2,
             image_url="/uploads/sneakers/nike_dh.jpeg",
         ),
         Sneaker(
@@ -38,6 +42,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=195.20,
             brand_id=1,
+            country_id=2,
             image_url="/uploads/sneakers/nike_dn.jpg",
         ),
         Sneaker(
@@ -45,6 +50,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=500.00,
             brand_id=1,
+            country_id=2,
             image_url="/uploads/sneakers/nike_jordan.jpg",
         ),
         Sneaker(
@@ -52,6 +58,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=245.30,
             brand_id=1,
+            country_id=2,
             image_url="/uploads/sneakers/nike_react.jpg",
         ),
         Sneaker(
@@ -59,6 +66,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=165.80,
             brand_id=1,
+            country_id=2,
             image_url="/uploads/sneakers/nike_intertop.jpg",
         ),
         Sneaker(
@@ -66,6 +74,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=425.99,
             brand_id=3,
+            country_id=3,
             image_url="/uploads/sneakers/puma_ferrari.jpg",
         ),
         Sneaker(
@@ -73,6 +82,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=180.75,
             brand_id=3,
+            country_id=3,
             image_url="/uploads/sneakers/puma_palermo.png",
         ),
         Sneaker(
@@ -80,6 +90,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=305.40,
             brand_id=3,
+            country_id=3,
             image_url="/uploads/sneakers/puma_Park.png",
         ),
         Sneaker(
@@ -87,6 +98,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=125.99,
             brand_id=3,
+            country_id=3,
             image_url="/uploads/sneakers/puma_Roma.jpg",
         ),
         Sneaker(
@@ -94,6 +106,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=410.50,
             brand_id=3,
+            country_id=3,
             image_url="/uploads/sneakers/puma_rs-x.png",
         ),
         Sneaker(
@@ -101,6 +114,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=350.25,
             brand_id=3,
+            country_id=3,
             image_url="/uploads/sneakers/puma_sl.png",
         ),
         Sneaker(
@@ -108,6 +122,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=270.80,
             brand_id=3,
+            country_id=3,
             image_url="/uploads/sneakers/puma_suede.jpg",
         ),
         Sneaker(
@@ -115,6 +130,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=199.99,
             brand_id=3,
+            country_id=3,
             image_url="/uploads/sneakers/puma_trinity.jpg",
         ),
         Sneaker(
@@ -122,6 +138,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=490.50,
             brand_id=4,
+            country_id=4,
             image_url="/uploads/sneakers/vans_authetic.png",
         ),
         Sneaker(
@@ -129,6 +146,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=130.99,
             brand_id=4,
+            country_id=4,
             image_url="/uploads/sneakers/vans_hevy.png",
         ),
         Sneaker(
@@ -136,6 +154,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=345.75,
             brand_id=4,
+            country_id=4,
             image_url="/uploads/sneakers/vans_old.jpg",
         ),
         Sneaker(
@@ -143,6 +162,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=280.20,
             brand_id=4,
+            country_id=4,
             image_url="/uploads/sneakers/vans_old_scholl.png",
         ),
         Sneaker(
@@ -150,6 +170,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=220.65,
             brand_id=4,
+            country_id=4,
             image_url="/uploads/sneakers/vans_Primary.png",
         ),
         Sneaker(
@@ -157,6 +178,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=495.99,
             brand_id=4,
+            country_id=4,
             image_url="/uploads/sneakers/vans_Sk8.png",
         ),
         Sneaker(
@@ -164,6 +186,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=190.89,
             brand_id=4,
+            country_id=4,
             image_url="/uploads/sneakers/vans_skool.png",
         ),
         Sneaker(
@@ -171,6 +194,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Классический дизайн",
             price=310.50,
             brand_id=4,
+            country_id=4,
             image_url="/uploads/sneakers/vans_slip.jpg",
         ),
         Sneaker(
@@ -178,6 +202,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Максимальная амортизация",
             price=315.99,
             brand_id=2,
+            country_id=5,
             image_url="/uploads/sneakers/adidas_centennial.jpg",
         ),
         Sneaker(
@@ -185,6 +210,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Максимальная амортизация",
             price=150.50,
             brand_id=2,
+            country_id=5,
             image_url="/uploads/sneakers/adidas_daroga.jpg",
         ),
         Sneaker(
@@ -192,6 +218,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Максимальная амортизация",
             price=475.80,
             brand_id=2,
+            country_id=5,
             image_url="/uploads/sneakers/adidas_eclyptix.png",
         ),
         Sneaker(
@@ -199,6 +226,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Максимальная амортизация",
             price=220.40,
             brand_id=2,
+            country_id=5,
             image_url="/uploads/sneakers/adidas_fenesi.jpg",
         ),
         Sneaker(
@@ -206,6 +234,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Максимальная амортизация",
             price=405.99,
             brand_id=2,
+            country_id=5,
             image_url="/uploads/sneakers/adidas_ozweego.png",
         ),
         Sneaker(
@@ -213,6 +242,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Максимальная амортизация",
             price=185.75,
             brand_id=2,
+            country_id=5,
             image_url="/uploads/sneakers/adidas_runfalcon.jpg",
         ),
         Sneaker(
@@ -220,6 +250,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Максимальная амортизация",
             price=345.99,
             brand_id=2,
+            country_id=5,
             image_url="/uploads/sneakers/adidas_runfalcon.png",
         ),
         Sneaker(
@@ -227,6 +258,7 @@ async def seed_sneakers(db: AsyncSession):
             description="Максимальная амортизация",
             price=260.30,
             brand_id=2,
+            country_id=5,
             image_url="/uploads/sneakers/adidas_temper.jpg",
         ),
     ]
