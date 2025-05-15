@@ -6,6 +6,8 @@ __all__ = (
     "Country",
     "Color",
     "SneakerColorAssociation",
+    "Material",
+    "SneakerMaterialAssociation"
 )
 
 
@@ -16,3 +18,5 @@ from .sneaker_size import SneakerSizeAssociation
 from .country import Country
 from .color import Color
 from .sneaker_color import SneakerColorAssociation
+from .material import Material
+from .sneaker_material import SneakerMaterialAssociation
