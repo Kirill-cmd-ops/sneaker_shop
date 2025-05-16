@@ -6,7 +6,6 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // ✅ Устанавливаем начальные значения из URL
   const [minPrice, setMinPrice] = useState(searchParams.get("min_price") || "");
   const [maxPrice, setMaxPrice] = useState(searchParams.get("max_price") || "");
   const [sneakerName, setSneakerName] = useState(searchParams.get("name") || "");
@@ -18,7 +17,6 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar }) {
   const availableBrands = ["Nike", "Adidas", "Puma", "Reebok", "New Balance"];
   const availableGenders = ["Мужские", "Женские", "Унисекс"];
 
-  // ✅ Автоматически обновляем фильтры при смене URL
   useEffect(() => {
     setMinPrice(searchParams.get("min_price") || "");
     setMaxPrice(searchParams.get("max_price") || "");
@@ -28,7 +26,6 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar }) {
     setSelectedGenders(searchParams.get("gender")?.split(",").filter(Boolean) || []);
   }, [searchParams]);
 
-  // ✅ Сброс фильтров (сортировка остаётся)
   const resetFilters = () => {
     const currentParams = new URLSearchParams(searchParams.toString());
     currentParams.delete("name");
@@ -41,7 +38,6 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar }) {
     router.push(`/catalog?${currentParams.toString()}`);
   };
 
-  // ✅ Применение фильтров (сохранение сортировки)
   const applyFilters = () => {
     const newParams = new URLSearchParams(searchParams.toString());
 
@@ -65,25 +61,20 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar }) {
     <>
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-md"
+          className="fixed inset-0 bg-black/50 backdrop-blur-md z-40"
           onClick={handleCloseSidebar}
         ></div>
       )}
 
       <div
-        className={`fixed top-0 left-0 h-full w-[450px] bg-white shadow-lg transform transition-transform duration-300 ${
+        className={`fixed top-0 left-0 h-full w-[450px] bg-white shadow-lg transform transition-transform duration-300 z-50 ${
           isSidebarOpen ? "translate-x-0" : "translate-x-[-100%]"
         }`}
       >
         <div className="p-10 flex flex-col h-full">
-          <h2 className="text-xl font-bold text-neutral-600 mb-10">
-            Фильтрация товаров
-          </h2>
+          <h2 className="text-xl font-bold text-neutral-600 mb-10">Фильтрация товаров</h2>
 
-          {/* Фильтр: Название */}
-          <label className="block text-sm font-medium text-gray-600">
-            Название кроссовок
-          </label>
+          <label className="block text-sm font-medium text-gray-600">Название кроссовок</label>
           <input
             type="text"
             className={`w-full mt-3 p-2 border rounded transition ${
@@ -94,10 +85,7 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar }) {
             onChange={(e) => setSneakerName(e.target.value)}
           />
 
-          {/* Фильтр: Цена */}
-          <label className="block text-sm font-medium text-gray-600 mt-5">
-            Цена
-          </label>
+          <label className="block text-sm font-medium text-gray-600 mt-5">Цена</label>
           <div className="flex gap-3 mt-3">
             <input
               type="number"
@@ -115,67 +103,55 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar }) {
             />
           </div>
 
-          {/* Фильтр: Бренды */}
-<label className="block text-sm font-medium text-gray-600 mt-5">
-  Бренды
-</label>
-<div className="flex flex-col mt-3 gap-2">
-  {availableBrands.map((brand) => (
-    <div
-      key={brand}
-      className="flex justify-between items-center cursor-pointer"
-      onClick={() =>
-        setSelectedBrands((prev) =>
-          prev.includes(brand)
-            ? prev.filter((b) => b !== brand)
-            : [...prev, brand]
-        )
-      }
-    >
-      <span className="text-gray-700 font-medium">{brand}</span>
-      <button
-        className={`w-5 h-5 border rounded-md flex items-center justify-center transition-all ${
-          selectedBrands.includes(brand)
-            ? "bg-yellow-500 border-yellow-600"
-            : "bg-gray-200 hover:bg-gray-300"
-        }`}
-      >
-        {selectedBrands.includes(brand) && (
-          <span className="text-black font-bold">✓</span>
-        )}
-      </button>
-    </div>
-  ))}
-</div>
-
-
-          {/* Фильтр: Размер */}
-          <label className="block text-sm font-medium text-gray-600 mt-5">
-            Размер
-          </label>
-          <div className="grid grid-cols-6 gap-2 mt-3">
-            {availableSizes.map((size) => (
-              <button
-                key={size}
-                className={`w-[50px] px-3 py-2 border rounded-md transition-all ${
-                  selectedSizes.includes(size.toString())
-                    ? "bg-yellow-500 text-white font-bold border-yellow-600"
-                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                }`}
+          <label className="block text-sm font-medium text-gray-600 mt-5">Бренды</label>
+          <div className="flex flex-col mt-3 gap-2">
+            {availableBrands.map((brand) => (
+              <div
+                key={brand}
+                className="flex justify-between items-center cursor-pointer"
                 onClick={() =>
-                  setSelectedSizes((prev) =>
-                    prev.includes(size.toString())
-                      ? prev.filter((s) => s !== size.toString())
-                      : [...prev, size.toString()]
+                  setSelectedBrands((prev) =>
+                    prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
                   )
                 }
               >
-                {size}
-              </button>
+                <span className="text-gray-700 font-medium">{brand}</span>
+                <button
+                  className={`w-5 h-5 border rounded-md flex items-center justify-center transition-all ${
+                    selectedBrands.includes(brand) ? "bg-yellow-500 border-yellow-600" : "bg-gray-200 hover:bg-gray-300"
+                  }`}
+                >
+                  {selectedBrands.includes(brand) && <span className="text-black font-bold">✓</span>}
+                </button>
+              </div>
             ))}
           </div>
 
-          {/* Кнопки управления */}
+          <label className="block text-sm font-medium text-gray-600 mt-5">
+  Размер
+</label>
+<div className="grid grid-cols-6 gap-2 mt-3">
+  {availableSizes.map((size) => (
+    <button
+      key={size}
+      className={`w-[50px] px-3 py-2 border rounded-md transition-all ${
+        selectedSizes.includes(size.toString())
+          ? "bg-yellow-500 text-white font-bold border-yellow-600"
+          : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+      }`}
+      onClick={() =>
+        setSelectedSizes((prev) =>
+          prev.includes(size.toString())
+            ? prev.filter((s) => s !== size.toString())
+            : [...prev, size.toString()]
+        )
+      }
+    >
+      {size}
+    </button>
+  ))}
+</div>
+
           <div className="flex justify-between w-full mt-auto">
             <button
               className="w-[45%] px-6 py-3 border border-gray-400 text-gray-600 bg-white rounded-md hover:bg-gray-300 transition-all"
