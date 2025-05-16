@@ -9,11 +9,11 @@ export default function CatalogPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  const currentPage = Number(searchParams.get("page")) || 1;
   const [sneakersData, setSneakersData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState(searchParams.get("sort_by") || "");
   const [order, setOrder] = useState(searchParams.get("order") || "");
-  const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
   const [totalPages, setTotalPages] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -39,8 +39,9 @@ export default function CatalogPage() {
   };
 
   useEffect(() => {
-    fetchSneakers();
-  }, [searchParams]); // ✅ Обновляем данные при изменении URL
+  fetchSneakers();
+}, [searchParams, currentPage]); // ✅ Обновляем данные при изменении страницы
+
 
   const handleOpenSidebar = () => setIsSidebarOpen(true);
   const handleCloseSidebar = () => setIsSidebarOpen(false);
