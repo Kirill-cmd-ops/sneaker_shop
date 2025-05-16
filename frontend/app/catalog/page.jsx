@@ -17,12 +17,20 @@ export default function CatalogPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // ✅ Восстанавливаем скролл при загрузке страницы
+  useEffect(() => {
+    const savedPosition = sessionStorage.getItem("scrollPosition");
+    if (savedPosition) {
+      window.scrollTo(0, Number(savedPosition));
+    }
+  }, []);
+
   const fetchSneakers = async () => {
     try {
       setLoading(true);
-      const params = new URLSearchParams(searchParams.toString()); // ✅ Берём параметры из URL
+      const params = new URLSearchParams(searchParams.toString());
 
-      params.set("limit", "30"); // ✅ Ограничение на количество товаров
+      params.set("limit", "30");
 
       const res = await fetch(`http://localhost:8000/api/v1/sneakers/?${params.toString()}`);
       const data = await res.json();
@@ -39,30 +47,27 @@ export default function CatalogPage() {
   };
 
   useEffect(() => {
-  fetchSneakers();
-}, [searchParams, currentPage]); // ✅ Обновляем данные при изменении страницы
-
+    fetchSneakers();
+  }, [searchParams, currentPage]);
 
   const handleOpenSidebar = () => setIsSidebarOpen(true);
   const handleCloseSidebar = () => setIsSidebarOpen(false);
 
   const applyFilters = (filters) => {
-  const newParams = new URLSearchParams();
+    const newParams = new URLSearchParams();
 
-  if (filters.sneakerName) newParams.set("name", filters.sneakerName);
-  if (filters.minPrice) newParams.set("min_price", filters.minPrice);
-  if (filters.maxPrice) newParams.set("max_price", filters.maxPrice);
-  if (filters.selectedSizes?.length) newParams.set("size", filters.selectedSizes.join(","));
-  if (filters.selectedBrands?.length) newParams.set("brand_name", filters.selectedBrands.join(","));
-  if (filters.selectedGenders?.length) newParams.set("gender", filters.selectedGenders.join(","));
+    if (filters.sneakerName) newParams.set("name", filters.sneakerName);
+    if (filters.minPrice) newParams.set("min_price", filters.minPrice);
+    if (filters.maxPrice) newParams.set("max_price", filters.maxPrice);
+    if (filters.selectedSizes?.length) newParams.set("size", filters.selectedSizes.join(","));
+    if (filters.selectedBrands?.length) newParams.set("brand_name", filters.selectedBrands.join(","));
+    if (filters.selectedGenders?.length) newParams.set("gender", filters.selectedGenders.join(","));
 
-  newParams.set("page", "1"); // ✅ Сбрасываем страницу на первую при фильтрации
+    newParams.set("page", "1");
 
-  // ✅ Обновляем URL только с актуальными параметрами (без пустых)
-  router.push(`/catalog${newParams.toString() ? "?" + newParams.toString() : ""}`);
-  setIsSidebarOpen(false);
-};
-
+    router.push(`/catalog${newParams.toString() ? "?" + newParams.toString() : ""}`);
+    setIsSidebarOpen(false);
+  };
 
   return (
     <main className="relative flex flex-col items-center min-h-screen bg-white text-black p-10">
@@ -97,25 +102,25 @@ export default function CatalogPage() {
       )}
 
       <div className="flex gap-3 mt-8">
-  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-    <button
-      key={page}
-      onClick={() => {
-        const currentParams = new URLSearchParams(searchParams.toString());
-        currentParams.set("page", page); // ✅ Меняем страницу
-        router.push(`/catalog?${currentParams.toString()}`); // ✅ Сохраняем сортировку
-      }}
-      className={`px-4 py-2 rounded-md transition-all ${
-        currentPage === page
-          ? "bg-yellow-500 text-black font-bold"
-          : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-      }`}
-    >
-      {page}
-    </button>
-  ))}
-</div>
-
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <button
+            key={page}
+            onClick={() => {
+              sessionStorage.setItem("scrollPosition", window.scrollY); // ✅ Сохраняем скролл перед сменой страницы
+              const currentParams = new URLSearchParams(searchParams.toString());
+              currentParams.set("page", page);
+              router.push(`/catalog?${currentParams.toString()}`);
+            }}
+            className={`px-4 py-2 rounded-md transition-all ${
+              currentPage === page
+                ? "bg-yellow-500 text-black font-bold"
+                : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+            }`}
+          >
+            {page}
+          </button>
+        ))}
+      </div>
 
       <p className="mt-4 text-lg font-semibold text-neutral-600">Страница: {currentPage}</p>
     </main>
