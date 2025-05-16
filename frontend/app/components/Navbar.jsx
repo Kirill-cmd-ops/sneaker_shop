@@ -1,7 +1,11 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
+import SearchBar from "./SearchBar";
 
 export default function Navbar() {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
   return (
     <header className="fixed top-0 left-0 w-full bg-neutral-900 text-white shadow-md py-1 z-50">
       <nav className="container mx-auto px-6">
@@ -51,7 +55,10 @@ export default function Navbar() {
           {/* Кнопки управления (Поиск, Избранное, Корзина) */}
           <div className="flex space-x-3 mr-6">
             <li className="text-center">
-              <button className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75">
+              <button
+                onClick={() => setIsSearchOpen(!isSearchOpen)}
+                className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75"
+              >
                 <img src="/search.svg" alt="Поиск" className="h-7 w-7" style={{ filter: "invert(1)" }} />
               </button>
             </li>
@@ -66,9 +73,11 @@ export default function Navbar() {
               </button>
             </li>
           </div>
-
         </ul>
       </nav>
+
+      {/* ✅ Показываем `SearchBar`, если `isSearchOpen === true` */}
+      {isSearchOpen && <SearchBar isOpen={isSearchOpen} toggleSearch={() => setIsSearchOpen(false)} />}
     </header>
   );
 }
