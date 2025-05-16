@@ -1,9 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
-export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar, applyFilters }) {
+export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar }) {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   // ✅ Устанавливаем начальные значения из URL
   const [minPrice, setMinPrice] = useState(searchParams.get("min_price") || "");
@@ -27,20 +28,43 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar, apply
     setSelectedGenders(searchParams.get("gender")?.split(",") || []);
   }, [searchParams]);
 
+  // ✅ Сброс фильтров (сортировка остаётся)
   const resetFilters = () => {
-    setMinPrice("");
-    setMaxPrice("");
-    setSneakerName("");
-    setSelectedSizes([]);
-    setSelectedBrands([]);
-    setSelectedGenders([]);
+    const currentParams = new URLSearchParams(searchParams.toString());
+
+    currentParams.delete("name");
+    currentParams.delete("min_price");
+    currentParams.delete("max_price");
+    currentParams.delete("size");
+    currentParams.delete("brand_name");
+    currentParams.delete("gender");
+
+    router.push(`/catalog?${currentParams.toString()}`);
+  };
+
+  // ✅ Применение фильтров (сохранение сортировки)
+  const applyFilters = () => {
+    const newParams = new URLSearchParams(searchParams.toString());
+
+    if (sneakerName) newParams.set("name", sneakerName);
+    if (minPrice) newParams.set("min_price", minPrice);
+    if (maxPrice) newParams.set("max_price", maxPrice);
+    if (selectedSizes.length) newParams.set("size", selectedSizes.join(","));
+    if (selectedBrands.length) newParams.set("brand_name", selectedBrands.join(","));
+    if (selectedGenders.length) newParams.set("gender", selectedGenders.join(","));
+
+    const sortBy = searchParams.get("sort_by");
+    const order = searchParams.get("order");
+    if (sortBy) newParams.set("sort_by", sortBy);
+    if (order) newParams.set("order", order);
+
+    router.push(`/catalog?${newParams.toString()}`);
+    handleCloseSidebar();
   };
 
   return (
     <>
-      {isSidebarOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-md" onClick={handleCloseSidebar}></div>
-      )}
+      {isSidebarOpen && <div className="fixed inset-0 bg-black/50 backdrop-blur-md" onClick={handleCloseSidebar}></div>}
 
       <div className={`fixed top-0 left-0 h-full w-[450px] bg-white shadow-lg transform transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "translate-x-[-100%]"}`}>
         <div className="p-10 flex flex-col h-full">
