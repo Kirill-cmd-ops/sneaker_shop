@@ -97,20 +97,25 @@ export default function CatalogPage() {
       )}
 
       <div className="flex gap-3 mt-8">
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-          <button
-            key={page}
-            onClick={() => router.push(`/catalog?page=${page}`)} // ✅ Меняем страницу через URL
-            className={`px-4 py-2 rounded-md transition-all ${
-              currentPage === page
-                ? "bg-yellow-500 text-black font-bold"
-                : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-            }`}
-          >
-            {page}
-          </button>
-        ))}
-      </div>
+  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+    <button
+      key={page}
+      onClick={() => {
+        const currentParams = new URLSearchParams(searchParams.toString());
+        currentParams.set("page", page); // ✅ Меняем страницу
+        router.push(`/catalog?${currentParams.toString()}`); // ✅ Сохраняем сортировку
+      }}
+      className={`px-4 py-2 rounded-md transition-all ${
+        currentPage === page
+          ? "bg-yellow-500 text-black font-bold"
+          : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+      }`}
+    >
+      {page}
+    </button>
+  ))}
+</div>
+
 
       <p className="mt-4 text-lg font-semibold text-neutral-600">Страница: {currentPage}</p>
     </main>
