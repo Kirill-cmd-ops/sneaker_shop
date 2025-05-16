@@ -23,15 +23,14 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar }) {
     setMinPrice(searchParams.get("min_price") || "");
     setMaxPrice(searchParams.get("max_price") || "");
     setSneakerName(searchParams.get("name") || "");
-    setSelectedSizes(searchParams.get("size")?.split(",") || []);
-    setSelectedBrands(searchParams.get("brand_name")?.split(",") || []);
-    setSelectedGenders(searchParams.get("gender")?.split(",") || []);
+    setSelectedSizes(searchParams.get("size")?.split(",").filter(Boolean) || []);
+    setSelectedBrands(searchParams.get("brand_name")?.split(",").filter(Boolean) || []);
+    setSelectedGenders(searchParams.get("gender")?.split(",").filter(Boolean) || []);
   }, [searchParams]);
 
   // ✅ Сброс фильтров (сортировка остаётся)
   const resetFilters = () => {
     const currentParams = new URLSearchParams(searchParams.toString());
-
     currentParams.delete("name");
     currentParams.delete("min_price");
     currentParams.delete("max_price");
@@ -64,14 +63,27 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar }) {
 
   return (
     <>
-      {isSidebarOpen && <div className="fixed inset-0 bg-black/50 backdrop-blur-md" onClick={handleCloseSidebar}></div>}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-md"
+          onClick={handleCloseSidebar}
+        ></div>
+      )}
 
-      <div className={`fixed top-0 left-0 h-full w-[450px] bg-white shadow-lg transform transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "translate-x-[-100%]"}`}>
+      <div
+        className={`fixed top-0 left-0 h-full w-[450px] bg-white shadow-lg transform transition-transform duration-300 ${
+          isSidebarOpen ? "translate-x-0" : "translate-x-[-100%]"
+        }`}
+      >
         <div className="p-10 flex flex-col h-full">
-          <h2 className="text-xl font-bold text-neutral-600 mb-10">Фильтрация товаров</h2>
+          <h2 className="text-xl font-bold text-neutral-600 mb-10">
+            Фильтрация товаров
+          </h2>
 
           {/* Фильтр: Название */}
-          <label className="block text-sm font-medium text-gray-600">Название кроссовок</label>
+          <label className="block text-sm font-medium text-gray-600">
+            Название кроссовок
+          </label>
           <input
             type="text"
             className={`w-full mt-3 p-2 border rounded transition ${
@@ -83,7 +95,9 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar }) {
           />
 
           {/* Фильтр: Цена */}
-          <label className="block text-sm font-medium text-gray-600 mt-5">Цена</label>
+          <label className="block text-sm font-medium text-gray-600 mt-5">
+            Цена
+          </label>
           <div className="flex gap-3 mt-3">
             <input
               type="number"
@@ -101,58 +115,59 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar }) {
             />
           </div>
 
-          {/* Фильтр: Пол */}
-          <label className="block text-sm font-medium text-gray-600 mt-5">Пол</label>
-          <div className="flex gap-2 mt-3">
-            {availableGenders.map((gender) => (
-              <button
-                key={gender}
-                className={`px-4 py-2 border rounded-md transition-all ${
-                  selectedGenders.includes(gender) ? "bg-yellow-500 text-white font-bold border-yellow-600" : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                }`}
-                onClick={() =>
-                  setSelectedGenders((prev) => (prev.includes(gender) ? prev.filter((g) => g !== gender) : [...prev, gender]))
-                }
-              >
-                {gender}
-              </button>
-            ))}
-          </div>
-
           {/* Фильтр: Бренды */}
-          <label className="block text-sm font-medium text-gray-600 mt-5">Бренды</label>
-          <div className="flex flex-col mt-3 gap-2">
-            {availableBrands.map((brand) => (
-              <div
-                key={brand}
-                className="flex justify-between items-center cursor-pointer"
-                onClick={() =>
-                  setSelectedBrands((prev) => (prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]))
-                }
-              >
-                <span className="text-gray-700 font-medium">{brand}</span>
-                <button
-                  className={`w-5 h-5 border rounded-md flex items-center justify-center transition-all ${
-                    selectedBrands.includes(brand) ? "bg-yellow-500 border-yellow-600" : "bg-gray-200 hover:bg-gray-300"
-                  }`}
-                >
-                  {selectedBrands.includes(brand) && <span className="text-black font-bold">✓</span>}
-                </button>
-              </div>
-            ))}
-          </div>
+<label className="block text-sm font-medium text-gray-600 mt-5">
+  Бренды
+</label>
+<div className="flex flex-col mt-3 gap-2">
+  {availableBrands.map((brand) => (
+    <div
+      key={brand}
+      className="flex justify-between items-center cursor-pointer"
+      onClick={() =>
+        setSelectedBrands((prev) =>
+          prev.includes(brand)
+            ? prev.filter((b) => b !== brand)
+            : [...prev, brand]
+        )
+      }
+    >
+      <span className="text-gray-700 font-medium">{brand}</span>
+      <button
+        className={`w-5 h-5 border rounded-md flex items-center justify-center transition-all ${
+          selectedBrands.includes(brand)
+            ? "bg-yellow-500 border-yellow-600"
+            : "bg-gray-200 hover:bg-gray-300"
+        }`}
+      >
+        {selectedBrands.includes(brand) && (
+          <span className="text-black font-bold">✓</span>
+        )}
+      </button>
+    </div>
+  ))}
+</div>
+
 
           {/* Фильтр: Размер */}
-          <label className="block text-sm font-medium text-gray-600 mt-5">Размер</label>
+          <label className="block text-sm font-medium text-gray-600 mt-5">
+            Размер
+          </label>
           <div className="grid grid-cols-6 gap-2 mt-3">
             {availableSizes.map((size) => (
               <button
                 key={size}
                 className={`w-[50px] px-3 py-2 border rounded-md transition-all ${
-                  selectedSizes.includes(size) ? "bg-yellow-500 text-white font-bold border-yellow-600" : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                  selectedSizes.includes(size.toString())
+                    ? "bg-yellow-500 text-white font-bold border-yellow-600"
+                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
                 }`}
                 onClick={() =>
-                  setSelectedSizes((prev) => (prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]))
+                  setSelectedSizes((prev) =>
+                    prev.includes(size.toString())
+                      ? prev.filter((s) => s !== size.toString())
+                      : [...prev, size.toString()]
+                  )
                 }
               >
                 {size}
@@ -170,7 +185,7 @@ export default function FilterSidebar({ isSidebarOpen, handleCloseSidebar }) {
             </button>
             <button
               className="w-[45%] px-6 py-3 border border-yellow-500 text-yellow-500 bg-white rounded-md hover:bg-yellow-500 hover:text-white transition-all"
-              onClick={() => applyFilters({ sneakerName, minPrice, maxPrice, selectedSizes, selectedBrands, selectedGenders })}
+              onClick={applyFilters}
             >
               Применить
             </button>
