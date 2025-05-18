@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation"; // ✅ Next.js App
 import SneakerGrid from "../components/SneakerGrid";
 import SortDropdown from "../components/SortDropdown";
 import FilterSidebar from "../components/FilterSidebar";
+import NoResults from "../components/NoResults"
 
 export default function CatalogPage() {
   const searchParams = useSearchParams();
@@ -96,7 +97,7 @@ export default function CatalogPage() {
           {sneakersData?.items?.length > 0 ? (
             <SneakerGrid data={sneakersData} cols="grid-cols-5" />
           ) : (
-            <p className="text-lg text-gray-500 mt-6">Кроссовки не найдены</p>
+            <NoResults />
           )}
         </>
       )}
