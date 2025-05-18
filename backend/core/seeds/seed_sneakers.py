@@ -11,6 +11,7 @@ async def seed_sneakers(db: AsyncSession):
             price=215.99,
             brand_id=1,
             country_id=2,
+            gender="Женские",
             image_url="/uploads/sneakers/nike_air_max.png",
         ),
         Sneaker(
@@ -19,6 +20,7 @@ async def seed_sneakers(db: AsyncSession):
             price=134.50,
             brand_id=1,
             country_id=2,
+            gender="Мужские",
             image_url="/uploads/sneakers/nike_yellow.jpg",
         ),
         Sneaker(
@@ -27,6 +29,7 @@ async def seed_sneakers(db: AsyncSession):
             price=489.99,
             brand_id=1,
             country_id=2,
+            gender="Женские",
             image_url="/uploads/sneakers/nike_al8.png",
         ),
         Sneaker(
@@ -35,6 +38,7 @@ async def seed_sneakers(db: AsyncSession):
             price=310.75,
             brand_id=1,
             country_id=2,
+            gender="Мужские",
             image_url="/uploads/sneakers/nike_dh.jpeg",
         ),
         Sneaker(
@@ -43,6 +47,7 @@ async def seed_sneakers(db: AsyncSession):
             price=195.20,
             brand_id=1,
             country_id=2,
+            gender="Женские",
             image_url="/uploads/sneakers/nike_dn.jpg",
         ),
         Sneaker(
@@ -51,6 +56,7 @@ async def seed_sneakers(db: AsyncSession):
             price=500.00,
             brand_id=1,
             country_id=2,
+            gender="Мужские",
             image_url="/uploads/sneakers/nike_jordan.jpg",
         ),
         Sneaker(
@@ -59,6 +65,7 @@ async def seed_sneakers(db: AsyncSession):
             price=245.30,
             brand_id=1,
             country_id=2,
+            gender="Мужские",
             image_url="/uploads/sneakers/nike_react.jpg",
         ),
         Sneaker(
@@ -67,6 +74,7 @@ async def seed_sneakers(db: AsyncSession):
             price=165.80,
             brand_id=1,
             country_id=2,
+            gender="Женские",
             image_url="/uploads/sneakers/nike_intertop.jpg",
         ),
         Sneaker(
@@ -75,6 +83,7 @@ async def seed_sneakers(db: AsyncSession):
             price=425.99,
             brand_id=3,
             country_id=3,
+            gender="Мужские",
             image_url="/uploads/sneakers/puma_ferrari.jpg",
         ),
         Sneaker(
@@ -83,6 +92,7 @@ async def seed_sneakers(db: AsyncSession):
             price=180.75,
             brand_id=3,
             country_id=3,
+            gender="Мужские",
             image_url="/uploads/sneakers/puma_palermo.png",
         ),
         Sneaker(
@@ -91,6 +101,7 @@ async def seed_sneakers(db: AsyncSession):
             price=305.40,
             brand_id=3,
             country_id=3,
+            gender="Женские",
             image_url="/uploads/sneakers/puma_Park.png",
         ),
         Sneaker(
@@ -99,6 +110,7 @@ async def seed_sneakers(db: AsyncSession):
             price=125.99,
             brand_id=3,
             country_id=3,
+            gender="Мужские",
             image_url="/uploads/sneakers/puma_Roma.jpg",
         ),
         Sneaker(
@@ -107,6 +119,7 @@ async def seed_sneakers(db: AsyncSession):
             price=410.50,
             brand_id=3,
             country_id=3,
+            gender="Мужские",
             image_url="/uploads/sneakers/puma_rs-x.png",
         ),
         Sneaker(
@@ -115,6 +128,7 @@ async def seed_sneakers(db: AsyncSession):
             price=350.25,
             brand_id=3,
             country_id=3,
+            gender="Женские",
             image_url="/uploads/sneakers/puma_sl.png",
         ),
         Sneaker(
@@ -123,6 +137,7 @@ async def seed_sneakers(db: AsyncSession):
             price=270.80,
             brand_id=3,
             country_id=3,
+            gender="Мужские",
             image_url="/uploads/sneakers/puma_suede.jpg",
         ),
         Sneaker(
@@ -131,6 +146,7 @@ async def seed_sneakers(db: AsyncSession):
             price=199.99,
             brand_id=3,
             country_id=3,
+            gender="Мужские",
             image_url="/uploads/sneakers/puma_trinity.jpg",
         ),
         Sneaker(
@@ -139,6 +155,7 @@ async def seed_sneakers(db: AsyncSession):
             price=490.50,
             brand_id=4,
             country_id=4,
+            gender="Мужские",
             image_url="/uploads/sneakers/vans_authetic.png",
         ),
         Sneaker(
@@ -147,6 +164,7 @@ async def seed_sneakers(db: AsyncSession):
             price=130.99,
             brand_id=4,
             country_id=4,
+            gender="Мужские",
             image_url="/uploads/sneakers/vans_hevy.png",
         ),
         Sneaker(
@@ -171,6 +189,7 @@ async def seed_sneakers(db: AsyncSession):
             price=220.65,
             brand_id=4,
             country_id=4,
+            gender="Мужские",
             image_url="/uploads/sneakers/vans_Primary.png",
         ),
         Sneaker(
@@ -179,6 +198,7 @@ async def seed_sneakers(db: AsyncSession):
             price=495.99,
             brand_id=4,
             country_id=4,
+            gender="Мужские",
             image_url="/uploads/sneakers/vans_Sk8.png",
         ),
         Sneaker(
@@ -195,6 +215,7 @@ async def seed_sneakers(db: AsyncSession):
             price=310.50,
             brand_id=4,
             country_id=4,
+            gender="Мужские",
             image_url="/uploads/sneakers/vans_slip.jpg",
         ),
         Sneaker(
@@ -211,6 +232,7 @@ async def seed_sneakers(db: AsyncSession):
             price=150.50,
             brand_id=2,
             country_id=5,
+            gender="Мужские",
             image_url="/uploads/sneakers/adidas_daroga.jpg",
         ),
         Sneaker(
@@ -227,6 +249,7 @@ async def seed_sneakers(db: AsyncSession):
             price=220.40,
             brand_id=2,
             country_id=5,
+            gender="Мужские",
             image_url="/uploads/sneakers/adidas_fenesi.jpg",
         ),
         Sneaker(
@@ -243,6 +266,7 @@ async def seed_sneakers(db: AsyncSession):
             price=185.75,
             brand_id=2,
             country_id=5,
+            gender="Мужские",
             image_url="/uploads/sneakers/adidas_runfalcon.jpg",
         ),
         Sneaker(
@@ -251,6 +275,7 @@ async def seed_sneakers(db: AsyncSession):
             price=345.99,
             brand_id=2,
             country_id=5,
+            gender="Женские",
             image_url="/uploads/sneakers/adidas_runfalcon.png",
         ),
         Sneaker(
@@ -259,6 +284,7 @@ async def seed_sneakers(db: AsyncSession):
             price=260.30,
             brand_id=2,
             country_id=5,
+            gender="Мужские",
             image_url="/uploads/sneakers/adidas_temper.jpg",
         ),
     ]
