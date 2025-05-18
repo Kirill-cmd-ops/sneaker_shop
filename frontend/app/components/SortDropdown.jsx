@@ -44,7 +44,7 @@ const SortDropdown = () => {
   };
 
   return (
-    <div className="w-[200px] mt-4">
+    <div className="w-[200px]">
       <select
         value={selected}
         onChange={handleSelect}

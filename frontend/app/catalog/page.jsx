@@ -1,10 +1,10 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation"; // ✅ Next.js App Router
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import SneakerGrid from "../components/SneakerGrid";
 import SortDropdown from "../components/SortDropdown";
 import FilterSidebar from "../components/FilterSidebar";
-import NoResults from "../components/NoResults"
+import NoResults from "../components/NoResults";
 
 export default function CatalogPage() {
   const searchParams = useSearchParams();
@@ -17,8 +17,9 @@ export default function CatalogPage() {
   const [order, setOrder] = useState(searchParams.get("order") || "");
   const [totalPages, setTotalPages] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const controlsRef = useRef(null);
+  const [isSticky, setIsSticky] = useState(false);
 
-  // ✅ Восстанавливаем скролл при загрузке страницы
   useEffect(() => {
     const savedPosition = sessionStorage.getItem("scrollPosition");
     if (savedPosition) {
@@ -26,17 +27,26 @@ export default function CatalogPage() {
     }
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (controlsRef.current) {
+        const { top } = controlsRef.current.getBoundingClientRect();
+        setIsSticky(top <= 20);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const fetchSneakers = async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams(searchParams.toString());
-
       params.set("limit", "30");
 
       const res = await fetch(`http://localhost:8000/api/v1/sneakers/?${params.toString()}`);
       const data = await res.json();
-
-      console.log("Загруженные данные:", data);
 
       setSneakersData(data || { total_count: 0, items: [] });
       setTotalPages(Math.ceil((data.total_count || 1) / 30));
@@ -56,7 +66,6 @@ export default function CatalogPage() {
 
   const applyFilters = (filters) => {
     const newParams = new URLSearchParams();
-
     if (filters.sneakerName) newParams.set("name", filters.sneakerName);
     if (filters.minPrice) newParams.set("min_price", filters.minPrice);
     if (filters.maxPrice) newParams.set("max_price", filters.maxPrice);
@@ -65,7 +74,6 @@ export default function CatalogPage() {
     if (filters.selectedGenders?.length) newParams.set("gender", filters.selectedGenders.join(","));
 
     newParams.set("page", "1");
-
     router.push(`/catalog${newParams.toString() ? "?" + newParams.toString() : ""}`);
     setIsSidebarOpen(false);
   };
@@ -74,21 +82,17 @@ export default function CatalogPage() {
     <main className="relative flex flex-col items-center min-h-screen bg-white text-black p-10">
       <h1 className="text-5xl font-bold text-neutral-600 mt-16 mb-6">Каталог</h1>
 
-      <div className="w-full flex flex-row gap-6 mt-[100px] justify-start">
+      <div className="w-full flex flex-row gap-6 mt-[100px] justify-start items-center sticky top-30 z-50 p-4">
         <button
-          className="px-8 h-[45px] mt-4 border border-yellow-500 text-yellow-500 bg-white rounded-md hover:bg-yellow-500 hover:text-white transition-all"
+          className="px-8 h-[45px] border border-yellow-500 text-yellow-500 rounded-md hover:bg-yellow-500 hover:text-white transition-all"
           onClick={handleOpenSidebar}
         >
           Фильтры
         </button>
-        <SortDropdown setSortBy={setSortBy} setOrder={setOrder} />
+        <SortDropdown setSortBy={setSortBy} />
       </div>
 
-      <FilterSidebar
-        isSidebarOpen={isSidebarOpen}
-        handleCloseSidebar={handleCloseSidebar}
-        applyFilters={applyFilters}
-      />
+      <FilterSidebar isSidebarOpen={isSidebarOpen} handleCloseSidebar={handleCloseSidebar} applyFilters={applyFilters} />
 
       {loading ? (
         <p className="text-lg text-gray-500 mt-6">Загрузка...</p>
@@ -107,15 +111,13 @@ export default function CatalogPage() {
           <button
             key={page}
             onClick={() => {
-              sessionStorage.setItem("scrollPosition", window.scrollY); // ✅ Сохраняем скролл перед сменой страницы
+              sessionStorage.setItem("scrollPosition", window.scrollY);
               const currentParams = new URLSearchParams(searchParams.toString());
               currentParams.set("page", page);
               router.push(`/catalog?${currentParams.toString()}`);
             }}
             className={`px-4 py-2 rounded-md transition-all ${
-              currentPage === page
-                ? "bg-yellow-500 text-black font-bold"
-                : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+              currentPage === page ? "bg-yellow-500 text-black font-bold" : "bg-gray-200 text-gray-600 hover:bg-gray-300"
             }`}
           >
             {page}
