@@ -72,6 +72,11 @@ export default function Navbar() {
                 <img src="/basket.svg" alt="Корзина" className="h-7 w-7" style={{ filter: "invert(1)" }} />
               </button>
             </li>
+            <li className="text-center">
+              <button className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75">
+                <img src="/avatar.svg" alt="Аватарка" className="h-7 w-7" style={{ filter: "invert(1)" }} />
+              </button>
+            </li>
           </div>
         </ul>
       </nav>
