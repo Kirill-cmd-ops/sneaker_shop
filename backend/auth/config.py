@@ -52,16 +52,19 @@ class CookieConfig(BaseModel):
 BASE_DIR = Path(__file__).parent.parent.parent
 
 class AuthConfig(BaseModel):
-    jwt_private_key_path: Path = BASE_DIR / "backend" / "secrets" / "private_key.pem"
-    jwt_public_key_path: Path = BASE_DIR / "backend" / "secrets" / "public_key.pem"
+    jwt_private_key_path: Path = BASE_DIR / "backend/secrets/private_key.pem"
+    jwt_public_key_path: Path = BASE_DIR / "backend/secrets/public_key.pem"
     jwt_private_key: str = ""
     jwt_public_key: str = ""
 
     def model_post_init(self, __context) -> None:
-        if self.jwt_private_key_path.exists():
-            self.jwt_private_key = self.jwt_private_key_path.read_text()
-        if self.jwt_public_key_path.exists():
-            self.jwt_public_key = self.jwt_public_key_path.read_text()
+        private_key_abs_path = self.jwt_private_key_path.resolve()
+        public_key_abs_path = self.jwt_public_key_path.resolve()
+        if private_key_abs_path.exists():
+            self.jwt_private_key = private_key_abs_path.read_text()
+        if public_key_abs_path.exists():
+            self.jwt_public_key = public_key_abs_path.read_text()
+
 
 
 class AccessToken(BaseModel):
