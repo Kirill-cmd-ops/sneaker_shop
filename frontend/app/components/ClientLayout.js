@@ -10,7 +10,7 @@ export default function ClientLayout({ children }) {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-grow">{children}</main>
-      {pathname !== "/about" && <Footer />}
+      {pathname !== "/about" && pathname !== "/register" && <Footer />}
     </div>
   );
 }
