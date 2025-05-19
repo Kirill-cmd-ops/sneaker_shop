@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({ first_name: "", last_name: "", email: "", password: "" });
@@ -34,71 +35,78 @@ export default function RegisterForm() {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-  <div className="max-w-xl p-10 bg-white border-4 border-yellow-500 shadow-lg rounded-lg text-black">
-    <h2 className="text-3xl font-bold mb-8 text-center">Регистрация</h2>
-    {message && <p className="text-red-500 mb-6 text-center">{message}</p>}
-    <form onSubmit={handleSubmit} className="space-y-8">
-      <input
-        type="text"
-        name="first_name"
-        placeholder="Введите имя"
-        value={formData.first_name}
-        onChange={handleChange}
-        required
-        className={`w-full p-5 border rounded-lg text-xl ${formData.first_name ? "border-yellow-500" : "border-gray-300"}`}
-      />
-      <input
-        type="text"
-        name="last_name"
-        placeholder="Введите фамилию"
-        value={formData.last_name}
-        onChange={handleChange}
-        required
-        className={`w-full p-5 border rounded-lg text-xl ${formData.last_name ? "border-yellow-500" : "border-gray-300"}`}
-      />
-      <input
-        type="email"
-        name="email"
-        placeholder="Введите email"
-        value={formData.email}
-        onChange={handleChange}
-        required
-        className={`w-full p-5 border rounded-lg text-xl ${formData.email ? "border-yellow-500" : "border-gray-300"}`}
-      />
-
-      {/* Поле пароля с глазиком */}
-      <div className="relative w-full">
-        <input
-          type={showPassword ? "text" : "password"}
-          name="password"
-          placeholder="Введите пароль"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          className={`w-full p-5 border rounded-lg text-xl ${formData.password ? "border-yellow-500" : "border-gray-300"}`}
-        />
-        <button
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-5 top-5"
-        >
-          <img
-            src={showPassword ? "/eye_open.svg" : "/eye_close.svg"}
-            alt="Показать/скрыть пароль"
-            className="h-8 w-8 cursor-pointer transition duration-300 hover:opacity-70"
+      <div className="max-w-xl p-10 bg-white border-4 border-yellow-500 shadow-lg rounded-lg text-black">
+        <h2 className="text-3xl font-bold mb-8 text-center">Регистрация</h2>
+        {message && <p className="text-red-500 mb-6 text-center">{message}</p>}
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <input
+            type="text"
+            name="first_name"
+            placeholder="Введите имя"
+            value={formData.first_name}
+            onChange={handleChange}
+            required
+            className={`w-full p-5 border rounded-lg text-xl ${formData.first_name ? "border-yellow-500" : "border-gray-300"}`}
           />
-        </button>
+          <input
+            type="text"
+            name="last_name"
+            placeholder="Введите фамилию"
+            value={formData.last_name}
+            onChange={handleChange}
+            required
+            className={`w-full p-5 border rounded-lg text-xl ${formData.last_name ? "border-yellow-500" : "border-gray-300"}`}
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Введите email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className={`w-full p-5 border rounded-lg text-xl ${formData.email ? "border-yellow-500" : "border-gray-300"}`}
+          />
+
+          {/* Поле пароля с глазиком */}
+          <div className="relative w-full">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Введите пароль"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className={`w-full p-5 border rounded-lg text-xl ${formData.password ? "border-yellow-500" : "border-gray-300"}`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-5 top-5"
+            >
+              <img
+                src={showPassword ? "/eye_open.svg" : "/eye_close.svg"}
+                alt="Показать/скрыть пароль"
+                className="h-8 w-8 cursor-pointer transition duration-300 hover:opacity-70"
+              />
+            </button>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-yellow-500 text-black text-xl py-5 rounded-lg hover:bg-yellow-600 transition-all"
+          >
+            Зарегистрироваться
+          </button>
+
+          {/* Кнопка "Вход" */}
+          <p className="mt-4 text-center text-lg">
+            Уже есть аккаунт?{" "}
+            <Link href="/login" className="text-blue-500 underline hover:text-blue-700">
+              Войти
+            </Link>
+          </p>
+        </form>
       </div>
-
-      <button
-        type="submit"
-        className="w-full bg-yellow-500 text-black text-xl py-5 rounded-lg hover:bg-yellow-600 transition-all"
-      >
-        Зарегистрироваться
-      </button>
-    </form>
-  </div>
-</div>
-
+    </div>
   );
 }

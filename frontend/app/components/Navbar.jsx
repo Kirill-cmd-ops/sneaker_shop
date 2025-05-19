@@ -52,33 +52,32 @@ export default function Navbar() {
             </li>
           </div>
 
-          {/* Кнопки управления (Поиск, Избранное, Корзина) */}
-          <div className="flex space-x-3 mr-6">
-            <li className="text-center">
-              <button
-                onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75"
-              >
-                <img src="/search.svg" alt="Поиск" className="h-7 w-7" style={{ filter: "invert(1)" }} />
-              </button>
-            </li>
-            <li className="text-center">
-              <button className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75">
-                <img src="/heart.svg" alt="Избранное" className="h-7 w-7" style={{ filter: "invert(1)" }} />
-              </button>
-            </li>
-            <li className="text-center">
-              <button className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75">
-                <img src="/basket.svg" alt="Корзина" className="h-7 w-7" style={{ filter: "invert(1)" }} />
-              </button>
-            </li>
-            <li className="text-center">
-  <Link href="/register" className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75">
-    <img src="/avatar.svg" alt="Аватарка" className="h-7 w-7" style={{ filter: "invert(1)" }} />
-  </Link>
-</li>
+          <div className="flex items-center space-x-3 mr-6">
+  <li className="text-center">
+    <button
+      onClick={() => setIsSearchOpen(!isSearchOpen)}
+      className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75"
+    >
+      <img src="/search.svg" alt="Поиск" className="h-7 w-7" style={{ filter: "invert(1)" }} />
+    </button>
+  </li>
+  <li className="text-center">
+    <button className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75">
+      <img src="/heart.svg" alt="Избранное" className="h-7 w-7" style={{ filter: "invert(1)" }} />
+    </button>
+  </li>
+  <li className="text-center">
+    <button className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75">
+      <img src="/basket.svg" alt="Корзина" className="h-7 w-7" style={{ filter: "invert(1)" }} />
+    </button>
+  </li>
+  <li className="text-center">
+    <Link href="/register" className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75">
+      <img src="/avatar.svg" alt="Аватарка" className="h-7 w-7" style={{ filter: "invert(1)" }} />
+    </Link>
+  </li>
+</div>
 
-          </div>
         </ul>
       </nav>
 
