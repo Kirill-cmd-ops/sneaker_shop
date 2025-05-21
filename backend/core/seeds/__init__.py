@@ -1,4 +1,3 @@
-import asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.auth.models import db_helper
 from backend.core.seeds.seed_brands import seed_brands
@@ -34,5 +33,3 @@ async def run_seeds():
     finally:
         await session.close()
 
-if __name__ == "__main__":
-    asyncio.run(run_seeds())

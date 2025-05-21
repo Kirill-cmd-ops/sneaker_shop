@@ -1,4 +1,7 @@
 "use client";
+export const dynamic = "force-dynamic";
+
+import { Suspense } from "react";
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import SneakerGrid from "../components/SneakerGrid";
@@ -6,7 +9,8 @@ import SortDropdown from "../components/SortDropdown";
 import FilterSidebar from "../components/FilterSidebar";
 import NoResults from "../components/NoResults";
 
-export default function CatalogPage() {
+// Выносим основное содержимое страницы в отдельный компонент
+function CatalogContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -127,5 +131,14 @@ export default function CatalogPage() {
 
       <p className="mt-4 text-lg font-semibold text-neutral-600">Страница: {currentPage}</p>
     </main>
+  );
+}
+
+// Оборачиваем в Suspense на уровне страницы
+export default function CatalogPage() {
+  return (
+    <Suspense fallback={<p>Loading catalog...</p>}>
+      <CatalogContent />
+    </Suspense>
   );
 }

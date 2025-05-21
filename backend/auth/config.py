@@ -52,8 +52,8 @@ class CookieConfig(BaseModel):
 BASE_DIR = Path(__file__).parent.parent.parent
 
 class AuthConfig(BaseModel):
-    jwt_private_key_path: Path = BASE_DIR / "backend/secrets/private_key.pem"
-    jwt_public_key_path: Path = BASE_DIR / "backend/secrets/public_key.pem"
+    jwt_private_key_path: Path = BASE_DIR / "backend" / "secrets" / "private_key.pem"
+    jwt_public_key_path: Path = BASE_DIR / "backend" / "secrets" / "public_key.pem"
     jwt_private_key: str = ""
     jwt_public_key: str = ""
 
