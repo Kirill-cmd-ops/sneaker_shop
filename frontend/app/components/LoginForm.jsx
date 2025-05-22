@@ -33,9 +33,9 @@ export default function LoginForm() {
 
     if (response.status === 204) {
       setMessage("✅ Успешный вход! Перенаправляем...");
-//       setTimeout(() => {
-//         window.location.href = "/";
-//       }, 1000);
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
       return;
     }
 

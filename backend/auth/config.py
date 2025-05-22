@@ -56,6 +56,7 @@ class AuthConfig(BaseModel):
     jwt_public_key_path: Path = BASE_DIR / "backend" / "secrets" / "public_key.pem"
     jwt_private_key: str = ""
     jwt_public_key: str = ""
+    algorithm: str = ""
 
     def model_post_init(self, __context) -> None:
         private_key_abs_path = self.jwt_private_key_path.resolve()
