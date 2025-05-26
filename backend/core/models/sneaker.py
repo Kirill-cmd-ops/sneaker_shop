@@ -15,6 +15,8 @@ if TYPE_CHECKING:
     from .sneaker_size import SneakerSizeAssociation
     from .sneaker_color import SneakerColorAssociation
     from .sneaker_material import SneakerMaterialAssociation
+    from .cart_sneaker import CartSneakerAssociation
+    from .cart import Cart
 
 
 class Sneaker(Base):
@@ -53,6 +55,10 @@ class Sneaker(Base):
         back_populates="sneaker",
     )
 
+    cart_associations: Mapped[list["CartSneakerAssociation"]] = relationship(
+        back_populates="sneaker",
+    )
+
     sizes: Mapped[list["Size"]] = relationship(
         secondary="sneaker_size_associations",
         viewonly=True,
@@ -65,5 +71,10 @@ class Sneaker(Base):
 
     materials: Mapped[list["Material"]] = relationship(
         secondary="sneaker_material_associations",
+        viewonly=True,
+    )
+
+    carts: Mapped[list["Cart"]] = relationship(
+        secondary="cart_sneaker_associations",
         viewonly=True,
     )

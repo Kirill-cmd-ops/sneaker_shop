@@ -8,7 +8,8 @@ __all__ = (
     "SneakerColorAssociation",
     "Material",
     "SneakerMaterialAssociation",
-    "Cart"
+    "Cart",
+    "CartSneakerAssociation",
 )
 
 
@@ -22,3 +23,4 @@ from .sneaker_color import SneakerColorAssociation
 from .material import Material
 from .sneaker_material import SneakerMaterialAssociation
 from .cart import Cart
+from .cart_sneaker import CartSneakerAssociation
