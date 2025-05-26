@@ -24,3 +24,5 @@ from .material import Material
 from .sneaker_material import SneakerMaterialAssociation
 from .cart import Cart
 from .cart_sneaker import CartSneakerAssociation
+from .favorite import Favorite
+from .favorite_sneaker import FavoriteSneakerAssociation
