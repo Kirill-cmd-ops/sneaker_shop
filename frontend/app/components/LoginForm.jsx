@@ -31,23 +31,23 @@ export default function LoginForm() {
 
     console.log("Ответ сервера:", response);
 
-    if (response.status === 204) {
-      setMessage("✅ Успешный вход! Перенаправляем...");
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 1000);
-      return;
-    }
+//     if (response.status === 204) {
+//       setMessage("✅ Успешный вход! Перенаправляем...");
+//       setTimeout(() => {
+//         window.location.href = "/";
+//       }, 1000);
+//       return;
+//     }
 
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.detail);
     }
 
-    setMessage("✅ Вход выполнен успешно!");
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 1000);
+//     setMessage("✅ Вход выполнен успешно!");
+//     setTimeout(() => {
+//       window.location.href = "/";
+//     }, 1000);
 
   } catch (error) {
     console.error("Ошибка запроса:", error);

@@ -21,7 +21,7 @@ const SneakerGrid = ({ data, cols }) => {
           onClick={() => sessionStorage.setItem("scrollPosition", window.scrollY)} // ✅ Сохраняем позицию скролла
         >
           <img
-            src={`http://127.0.0.1:8000${image_url}`}
+            src={`http://localhost:8000${image_url}`}
             alt={name}
             className="w-full h-[250px] object-cover rounded-md mx-auto transition-all duration-300"
           />
