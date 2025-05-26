@@ -62,9 +62,9 @@ export default function Navbar() {
     </button>
   </li>
   <li className="text-center">
-    <button className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75">
+    <Link href="/favorites" className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75">
       <img src="/heart.svg" alt="Избранное" className="h-7 w-7" style={{ filter: "invert(1)" }} />
-    </button>
+    </Link>
   </li>
   <li className="text-center">
     <button className="cursor-pointer transition duration-300 ease-in-out p-2 hover:brightness-75">

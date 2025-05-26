@@ -12,8 +12,8 @@ function DetailsContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
-  const [addedToCart, setAddedToCart] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [showCartToast, setShowCartToast] = useState(false);
 
   useEffect(() => {
     if (!sneakerId) return;
@@ -38,8 +38,8 @@ function DetailsContent() {
 
   const handleAddToCart = () => {
     if (!selectedSize) return;
-    setAddedToCart(true);
-    setTimeout(() => setAddedToCart(false), 3000);
+    setShowCartToast(true);
+    setTimeout(() => setShowCartToast(false), 3000);
   };
 
   const handleFavoriteClick = () => {
@@ -53,9 +53,17 @@ function DetailsContent() {
 
   return (
     <div className="max-w-7xl mx-auto mt-40 flex gap-20 items-start">
+      {/* Всплывающее уведомление о добавлении в избранное */}
       {showToast && (
-        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg z-50">
+        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-black px-6 py-3 rounded-md shadow-lg z-50">
           Товар добавлен в избранное!
+        </div>
+      )}
+
+      {/* Всплывающее уведомление о добавлении в корзину */}
+      {showCartToast && (
+        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-black px-6 py-3 rounded-md shadow-lg z-50">
+          Товар добавлен в корзину!
         </div>
       )}
 
@@ -120,11 +128,9 @@ function DetailsContent() {
         <div className="flex items-center gap-4 mt-6">
           <button
             onClick={handleAddToCart}
-            className={`px-6 py-3 rounded-md text-lg font-bold w-full ${
-              addedToCart ? "bg-yellow-500 text-black" : "bg-gray-800 text-white hover:bg-gray-900"
-            } transition-colors duration-200`}
+            className="px-6 py-3 rounded-md text-lg font-bold bg-gray-800 text-white hover:bg-gray-900 transition-colors duration-200 w-full"
           >
-            {selectedSize ? (addedToCart ? "Добавлено в корзину" : "В корзину") : "Выберите размер"}
+            В корзину
           </button>
 
           <button
