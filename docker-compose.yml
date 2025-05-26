@@ -56,6 +56,9 @@ services:
     command: [ "alembic", "upgrade", "head" ]
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@db:5432/sneaker_shop
+    volumes:
+      - ./alembic:/app/alembic
+      - ./:/app
 
 
 volumes:
