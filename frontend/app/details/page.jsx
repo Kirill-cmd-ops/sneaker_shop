@@ -13,6 +13,7 @@ function DetailsContent() {
   const [error, setError] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     if (!sneakerId) return;
@@ -41,12 +42,23 @@ function DetailsContent() {
     setTimeout(() => setAddedToCart(false), 3000);
   };
 
+  const handleFavoriteClick = () => {
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
+
   if (loading) return <p>Загрузка...</p>;
   if (error) return <p className="text-red-500">Ошибка: {error}</p>;
   if (!sneaker) return <p>Кроссовки не найдены.</p>;
 
   return (
     <div className="max-w-7xl mx-auto mt-40 flex gap-20 items-start">
+      {showToast && (
+        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg z-50">
+          Товар добавлен в избранное!
+        </div>
+      )}
+
       <div className="w-3/5">
         <img
           src={`http://127.0.0.1:8000${sneaker.image_url}`}
@@ -79,6 +91,7 @@ function DetailsContent() {
         <p className="text-2xl font-semibold text-gray-800 mt-4">
           Страна производства: <strong>{sneaker.country?.name || "Не указано"}</strong>
         </p>
+
         <p className="text-2xl font-bold text-gray-800 mt-6">Цвета:</p>
         <div className="flex flex-wrap gap-3 mt-2">
           {sneaker.colors?.map((color) => (
@@ -87,6 +100,7 @@ function DetailsContent() {
             </span>
           )) || <span className="text-gray-500 text-lg">Не указаны</span>}
         </div>
+
         <p className="text-2xl font-bold text-gray-800 mt-6">Материалы:</p>
         <div className="flex flex-wrap gap-3 mt-2">
           {sneaker.materials?.map((material) => (
@@ -95,19 +109,31 @@ function DetailsContent() {
             </span>
           )) || <span className="text-gray-500 text-lg">Не указаны</span>}
         </div>
+
         <p className="text-2xl font-bold text-gray-800 mt-6">Описание:</p>
         <p className="text-xl text-gray-700 mt-2">
           {sneaker.description || "Описание отсутствует."}
         </p>
+
         <p className="text-5xl font-bold text-black mt-8">{sneaker.price} Br</p>
-        <button
-          onClick={handleAddToCart}
-          className={`w-full mt-6 px-6 py-3 rounded-md text-lg font-bold ${
-            addedToCart ? "bg-yellow-500 text-black" : "bg-gray-800 text-white hover:bg-gray-900"
-          } transition-colors duration-200`}
-        >
-          {selectedSize ? (addedToCart ? "Добавлено в корзину" : "В корзину") : "Выберите размер"}
-        </button>
+
+        <div className="flex items-center gap-4 mt-6">
+          <button
+            onClick={handleAddToCart}
+            className={`px-6 py-3 rounded-md text-lg font-bold w-full ${
+              addedToCart ? "bg-yellow-500 text-black" : "bg-gray-800 text-white hover:bg-gray-900"
+            } transition-colors duration-200`}
+          >
+            {selectedSize ? (addedToCart ? "Добавлено в корзину" : "В корзину") : "Выберите размер"}
+          </button>
+
+          <button
+            className="px-3 py-2 rounded-md bg-gray-200 hover:bg-gray-300 transition-colors duration-200"
+            onClick={handleFavoriteClick}
+          >
+            <img src="/heart.svg" alt="Избранное" className="h-9 w-9" />
+          </button>
+        </div>
       </div>
     </div>
   );
