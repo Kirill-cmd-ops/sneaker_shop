@@ -4,7 +4,7 @@ from backend.core.schemas.brand import BrandRead
 from backend.core.schemas.size import SizeRead
 
 
-class SneakerRead(BaseModel):
+class SneakerStandard(BaseModel):
     id: int
     name: str = Field(max_length=100)
     description: str = Field(max_length=400)
@@ -13,5 +13,10 @@ class SneakerRead(BaseModel):
     image_url: str = Field(max_length=200)
     is_active: bool = Field(default=True)
 
+
+class SneakerOut(SneakerStandard):
+    pass
+
+class SneakerRead(SneakerStandard):
     brand: BrandRead
     sizes: list[SizeRead]
