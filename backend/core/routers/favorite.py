@@ -3,25 +3,25 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from backend.auth.authentication.fastapi_users import fastapi_users
 
 from backend.auth.models import User
-from backend.core.services.cart import read_cart, create_cart
+from backend.core.services.favorite import read_favorite, create_favorite
 from backend.auth.models import db_helper
 from backend.core.schemas.sneaker import SneakerOut
 
 router = APIRouter()
 
 
-@router.post("/cart")
-async def call_create_cart(
+@router.post("/favorite")
+async def call_create_favorite(
     user: User = Depends(fastapi_users.current_user()),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    await create_cart(session, user_id=user.id)
+    await create_favorite(session, user_id=user.id)
 
 
-@router.get("/cart", response_model=list[SneakerOut])
+@router.get("/favorite", response_model=list[SneakerOut])
 async def call_get_cart(
     user: User = Depends(fastapi_users.current_user()),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    items = await read_cart(session, user_id=user.id)
+    items = await read_favorite(session, user_id=user.id)
     return items
