@@ -12,7 +12,6 @@ class FavoriteSneakerAssociation(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     favorite_id: Mapped[int] = mapped_column(ForeignKey("favorites.id"))
     sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id"))
-    sneaker_size: Mapped[float]
 
     sneaker: Mapped["Sneaker"] = relationship(
         back_populates="favorite_associations",
