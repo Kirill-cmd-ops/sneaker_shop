@@ -12,6 +12,9 @@ from .mixins.int_id_pk import IntIdPkMixin
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
     from backend.core.models import Cart
+    from backend.core.models import Favorite
+
+
 
 
 class User(Base, IntIdPkMixin, SQLAlchemyBaseUserTable[UserIdType]):
@@ -19,6 +22,10 @@ class User(Base, IntIdPkMixin, SQLAlchemyBaseUserTable[UserIdType]):
     last_name: Mapped[str] = mapped_column(String(50), nullable=False)
 
     cart: Mapped["Cart"] = relationship(
+        back_populates="user",
+    )
+
+    favorite: Mapped["Favorite"] = relationship(
         back_populates="user",
     )
 
