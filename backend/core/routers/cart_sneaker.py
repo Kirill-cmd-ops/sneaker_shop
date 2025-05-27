@@ -15,7 +15,7 @@ from backend.core.models import Cart
 router = APIRouter()
 
 
-@router.post("/", response_model=dict)
+@router.post("/cart_add/", response_model=dict)
 async def call_create_sneaker_to_cart(
     item: CartSneakerCreate,
     user: User = Depends(fastapi_users.current_user()),
@@ -36,7 +36,7 @@ async def call_create_sneaker_to_cart(
     return {"status": "Элемент добавлен", "item_id": new_item.id}
 
 
-@router.put("/{association_id}", response_model=dict)
+@router.put("/cart_delete/{association_id}", response_model=dict)
 async def call_update_sneaker_to_cart(
     association_id: int,
     item_data: CartSneakerUpdate,

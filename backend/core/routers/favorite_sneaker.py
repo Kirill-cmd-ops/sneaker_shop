@@ -14,7 +14,7 @@ from backend.core.models import Favorite
 router = APIRouter()
 
 
-@router.post("/", response_model=dict)
+@router.post("/favorite_add/", response_model=dict)
 async def call_create_sneaker_to_favorite(
     item: FavoriteSneakerCreate,
     user: User = Depends(fastapi_users.current_user()),
@@ -34,7 +34,7 @@ async def call_create_sneaker_to_favorite(
     )
     return {"status": "Элемент добавлен", "item_id": new_item.id}
 
-@router.delete("/{association_id}", response_model=dict)
+@router.delete("/favorite_delete/{association_id}", response_model=dict)
 async def call_delete_sneaker_to_favorite(
     association_id: int,
     user: User = Depends(fastapi_users.current_user()),
