@@ -1,6 +1,4 @@
 "use client";
-export const dynamic = "force-dynamic";
-
 import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -21,7 +19,7 @@ function DetailsContent() {
     const fetchSneakerDetails = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://127.0.0.1:8000/api/v1/sneaker/${sneakerId}`);
+        const response = await fetch(`http://localhost:8000/api/v1/sneaker/${sneakerId}`);
         if (!response.ok) throw new Error("Ошибка загрузки данных");
         const data = await response.json();
         setSneaker(data);
@@ -42,9 +40,24 @@ function DetailsContent() {
     setTimeout(() => setShowCartToast(false), 3000);
   };
 
-  const handleFavoriteClick = () => {
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
+  const handleFavoriteClick = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/api/v1/favorite_add/", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ sneaker_id: sneakerId }),
+      });
+      if (!res.ok) throw new Error("Ошибка при добавлении в избранное");
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+    } catch (error) {
+      console.error("Ошибка при добавлении в избранное:", error);
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+    }
   };
 
   if (loading) return <p>Загрузка...</p>;
@@ -69,7 +82,7 @@ function DetailsContent() {
 
       <div className="w-3/5">
         <img
-          src={`http://127.0.0.1:8000${sneaker.image_url}`}
+          src={`http://localhost:8000${sneaker.image_url}`}
           alt={sneaker.name}
           className="w-full h-[500px] object-cover rounded-md"
         />
