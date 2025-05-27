@@ -30,7 +30,6 @@ async def call_create_sneaker_to_favorite(
         session,
         favorite_id=user_favorite.id,
         sneaker_id=item.sneaker_id,
-        sneaker_size=item.sneaker_size,
     )
     return {"status": "Элемент добавлен", "item_id": new_item.id}
 

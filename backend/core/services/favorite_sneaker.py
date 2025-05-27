@@ -8,12 +8,10 @@ async def create_sneaker_to_favorite(
     session: AsyncSession,
     favorite_id: int,
     sneaker_id: int,
-    sneaker_size: float,
 ):
     new_sneaker = FavoriteSneakerAssociation(
         favorite_id=favorite_id,
         sneaker_id=sneaker_id,
-        sneaker_size=sneaker_size,
     )
     session.add(new_sneaker)
     await session.commit()
