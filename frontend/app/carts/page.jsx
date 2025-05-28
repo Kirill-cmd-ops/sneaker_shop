@@ -103,7 +103,7 @@ function CartPage() {
     );
 
   return (
-    <div className="max-w-4xl mx-auto mt-24 p-4">
+    <div className="max-w-7xl mx-auto mt-24 p-4">
       {/* Toast-уведомление */}
       {toastMessage && (
         <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-black px-6 py-3 rounded-md shadow-lg z-50">
@@ -111,68 +111,71 @@ function CartPage() {
         </div>
       )}
       <h1 className="text-4xl font-bold mb-6">Корзина</h1>
-      <div className="space-y-6">
-        {cartItems.map((item) => (
-          <div
-            key={item.id}
-            className="flex flex-col md:flex-row items-center border-2 border-transparent rounded p-4 transition-transform duration-300 hover:scale-[1.03] hover:border-yellow-500"
-          >
-            {/* Изображение товара */}
-            <div className="md:w-1/4">
-              <img
-                src={`http://localhost:8000${item.image_url}`}
-                alt={item.name}
-                className="w-full h-auto object-cover rounded"
-              />
-            </div>
-            {/* Информация о товаре */}
-            <div className="mt-4 md:mt-0 md:ml-4 flex-grow">
-              <h2 className="text-2xl font-bold">{item.name}</h2>
-              <p className="text-xl text-gray-600">{item.price} Br</p>
-              {/* Кнопки управления */}
-              <div className="mt-2 flex space-x-4">
+      <div className="flex gap-6 items-start">
+        {/* Список товаров */}
+        <div className="flex-grow space-y-6 -ml-4">
+          {cartItems.map((item) => (
+            <div
+              key={item.id}
+              className="flex flex-col md:flex-row items-center border-2 border-transparent rounded p-4 transition-transform duration-300 hover:scale-[1.03] hover:border-yellow-500"
+            >
+              {/* Изображение товара */}
+              <div className="md:w-1/4">
+                <img
+                  src={`http://localhost:8000${item.image_url}`}
+                  alt={item.name}
+                  className="w-full h-auto object-cover rounded"
+                />
+              </div>
+              {/* Информация о товаре */}
+              <div className="mt-4 md:mt-0 md:ml-4 flex-grow">
+                <h2 className="text-2xl font-bold">{item.name}</h2>
+                <p className="text-xl text-gray-600">{item.price} Br</p>
+                {/* Кнопки управления */}
+                <div className="mt-2 flex space-x-4">
+                  <button
+                    onClick={(e) => handleAddToFavorites(item.id, e)}
+                    className="p-2 bg-transparent"
+                  >
+                    <img
+                      src="/heart.svg"
+                      alt="Избранное"
+                      className="w-6 h-6 filter grayscale"
+                    />
+                  </button>
+                  <button
+                    onClick={(e) => handleRemoveItem(item.associationId, e)}
+                    className="p-2 bg-transparent"
+                  >
+                    <img
+                      src="/trash.svg"
+                      alt="Мусорка"
+                      className="w-6 h-6 filter grayscale"
+                    />
+                  </button>
+                </div>
+              </div>
+              {/* Кнопка "Купить" */}
+              <div className="mt-4 md:mt-0 md:ml-4">
                 <button
-                  onClick={(e) => handleAddToFavorites(item.id, e)}
-                  className="p-2 bg-transparent"
+                  onClick={() => {}}
+                  className="w-full text-lg font-bold bg-yellow-500 text-white px-6 py-3 rounded"
                 >
-                  <img
-                    src="/heart.svg"
-                    alt="Избранное"
-                    className="w-6 h-6 filter grayscale"
-                  />
-                </button>
-                <button
-                  onClick={(e) => handleRemoveItem(item.associationId, e)}
-                  className="p-2 bg-transparent"
-                >
-                  <img
-                    src="/trash.svg"
-                    alt="Мусорка"
-                    className="w-6 h-6 filter grayscale"
-                  />
+                  Купить
                 </button>
               </div>
             </div>
-            {/* Кнопка "Купить" */}
-            <div className="mt-4 md:mt-0 md:ml-4">
-              <button
-                onClick={() => {}}
-                className="w-full text-lg font-bold bg-yellow-500 text-white px-6 py-3 rounded"
-              >
-                Купить
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-      {/* Кнопка "Заказать" */}
-      <div className="mt-10 flex justify-end">
-        <button
-          onClick={() => router.push("/checkout")}
-          className="px-8 py-4 bg-blue-500 text-white text-xl font-bold rounded"
-        >
-          Заказать
-        </button>
+          ))}
+        </div>
+        {/* Кнопка "Заказать" справа, почти вверху */}
+        <div>
+          <button
+            onClick={() => router.push("/checkout")}
+            className="px-8 py-4 bg-yellow-500 text-white text-xl font-bold rounded transition-colors duration-300 hover:bg-yellow-600 active:bg-yellow-700"
+          >
+            Заказать
+          </button>
+        </div>
       </div>
     </div>
   );
