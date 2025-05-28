@@ -10,8 +10,7 @@ function DetailsContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
-  const [showToast, setShowToast] = useState(false);
-  const [showCartToast, setShowCartToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   useEffect(() => {
     if (!sneakerId) return;
@@ -20,7 +19,9 @@ function DetailsContent() {
       try {
         setLoading(true);
         const response = await fetch(`http://localhost:8000/api/v1/sneaker/${sneakerId}`);
-        if (!response.ok) throw new Error("Ошибка загрузки данных");
+        if (!response.ok) {
+          throw new Error("Ошибка загрузки данных");
+        }
         const data = await response.json();
         setSneaker(data);
       } catch (err) {
@@ -34,10 +35,35 @@ function DetailsContent() {
     fetchSneakerDetails();
   }, [sneakerId]);
 
-  const handleAddToCart = () => {
-    if (!selectedSize) return;
-    setShowCartToast(true);
-    setTimeout(() => setShowCartToast(false), 3000);
+  // Функция для показа toast-сообщения
+  const showToastMessage = (message) => {
+    setToastMessage(message);
+    setTimeout(() => setToastMessage(""), 3000);
+  };
+
+  // Обновлённый обработчик добавления в корзину:
+  const handleAddToCart = async () => {
+    if (!selectedSize) {
+      showToastMessage("Пожалуйста, выберите размер");
+      return;
+    }
+    try {
+      const res = await fetch("http://localhost:8000/api/v1/cart_add/", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ sneaker_id: sneakerId, sneaker_size: selectedSize }),
+      });
+      if (!res.ok) {
+        throw new Error("Ошибка при добавлении товара в корзину");
+      }
+      showToastMessage("Товар успешно добавлен в корзину!");
+    } catch (error) {
+      console.error("Ошибка при добавлении в корзину:", error);
+      showToastMessage("Ошибка при добавлении товара в корзину");
+    }
   };
 
   const handleFavoriteClick = async () => {
@@ -50,13 +76,13 @@ function DetailsContent() {
         },
         body: JSON.stringify({ sneaker_id: sneakerId }),
       });
-      if (!res.ok) throw new Error("Ошибка при добавлении в избранное");
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 3000);
+      if (!res.ok) {
+        throw new Error("Ошибка при добавлении товара в избранное");
+      }
+      showToastMessage("Товар добавлен в избранное!");
     } catch (error) {
       console.error("Ошибка при добавлении в избранное:", error);
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 3000);
+      showToastMessage("Ошибка при добавлении товара в избранное");
     }
   };
 
@@ -66,17 +92,10 @@ function DetailsContent() {
 
   return (
     <div className="max-w-7xl mx-auto mt-40 flex gap-20 items-start">
-      {/* Всплывающее уведомление о добавлении в избранное */}
-      {showToast && (
+      {/* Toast-уведомление */}
+      {toastMessage && (
         <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-black px-6 py-3 rounded-md shadow-lg z-50">
-          Товар добавлен в избранное!
-        </div>
-      )}
-
-      {/* Всплывающее уведомление о добавлении в корзину */}
-      {showCartToast && (
-        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-black px-6 py-3 rounded-md shadow-lg z-50">
-          Товар добавлен в корзину!
+          {toastMessage}
         </div>
       )}
 
@@ -93,7 +112,9 @@ function DetailsContent() {
               key={size.id}
               onClick={() => setSelectedSize(size.eu_size)}
               className={`px-6 py-2 rounded-md text-lg font-medium ${
-                selectedSize === size.eu_size ? "bg-yellow-500 text-black" : "bg-gray-200 text-black"
+                selectedSize === size.eu_size
+                  ? "bg-yellow-500 text-black"
+                  : "bg-gray-200 text-black"
               } transition-colors duration-200 hover:bg-yellow-500 hover:text-black`}
             >
               {size.eu_size}
@@ -110,13 +131,17 @@ function DetailsContent() {
           {sneaker.gender || "Не указан"} кроссовки
         </p>
         <p className="text-2xl font-semibold text-gray-800 mt-4">
-          Страна производства: <strong>{sneaker.country?.name || "Не указано"}</strong>
+          Страна производства:{" "}
+          <strong>{sneaker.country?.name || "Не указано"}</strong>
         </p>
 
         <p className="text-2xl font-bold text-gray-800 mt-6">Цвета:</p>
         <div className="flex flex-wrap gap-3 mt-2">
           {sneaker.colors?.map((color) => (
-            <span key={color.id} className="px-5 py-2 bg-gray-300 rounded-md text-lg">
+            <span
+              key={color.id}
+              className="px-5 py-2 bg-gray-300 rounded-md text-lg"
+            >
               {color.name}
             </span>
           )) || <span className="text-gray-500 text-lg">Не указаны</span>}
@@ -125,7 +150,10 @@ function DetailsContent() {
         <p className="text-2xl font-bold text-gray-800 mt-6">Материалы:</p>
         <div className="flex flex-wrap gap-3 mt-2">
           {sneaker.materials?.map((material) => (
-            <span key={material.id} className="px-5 py-2 bg-gray-300 rounded-md text-lg">
+            <span
+              key={material.id}
+              className="px-5 py-2 bg-gray-300 rounded-md text-lg"
+            >
               {material.name}
             </span>
           )) || <span className="text-gray-500 text-lg">Не указаны</span>}
