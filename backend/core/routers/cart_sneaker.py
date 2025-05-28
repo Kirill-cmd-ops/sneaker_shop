@@ -36,7 +36,7 @@ async def call_create_sneaker_to_cart(
     return {"status": "Элемент добавлен", "item_id": new_item.id}
 
 
-@router.put("/cart_delete/{association_id}", response_model=dict)
+@router.put("/cart_update/{association_id}", response_model=dict)
 async def call_update_sneaker_to_cart(
     association_id: int,
     item_data: CartSneakerUpdate,
@@ -49,7 +49,7 @@ async def call_update_sneaker_to_cart(
     return {"status": "Элемент обновлён", "item_id": updated_item.id}
 
 
-@router.delete("/{association_id}", response_model=dict)
+@router.delete("/cart_delete/{association_id}", response_model=dict)
 async def call_delete_sneaker_to_cart(
     association_id: int,
     user: User = Depends(fastapi_users.current_user()),

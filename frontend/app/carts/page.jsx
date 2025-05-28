@@ -94,32 +94,36 @@ export default function CartPage() {
             <div className="mt-4 md:mt-0 md:ml-4 flex-grow">
               <h2 className="text-2xl font-bold">{item.name}</h2>
               <p className="text-xl text-gray-600">{item.price} Br</p>
-              {/* Маленькие кнопки под текстом с ценой */}
+              {/* Кнопки управления под текстом с ценой */}
               <div className="mt-2 flex space-x-4">
                 <button
                   onClick={(e) => handleAddToFavorites(item.id, e)}
-                  className="p-2 bg-yellow-500 rounded transition hover:bg-yellow-600"
+                  className="p-2 bg-transparent"  /* без переходов и hover-эффектов */
                 >
                   <img
                     src="/heart.svg"
                     alt="Избранное"
-                    className="w-6 h-6"
+                    className="w-6 h-6 filter grayscale"
                   />
                 </button>
                 <button
                   onClick={(e) => handleRemoveItem(item.id, e)}
-                  className="p-2 bg-yellow-500 rounded transition hover:bg-yellow-600"
+                  className="p-2 bg-transparent"
                 >
-                  <img src="/cart.svg" alt="Удалить" className="w-6 h-6" />
+                  <img
+                    src="/trash.svg"
+                    alt="Удалить"
+                    className="w-6 h-6 filter grayscale"
+                  />
                 </button>
               </div>
             </div>
 
-            {/* Кнопка "Купить" – расположена справа карточки и больше по размеру */}
+            {/* Кнопка "Купить" – расположена справа карточки */}
             <div className="mt-4 md:mt-0 md:ml-4">
               <button
                 onClick={() => {}}
-                className="w-full text-lg font-bold bg-yellow-500 text-white px-6 py-3 rounded transition hover:bg-yellow-600"
+                className="w-full text-lg font-bold bg-yellow-500 text-white px-6 py-3 rounded"
               >
                 Купить
               </button>
@@ -132,7 +136,7 @@ export default function CartPage() {
       <div className="mt-10 flex justify-end">
         <button
           onClick={() => router.push("/checkout")}
-          className="px-8 py-4 bg-blue-500 text-white text-xl font-bold rounded transition hover:bg-blue-600"
+          className="px-8 py-4 bg-blue-500 text-white text-xl font-bold rounded"
         >
           Заказать
         </button>
