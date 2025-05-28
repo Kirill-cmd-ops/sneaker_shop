@@ -14,7 +14,7 @@ function FavoritePage() {
       try {
         const res = await fetch("http://localhost:8000/api/v1/favorite", {
           method: "GET",
-          credentials: "include", // Отправляем cookie с JWT
+          credentials: "include",
         });
         if (!res.ok) {
           throw new Error("Ошибка при загрузке избранных товаров");
@@ -31,7 +31,6 @@ function FavoritePage() {
     fetchFavorites();
   }, []);
 
-  // Обработка удаления товара из избранного
   const handleDeleteFavorite = async (associationId, e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -44,7 +43,6 @@ function FavoritePage() {
         }
       );
       if (!res.ok) throw new Error("Ошибка при удалении товара из избранного");
-      // Обновляем список, удаляя удалённый элемент
       setFavorites((prev) => prev.filter((fav) => fav.id !== associationId));
     } catch (err) {
       console.error(err);
@@ -72,7 +70,6 @@ function FavoritePage() {
     <div className="max-w-7xl mx-auto mt-24">
       <h1 className="text-4xl font-bold text-gray-900 mb-10">Избранное</h1>
 
-      {/* Карточки в виде сетки */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10 mt-6 justify-center">
         {favorites.map((item) => (
           <a
@@ -81,14 +78,12 @@ function FavoritePage() {
             className="group relative w-[400px] h-[500px] text-center rounded-lg shadow-md transition-transform duration-300 hover:scale-105 p-4 bg-white block hover:border-2 hover:border-yellow-500"
             onClick={() => sessionStorage.setItem("scrollPosition", window.scrollY)}
           >
-            {/* Контейнер для изображения с позицией relative */}
             <div className="relative">
               <img
                 src={`http://localhost:8000${item.image_url}`}
                 alt={item.name}
                 className="w-full h-[250px] object-cover rounded-md mx-auto transition-all duration-300"
               />
-              {/* SVG-иконка (сердечко), желтого цвета, для удаления из избранного */}
               <svg
                 onClick={(e) => handleDeleteFavorite(item.id, e)}
                 xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +97,6 @@ function FavoritePage() {
                   3.78-3.4 6.86-8.55 11.54L12 21.35z" />
               </svg>
             </div>
-            {/* Информация о товаре */}
             <h2 className="text-2xl text-gray-500 mt-3">
               {item.brand?.name || "Без бренда"}
             </h2>
@@ -110,12 +104,10 @@ function FavoritePage() {
             <p className="text-xl text-gray-600 mt-2">
               <span className="font-bold text-black">{item.price}</span> Br
             </p>
-            {/* Кнопка "В корзину" */}
             <button
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                // Перенаправляем на страницу деталей (или можно вызвать другую логику)
                 router.push(`/details?sneakerId=${item.id}`);
               }}
               className="w-40 mt-4 bg-yellow-500 text-white px-4 py-2 rounded-md transition-all duration-300 hover:w-full hover:bg-yellow-600"
