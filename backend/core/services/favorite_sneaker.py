@@ -1,7 +1,8 @@
 from fastapi import HTTPException
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.core.models import FavoriteSneakerAssociation
+from backend.core.models import FavoriteSneakerAssociation, Favorite
 
 
 async def create_sneaker_to_favorite(
@@ -18,11 +19,23 @@ async def create_sneaker_to_favorite(
     await session.refresh(new_sneaker)
     return new_sneaker
 
+
 async def delete_sneaker_to_favorite(
-    session: AsyncSession, association_id: int
+    session: AsyncSession, user_id: int, sneaker_id: int
 ) -> None:
-    current_sneaker = await session.get(FavoriteSneakerAssociation, association_id)
-    if not current_sneaker:
-        raise HTTPException(status_code=404, detail="Элемент избранного не найден")
-    await session.delete(current_sneaker)
+    stmt = (
+        select(FavoriteSneakerAssociation)
+        .join(Favorite)
+        .where(
+            Favorite.user_id == user_id,
+            FavoriteSneakerAssociation.sneaker_id == sneaker_id,
+        )
+    )
+    result = await session.execute(stmt)
+    association = result.scalar_one_or_none()
+
+    if not association:
+        raise HTTPException(status_code=404, detail="Объект избранного не найден")
+
+    await session.delete(association)
     await session.commit()

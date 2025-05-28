@@ -31,6 +31,27 @@ function FavoritePage() {
     fetchFavorites();
   }, []);
 
+  // Обработка удаления товара из избранного
+  const handleDeleteFavorite = async (associationId, e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    try {
+      const res = await fetch(
+        `http://localhost:8000/api/v1/favorite_delete/${associationId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+      if (!res.ok) throw new Error("Ошибка при удалении товара из избранного");
+      // Обновляем список, удаляя удалённый элемент
+      setFavorites((prev) => prev.filter((fav) => fav.id !== associationId));
+    } catch (err) {
+      console.error(err);
+      alert("Ошибка при удалении товара из избранного");
+    }
+  };
+
   if (loading) {
     return <p className="text-center mt-20">Загрузка...</p>;
   }
@@ -52,7 +73,7 @@ function FavoritePage() {
       <h1 className="text-4xl font-bold text-gray-900 mb-10">Избранное</h1>
 
       {/* Карточки в виде сетки */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 mt-6 justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10 mt-6 justify-center">
         {favorites.map((item) => (
           <a
             key={item.id}
@@ -67,12 +88,13 @@ function FavoritePage() {
                 alt={item.name}
                 className="w-full h-[250px] object-cover rounded-md mx-auto transition-all duration-300"
               />
-              {/* Inline SVG-иконка, желтого цвета, появляется в правом верхнем углу при наведении */}
+              {/* SVG-иконка (сердечко), желтого цвета, для удаления из избранного */}
               <svg
+                onClick={(e) => handleDeleteFavorite(item.id, e)}
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="absolute top-0 right-0 w-10 h-10 p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-yellow-500"
+                className="absolute top-0 right-0 w-10 h-10 p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-yellow-500 cursor-pointer"
               >
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
                   2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09
@@ -88,12 +110,12 @@ function FavoritePage() {
             <p className="text-xl text-gray-600 mt-2">
               <span className="font-bold text-black">{item.price}</span> Br
             </p>
-            {/* Кнопка "Купить" с желтым фоном, белым текстом,
-                которая при наведении расширяется, и перенаправляет на страницу деталей */}
+            {/* Кнопка "В корзину" */}
             <button
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                // Перенаправляем на страницу деталей (или можно вызвать другую логику)
                 router.push(`/details?sneakerId=${item.id}`);
               }}
               className="w-40 mt-4 bg-yellow-500 text-white px-4 py-2 rounded-md transition-all duration-300 hover:w-full hover:bg-yellow-600"
