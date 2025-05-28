@@ -1,8 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const SneakerGrid = ({ data, cols }) => {
   const [toast, setToast] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const savedPosition = sessionStorage.getItem("scrollPosition");
@@ -47,11 +49,12 @@ const SneakerGrid = ({ data, cols }) => {
                 className="w-full h-[250px] object-cover rounded-md mx-auto transition-all duration-300"
               />
               <div className="absolute inset-0 bg-white bg-opacity-30 flex flex-col items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {/* При нажатии кнопка ведёт на страницу деталей */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    // Логика добавления в корзину (если необходима)
+                    router.push(`/details?sneakerId=${id}`);
                   }}
                   className="w-40 bg-white border border-yellow-500 text-yellow-500 px-4 py-2 rounded-md transition-colors duration-300 hover:bg-yellow-500 hover:text-white"
                 >
@@ -74,7 +77,9 @@ const SneakerGrid = ({ data, cols }) => {
                         }
                       );
                       if (!res.ok) {
-                        throw new Error("Ошибка при добавлении товара в избранное");
+                        throw new Error(
+                          "Ошибка при добавлении товара в избранное"
+                        );
                       }
                       showToast("Товар успешно добавлен в избранное!");
                     } catch (error) {
