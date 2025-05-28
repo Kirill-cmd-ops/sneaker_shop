@@ -21,7 +21,9 @@ async def create_sneaker_to_favorite(
 
 
 async def delete_sneaker_to_favorite(
-    session: AsyncSession, user_id: int, sneaker_id: int
+    session: AsyncSession,
+    user_id: int,
+    sneaker_id: int,
 ) -> None:
     stmt = (
         select(FavoriteSneakerAssociation)

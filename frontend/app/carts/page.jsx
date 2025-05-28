@@ -3,11 +3,18 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function CartPage() {
+function CartPage() {
   const [cartItems, setCartItems] = useState([]);
+  const [toastMessage, setToastMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
+
+  // Функция для отображения toast‑уведомления
+  const showToast = (message) => {
+    setToastMessage(message);
+    setTimeout(() => setToastMessage(""), 3000);
+  };
 
   // Запрос списка товаров корзины при монтировании компонента
   useEffect(() => {
@@ -37,34 +44,57 @@ export default function CartPage() {
     fetchCart();
   }, []);
 
-  // Обработчик добавления товара в избранное (placeholder)
-  const handleAddToFavorites = (itemId, e) => {
-    e?.stopPropagation();
-    e?.preventDefault();
-    alert("Товар добавлен в избранное");
-  };
-
-  // Обработчик удаления товара из корзины
-  const handleRemoveItem = async (itemId, e) => {
+  // Обработчик добавления товара в избранное через /api/v1/favorite_add/
+  const handleAddToFavorites = async (itemId, e) => {
     e?.stopPropagation();
     e?.preventDefault();
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/cart/${itemId}`, {
-        method: "DELETE",
+      const res = await fetch("http://localhost:8000/api/v1/favorite_add/", {
+        method: "POST",
         credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ sneaker_id: itemId }),
       });
+      if (!res.ok) {
+        throw new Error("Ошибка при добавлении товара в избранное");
+      }
+      showToast("Товар успешно добавлен в избранное!");
+    } catch (err) {
+      console.error(err);
+      showToast("Ошибка при добавлении товара в избранное");
+    }
+  };
+
+  // Обработчик удаления товара из корзины через /api/v1/cart_delete/{associationId}
+  const handleRemoveItem = async (associationId, e) => {
+    e?.stopPropagation();
+    e?.preventDefault();
+    try {
+      const res = await fetch(
+        `http://localhost:8000/api/v1/cart_delete/${associationId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
       if (!res.ok) {
         throw new Error("Ошибка при удалении товара");
       }
-      setCartItems((prev) => prev.filter((item) => item.id !== itemId));
+      setCartItems((prev) =>
+        prev.filter((item) => item.associationId !== associationId)
+      );
+      showToast("Товар удалён из корзины");
     } catch (err) {
       console.error(err);
-      alert("Ошибка при удалении товара из корзины");
+      showToast("Ошибка при удалении товара из корзины");
     }
   };
 
   if (loading) return <p className="text-center mt-20">Загрузка...</p>;
-  if (error) return <p className="text-center mt-20 text-red-600">{error}</p>;
+  if (error)
+    return <p className="text-center mt-20 text-red-600">{error}</p>;
   if (cartItems.length === 0)
     return (
       <p className="text-center mt-20 text-xl text-gray-500">
@@ -74,6 +104,12 @@ export default function CartPage() {
 
   return (
     <div className="max-w-4xl mx-auto mt-24 p-4">
+      {/* Toast-уведомление */}
+      {toastMessage && (
+        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-black px-6 py-3 rounded-md shadow-lg z-50">
+          {toastMessage}
+        </div>
+      )}
       <h1 className="text-4xl font-bold mb-6">Корзина</h1>
       <div className="space-y-6">
         {cartItems.map((item) => (
@@ -89,16 +125,15 @@ export default function CartPage() {
                 className="w-full h-auto object-cover rounded"
               />
             </div>
-
             {/* Информация о товаре */}
             <div className="mt-4 md:mt-0 md:ml-4 flex-grow">
               <h2 className="text-2xl font-bold">{item.name}</h2>
               <p className="text-xl text-gray-600">{item.price} Br</p>
-              {/* Кнопки управления под текстом с ценой */}
+              {/* Кнопки управления */}
               <div className="mt-2 flex space-x-4">
                 <button
                   onClick={(e) => handleAddToFavorites(item.id, e)}
-                  className="p-2 bg-transparent"  /* без переходов и hover-эффектов */
+                  className="p-2 bg-transparent"
                 >
                   <img
                     src="/heart.svg"
@@ -107,19 +142,18 @@ export default function CartPage() {
                   />
                 </button>
                 <button
-                  onClick={(e) => handleRemoveItem(item.id, e)}
+                  onClick={(e) => handleRemoveItem(item.associationId, e)}
                   className="p-2 bg-transparent"
                 >
                   <img
                     src="/trash.svg"
-                    alt="Удалить"
+                    alt="Мусорка"
                     className="w-6 h-6 filter grayscale"
                   />
                 </button>
               </div>
             </div>
-
-            {/* Кнопка "Купить" – расположена справа карточки */}
+            {/* Кнопка "Купить" */}
             <div className="mt-4 md:mt-0 md:ml-4">
               <button
                 onClick={() => {}}
@@ -131,7 +165,6 @@ export default function CartPage() {
           </div>
         ))}
       </div>
-
       {/* Кнопка "Заказать" */}
       <div className="mt-10 flex justify-end">
         <button
@@ -144,3 +177,5 @@ export default function CartPage() {
     </div>
   );
 }
+
+export default CartPage;

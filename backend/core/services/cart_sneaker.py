@@ -4,8 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.core.models import (
     CartSneakerAssociation,
-    FavoriteSneakerAssociation,
-    Favorite,
+    Cart,
 )
 
 
@@ -25,8 +24,9 @@ async def create_sneaker_to_cart(
     await session.refresh(new_sneaker)
     return new_sneaker
 
+
 async def update_sneaker_to_cart(
-session: AsyncSession, association_id: int, sneaker_size: float
+    session: AsyncSession, association_id: int, sneaker_size: float
 ) -> CartSneakerAssociation:
     current_sneaker = await session.get(CartSneakerAssociation, association_id)
     if not current_sneaker:
@@ -36,22 +36,25 @@ session: AsyncSession, association_id: int, sneaker_size: float
     await session.refresh(current_sneaker)
     return current_sneaker
 
+
 async def delete_sneaker_to_cart(
-    session: AsyncSession, user_id: int, sneaker_id: int
+    session: AsyncSession,
+    user_id: int,
+    sneaker_id: int,
 ) -> None:
     stmt = (
-        select(FavoriteSneakerAssociation)
-        .join(Favorite)
+        select(CartSneakerAssociation)
+        .join(Cart)
         .where(
-            Favorite.user_id == user_id,
-            FavoriteSneakerAssociation.sneaker_id == sneaker_id,
+            Cart.user_id == user_id,
+            CartSneakerAssociation.sneaker_id == sneaker_id,
         )
     )
     result = await session.execute(stmt)
     association = result.scalar_one_or_none()
 
     if not association:
-        raise HTTPException(status_code=404, detail="Объект избранного не найден")
+        raise HTTPException(status_code=404, detail="Объект корзины не найден")
 
     await session.delete(association)
     await session.commit()

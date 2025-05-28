@@ -49,11 +49,11 @@ async def call_update_sneaker_to_cart(
     return {"status": "Элемент обновлён", "item_id": updated_item.id}
 
 
-@router.delete("/cart_delete/{association_id}", response_model=dict)
+@router.delete("/cart_delete/{sneaker_id}", response_model=dict)
 async def call_delete_sneaker_to_cart(
-    association_id: int,
+    sneaker_id: int,
     user: User = Depends(fastapi_users.current_user()),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    await delete_sneaker_to_cart(session, association_id=association_id)
+    await delete_sneaker_to_cart(session, user_id=user.id, sneaker_id=sneaker_id)
     return {"status": "Элемент удалён"}
