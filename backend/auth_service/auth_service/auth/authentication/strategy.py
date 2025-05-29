@@ -1,5 +1,5 @@
 from fastapi_users.authentication import JWTStrategy
-from auth_service.auth.config import settings
+from backend.auth_service.auth_service.auth.config import settings
 
 
 def get_jwt_strategy() -> JWTStrategy:

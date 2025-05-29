@@ -8,10 +8,10 @@ from fastapi_users import (
     InvalidPasswordException, models,
 )
 
-from auth_service.auth.config import settings
-from auth_service.auth.models import User
-from auth_service.auth.schemas.user import UserCreate
-from auth_service.auth.types.user_id import UserIdType
+from backend.auth_service.auth_service.auth.config import settings
+from backend.auth_service.auth_service.auth.models import User
+from backend.auth_service.auth_service.auth.schemas.user import UserCreate
+from backend.auth_service.auth_service.auth.types.user_id import UserIdType
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):

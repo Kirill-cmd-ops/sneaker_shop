@@ -2,7 +2,7 @@ from typing import Optional
 
 from fastapi_users import schemas
 
-from auth_service.auth.types.user_id import UserIdType
+from backend.auth_service.auth_service.auth.types.user_id import UserIdType
 
 
 class UserRead(schemas.BaseUser[UserIdType]):

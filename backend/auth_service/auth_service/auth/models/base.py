@@ -2,8 +2,8 @@ from sqlalchemy import MetaData
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import declared_attr
 
-from auth_service.auth.config import settings
-from backend.utils import camel_case_to_snake_case
+from backend.auth_service.auth_service.auth.config import settings
+from backend.auth_service.auth_service.utils import camel_case_to_snake_case
 
 
 class Base(DeclarativeBase):

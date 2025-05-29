@@ -5,7 +5,7 @@ from typing import (
 
 from fastapi import Depends
 
-from auth_service.auth.models import db_helper, User
+from backend.auth_service.auth_service.auth.models import db_helper, User
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession

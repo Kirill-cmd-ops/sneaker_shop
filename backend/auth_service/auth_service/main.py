@@ -3,10 +3,10 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 
-from auth_service.auth.config import settings
-from backend.auth_servicee import db_helper
+from backend.auth_service.auth_service.auth.config import settings
+from backend.auth_service.auth_service.auth.models import db_helper
 from backend.middlewares import add_middleware
-from backend.auth_servicee import router as auth_router
+from backend.auth_service.auth_service import router as auth_router
 
 
 @asynccontextmanager
