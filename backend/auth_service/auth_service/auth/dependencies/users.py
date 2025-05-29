@@ -5,10 +5,7 @@ from typing import (
 
 from fastapi import Depends
 
-from backend.auth.models import (
-    db_helper,
-    User,
-)
+from auth_service.auth.models import db_helper, User
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
@@ -21,4 +18,3 @@ async def get_users_db(
     ],
 ):
     yield User.get_db(session=session)
-

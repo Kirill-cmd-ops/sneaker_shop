@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from backend.auth.authentication.routers import router as auth_router
-from backend.auth.authentication.users import router as users_router
+from auth_service.auth.authentication.routers import router as auth_router
+from auth_service.auth.authentication.users import router as users_router
 from backend.core.routers.sneakers import router as sneakers_router
 from backend.core.routers.sneaker import router as sneaker_router
 from backend.core.routers.profile import router as profile_router
@@ -9,7 +9,7 @@ from backend.core.routers.cart import router as cart_router
 from backend.core.routers.cart_sneaker import router as cart_sneaker_router
 from backend.core.routers.favorite import router as favorite_router
 from backend.core.routers.favorite_sneaker import router as favorite_sneaker_router
-from backend.auth.config import settings
+from auth_service.auth.config import settings
 
 router = APIRouter(
     prefix=settings.api.v1.prefix,

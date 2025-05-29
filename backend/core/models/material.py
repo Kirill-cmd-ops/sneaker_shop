@@ -1,6 +1,6 @@
 from sqlalchemy import String
 from typing import TYPE_CHECKING
-from backend.auth.models import Base
+from backend.auth_servicee import Base
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 if TYPE_CHECKING:

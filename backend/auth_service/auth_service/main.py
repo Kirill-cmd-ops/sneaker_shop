@@ -2,14 +2,11 @@ from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import ORJSONResponse
-from fastapi.staticfiles import StaticFiles
 
+from auth_service.auth.config import settings
 from backend.auth_servicee import db_helper
 from backend.middlewares import add_middleware
-from auth_service.auth.config import settings
-
-from backend.api import router as api_router
+from backend.auth_servicee import router as auth_router
 
 
 @asynccontextmanager
@@ -20,20 +17,13 @@ async def lifespan(app: FastAPI):
     await db_helper.dispose()
 
 
-app = FastAPI(
-    default_response_class=ORJSONResponse,
-    lifespan=lifespan,
-)
-
-
-app.mount("/uploads/sneakers", StaticFiles(directory="backend/static/uploads/sneakers"), name="sneakers")
-app.mount("/uploads/brands", StaticFiles(directory="backend/static/uploads/brands"), name="brands")
+app = FastAPI(lifespan=lifespan)
 
 
 add_middleware(app)
 
 app.include_router(
-    api_router,
+    auth_router,
 )
 
 

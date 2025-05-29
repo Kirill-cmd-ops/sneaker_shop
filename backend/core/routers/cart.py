@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.auth.authentication.fastapi_users import fastapi_users
+from auth_service.auth.authentication.fastapi_users import fastapi_users
 
-from backend.auth.models import User
+from backend.auth_servicee import User
 from backend.core.services.cart import read_cart, create_cart
-from backend.auth.models import db_helper
+from backend.auth_servicee import db_helper
 from backend.core.schemas.sneaker import SneakerOut
 
 router = APIRouter()

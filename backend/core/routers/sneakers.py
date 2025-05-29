@@ -3,7 +3,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.auth.models import db_helper
+from backend.auth_servicee import db_helper
 
 from backend.core.services.sneakers import get_sneakers_details
 

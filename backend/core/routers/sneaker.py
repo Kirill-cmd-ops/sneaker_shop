@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.auth.models import db_helper
+from backend.auth_servicee import db_helper
 from backend.core.services.sneaker import get_sneaker_details
 
 router = APIRouter()

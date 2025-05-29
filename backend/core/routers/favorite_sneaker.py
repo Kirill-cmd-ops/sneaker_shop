@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from backend.auth.authentication.fastapi_users import fastapi_users
-from backend.auth.models import User
-from backend.auth.models import db_helper
+from auth_service.auth.authentication.fastapi_users import fastapi_users
+from backend.auth_servicee import User
+from backend.auth_servicee import db_helper
 from backend.core.schemas.favorite_sneaker import FavoriteSneakerCreate
 from backend.core.services.favorite_sneaker import (
     create_sneaker_to_favorite,

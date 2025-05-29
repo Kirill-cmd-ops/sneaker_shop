@@ -1,10 +1,10 @@
 from sqlalchemy import ForeignKey
-from backend.auth.models import Base
+from backend.auth_servicee import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from backend.auth.models import User
+    from backend.auth_servicee import User
     from .favorite_sneaker import FavoriteSneakerAssociation
     from .sneaker import Sneaker
 

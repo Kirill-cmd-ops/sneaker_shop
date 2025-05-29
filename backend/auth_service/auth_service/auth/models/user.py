@@ -5,7 +5,7 @@ from sqlalchemy import String
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from backend.auth.types.user_id import UserIdType
+from auth_service.auth.types.user_id import UserIdType
 from .base import Base
 from .mixins.int_id_pk import IntIdPkMixin
 

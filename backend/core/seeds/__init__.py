@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.auth.models import db_helper
+from backend.auth_servicee import db_helper
 from backend.core.seeds.seed_brands import seed_brands
 from backend.core.seeds.seed_sizes import seed_sizes
 from backend.core.seeds.seed_sneakers import seed_sneakers
