@@ -10,7 +10,7 @@ from alembic import context
 from auth_service.auth.config import settings
 from backend.auth_servicee import Base
 
-# this is the Alembic Config object, which provides
+# this is the Alembic Config object, which providesZ
 # access to the values within the .ini file in use.
 config = context.config
 
