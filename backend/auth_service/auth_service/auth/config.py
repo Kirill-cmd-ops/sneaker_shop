@@ -56,13 +56,14 @@ class AuthConfig(BaseModel):
     jwt_public_key_path: Path = BASE_DIR / "auth_service" / "secrets" / "public_key.pem"
     jwt_private_key: str = ""
     jwt_public_key: str = ""
-    algorithm: str = ""
+    algorithm: str = "RS256"
 
     def model_post_init(self, __context) -> None:
         private_key_abs_path = self.jwt_private_key_path.resolve()
-        public_key_abs_path = self.jwt_public_key_path.resolve()
         if private_key_abs_path.exists():
             self.jwt_private_key = private_key_abs_path.read_text()
+
+        public_key_abs_path = self.jwt_public_key_path.resolve()
         if public_key_abs_path.exists():
             self.jwt_public_key = public_key_abs_path.read_text()
 
