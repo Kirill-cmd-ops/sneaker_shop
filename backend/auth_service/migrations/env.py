@@ -1,10 +1,15 @@
 import asyncio
-from logging.config import fileConfig
+import sys
+from pathlib import Path
 
+# Добавляем корневой каталог проекта в sys.path
+project_root = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(project_root))
+
+from logging.config import fileConfig
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
-
 from alembic import context
 from backend.auth_service.auth_service.auth.config import settings
 from backend.auth_service.auth_service.auth.models import Base
