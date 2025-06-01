@@ -43,12 +43,9 @@ services:
         condition: service_healthy
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@db:5432/sneaker_shop_auth
-    # Устанавливаем entrypoint, который запускает alembic с нужным конфигурационным файлом
     entrypoint: ["poetry", "run", "alembic", "-c", "backend/auth_service/alembic.ini"]
-    # Монтируем корень проекта, чтобы изменения в миграциях были видны на хосте
     volumes:
       - .:/app
-    # Не задаём фиксированную команду — она будет переопределяться при запуске
     command: [ "poetry", "run", "alembic", "-c", "backend/auth_service/alembic.ini", "upgrade", "head" ]
 
 volumes:
