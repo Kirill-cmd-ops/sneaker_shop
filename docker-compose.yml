@@ -43,10 +43,10 @@ services:
         condition: service_healthy
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@db:5432/sneaker_shop_auth
-    entrypoint: ["poetry", "run", "alembic", "-c", "backend/auth_service/alembic.ini"]
+    entrypoint: ["poetry", "run", "migrations", "-c", "backend/auth_service/migrations.ini"]
     volumes:
       - .:/app
-    command: [ "poetry", "run", "alembic", "-c", "backend/auth_service/alembic.ini", "upgrade", "head" ]
+    command: [ "poetry", "run", "migrations", "-c", "backend/auth_service/migrations.ini", "upgrade", "head" ]
 
 volumes:
   pgdata:
