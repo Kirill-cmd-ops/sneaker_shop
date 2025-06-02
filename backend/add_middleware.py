@@ -10,4 +10,4 @@ def add_middleware(app):
         allow_headers=["*"],
     )
 
-    app.add_middleware(AuthMiddleware)
+    # app.add_middleware(AuthMiddleware)

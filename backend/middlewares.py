@@ -3,8 +3,8 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 import jwt
 from starlette.responses import Response
 
-SECRET_KEY = ""
-ALGORITHM = ""
+from favorite_service.favorite.config import settings
+
 
 class AuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(
@@ -14,12 +14,20 @@ class AuthMiddleware(BaseHTTPMiddleware):
         if auth_header:
             scheme, _, token = auth_header.partition(" ")
             if scheme.lower() != "bearer" or not token:
-                raise HTTPException(status_code=401, detail="Неверная схема авторизации")
+                raise HTTPException(
+                    status_code=401, detail="Неверная схема авторизации"
+                )
             try:
-                payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+                payload = jwt.decode(
+                    token,
+                    settings.auth_config.jwt_private_key,
+                    algorithms=[settings.auth_config.algorithm],
+                )
                 request.state.user = payload.get("sub")
             except jwt.PyJWTError:
-                raise HTTPException(status_code=401, detail="Неккорректный или просроченный токен")
+                raise HTTPException(
+                    status_code=401, detail="Неккорректный или просроченный токен"
+                )
         else:
             request.state.user = None
 
