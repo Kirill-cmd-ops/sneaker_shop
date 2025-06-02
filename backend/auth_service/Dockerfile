@@ -1,13 +1,13 @@
 FROM python:3.12-slim
 
-WORKDIR /app
+WORKDIR /app/auth_service
 
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=/app/auth_service/
 
 RUN pip install --upgrade pip
 
-COPY pyproject.toml poetry.lock README.md /app/
-COPY . /app
+COPY pyproject.toml poetry.lock README.md /app/auth_service/
+COPY . /app/auth_service/
 
 RUN pip install poetry && \
     poetry config virtualenvs.create false && \
