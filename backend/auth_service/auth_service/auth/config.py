@@ -49,11 +49,12 @@ class CookieConfig(BaseModel):
     cookie_samesite: Literal["lax", "strict", "none"] = "lax"
 
 
-BASE_DIR = Path(__file__).parent.parent.parent
+ENV_DIR = Path(__file__).parent.parent.parent
+KEY_DIR = Path(__file__).parent.parent.parent.parent
 
 class AuthConfig(BaseModel):
-    jwt_private_key_path: Path = BASE_DIR / "auth_service" / "secrets" / "private_key.pem"
-    jwt_public_key_path: Path = BASE_DIR / "auth_service" / "secrets" / "public_key.pem"
+    jwt_private_key_path: Path = KEY_DIR / "secrets" / "private_key.pem"
+    jwt_public_key_path: Path = KEY_DIR / "secrets" / "public_key.pem"
     jwt_private_key: str = ""
     jwt_public_key: str = ""
     algorithm: str = "RS256"
@@ -77,7 +78,7 @@ class AccessToken(BaseModel):
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=(str(BASE_DIR / ".env.template"), str(BASE_DIR / ".env")),
+        env_file=(str(ENV_DIR / ".env.template"), str(ENV_DIR / ".env")),
         case_sensitive=False,
         env_nested_delimiter="__",
         env_prefix="APP_CONFIG__",
