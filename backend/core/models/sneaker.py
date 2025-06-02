@@ -17,8 +17,8 @@ if TYPE_CHECKING:
     from .sneaker_material import SneakerMaterialAssociation
     from .cart_sneaker import CartSneakerAssociation
     from .cart import Cart
-    from .favorite import Favorite
-    from .favorite_sneaker import FavoriteSneakerAssociation
+    from favorite_service.favorite.models.favorite import Favorite
+    from favorite_service.favorite.models.favorite_sneaker import FavoriteSneakerAssociation
 
 
 class Sneaker(Base):

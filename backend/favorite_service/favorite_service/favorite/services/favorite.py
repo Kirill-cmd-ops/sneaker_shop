@@ -1,8 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-
-from backend.core.models import Favorite
+from favorite_service.favorite.models.favorite import Favorite
 
 
 async def create_favorite(session: AsyncSession, user_id: int):

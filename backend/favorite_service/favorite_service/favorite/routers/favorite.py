@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from auth_service.auth.authentication.fastapi_users import fastapi_users
+from auth_service.auth.models import User
 
-from backend.auth_servicee import User
-from backend.core.services.favorite import read_favorite, create_favorite
-from backend.auth_servicee import db_helper
+from backend.favorite_service.favorite_service.favorite.models import db_helper
+from favorite_service.favorite.services.favorite import read_favorite, create_favorite
+
+
 from backend.core.schemas.sneaker import SneakerOut
 
 router = APIRouter()
@@ -19,7 +21,7 @@ async def call_create_favorite(
 
 
 @router.get("/favorite", response_model=list[SneakerOut])
-async def call_get_cart(
+async def call_get_favorite(
     user: User = Depends(fastapi_users.current_user()),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):

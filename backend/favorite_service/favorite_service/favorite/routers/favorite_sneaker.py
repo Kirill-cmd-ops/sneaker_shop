@@ -4,12 +4,12 @@ from sqlalchemy import select
 from auth_service.auth.authentication.fastapi_users import fastapi_users
 from backend.auth_servicee import User
 from backend.auth_servicee import db_helper
-from backend.core.schemas.favorite_sneaker import FavoriteSneakerCreate
-from backend.core.services.favorite_sneaker import (
+from favorite_service.favorite.schemas.favorite_sneaker import FavoriteSneakerCreate
+from favorite_service.favorite.services.favorite_sneaker import (
     create_sneaker_to_favorite,
     delete_sneaker_to_favorite,
 )
-from backend.core.models import Favorite
+from backend.favorite_service.favorite_service.favorite.models import Favorite
 
 router = APIRouter()
 
