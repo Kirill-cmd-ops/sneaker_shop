@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  db:
+  auth_db:
     image: postgres:16-alpine
     container_name: auth_db
     environment:
@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: meteor906587
       POSTGRES_DB: sneaker_shop_auth
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - auth_pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
@@ -18,35 +18,84 @@ services:
       timeout: 5s
       retries: 5
 
-  app:
+  favorite_db:
+    image: postgres:16-alpine
+    container_name: favorite_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: meteor906587
+      POSTGRES_DB: sneaker_shop_favorite
+    volumes:
+      - favorite_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  auth_service:
     build:
-      context: .
-      dockerfile: backend/auth_service/Dockerfile
+      context: ./backend/auth_service
+      dockerfile: Dockerfile
     container_name: auth_service
     depends_on:
-      db:
+      auth_db:
         condition: service_healthy
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://postgres:meteor906587@db:5432/sneaker_shop_auth
-    command: ["python", "-m", "uvicorn", "backend.auth_service.auth_service.main:app", "--host", "0.0.0.0", "--port", "8000"]
+      - DATABASE_URL=postgresql://postgres:meteor906587@auth_db:5432/sneaker_shop_auth
+    command: ["python", "-m", "uvicorn", "auth_service.main:app", "--host", "0.0.0.0", "--port", "8000"]
     restart: unless-stopped
 
-  alembic:
+  auth_alembic:
     build:
-      context: .
-      dockerfile: backend/auth_service/Dockerfile
+      context: ./backend/auth_service
+      dockerfile: Dockerfile
     container_name: alembic_migrations
     depends_on:
-      db:
+      auth_db:
         condition: service_healthy
     environment:
-      - DATABASE_URL=postgresql://postgres:meteor906587@db:5432/sneaker_shop_auth
-    entrypoint: ["poetry", "run", "migrations", "-c", "backend/auth_service/migrations.ini"]
+      - DATABASE_URL=postgresql://postgres:meteor906587@auth_db:5432/sneaker_shop_auth
+    entrypoint: ["poetry", "run", "alembic", "-c", "alembic.ini"]
     volumes:
       - .:/app
-    command: [ "poetry", "run", "migrations", "-c", "backend/auth_service/migrations.ini", "upgrade", "head" ]
+    command: ["upgrade", "head"]
+
+  favorite_service:
+    build:
+      context: ./backend/favorite_service
+      dockerfile: Dockerfile
+    container_name: favorite_service
+    depends_on:
+      favorite_db:
+        condition: service_healthy
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgresql://postgres:meteor906587@favorite_db:5432/sneaker_shop_favorite
+    command: [ "python", "-m", "uvicorn", "favorite_service.main:app", "--host", "0.0.0.0", "--port", "8001" ]
+    restart: unless-stopped
+
+  favorite_alembic:
+    build:
+      context: ./backend/favorite_service
+      dockerfile: Dockerfile
+    container_name: favorite_alembic_migrations
+    depends_on:
+      favorite_db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://postgres:meteor906587@favorite_db:5432/sneaker_shop_favorite
+    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
+    volumes:
+      - .:/app
+    command: [ "upgrade", "head" ]
+
 
 volumes:
-  pgdata:
+  auth_pgdata:
+  favorite_pgdata:

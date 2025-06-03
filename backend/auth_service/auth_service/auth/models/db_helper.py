@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import (
     AsyncSession,
 )
 
-from backend.auth_service.auth_service.auth.config import settings
+from auth_service.auth.config import settings
 
 
 class DatabaseHelper:

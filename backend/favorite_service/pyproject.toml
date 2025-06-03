@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "favorite-service"
+name = "favorite_service"
 version = "0.1.0"
 description = "Микросервис для добавления товаров в избранное"
 authors = ["Kirill <bondarenkokirill150208@gmail.com>"]

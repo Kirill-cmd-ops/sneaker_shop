@@ -7,7 +7,7 @@ from favorite_service.favorite.services.favorite_sneaker import (
     create_sneaker_to_favorite,
     delete_sneaker_to_favorite,
 )
-from backend.favorite_service.favorite_service.favorite.models import Favorite
+from favorite_service.favorite.models import Favorite
 from favorite_service.favorite.dependencies.get_current_user import get_current_user
 
 router = APIRouter()
