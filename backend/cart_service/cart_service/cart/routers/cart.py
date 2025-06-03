@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from auth_service.auth.authentication.fastapi_users import fastapi_users
 
 from backend.auth_servicee import User
-from backend.core.services.cart import read_cart, create_cart
+from backend.cart_service.cart_service.cart.services.cart import read_cart, create_cart
 from backend.auth_servicee import db_helper
 from backend.core.schemas.sneaker import SneakerOut
 

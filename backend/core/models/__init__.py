@@ -22,5 +22,5 @@ from .color import Color
 from .sneaker_color import SneakerColorAssociation
 from .material import Material
 from .sneaker_material import SneakerMaterialAssociation
-from .cart import Cart
-from .cart_sneaker import CartSneakerAssociation
+from backend.cart_service.cart_service.cart.models.cart import Cart
+from backend.cart_service.cart_service.cart.models.cart_sneaker import CartSneakerAssociation

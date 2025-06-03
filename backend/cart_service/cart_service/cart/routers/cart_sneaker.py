@@ -4,8 +4,8 @@ from sqlalchemy import select
 from auth_service.auth.authentication.fastapi_users import fastapi_users
 from backend.auth_servicee import User
 from backend.auth_servicee import db_helper
-from backend.core.schemas.cart_sneaker import CartSneakerUpdate, CartSneakerCreate
-from backend.core.services.cart_sneaker import (
+from backend.cart_service.cart_service.cart.schemas.cart_sneaker import CartSneakerUpdate, CartSneakerCreate
+from backend.cart_service.cart_service.cart.services.cart_sneaker import (
     create_sneaker_to_cart,
     update_sneaker_to_cart,
     delete_sneaker_to_cart,

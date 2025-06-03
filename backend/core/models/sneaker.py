@@ -15,8 +15,8 @@ if TYPE_CHECKING:
     from .sneaker_size import SneakerSizeAssociation
     from .sneaker_color import SneakerColorAssociation
     from .sneaker_material import SneakerMaterialAssociation
-    from .cart_sneaker import CartSneakerAssociation
-    from .cart import Cart
+    from backend.cart_service.cart_service.cart.models.cart_sneaker import CartSneakerAssociation
+    from backend.cart_service.cart_service.cart.models.cart import Cart
     from favorite_service.favorite.models.favorite import Favorite
     from favorite_service.favorite.models.favorite_sneaker import FavoriteSneakerAssociation
 
