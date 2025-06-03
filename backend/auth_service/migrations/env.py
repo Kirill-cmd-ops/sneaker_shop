@@ -11,8 +11,8 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
-from backend.auth_service.auth_service.auth.config import settings
-from backend.auth_service.auth_service.auth.models import Base
+from auth_service.auth.config import settings
+from auth_service.auth.models import Base
 
 # this is the Alembic Config object, which providesZ
 # access to the values within the .ini file in use.

@@ -60,10 +60,11 @@ services:
         condition: service_healthy
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@auth_db:5432/sneaker_shop_auth
-    entrypoint: ["poetry", "run", "alembic", "-c", "alembic.ini"]
+    working_dir: /app/auth_service
+    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
-      - .:/app
-    command: ["upgrade", "head"]
+      - ./backend/auth_service:/app/auth_service
+    command: [ "upgrade", "head" ]
 
   favorite_service:
     build:
@@ -90,9 +91,10 @@ services:
         condition: service_healthy
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@favorite_db:5432/sneaker_shop_favorite
+    working_dir: /app/favorite_service
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
-      - .:/app
+      - ./backend/favorite_service:/app/favorite_service
     command: [ "upgrade", "head" ]
 
 

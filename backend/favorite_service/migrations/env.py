@@ -11,8 +11,8 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
-from backend.favorite_service.favorite_service.favorite.config import settings
-from backend.favorite_service.favorite_service.favorite.models import Base
+from favorite_service.favorite.config import settings
+from favorite_service.favorite.models import Base
 
 # this is the Alembic Config object, which providesZ
 # access to the values within the .ini file in use.

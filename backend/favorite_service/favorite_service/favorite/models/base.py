@@ -2,8 +2,8 @@ from sqlalchemy import MetaData
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import declared_attr
 
-from backend.favorite_service.favorite_service.favorite.config import settings
-from backend.favorite_service.favorite_service.utils import camel_case_to_snake_case
+from favorite_service.favorite.config import settings
+from favorite_service.utils import camel_case_to_snake_case
 
 
 class Base(DeclarativeBase):
