@@ -9,8 +9,12 @@ from favorite_service.favorite.services.favorite_sneaker import (
 )
 from favorite_service.favorite.models import Favorite
 from favorite_service.favorite.dependencies.get_current_user import get_current_user
+from favorite_service.favorite.config import settings
 
-router = APIRouter()
+router = APIRouter(
+    prefix=settings.api.v1.favorite_sneaker,
+    tags=["Favorite Sneaker"],
+)
 
 
 @router.post("/favorite_add/", response_model=dict)
