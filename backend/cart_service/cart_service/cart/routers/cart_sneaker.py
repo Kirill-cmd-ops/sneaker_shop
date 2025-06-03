@@ -1,24 +1,26 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from auth_service.auth.authentication.fastapi_users import fastapi_users
-from backend.auth_servicee import User
-from backend.auth_servicee import db_helper
-from backend.cart_service.cart_service.cart.schemas.cart_sneaker import CartSneakerUpdate, CartSneakerCreate
-from backend.cart_service.cart_service.cart.services.cart_sneaker import (
+from cart_service.cart.models import db_helper
+from cart_service.cart.schemas.cart_sneaker import CartSneakerCreate
+from cart_service.cart.services.cart_sneaker import (
     create_sneaker_to_cart,
-    update_sneaker_to_cart,
     delete_sneaker_to_cart,
 )
-from backend.core.models import Cart
+from cart_service.cart.models import Cart
+from cart_service.cart.dependencies.get_current_user import get_current_user
+from cart_service.cart.config import settings
 
-router = APIRouter()
+router = APIRouter(
+    prefix=settings.api.v1.cart_sneaker,
+    tags=["Cart Sneaker"],
+)
 
 
 @router.post("/cart_add/", response_model=dict)
 async def call_create_sneaker_to_cart(
     item: CartSneakerCreate,
-    user: User = Depends(fastapi_users.current_user()),
+    user: str = Depends(get_current_user),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     stmt = select(Cart).filter(Cart.user_id == user.id)
@@ -40,7 +42,7 @@ async def call_create_sneaker_to_cart(
 async def call_update_sneaker_to_cart(
     association_id: int,
     item_data: CartSneakerUpdate,
-    user: User = Depends(fastapi_users.current_user()),
+    user: str = Depends(get_current_user),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     updated_item = await update_sneaker_to_cart(
@@ -52,7 +54,7 @@ async def call_update_sneaker_to_cart(
 @router.delete("/cart_delete/{sneaker_id}", response_model=dict)
 async def call_delete_sneaker_to_cart(
     sneaker_id: int,
-    user: User = Depends(fastapi_users.current_user()),
+    user: str = Depends(get_current_user),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     await delete_sneaker_to_cart(session, user_id=user.id, sneaker_id=sneaker_id)
