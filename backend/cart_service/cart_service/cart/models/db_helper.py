@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import (
     AsyncSession,
 )
 
-from cart_service.favorite.config import settings
+from cart_service.cart.config import settings
 
 
 class DatabaseHelper:

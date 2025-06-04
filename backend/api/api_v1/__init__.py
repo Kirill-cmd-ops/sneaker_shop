@@ -15,20 +15,10 @@ router = APIRouter(
     prefix=settings.api.v1.prefix,
 )
 
-router.include_router(auth_router)
-
-router.include_router(users_router)
-
 router.include_router(sneakers_router)
 
 router.include_router(sneaker_router)
 
-router.include_router(profile_router)
-
 router.include_router(cart_router)
 
 router.include_router(cart_sneaker_router)
-
-router.include_router(favorite_router)
-
-router.include_router(favorite_sneaker_router)

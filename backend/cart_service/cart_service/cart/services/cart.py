@@ -1,8 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-
-from backend.core.models import Cart
+from cart_service.cart.models.cart import Cart
 
 
 async def create_cart(session: AsyncSession, user_id: int):

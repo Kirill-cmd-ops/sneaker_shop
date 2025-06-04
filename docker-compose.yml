@@ -35,6 +35,23 @@ services:
       timeout: 5s
       retries: 5
 
+  cart_db:
+    image: postgres:16-alpine
+    container_name: cart_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: meteor906587
+      POSTGRES_DB: sneaker_shop_cart
+    volumes:
+      - cart_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   auth_service:
     build:
       context: ./backend/auth_service
@@ -61,10 +78,10 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@auth_db:5432/sneaker_shop_auth
     working_dir: /app/auth_service
-    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
+    entrypoint: ["poetry", "run", "alembic", "-c", "alembic.ini"]
     volumes:
       - ./backend/auth_service:/app/auth_service
-    command: [ "upgrade", "head" ]
+    command: ["upgrade", "head"]
 
   favorite_service:
     build:
@@ -78,7 +95,7 @@ services:
       - "8001:8001"
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@favorite_db:5432/sneaker_shop_favorite
-    command: [ "python", "-m", "uvicorn", "favorite_service.main:app", "--host", "0.0.0.0", "--port", "8001" ]
+    command: ["python", "-m", "uvicorn", "favorite_service.main:app", "--host", "0.0.0.0", "--port", "8001"]
     restart: unless-stopped
 
   favorite_alembic:
@@ -92,12 +109,43 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@favorite_db:5432/sneaker_shop_favorite
     working_dir: /app/favorite_service
-    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
+    entrypoint: ["poetry", "run", "alembic", "-c", "alembic.ini"]
     volumes:
       - ./backend/favorite_service:/app/favorite_service
-    command: [ "upgrade", "head" ]
+    command: ["upgrade", "head"]
 
+  cart_service:
+    build:
+      context: ./backend/cart_service
+      dockerfile: Dockerfile
+    container_name: cart_service
+    depends_on:
+      cart_db:
+        condition: service_healthy
+    ports:
+      - "8002:8002"
+    environment:
+      - DATABASE_URL=postgresql://postgres:meteor906587@cart_db:5432/sneaker_shop_cart
+    command: ["python", "-m", "uvicorn", "cart_service.main:app", "--host", "0.0.0.0", "--port", "8002"]
+    restart: unless-stopped
+
+  cart_alembic:
+    build:
+      context: ./backend/cart_service
+      dockerfile: Dockerfile
+    container_name: cart_alembic_migrations
+    depends_on:
+      cart_db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://postgres:meteor906587@cart_db:5432/sneaker_shop_cart
+    working_dir: /app/cart_service
+    entrypoint: ["poetry", "run", "alembic", "-c", "alembic.ini"]
+    volumes:
+      - ./backend/cart_service:/app/cart_service
+    command: ["upgrade", "head"]
 
 volumes:
   auth_pgdata:
   favorite_pgdata:
+  cart_pgdata:
