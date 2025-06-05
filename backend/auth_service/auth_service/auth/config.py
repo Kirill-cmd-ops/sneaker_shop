@@ -51,24 +51,32 @@ class CookieConfig(BaseModel):
 
 
 ENV_DIR = Path(__file__).parent.parent.parent
-KEY_DIR = Path(__file__).parent.parent.parent.parent
 
 class AuthConfig(BaseModel):
-    jwt_private_key_path: Path = KEY_DIR / "secrets" / "private_key.pem"
-    jwt_public_key_path: Path = KEY_DIR / "secrets" / "public_key.pem"
+    jwt_private_key_path: Path = "/app/secrets/private_key.pem"
+    jwt_public_key_path: Path = "/app/secrets/public_key.pem"
     jwt_private_key: str = ""
     jwt_public_key: str = ""
     algorithm: str = "RS256"
 
     def model_post_init(self, __context) -> None:
         private_key_abs_path = self.jwt_private_key_path.resolve()
+        print("Абсолютный путь: ", private_key_abs_path)
+        print("Тест private")
         if private_key_abs_path.exists():
+            print("Есть ключ")
             self.jwt_private_key = private_key_abs_path.read_text()
+        else:
+            print("Нету ключа")
 
         public_key_abs_path = self.jwt_public_key_path.resolve()
+        print("Абсолютный путь: ", public_key_abs_path)
+        print("Тест public")
         if public_key_abs_path.exists():
+            print("Есть ключ")
             self.jwt_public_key = public_key_abs_path.read_text()
-
+        else:
+            print("Нету ключа")
 
 
 class AccessToken(BaseModel):

@@ -60,6 +60,8 @@ services:
     depends_on:
       auth_db:
         condition: service_healthy
+    volumes:
+      - ./backend/secrets:/app/secrets
     ports:
       - "8000:8000"
     environment:
@@ -78,10 +80,12 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@auth_db:5432/sneaker_shop_auth
     working_dir: /app/auth_service
-    entrypoint: ["poetry", "run", "alembic", "-c", "alembic.ini"]
+    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
       - ./backend/auth_service:/app/auth_service
-    command: ["upgrade", "head"]
+      - ./backend/secrets:/app/secrets
+    command: [ "upgrade", "head" ]
+
 
   favorite_service:
     build:
