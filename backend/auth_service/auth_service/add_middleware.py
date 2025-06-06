@@ -1,5 +1,8 @@
 from starlette.middleware.cors import CORSMiddleware
 
+from auth_service.middlewares import AuthMiddleware
+
+
 def add_middleware(app):
     app.add_middleware(
         CORSMiddleware,
@@ -9,4 +12,4 @@ def add_middleware(app):
         allow_headers=["*"],
     )
 
-    # app.add_middleware(AuthMiddleware)
+    app.add_middleware(AuthMiddleware)

@@ -61,23 +61,14 @@ class AuthConfig(BaseModel):
 
     def model_post_init(self, __context) -> None:
         private_key_abs_path = self.jwt_private_key_path.resolve()
-        print("Абсолютный путь: ", private_key_abs_path)
-        print("Тест private")
         if private_key_abs_path.exists():
-            print("Есть ключ")
             self.jwt_private_key = private_key_abs_path.read_text()
-        else:
-            print("Нету ключа")
+            print(self.jwt_private_key)
 
         public_key_abs_path = self.jwt_public_key_path.resolve()
-        print("Абсолютный путь: ", public_key_abs_path)
-        print("Тест public")
         if public_key_abs_path.exists():
-            print("Есть ключ")
             self.jwt_public_key = public_key_abs_path.read_text()
-        else:
-            print("Нету ключа")
-
+            print(self.jwt_public_key)
 
 class AccessToken(BaseModel):
     lifetime_seconds: int = 3600
