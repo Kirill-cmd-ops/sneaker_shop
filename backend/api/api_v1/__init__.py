@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from backend.core.routers.sneakers import router as sneakers_router
+from backend.catalog_service.catalog_service.catalog.routers.sneakers import router as sneakers_router
 from backend.core.routers.sneaker import router as sneaker_router
 from auth_service.auth.config import settings
 
