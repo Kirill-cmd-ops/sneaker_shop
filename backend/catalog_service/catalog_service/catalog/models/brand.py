@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from auth_service.auth.models.base import Base
+from catalog_service.catalog.models.base import Base
 
 if TYPE_CHECKING:
     from .sneaker import Sneaker

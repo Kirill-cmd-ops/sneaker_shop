@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.core.models.country import Country
+from backend.catalog_service.catalog_service.catalog.models import Country
 
 async def seed_countries(db: AsyncSession):
     countries = [

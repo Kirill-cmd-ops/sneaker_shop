@@ -3,25 +3,27 @@ from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from auth_service.auth.models.base import Base
+from catalog_service.catalog.models.base import Base
 
 if TYPE_CHECKING:
+    from .size import Size
     from .sneaker import Sneaker
-    from .color import Color
 
-class SneakerColorAssociation(Base):
+
+class SneakerSizeAssociation(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id"))
-    color_id: Mapped[int] = mapped_column(ForeignKey("colors.id"))
+    size_id: Mapped[int] = mapped_column(ForeignKey("sizes.id"))
+    quantity: Mapped[int] = mapped_column(default=0)
 
     __table_args__ = (
-        UniqueConstraint("sneaker_id", "color_id", name="uq_sneaker_color"),
+        UniqueConstraint("sneaker_id", "size_id", name="uq_sneaker_size"),
     )
 
     sneaker: Mapped["Sneaker"] = relationship(
-        back_populates="color_associations",
+        back_populates="size_associations",
     )
 
-    color: Mapped["Color"] = relationship(
+    size: Mapped["Size"] = relationship(
         back_populates="sneaker_associations",
     )

@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
 
-from backend.core.models import Sneaker
+from backend.catalog_service.catalog_service.catalog.models import Sneaker
 
 
 async def get_sneaker_details(
