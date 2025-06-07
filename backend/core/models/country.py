@@ -4,11 +4,10 @@ from catalog_service.catalog.models.base import Base
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 if TYPE_CHECKING:
-    from .sneaker import Sneaker
-    from .sneaker_material import SneakerMaterialAssociation
+    from backend.catalog_service.catalog_service.catalog.models.sneaker import Sneaker
 
 
-class Material(Base):
+class Country(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(
         String(40),
@@ -16,11 +15,5 @@ class Material(Base):
         unique=True,
         index=True,
     )
-    sneaker_associations: Mapped[list["SneakerMaterialAssociation"]] = relationship(
-        back_populates="material",
-    )
 
-    sneakers: Mapped[list["Sneaker"]] = relationship(
-        secondary="sneaker_material_associations",
-        viewonly=True,
-    )
+    sneakers: Mapped[list["Sneaker"]] = relationship(back_populates="country")

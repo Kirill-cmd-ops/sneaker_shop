@@ -6,22 +6,23 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from catalog_service.catalog.models.base import Base
 
 if TYPE_CHECKING:
-    from .sneaker import Sneaker
-    from .color import Color
+    from backend.catalog_service.catalog_service.catalog.models.sneaker import Sneaker
+    from backend.core.models.material import Material
 
-class SneakerColorAssociation(Base):
+
+class SneakerMaterialAssociation(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id"))
-    color_id: Mapped[int] = mapped_column(ForeignKey("colors.id"))
+    material_id: Mapped[int] = mapped_column(ForeignKey("materials.id"))
 
     __table_args__ = (
-        UniqueConstraint("sneaker_id", "color_id", name="uq_sneaker_color"),
+        UniqueConstraint("sneaker_id", "material_id", name="uq_sneaker_material"),
     )
 
     sneaker: Mapped["Sneaker"] = relationship(
-        back_populates="color_associations",
+        back_populates="material_associations",
     )
 
-    color: Mapped["Color"] = relationship(
+    material: Mapped["Material"] = relationship(
         back_populates="sneaker_associations",
     )

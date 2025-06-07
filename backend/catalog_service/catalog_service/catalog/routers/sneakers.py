@@ -3,9 +3,9 @@ from typing import Optional
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.auth_servicee import db_helper
+from catalog_service.catalog.services.sneakers import get_sneakers_details
+from catalog_service.catalog.models import db_helper
 
-from backend.catalog_service.catalog_service.catalog.services.sneakers import get_sneakers_details
 
 router = APIRouter()
 

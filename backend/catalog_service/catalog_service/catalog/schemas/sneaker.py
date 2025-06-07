@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
-from backend.catalog_service.catalog_service.catalog.schemas.brand import BrandRead
-from backend.catalog_service.catalog_service.catalog.schemas.size import SizeRead
+from catalog_service.catalog.schemas.brand import BrandRead
+from catalog_service.catalog.schemas.size import SizeRead
 
 
 class SneakerStandard(BaseModel):
