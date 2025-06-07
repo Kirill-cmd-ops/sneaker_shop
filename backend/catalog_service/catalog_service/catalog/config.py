@@ -40,20 +40,6 @@ class DatabaseConfig(BaseModel):
 
 
 ENV_DIR = Path(__file__).parent.parent.parent
-KEY_DIR = Path(__file__).parent.parent.parent.parent
-
-class AuthConfig(BaseModel):
-    jwt_private_key_path: Path = (
-        KEY_DIR / "secrets" / "private_key.pem"
-    )
-    jwt_private_key: str = ""
-    algorithm: str = "RS256"
-
-    def model_post_init(self, __context) -> None:
-        private_key_abs_path = self.jwt_private_key_path.resolve()
-        if private_key_abs_path.exists():
-            self.jwt_private_key = private_key_abs_path.read_text()
-
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -65,7 +51,6 @@ class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig
-    auth_config: AuthConfig
 
 
 settings = Settings()

@@ -52,6 +52,23 @@ services:
       timeout: 5s
       retries: 5
 
+  catalog_db:
+    image: postgres:16-alpine
+    container_name: catalog_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: meteor906587
+      POSTGRES_DB: sneaker_shop_catalog
+    volumes:
+      - catalog_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   auth_service:
     build:
       context: ./backend/auth_service
@@ -149,7 +166,39 @@ services:
       - ./backend/cart_service:/app/cart_service
     command: ["upgrade", "head"]
 
+  catalog_service:
+    build:
+      context: ./backend/catalog_service
+      dockerfile: Dockerfile
+    container_name: catalog_service
+    depends_on:
+      catalog_db:
+        condition: service_healthy
+    ports:
+      - "8003:8003"
+    environment:
+      - DATABASE_URL=postgresql://postgres:meteor906587@catalog_db:5432/sneaker_shop_catalog
+    command: [ "python", "-m", "uvicorn", "catalog_service.main:app", "--host", "0.0.0.0", "--port", "8003" ]
+    restart: unless-stopped
+
+  catalog_alembic:
+    build:
+      context: ./backend/catalog_service
+      dockerfile: Dockerfile
+    container_name: catalog_alembic_migrations
+    depends_on:
+      catalog_db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://postgres:meteor906587@catalog_db:5432/sneaker_shop_catalog
+    working_dir: /app/catalog_service
+    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
+    volumes:
+      - ./backend/catalog_service:/app/catalog_service
+    command: [ "upgrade", "head" ]
+
 volumes:
   auth_pgdata:
   favorite_pgdata:
   cart_pgdata:
+  catalog_pgdata:

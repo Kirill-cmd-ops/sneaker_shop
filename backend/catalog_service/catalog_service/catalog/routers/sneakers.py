@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from catalog_service.catalog.services.sneakers import get_sneakers_details
-from catalog_service.catalog.models import db_helper
+from catalog_service.catalog.models.db_helper import db_helper
 
 
 router = APIRouter()

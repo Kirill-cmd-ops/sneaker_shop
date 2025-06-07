@@ -63,12 +63,10 @@ class AuthConfig(BaseModel):
         private_key_abs_path = self.jwt_private_key_path.resolve()
         if private_key_abs_path.exists():
             self.jwt_private_key = private_key_abs_path.read_text()
-            print(self.jwt_private_key)
 
         public_key_abs_path = self.jwt_public_key_path.resolve()
         if public_key_abs_path.exists():
             self.jwt_public_key = public_key_abs_path.read_text()
-            print(self.jwt_public_key)
 
 class AccessToken(BaseModel):
     lifetime_seconds: int = 3600

@@ -1,4 +1,5 @@
 __all__ = (
+    "Base",
     "Brand",
     "Size",
     "Sneaker",
@@ -6,6 +7,7 @@ __all__ = (
 )
 
 
+from .base import Base
 from .brand import Brand
 from .size import Size
 from .sneaker import Sneaker
