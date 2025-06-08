@@ -1,6 +1,6 @@
 import random
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.catalog_service.catalog_service.catalog.models import SneakerSizeAssociation
+from catalog_service.catalog.models import SneakerSizeAssociation
 
 async def seed_sneaker_sizes(db: AsyncSession):
     associations = []

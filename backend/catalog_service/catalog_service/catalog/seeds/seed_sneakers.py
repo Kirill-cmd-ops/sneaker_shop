@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.catalog_service.catalog_service.catalog.models import Sneaker
+from catalog_service.catalog.models import Sneaker
 
 
 async def seed_sneakers(db: AsyncSession):
