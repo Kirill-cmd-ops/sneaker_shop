@@ -12,14 +12,6 @@ router = APIRouter(
 )
 
 
-@router.post("/cart")
-async def call_create_cart(
-    user: str = Depends(get_current_user),
-    session: AsyncSession = Depends(db_helper.session_getter),
-):
-    await create_cart(session, user_id=user.id)
-
-
 @router.get("/cart")
 async def call_get_cart(
     user: str = Depends(get_current_user),

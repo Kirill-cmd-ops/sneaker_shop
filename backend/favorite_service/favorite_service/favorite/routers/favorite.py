@@ -12,14 +12,6 @@ router = APIRouter(
 )
 
 
-@router.post("/favorite")
-async def call_create_favorite(
-    user: str = Depends(get_current_user),
-    session: AsyncSession = Depends(db_helper.session_getter),
-):
-    await create_favorite(session, user_id=user.id)
-
-
 @router.get("/favorite")
 async def call_get_favorite(
     user: str = Depends(get_current_user),
