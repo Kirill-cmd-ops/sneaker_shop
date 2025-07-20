@@ -7,13 +7,16 @@ from auth_service.auth.config import settings
 from auth_service.auth.models import db_helper
 from auth_service.add_middleware import add_middleware
 from auth_service import router as auth_router
+from kafka.producer import start_producer, close_producer
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
+    await start_producer()
     yield
     # shutdown
+    await close_producer()
     await db_helper.dispose()
 
 

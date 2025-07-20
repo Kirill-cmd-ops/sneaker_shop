@@ -13,6 +13,8 @@ from auth_service.auth.models import User
 from auth_service.auth.schemas.user import UserCreate
 from auth_service.auth.types.user_id import UserIdType
 
+from kafka.producer import send_user_registered
+
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
     reset_password_token_secret = settings.access_token.reset_password_token_secret
@@ -53,8 +55,8 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
             )
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
-        # После регистрации отправялем сообщение на email для активации аккаунта
-        ...
+        await send_user_registered(str(user.id))
+        # TODO: После регистрации отправялем сообщение на email для активации аккаунта
 
     async def on_after_update(
         self,
