@@ -11,7 +11,7 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -28,7 +28,7 @@ services:
     ports:
       - "5433:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -45,7 +45,7 @@ services:
     ports:
       - "5434:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -75,20 +75,24 @@ services:
     depends_on:
       auth_db:
         condition: service_healthy
+      kafka:
+        condition: service_healthy
     volumes:
       - ./backend/secrets:/app/secrets
+      - ./kafka:/app/auth_service/kafka
     ports:
       - "8004:8004"
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@auth_db:5432/sneaker_shop_auth
-    command: ["python", "-m", "uvicorn", "auth_service.main:app", "--host", "0.0.0.0", "--port", "8004"]
+    working_dir: /app/auth_service
+    command: [ "python", "-m", "uvicorn", "auth_service.main:app", "--host", "0.0.0.0", "--port", "8004" ]
     restart: unless-stopped
 
   auth_alembic:
     build:
       context: ./backend/auth_service
       dockerfile: Dockerfile
-    container_name: alembic_migrations
+    container_name: auth_alembic_migrations
     depends_on:
       auth_db:
         condition: service_healthy
@@ -99,6 +103,7 @@ services:
     volumes:
       - ./backend/auth_service:/app/auth_service
       - ./backend/secrets:/app/secrets
+      - ./kafka:/app/auth_service/kafka
     command: [ "upgrade", "head" ]
 
 
@@ -114,7 +119,7 @@ services:
       - "8005:8005"
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@favorite_db:5432/sneaker_shop_favorite
-    command: ["python", "-m", "uvicorn", "favorite_service.main:app", "--host", "0.0.0.0", "--port", "8005"]
+    command: [ "python", "-m", "uvicorn", "favorite_service.main:app", "--host", "0.0.0.0", "--port", "8005" ]
     restart: unless-stopped
 
   favorite_alembic:
@@ -128,10 +133,10 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@favorite_db:5432/sneaker_shop_favorite
     working_dir: /app/favorite_service
-    entrypoint: ["poetry", "run", "alembic", "-c", "alembic.ini"]
+    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
       - ./backend/favorite_service:/app/favorite_service
-    command: ["upgrade", "head"]
+    command: [ "upgrade", "head" ]
 
   cart_service:
     build:
@@ -145,7 +150,7 @@ services:
       - "8002:8002"
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@cart_db:5432/sneaker_shop_cart
-    command: ["python", "-m", "uvicorn", "cart_service.main:app", "--host", "0.0.0.0", "--port", "8002"]
+    command: [ "python", "-m", "uvicorn", "cart_service.main:app", "--host", "0.0.0.0", "--port", "8002" ]
     restart: unless-stopped
 
   cart_alembic:
@@ -159,10 +164,10 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@cart_db:5432/sneaker_shop_cart
     working_dir: /app/cart_service
-    entrypoint: ["poetry", "run", "alembic", "-c", "alembic.ini"]
+    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
       - ./backend/cart_service:/app/cart_service
-    command: ["upgrade", "head"]
+    command: [ "upgrade", "head" ]
 
   catalog_service:
     build:
@@ -259,6 +264,15 @@ services:
       KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "/opt/bitnami/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 || exit 1"
+      ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
     volumes:
       - kafka-data:/bitnami/kafka
