@@ -1,6 +1,7 @@
 import re
 from typing import Optional, Union, Any
 
+from aiokafka import AIOKafkaProducer
 from fastapi import Request
 from fastapi_users import (
     BaseUserManager,
@@ -55,7 +56,8 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
             )
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
-        await send_user_registered(str(user.id))
+        producer: AIOKafkaProducer = request.app.state.kafka_producer
+        await send_user_registered(producer, str(user.id))
         # TODO: После регистрации отправялем сообщение на email для активации аккаунта
 
     async def on_after_update(

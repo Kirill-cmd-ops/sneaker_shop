@@ -73,6 +73,12 @@ class AccessToken(BaseModel):
     reset_password_token_secret: str
     verification_token_secret: str
 
+class KafkaConfig(BaseModel):
+    kafka_bootstrap_servers: str
+    registered_topic: str
+    cart_group_id: str
+    favorite_group_id: str
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -87,6 +93,7 @@ class Settings(BaseSettings):
     cookie: CookieConfig = CookieConfig()
     auth_config: AuthConfig
     access_token: AccessToken
+    kafka_config: KafkaConfig
 
 
 settings = Settings()
