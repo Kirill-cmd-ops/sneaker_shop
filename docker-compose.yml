@@ -106,7 +106,7 @@ services:
       - ./kafka:/app/auth_service/kafka
     command: [ "upgrade", "head" ]
 
-
+# TODO: заменить с 5432 бд на другой свободный сервис, так как он занят auth_db и в alembic тоже
   favorite_service:
     build:
       context: ./backend/favorite_service
@@ -115,10 +115,15 @@ services:
     depends_on:
       favorite_db:
         condition: service_healthy
+      kafka:
+        condition: service_healthy
+    volumes:
+      - ./kafka:/app/favorite_service/kafka
     ports:
       - "8005:8005"
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@favorite_db:5432/sneaker_shop_favorite
+    working_dir: /app/favorite_service
     command: [ "python", "-m", "uvicorn", "favorite_service.main:app", "--host", "0.0.0.0", "--port", "8005" ]
     restart: unless-stopped
 
@@ -146,10 +151,15 @@ services:
     depends_on:
       cart_db:
         condition: service_healthy
+      kafka:
+        condition: service_healthy
+    volumes:
+      - ./kafka:/app/cart_service/kafka
     ports:
       - "8002:8002"
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@cart_db:5432/sneaker_shop_cart
+    working_dir: /app/cart_service
     command: [ "python", "-m", "uvicorn", "cart_service.main:app", "--host", "0.0.0.0", "--port", "8002" ]
     restart: unless-stopped
 

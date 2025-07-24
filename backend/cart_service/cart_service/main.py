@@ -8,12 +8,23 @@ from cart_service.cart.models import db_helper
 from cart_service.add_middleware import add_middleware
 from cart_service import router as cart_router
 
+from kafka.consumer import start_consumer, close_consumer
+
+from cart_service.cart.kafka_handlers.cart_handler import handle_cart
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
+    cart_consumer, task_cart = await start_consumer(
+        settings.kafka_config.registered_topic,
+        settings.kafka_config.kafka_bootstrap_servers,
+        settings.kafka_config.cart_group_id,
+        handle_cart,
+    )
     yield
     # shutdown
+    await close_consumer(cart_consumer, task_cart)
     await db_helper.dispose()
 
 

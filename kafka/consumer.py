@@ -5,17 +5,16 @@ from typing import Callable, Awaitable, Tuple
 
 from aiokafka import AIOKafkaConsumer
 
-from auth_service.auth.config import settings
-
 
 async def start_consumer(
     topic: str,
+bootstrap_servers: str,
     group_id: str,
     handler: Callable[[str | None, dict], Awaitable[None]],
 ) -> Tuple[AIOKafkaConsumer, asyncio.Task]:
     consumer = AIOKafkaConsumer(
         topic,
-        bootstrap_servers=settings.kafka_config.kafka_bootstrap_servers,
+        bootstrap_servers=bootstrap_servers,
         group_id=group_id,
         enable_auto_commit=True,
         auto_offset_reset="earliest",

@@ -43,10 +43,9 @@ class DatabaseConfig(BaseModel):
 ENV_DIR = Path(__file__).parent.parent.parent
 KEY_DIR = Path(__file__).parent.parent.parent.parent
 
+
 class AuthConfig(BaseModel):
-    jwt_private_key_path: Path = (
-        KEY_DIR / "secrets" / "private_key.pem"
-    )
+    jwt_private_key_path: Path = KEY_DIR / "secrets" / "private_key.pem"
     jwt_private_key: str = ""
     algorithm: str = "RS256"
 
@@ -54,6 +53,12 @@ class AuthConfig(BaseModel):
         private_key_abs_path = self.jwt_private_key_path.resolve()
         if private_key_abs_path.exists():
             self.jwt_private_key = private_key_abs_path.read_text()
+
+
+class KafkaConfig(BaseModel):
+    kafka_bootstrap_servers: str
+    registered_topic: str
+    favorite_group_id: str
 
 
 class Settings(BaseSettings):
@@ -67,6 +72,7 @@ class Settings(BaseSettings):
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig
     auth_config: AuthConfig
+    kafka_config: KafkaConfig
 
 
 settings = Settings()

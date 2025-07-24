@@ -8,12 +8,23 @@ from favorite_service.favorite.models import db_helper
 from favorite_service.add_middleware import add_middleware
 from favorite_service import router as favorite_router
 
+from kafka.consumer import start_consumer, close_consumer
+
+from favorite_service.favorite.kafka_handler.favorite_handler import handle_favorite
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
+    favorite_consumer, task_favorite = await start_consumer(
+        settings.kafka_config.registered_topic,
+        settings.kafka_config.kafka_bootstrap_servers,
+        settings.kafka_config.favorite_group_id,
+        handle_favorite,
+    )
     yield
     # shutdown
+    await close_consumer(favorite_consumer, task_favorite)
     await db_helper.dispose()
 
 

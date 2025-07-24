@@ -7,16 +7,18 @@ from auth_service.auth.config import settings
 from auth_service.auth.models import db_helper
 from auth_service.add_middleware import add_middleware
 from auth_service import router as auth_router
+
 from kafka.producer import start_producer, close_producer
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
-    await start_producer()
+    producer = await start_producer()
+    app.state.kafka_producer = producer
     yield
     # shutdown
-    await close_producer()
+    await close_producer(producer)
     await db_helper.dispose()
 
 
@@ -29,10 +31,10 @@ app.include_router(
     auth_router,
 )
 
-
+# TODO: удалить, он лишний, мы все равно запускаем через docker compose
 if __name__ == "__main__":
     uvicorn.run(
-        "main:app",
+        "auth_service.main:app",
         host=settings.run.host,
         port=settings.run.port,
         reload=True,

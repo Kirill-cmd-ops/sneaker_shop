@@ -41,16 +41,18 @@ class DatabaseConfig(BaseModel):
         "pk": "pk_%(table_name)s",
     }
 
+
 class CookieConfig(BaseModel):
     cookie_name: str = Field(default="jwt_session_cookie", pattern=r"^[a-zA-Z0-9_-]+$")
     cookie_max_age: int = Field(default=3600, ge=60)
     cookie_path: str = "/"
-    cookie_secure: bool = False    # при продакшене заменить на True
+    cookie_secure: bool = False  # при продакшене заменить на True
     cookie_httponly: bool = True
     cookie_samesite: Literal["lax", "strict", "none"] = "lax"
 
 
 ENV_DIR = Path(__file__).parent.parent.parent
+
 
 class AuthConfig(BaseModel):
     jwt_private_key_path: Path = "/app/secrets/private_key.pem"
@@ -68,16 +70,16 @@ class AuthConfig(BaseModel):
         if public_key_abs_path.exists():
             self.jwt_public_key = public_key_abs_path.read_text()
 
+
 class AccessToken(BaseModel):
     lifetime_seconds: int = 3600
     reset_password_token_secret: str
     verification_token_secret: str
 
+
 class KafkaConfig(BaseModel):
     kafka_bootstrap_servers: str
     registered_topic: str
-    cart_group_id: str
-    favorite_group_id: str
 
 
 class Settings(BaseSettings):
