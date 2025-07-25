@@ -106,7 +106,6 @@ services:
       - ./kafka:/app/auth_service/kafka
     command: [ "upgrade", "head" ]
 
-# TODO: заменить с 5432 бд на другой свободный сервис, так как он занят auth_db и в alembic тоже
   favorite_service:
     build:
       context: ./backend/favorite_service
@@ -141,6 +140,7 @@ services:
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
       - ./backend/favorite_service:/app/favorite_service
+      - ./kafka:/app/favorite_service/kafka
     command: [ "upgrade", "head" ]
 
   cart_service:
@@ -177,6 +177,7 @@ services:
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
       - ./backend/cart_service:/app/cart_service
+      - ./kafka:/app/cart_service/kafka
     command: [ "upgrade", "head" ]
 
   catalog_service:

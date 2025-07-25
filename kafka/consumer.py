@@ -8,7 +8,7 @@ from aiokafka import AIOKafkaConsumer
 
 async def start_consumer(
     topic: str,
-bootstrap_servers: str,
+    bootstrap_servers: str,
     group_id: str,
     handler: Callable[[str | None, dict], Awaitable[None]],
 ) -> Tuple[AIOKafkaConsumer, asyncio.Task]:
