@@ -5,7 +5,7 @@ from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 if TYPE_CHECKING:
     from backend.catalog_service.catalog_service.catalog.models.sneaker import Sneaker
-    from backend.core.models.sneaker_material import SneakerMaterialAssociation
+    from backend.sneaker_details_service.sneaker_details_service.sneaker_details.models.sneaker_material import SneakerMaterialAssociation
 
 
 class Material(Base):

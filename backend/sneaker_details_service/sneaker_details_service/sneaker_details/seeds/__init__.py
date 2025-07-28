@@ -4,11 +4,11 @@ from backend.catalog_service.catalog_service.catalog.seeds.seed_brands import se
 from backend.catalog_service.catalog_service.catalog.seeds.seed_sizes import seed_sizes
 from backend.catalog_service.catalog_service.catalog.seeds.seed_sneakers import seed_sneakers
 from backend.catalog_service.catalog_service.catalog.seeds.seed_sneaker_sizes import seed_sneaker_sizes
-from backend.core.seeds.seed_countries import seed_countries
-from backend.core.seeds.seed_colors import seed_colors
-from backend.core.seeds.seed_sneaker_colors import seed_sneaker_colors
-from backend.core.seeds.seed_materials import seed_materials
-from backend.core.seeds.seed_sneaker_materials import seed_sneaker_materials
+from backend.sneaker_details_service.sneaker_details_service.sneaker_details.seeds.seed_countries import seed_countries
+from backend.sneaker_details_service.sneaker_details_service.sneaker_details.seeds.seed_colors import seed_colors
+from backend.sneaker_details_service.sneaker_details_service.sneaker_details.seeds.seed_sneaker_colors import seed_sneaker_colors
+from backend.sneaker_details_service.sneaker_details_service.sneaker_details.seeds.seed_materials import seed_materials
+from backend.sneaker_details_service.sneaker_details_service.sneaker_details.seeds.seed_sneaker_materials import seed_sneaker_materials
 
 async def run_seeds():
     session_gen = db_helper.session_getter()
