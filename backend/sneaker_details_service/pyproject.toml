@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "sneaker_details_service"
+version = "0.1.0"
+description = "Микросвервис для выдачи подробной информации о кроссовках"
+authors = ["Kirill <bondarenkokirill150208@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "sneaker_details_service" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+sqlalchemy = {version = "2.0.41", extras = ["asyncio"]}
+fastapi = {version = "0.115.12", extras = ["standard"]}
+uvicorn = {version = "0.34.3", extras = ["standard"]}
+pydantic = {version = "2.11.5", extras = ["email"]}
+pydantic-settings = "2.9.1"
+asyncpg = "0.30.0"
+alembic = "1.16.1"
+fastapi-users = {version = "14.0.1", extras = ["sqlalchemy"]}
+fastapi-mail = "1.5.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "25.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
