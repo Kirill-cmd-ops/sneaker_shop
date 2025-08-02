@@ -11,10 +11,10 @@ async def create_favorite(session: AsyncSession, user_id: int):
     await session.refresh(new_favorite)
 
 async def read_favorite(session: AsyncSession, user_id: int):
-    stmt = select(Favorite).where(Favorite.user_id == user_id).options(selectinload(Favorite.sneakers))
+    stmt = select(Favorite).where(Favorite.user_id == user_id).options(selectinload(Favorite.sneaker_associations))
     result = await session.execute(stmt)
     favorite = result.scalar_one_or_none()
     if favorite is None:
         return []
 
-    return favorite.sneakers
+    return favorite.sneaker_associations
