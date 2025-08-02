@@ -11,10 +11,10 @@ async def create_cart(session: AsyncSession, user_id: int):
     await session.refresh(new_cart)
 
 async def read_cart(session: AsyncSession, user_id: int):
-    stmt = select(Cart).where(Cart.user_id == user_id).options(selectinload(Cart.sneakers))
+    stmt = select(Cart).where(Cart.user_id == user_id).options(selectinload(Cart.sneaker_associations))
     result = await session.execute(stmt)
     cart = result.scalar_one_or_none()
     if cart is None:
         return []
 
-    return cart.sneakers
+    return cart.sneaker_associations
