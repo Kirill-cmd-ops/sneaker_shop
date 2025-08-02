@@ -8,7 +8,7 @@ from favorite_service.favorite.services.favorite_sneaker import (
     delete_sneaker_to_favorite,
 )
 from favorite_service.favorite.models import Favorite
-from favorite_service.favorite.dependencies.get_current_user import get_current_user
+from favorite_service.favorite.dependencies.get_current_user import get_user_by_header
 from favorite_service.favorite.config import settings
 
 router = APIRouter(
@@ -20,10 +20,10 @@ router = APIRouter(
 @router.post("/favorite_add/", response_model=dict)
 async def call_create_sneaker_to_favorite(
     item: FavoriteSneakerCreate,
-    user: str = Depends(get_current_user),
+    user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    stmt = select(Favorite).filter(Favorite.user_id == user.id)
+    stmt = select(Favorite).filter(Favorite.user_id == user_id)
     result = await session.execute(stmt)
     user_favorite = result.scalar_one_or_none()
     if not user_favorite:
@@ -39,8 +39,8 @@ async def call_create_sneaker_to_favorite(
 @router.delete("/favorite_delete/{sneaker_id}", response_model=dict)
 async def call_delete_sneaker_to_favorite(
     sneaker_id: int,
-    user: str = Depends(get_current_user),
+    user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    await delete_sneaker_to_favorite(session, user_id=user.id, sneaker_id=sneaker_id)
+    await delete_sneaker_to_favorite(session, user_id=user_id, sneaker_id=sneaker_id)
     return {"status": "Элемент удалён"}
