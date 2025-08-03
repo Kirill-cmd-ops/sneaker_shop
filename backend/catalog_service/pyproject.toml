@@ -25,3 +25,6 @@ black = "^25.1.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+catalog_seeds = "catalog_service.catalog.seed:start_seeds"
