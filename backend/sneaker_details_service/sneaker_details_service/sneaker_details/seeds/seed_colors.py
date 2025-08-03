@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.catalog_service.catalog_service.catalog.models import Color
+from sneaker_details_service.sneaker_details.models import Color
 
 async def seed_colors(db: AsyncSession):
     colors = [

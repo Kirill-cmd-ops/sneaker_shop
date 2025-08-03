@@ -1,8 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.catalog_service.catalog_service.catalog.models import SneakerMaterialAssociation
-from backend.catalog_service.catalog_service.catalog.models import Sneaker
-from backend.catalog_service.catalog_service.catalog.models import Material
+from sneaker_details_service.sneaker_details.models import SneakerMaterialAssociation
+from sneaker_details_service.sneaker_details.models import Sneaker
+from sneaker_details_service.sneaker_details.models import Material
 import random
 
 async def seed_sneaker_materials(db: AsyncSession):

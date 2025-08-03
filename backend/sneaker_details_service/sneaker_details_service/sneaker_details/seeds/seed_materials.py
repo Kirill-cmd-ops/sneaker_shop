@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.catalog_service.catalog_service.catalog.models import Material
+from sneaker_details_service.sneaker_details.models import Material
 
 async def seed_materials(db: AsyncSession):
     materials = [
