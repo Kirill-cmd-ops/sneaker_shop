@@ -67,6 +67,23 @@ services:
       timeout: 5s
       retries: 5
 
+  sneaker_details_db:
+    image: postgres:16-alpine
+    container_name: sneaker_details_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: meteor906587
+      POSTGRES_DB: sneaker_shop_sneaker_details
+    volumes:
+      - sneaker_details_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5436:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   auth_service:
     build:
       context: ./backend/auth_service
@@ -209,6 +226,37 @@ services:
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
       - ./backend/catalog_service:/app/catalog_service
+    command: [ "upgrade", "head" ]
+
+  sneaker_details_service:
+    build:
+      context: ./backend/sneaker_details_service
+      dockerfile: Dockerfile
+    container_name: sneaker_details_service
+    depends_on:
+      sneaker_details_db:
+        condition: service_healthy
+    ports:
+      - "8006:8006"
+    environment:
+      - DATABASE_URL=postgresql://postgres:meteor906587@sneaker_details_db:5432/sneaker_shop_sneaker_details
+    command: [ "python", "-m", "uvicorn", "sneaker_details_service.main:app", "--host", "0.0.0.0", "--port", "8006" ]
+    restart: unless-stopped
+
+  sneaker_details_alembic:
+    build:
+      context: ./backend/sneaker_details_service
+      dockerfile: Dockerfile
+    container_name: sneaker_details_alembic_migrations
+    depends_on:
+      sneaker_details_db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://postgres:meteor906587@sneaker_details_db:5432/sneaker_shop_sneaker_details
+    working_dir: /app/sneaker_details_service
+    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
+    volumes:
+      - ./backend/sneaker_details_service:/app/sneaker_details_service
     command: [ "upgrade", "head" ]
 
   kong-database:
