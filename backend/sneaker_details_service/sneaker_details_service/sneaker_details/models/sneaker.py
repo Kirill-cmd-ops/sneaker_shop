@@ -4,17 +4,17 @@ from typing import TYPE_CHECKING
 from sqlalchemy import String, CheckConstraint, Numeric, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from catalog_service.catalog.models.base import Base
+from .base import Base
 
 if TYPE_CHECKING:
     from .country import Country
     from .brand import Brand
-    from backend.catalog_service.catalog_service.catalog.models.size import Size
-    from backend.catalog_service.catalog_service.catalog.models.sneaker_size import SneakerSizeAssociation
+    from .size import Size
+    from .color import Color
+    from .material import Material
+    from .sneaker_size import SneakerSizeAssociation
     from .sneaker_color import SneakerColorAssociation
     from .sneaker_material import SneakerMaterialAssociation
-    from backend.cart_service.cart_service.cart.models.cart_sneaker import CartSneakerAssociation
-    from favorite_service.favorite.models.favorite_sneaker import FavoriteSneakerAssociation
 
 
 class Sneaker(Base):
@@ -53,15 +53,17 @@ class Sneaker(Base):
         back_populates="sneaker",
     )
 
-    cart_associations: Mapped[list["CartSneakerAssociation"]] = relationship(
-        back_populates="sneaker",
-    )
-
-    favorite_associations: Mapped[list["FavoriteSneakerAssociation"]] = relationship(
-        back_populates="sneaker",
-    )
-
     sizes: Mapped[list["Size"]] = relationship(
         secondary="sneaker_size_associations",
+        viewonly=True,
+    )
+
+    colors: Mapped[list["Color"]] = relationship(
+        secondary="sneaker_color_associations",
+        viewonly=True,
+    )
+
+    materials: Mapped[list["Material"]] = relationship(
+        secondary="sneaker_material_associations",
         viewonly=True,
     )
