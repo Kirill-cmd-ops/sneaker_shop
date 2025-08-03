@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from catalog_service.catalog.models.base import Base
+from .base import Base
 
 if TYPE_CHECKING:
-    from backend.catalog_service.catalog_service.catalog.models.sneaker import Sneaker
-    from backend.sneaker_details_service.sneaker_details_service.sneaker_details.models.material import Material
+    from .sneaker import Sneaker
+    from .material import Material
 
 
 class SneakerMaterialAssociation(Base):
