@@ -2,12 +2,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
 
-from backend.catalog_service.catalog_service.catalog.models import Sneaker
+from sneaker_details_service.sneaker_details.models.sneaker import Sneaker
 
 
 async def get_sneaker_details(
     session: AsyncSession,
-    sneakerId: int,
+    sneaker_id: int,
 ):
     stmt = (
         select(Sneaker)
@@ -18,7 +18,7 @@ async def get_sneaker_details(
             selectinload(Sneaker.colors),
             selectinload(Sneaker.materials),
         )
-        .where(Sneaker.id == sneakerId)
+        .where(Sneaker.id == sneaker_id)
     )
     result = await session.execute(stmt)
     sneaker = result.scalar_one_or_none()
