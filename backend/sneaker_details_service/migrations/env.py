@@ -1,17 +1,24 @@
 import asyncio
-from logging.config import fileConfig
+import sys
+from pathlib import Path
 
+# Добавляем корневой каталог проекта в sys.path
+project_root = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(project_root))
+
+from logging.config import fileConfig
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
-
 from alembic import context
+from sneaker_details_service.sneaker_details.config import settings
+from sneaker_details_service.sneaker_details.models import Base
 
-# this is the Alembic Config object, which provides
+# this is the Alembic Config object, which providesZ
 # access to the values within the .ini file in use.
 config = context.config
 
-# Interpret the config file for Python logging.
+# Interpret the schemas file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
@@ -20,12 +27,13 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+target_metadata = Base.metadata
 
-# other values from the config, defined by the needs of env.py,
+# other values from the schemas, defined by the needs of env.py,
 # can be acquired:
-# my_important_option = config.get_main_option("my_important_option")
+# my_important_option = schemas.get_main_option("my_important_option")
 # ... etc.
+config.set_main_option("sqlalchemy.url", str(settings.db.url))
 
 
 def run_migrations_offline() -> None:
