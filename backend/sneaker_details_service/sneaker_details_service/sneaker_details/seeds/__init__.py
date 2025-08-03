@@ -1,14 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.auth_servicee import db_helper
-from backend.catalog_service.catalog_service.catalog.seeds.seed_brands import seed_brands
-from backend.catalog_service.catalog_service.catalog.seeds.seed_sizes import seed_sizes
-from backend.catalog_service.catalog_service.catalog.seeds.seed_sneakers import seed_sneakers
-from backend.catalog_service.catalog_service.catalog.seeds.seed_sneaker_sizes import seed_sneaker_sizes
-from backend.sneaker_details_service.sneaker_details_service.sneaker_details.seeds.seed_countries import seed_countries
-from backend.sneaker_details_service.sneaker_details_service.sneaker_details.seeds.seed_colors import seed_colors
-from backend.sneaker_details_service.sneaker_details_service.sneaker_details.seeds.seed_sneaker_colors import seed_sneaker_colors
-from backend.sneaker_details_service.sneaker_details_service.sneaker_details.seeds.seed_materials import seed_materials
-from backend.sneaker_details_service.sneaker_details_service.sneaker_details.seeds.seed_sneaker_materials import seed_sneaker_materials
+from sneaker_details_service.sneaker_details.models.db_helper import db_helper
+from sneaker_details_service.sneaker_details.seeds.seed_brands import seed_brands
+from sneaker_details_service.sneaker_details.seeds.seed_sizes import seed_sizes
+from sneaker_details_service.sneaker_details.seeds.seed_sneakers import seed_sneakers
+from sneaker_details_service.sneaker_details.seeds.seed_sneaker_sizes import seed_sneaker_sizes
+from sneaker_details_service.sneaker_details.seeds.seed_countries import seed_countries
+from sneaker_details_service.sneaker_details.seeds.seed_colors import seed_colors
+from sneaker_details_service.sneaker_details.seeds.seed_sneaker_colors import seed_sneaker_colors
+from sneaker_details_service.sneaker_details.seeds.seed_materials import seed_materials
+from sneaker_details_service.sneaker_details.seeds.seed_sneaker_materials import seed_sneaker_materials
 
 async def run_seeds():
     session_gen = db_helper.session_getter()
