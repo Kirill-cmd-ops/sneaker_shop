@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from .sneaker_color import SneakerColorAssociation
     from .sneaker_material import SneakerMaterialAssociation
 
-
+# TODO: изменить countrys на countries в Base
 class Sneaker(Base):
     __table_args__ = (CheckConstraint("price > 0", name="check_price_positive"),)
 
@@ -25,7 +25,7 @@ class Sneaker(Base):
     description: Mapped[str] = mapped_column(String(400))
     price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     brand_id: Mapped[int] = mapped_column(ForeignKey("brands.id"), index=True)
-    country_id: Mapped[int] = mapped_column(ForeignKey("countries.id"), index=True)
+    country_id: Mapped[int] = mapped_column(ForeignKey("countrys.id"), index=True)
     image_url: Mapped[str] = mapped_column(String(200), nullable=False)
     is_active: Mapped[bool] = mapped_column(default=True)
     created_at: Mapped[datetime] = mapped_column(
