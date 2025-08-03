@@ -343,5 +343,6 @@ volumes:
   favorite_pgdata:
   cart_pgdata:
   catalog_pgdata:
+  sneaker_details_pgdata:
   kong-data:
   kafka-data:
