@@ -1,10 +1,10 @@
 from sqlalchemy import String
 from typing import TYPE_CHECKING
-from catalog_service.catalog.models.base import Base
+from .base import Base
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 if TYPE_CHECKING:
-    from backend.catalog_service.catalog_service.catalog.models.sneaker import Sneaker
+    from .sneaker import Sneaker
 
 
 class Country(Base):
