@@ -15,11 +15,10 @@ pydantic = {extras = ["email"], version = "^2.11.5"}
 pydantic-settings = "^2.9.1"
 asyncpg = "^0.30.0"
 alembic = "^1.16.1"
-fastapi-users = {extras = ["sqlalchemy"], version = "^14.0.1"}
+fastapi-users = {extras = ["sqlalchemy", "oauth"], version = "^14.0.1"}
 fastapi-mail = "^1.5.0"
 aiokafka = "^0.12.0"
-
-[tool.poetry.group.dev.dependencies]
+httpx-oauth = "0.16.1"
 black = "^25.1.0"
 
 [build-system]
