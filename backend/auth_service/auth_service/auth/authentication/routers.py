@@ -8,6 +8,9 @@ from auth_service.auth.models import User
 from auth_service.auth.schemas.user import UserRead, UserCreate
 from auth_service.auth.types.user_id import UserIdType
 
+from auth_service.auth.authentication.oauth import google_oauth_client
+from auth_service.auth.config import settings
+
 fastapi_users = FastAPIUsers[User, UserIdType](
     get_user_manager,
     [auth_backend],
@@ -36,4 +39,21 @@ router.include_router(
 
 router.include_router(
     fastapi_users.get_reset_password_router(),
+)
+
+router.include_router(
+    fastapi_users.get_oauth_router(
+        google_oauth_client,
+        auth_backend,
+        settings.auth_config.state_secret,
+        associate_by_email=True,
+    ),
+)
+
+router.include_router(
+    fastapi_users.get_oauth_associate_router(
+        google_oauth_client,
+        UserRead,
+        settings.auth_config.state_secret,
+    ),
 )
