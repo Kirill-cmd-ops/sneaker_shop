@@ -60,6 +60,9 @@ class AuthConfig(BaseModel):
     jwt_private_key: str = ""
     jwt_public_key: str = ""
     algorithm: str = "RS256"
+    client_id: str = ""
+    client_secret: str = ""
+    state_secret: str = ""
 
     def model_post_init(self, __context) -> None:
         private_key_abs_path = self.jwt_private_key_path.resolve()
