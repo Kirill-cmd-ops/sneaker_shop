@@ -6,8 +6,8 @@ from auth_service.auth.types.user_id import UserIdType
 
 
 class UserRead(schemas.BaseUser[UserIdType]):
-    first_name: str
-    last_name: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
 
 
 class UserCreate(schemas.BaseUserCreate):

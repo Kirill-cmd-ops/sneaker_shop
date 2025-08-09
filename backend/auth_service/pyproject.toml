@@ -19,7 +19,10 @@ fastapi-users = {extras = ["sqlalchemy", "oauth"], version = "^14.0.1"}
 fastapi-mail = "^1.5.0"
 aiokafka = "^0.12.0"
 httpx-oauth = "0.16.1"
-black = "^25.1.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "25.1.0"
 
 [build-system]
 requires = ["poetry-core"]
