@@ -8,7 +8,7 @@ def get_jwt_strategy() -> JWTStrategy:
 
     return JWTStrategy(
         secret=settings.auth_config.jwt_private_key,
-        lifetime_seconds=3600,
+        lifetime_seconds=settings.auth_config.lifetime_seconds,
         algorithm=settings.auth_config.algorithm,
         public_key=settings.auth_config.jwt_public_key,
     )

@@ -63,6 +63,7 @@ class AuthConfig(BaseModel):
     client_id: str = ""
     client_secret: str = ""
     state_secret: str = ""
+    lifetime_seconds: int = 3600
 
     def model_post_init(self, __context) -> None:
         private_key_abs_path = self.jwt_private_key_path.resolve()
