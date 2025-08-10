@@ -65,6 +65,7 @@ class AuthConfig(BaseModel):
     state_secret: str = ""
     lifetime_seconds: int = 3600
     issuer: str = ""
+    token_audience: list[str] = ""
 
     def model_post_init(self, __context) -> None:
         private_key_abs_path = self.jwt_private_key_path.resolve()
