@@ -1,0 +1,19 @@
+def set_value_in_cookie(
+    response,
+    value,
+    key,
+    max_age,
+    path,
+    secure,
+    httponly,
+    samesite,
+):
+    response.set_cookie(
+        key=key,
+        value=value,
+        max_age=max_age,
+        path=path,
+        secure=secure,
+        httponly=httponly,
+        samesite=samesite,
+    )
