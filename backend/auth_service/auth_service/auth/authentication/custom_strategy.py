@@ -12,5 +12,6 @@ def get_jwt_strategy() -> MyJWTStrategy:
         algorithm=settings.auth_config.algorithm,
         public_key=settings.auth_config.jwt_public_key,
         issuer=settings.auth_config.issuer,
-        token_audience=settings.auth_config.token_audience
+        token_audience=settings.auth_config.token_audience,
+        allowed_audience=settings.auth_config.allowed_audience
     )
