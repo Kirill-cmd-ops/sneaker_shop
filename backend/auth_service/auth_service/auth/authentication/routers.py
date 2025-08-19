@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from fastapi_users import FastAPIUsers
 
 from auth_service.auth.authentication.backends import auth_backend
-from auth_service.auth.config import settings
+from auth_service.auth.authentication.custom_routers import custom_router
 from auth_service.auth.dependencies.user_manager import get_user_manager
 from auth_service.auth.models import User
 from auth_service.auth.schemas.user import UserRead, UserCreate
@@ -22,18 +22,18 @@ router = APIRouter(
 )
 
 router.include_router(
-    router=fastapi_users.get_auth_router(auth_backend),
+    fastapi_users.get_auth_router(auth_backend),
 )
 
 router.include_router(
-    router=fastapi_users.get_register_router(
+    fastapi_users.get_register_router(
         UserRead,
         UserCreate,
     ),
 )
 
 router.include_router(
-    router=fastapi_users.get_verify_router(UserRead),
+    fastapi_users.get_verify_router(UserRead),
 )
 
 
@@ -57,3 +57,5 @@ router.include_router(
         settings.auth_config.state_secret,
     ),
 )
+
+router.include_router(custom_router)
