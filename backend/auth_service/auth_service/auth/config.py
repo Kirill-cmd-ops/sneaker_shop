@@ -43,8 +43,10 @@ class DatabaseConfig(BaseModel):
 
 
 class CookieConfig(BaseModel):
-    cookie_name: str = Field(default="jwt_session_cookie", pattern=r"^[a-zA-Z0-9_-]+$")
-    cookie_max_age: int = Field(default=3600, ge=60)
+    jwt_cookie_name: str = Field(default="jwt_session_cookie", pattern=r"^[a-zA-Z0-9_-]+$")
+    refresh_cookie_name: str = Field(default="refresh_session_cookie", pattern=r"^[a-zA-Z0-9_-]+$")
+    jwt_cookie_max_age: int = Field(default=570, ge=60)
+    refresh_cookie_max_age: int = Field(default=2418900, ge=60)
     cookie_path: str = "/"
     cookie_secure: bool = False  # при продакшене заменить на True
     cookie_httponly: bool = True
