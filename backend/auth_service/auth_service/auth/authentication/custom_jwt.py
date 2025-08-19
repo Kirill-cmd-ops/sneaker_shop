@@ -12,6 +12,7 @@ class MyJWTStrategy(JWTStrategy):
         issuer: str,
         lifetime_seconds: Optional[int],
         token_audience: list[str],
+        allowed_audience: list[str],
         algorithm: str = "RS256",
         public_key: Optional[SecretType] = None,
     ):
@@ -23,10 +24,15 @@ class MyJWTStrategy(JWTStrategy):
             public_key=public_key,
         )
         self.issuer = issuer
+        self.allowed_audience = allowed_audience
 
     async def write_token(self, user: models.UP):
+        if not set(self.token_audience).issubset(self.allowed_audience):
+            raise ValueError("Значение aud некорректно для access токена, который вы пытаетесь создать")
+
+        sub = getattr(user, "id", user)
         data = {
-            "sub": str(user.id),
+            "sub": str(sub),
             "iss": self.issuer,
             "aud": self.token_audience,
         }
