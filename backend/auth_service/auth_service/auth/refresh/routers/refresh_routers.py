@@ -17,10 +17,10 @@ from auth_service.auth.refresh.utils.encode_token import encode_refresh_token
 from auth_service.auth.refresh.utils.generate_token import generate_refresh_token
 from auth_service.auth.refresh.utils.set_cookie import set_value_in_cookie
 
-custom_router = APIRouter()
+refresh_router = APIRouter()
 
 
-@custom_router.post("/refresh")
+@refresh_router.post("/refresh")
 async def all_logic_refresh_token(
     response: Response,
     token_aud: list[str],
