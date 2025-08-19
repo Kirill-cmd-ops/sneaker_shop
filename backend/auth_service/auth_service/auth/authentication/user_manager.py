@@ -14,14 +14,13 @@ from fastapi_users import (
 from starlette.responses import Response
 
 from auth_service.auth.config import settings
-from auth_service.auth.dependencies.generate_refresh_token import (
-    generate_refresh_token,
-    encode_refresh_token,
-    hash_refresh_token_add_db,
-    set_value_in_cookie,
-    check_refresh_token_rotation,
-)
+
 from auth_service.auth.models import User, db_helper
+from auth_service.auth.refresh.services.add_token_in_db import hash_refresh_token_add_db
+from auth_service.auth.refresh.services.refresh_checks import check_refresh_token_rotation
+from auth_service.auth.refresh.utils.encode_token import encode_refresh_token
+from auth_service.auth.refresh.utils.generate_token import generate_refresh_token
+from auth_service.auth.refresh.utils.set_cookie import set_value_in_cookie
 from auth_service.auth.schemas.user import UserCreate
 from auth_service.auth.types.user_id import UserIdType
 
