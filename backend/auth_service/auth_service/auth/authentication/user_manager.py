@@ -16,6 +16,8 @@ from starlette.responses import Response
 from auth_service.auth.config import settings
 
 from auth_service.auth.models import User, db_helper
+from auth_service.auth.refresh.dependencies.get_token_id import get_refresh_token_id
+from auth_service.auth.refresh.services.add_token_in_blacklist import add_to_blacklist
 from auth_service.auth.refresh.services.add_token_in_db import hash_refresh_token_add_db
 from auth_service.auth.refresh.services.refresh_checks import check_refresh_token_rotation
 from auth_service.auth.refresh.utils.encode_token import encode_refresh_token
@@ -106,7 +108,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional[Request] = None,
         response: Optional[Response] = None,
     ) -> None:
-        refresh_token = request.cookies.get(settings.cookie.refresh_cookie_name) # None
+        refresh_token = request.cookies.get(settings.cookie.refresh_cookie_name)
         print("Отладка токен:", refresh_token)
         async with db_helper.session_context() as session:
             if refresh_token is None:
@@ -116,6 +118,11 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
                 print("Ротация результат: ", user_id)
 
             if user_id is None:
+                if refresh_token:
+                    hash_refresh_token = encode_refresh_token(refresh_token)
+                    print("Хеш токена: ", hash_refresh_token)
+                    id_refresh_token = await get_refresh_token_id(hash_refresh_token, session)
+                    await add_to_blacklist(session, id_refresh_token)
                 user_id = getattr(user, "id", user)
 
                 raw = secrets.token_bytes(32)
