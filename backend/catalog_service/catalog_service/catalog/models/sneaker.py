@@ -24,7 +24,7 @@ class Sneaker(Base):
     created_at: Mapped[datetime] = mapped_column(
         default=datetime.utcnow, nullable=False, server_default=func.now()
     )
-    gender: Mapped[str] = mapped_column(String(10), default="Унисекс")
+    gender: Mapped[str] = mapped_column(String(10), default="унисекс")
 
     brand: Mapped["Brand"] = relationship(
         back_populates="sneakers",
