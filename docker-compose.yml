@@ -336,6 +336,17 @@ services:
     volumes:
       - kafka-data:/bitnami/kafka
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: frontend_builder
+    container_name: nextjs_app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app/frontend
+
 
 
 volumes:
