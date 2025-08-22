@@ -30,7 +30,6 @@ async def get_sneakers_details(
         .join(Size)
         .where(Sneaker.is_active == True)
     )
-
     if name:
         stmt = stmt.filter(Sneaker.name.ilike(f"%{name}%"))
 
@@ -40,7 +39,8 @@ async def get_sneakers_details(
     if max_price is not None:
         stmt = stmt.filter(Sneaker.price <= max_price)
 
-    valid_genders = {"Мужские", "Женские", "Унисекс"}
+    valid_genders = {"мужские", "женские", "унисекс"}
+    gender = gender.lower()
     if gender and gender in valid_genders:
         stmt = stmt.filter(Sneaker.gender == gender)
 
