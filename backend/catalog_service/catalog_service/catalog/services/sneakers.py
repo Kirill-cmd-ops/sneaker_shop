@@ -40,9 +40,10 @@ async def get_sneakers_details(
         stmt = stmt.filter(Sneaker.price <= max_price)
 
     valid_genders = {"мужские", "женские", "унисекс"}
-    gender = gender.lower()
-    if gender and gender in valid_genders:
-        stmt = stmt.filter(Sneaker.gender == gender)
+    if gender:
+        gender = gender.lower()
+        if gender in valid_genders:
+            stmt = stmt.filter(Sneaker.gender == gender)
 
     if brand_name:
         stmt = stmt.filter(Brand.name.ilike(f"%{brand_name}%"))
