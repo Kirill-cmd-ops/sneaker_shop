@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -15,6 +16,8 @@ async def read_favorite(session: AsyncSession, user_id: int):
     result = await session.execute(stmt)
     favorite = result.scalar_one_or_none()
     if favorite is None:
-        return []
+        raise HTTPException(
+            status_code=404, detail="У данного пользователя нету избранного"
+        )
 
     return favorite.sneaker_associations
