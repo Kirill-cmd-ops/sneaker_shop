@@ -12,5 +12,6 @@ class Favorite(Base):
     user_id: Mapped[int] = mapped_column(unique=True, index=True)
 
     sneaker_associations: Mapped[list["FavoriteSneakerAssociation"]] = relationship(
+        "FavoriteSneakerAssociation",
         back_populates="favorite",
     )
