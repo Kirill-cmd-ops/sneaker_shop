@@ -2,7 +2,7 @@ from typing import Optional
 
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload, selectinload
+from sqlalchemy.orm import joinedload, selectinload, contains_eager
 
 from catalog_service.catalog.models import Sneaker, Brand, SneakerSizeAssociation, Size
 
@@ -24,11 +24,15 @@ async def get_sneakers_details(
 
     stmt = (
         select(Sneaker)
-        .distinct()
         .join(Brand)
         .join(SneakerSizeAssociation)
         .join(Size)
         .where(Sneaker.is_active == True)
+        .where(SneakerSizeAssociation.quantity > 0)
+        .options(
+            contains_eager(Sneaker.sizes),
+            contains_eager(Sneaker.brand)
+        )
     )
     if name:
         stmt = stmt.filter(Sneaker.name.ilike(f"%{name}%"))
@@ -70,14 +74,10 @@ async def get_sneakers_details(
     stmt = (
         stmt.offset(offset)
         .limit(limit)
-        .options(
-            joinedload(Sneaker.brand),
-            selectinload(Sneaker.sizes),
-        )
     )
 
     result = await session.execute(stmt)
-    sneakers = result.scalars().all()
+    sneakers = result.unique().scalars().all()
 
     return {
         "total_count": total_count,
