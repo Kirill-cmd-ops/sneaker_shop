@@ -10,9 +10,10 @@ if TYPE_CHECKING:
 class CartSneakerAssociation(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     cart_id: Mapped[int] = mapped_column(ForeignKey("carts.id"))
-    sneaker_id: Mapped[int] = mapped_column()
+    sneaker_id: Mapped[int]
     sneaker_size: Mapped[float]
 
     cart: Mapped["Cart"] = relationship(
+        "Cart",
         back_populates="sneaker_associations",
     )

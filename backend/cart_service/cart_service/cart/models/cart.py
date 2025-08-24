@@ -12,5 +12,6 @@ class Cart(Base):
     user_id: Mapped[int] = mapped_column(unique=True, index=True)
 
     sneaker_associations: Mapped[list["CartSneakerAssociation"]] = relationship(
+        "CartSneakerAssociation",
         back_populates="cart",
     )
