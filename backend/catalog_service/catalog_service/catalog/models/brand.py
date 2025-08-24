@@ -14,4 +14,7 @@ class Brand(Base):
     name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True, index=True)
     image_url: Mapped[str] = mapped_column(String(200), nullable=False)
 
-    sneakers: Mapped[list["Sneaker"]] = relationship(back_populates="brand")
+    sneakers: Mapped[list["Sneaker"]] = relationship(
+        "Sneaker",
+        back_populates="brand"
+    )

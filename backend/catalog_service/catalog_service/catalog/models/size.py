@@ -23,6 +23,7 @@ class Size(Base):
     )
 
     sneaker_associations: Mapped[list["SneakerSizeAssociation"]] = relationship(
+        "SneakerSizeAssociation",
         back_populates="size",
     )
 

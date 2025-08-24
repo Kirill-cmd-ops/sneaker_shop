@@ -27,10 +27,12 @@ class Sneaker(Base):
     gender: Mapped[str] = mapped_column(String(10), default="унисекс")
 
     brand: Mapped["Brand"] = relationship(
+        "Brand",
         back_populates="sneakers",
     )
 
     size_associations: Mapped[list["SneakerSizeAssociation"]] = relationship(
+        "SneakerSizeAssociation",
         back_populates="sneaker",
     )
 
