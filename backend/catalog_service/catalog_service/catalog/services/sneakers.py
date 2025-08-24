@@ -64,13 +64,6 @@ async def get_sneakers_details(
                 sort_column.desc() if order == "desc" else sort_column.asc()
             )
 
-    count_stmt = stmt.with_only_columns(func.count(func.distinct(Sneaker.id))).order_by(
-        None
-    )
-
-    result = await session.execute(count_stmt)
-    total_count = result.scalar_one_or_none()
-
     stmt = (
         stmt.offset(offset)
         .limit(limit)
@@ -78,6 +71,14 @@ async def get_sneakers_details(
 
     result = await session.execute(stmt)
     sneakers = result.unique().scalars().all()
+
+
+    count_stmt = stmt.with_only_columns(func.count(func.distinct(Sneaker.id))).order_by(
+        None
+    )
+
+    result = await session.execute(count_stmt)
+    total_count = result.scalar_one_or_none()
 
     return {
         "total_count": total_count,
