@@ -98,11 +98,11 @@ services:
       - ./backend/secrets:/app/secrets
       - ./kafka:/app/auth_service/kafka
     ports:
-      - "8004:8004"
+      - "8002:8002"
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@auth_db:5432/sneaker_shop_auth
     working_dir: /app/auth_service
-    command: [ "python", "-m", "uvicorn", "auth_service.main:app", "--host", "0.0.0.0", "--port", "8004" ]
+    command: [ "python", "-m", "uvicorn", "auth_service.main:app", "--host", "0.0.0.0", "--port", "8002" ]
     restart: unless-stopped
 
   auth_alembic:
@@ -136,11 +136,11 @@ services:
     volumes:
       - ./kafka:/app/favorite_service/kafka
     ports:
-      - "8005:8005"
+      - "8003:8003"
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@favorite_db:5432/sneaker_shop_favorite
     working_dir: /app/favorite_service
-    command: [ "python", "-m", "uvicorn", "favorite_service.main:app", "--host", "0.0.0.0", "--port", "8005" ]
+    command: [ "python", "-m", "uvicorn", "favorite_service.main:app", "--host", "0.0.0.0", "--port", "8003" ]
     restart: unless-stopped
 
   favorite_alembic:
@@ -173,11 +173,11 @@ services:
     volumes:
       - ./kafka:/app/cart_service/kafka
     ports:
-      - "8002:8002"
+      - "8004:8004"
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@cart_db:5432/sneaker_shop_cart
     working_dir: /app/cart_service
-    command: [ "python", "-m", "uvicorn", "cart_service.main:app", "--host", "0.0.0.0", "--port", "8002" ]
+    command: [ "python", "-m", "uvicorn", "cart_service.main:app", "--host", "0.0.0.0", "--port", "8004" ]
     restart: unless-stopped
 
   cart_alembic:
@@ -206,10 +206,10 @@ services:
       catalog_db:
         condition: service_healthy
     ports:
-      - "8003:8003"
+      - "8005:8005"
     environment:
       - DATABASE_URL=postgresql://postgres:meteor906587@catalog_db:5432/sneaker_shop_catalog
-    command: [ "python", "-m", "uvicorn", "catalog_service.main:app", "--host", "0.0.0.0", "--port", "8003" ]
+    command: [ "python", "-m", "uvicorn", "catalog_service.main:app", "--host", "0.0.0.0", "--port", "8005" ]
     restart: unless-stopped
 
   catalog_alembic:
