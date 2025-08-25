@@ -16,4 +16,7 @@ class Country(Base):
         index=True,
     )
 
-    sneakers: Mapped[list["Sneaker"]] = relationship(back_populates="country")
+    sneakers: Mapped[list["Sneaker"]] = relationship(
+        "Sneaker",
+        back_populates="country"
+    )

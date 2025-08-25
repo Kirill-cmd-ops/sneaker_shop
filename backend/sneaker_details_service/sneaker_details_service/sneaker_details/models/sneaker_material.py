@@ -20,9 +20,11 @@ class SneakerMaterialAssociation(Base):
     )
 
     sneaker: Mapped["Sneaker"] = relationship(
+        "Sneaker",
         back_populates="material_associations",
     )
 
     material: Mapped["Material"] = relationship(
+        "Material",
         back_populates="sneaker_associations",
     )

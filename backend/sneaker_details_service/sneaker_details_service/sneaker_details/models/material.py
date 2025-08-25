@@ -17,6 +17,7 @@ class Material(Base):
         index=True,
     )
     sneaker_associations: Mapped[list["SneakerMaterialAssociation"]] = relationship(
+        "SneakerMaterialAssociation",
         back_populates="material",
     )
 

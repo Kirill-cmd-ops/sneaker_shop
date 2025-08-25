@@ -17,6 +17,7 @@ class Color(Base):
         index=True,
     )
     sneaker_associations: Mapped[list["SneakerColorAssociation"]] = relationship(
+        "SneakerColorAssociation",
         back_populates="color",
     )
 

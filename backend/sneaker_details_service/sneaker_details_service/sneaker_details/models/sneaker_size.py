@@ -21,9 +21,11 @@ class SneakerSizeAssociation(Base):
     )
 
     sneaker: Mapped["Sneaker"] = relationship(
+        "Sneaker",
         back_populates="size_associations",
     )
 
     size: Mapped["Size"] = relationship(
+        "Size",
         back_populates="sneaker_associations",
     )

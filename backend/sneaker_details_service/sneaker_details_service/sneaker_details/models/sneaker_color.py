@@ -19,9 +19,11 @@ class SneakerColorAssociation(Base):
     )
 
     sneaker: Mapped["Sneaker"] = relationship(
+        "Sneaker",
         back_populates="color_associations",
     )
 
     color: Mapped["Color"] = relationship(
+        "Color",
         back_populates="sneaker_associations",
     )
