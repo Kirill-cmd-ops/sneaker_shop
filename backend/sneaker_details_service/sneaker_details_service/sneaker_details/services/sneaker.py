@@ -8,12 +8,13 @@ from sneaker_details_service.sneaker_details.models.sneaker_size import (
     SneakerSizeAssociation,
 )
 
-from sneaker_details_service.sneaker_details.schemas.sneaker import SneakerCreate
+from sneaker_details_service.sneaker_details.schemas.sneaker import SneakerCreate, SneakerUpdate
 
 from sneaker_details_service.sneaker_details.models import (
     SneakerColorAssociation,
     SneakerMaterialAssociation,
 )
+
 
 
 async def create_sneaker(
@@ -61,6 +62,20 @@ async def delete_sneaker(session: AsyncSession, sneaker_id: int):
     sneaker = await session.get(Sneaker, sneaker_id)
     await session.delete(sneaker)
 
+    await session.commit()
+
+
+async def update_sneaker(
+    session: AsyncSession,
+    sneaker_id: int,
+    sneaker_update: SneakerUpdate
+):
+    sneaker = await session.get(Sneaker, sneaker_id)
+    update_data = sneaker_update.dict(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(sneaker, field, value)
+
+    session.add(sneaker)
     await session.commit()
 
 

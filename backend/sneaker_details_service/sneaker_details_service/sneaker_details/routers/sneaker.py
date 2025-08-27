@@ -4,10 +4,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sneaker_details_service.sneaker_details.models.db_helper import db_helper
 from sneaker_details_service.sneaker_details.services.sneaker import get_sneaker_details
 
-from sneaker_details_service.sneaker_details.schemas.sneaker import SneakerCreate
-from sneaker_details_service.sneaker_details.services.sneaker import create_sneaker
+from sneaker_details_service.sneaker_details.schemas.sneaker import SneakerCreate, SneakerUpdate
+from sneaker_details_service.sneaker_details.services.sneaker import (
+    create_sneaker,
+    delete_sneaker,
+    update_sneaker,
+)
 
-from sneaker_details_service.sneaker_details.services.sneaker import delete_sneaker
 
 router = APIRouter()
 
@@ -29,6 +32,16 @@ async def call_delete_sneaker(
 ):
     await delete_sneaker(session, sneaker_id)
     return "Товар успешно удален"
+
+
+@router.patch("/update_sneaker/")
+async def call_update_sneaker(
+    sneaker_id: int,
+    sneaker_update: SneakerUpdate,
+    session: AsyncSession = Depends(db_helper.session_getter),
+):
+    await update_sneaker(session, sneaker_id, sneaker_update)
+    return "Товар успешно обновлен"
 
 
 @router.get("/sneaker/{sneaker_id}")
