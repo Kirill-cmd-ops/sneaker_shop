@@ -7,6 +7,8 @@ from sneaker_details_service.sneaker_details.services.sneaker import get_sneaker
 from sneaker_details_service.sneaker_details.schemas.sneaker import SneakerCreate
 from sneaker_details_service.sneaker_details.services.sneaker import create_sneaker
 
+from sneaker_details_service.sneaker_details.services.sneaker import delete_sneaker
+
 router = APIRouter()
 
 
@@ -18,6 +20,15 @@ async def call_create_sneaker(
 ):
     await create_sneaker(session, sneaker_quantity, sneaker_create)
     return "Товар успешно создан"
+
+
+@router.delete("/delete_sneaker/")
+async def call_delete_sneaker(
+    sneaker_id: int,
+    session: AsyncSession = Depends(db_helper.session_getter),
+):
+    await delete_sneaker(session, sneaker_id)
+    return "Товар успешно удален"
 
 
 @router.get("/sneaker/{sneaker_id}")

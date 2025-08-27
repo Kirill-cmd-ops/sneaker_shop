@@ -46,6 +46,24 @@ async def create_sneaker(
     await session.commit()
 
 
+async def delete_sneaker(session: AsyncSession, sneaker_id: int):
+    assoc_tables = [
+        SneakerSizeAssociation,
+        SneakerColorAssociation,
+        SneakerMaterialAssociation,
+    ]
+    for assoc_table in assoc_tables:
+        stmt = select(assoc_table).where(assoc_table.sneaker_id == sneaker_id)
+        result = await session.execute(stmt)
+        for assoc in result.scalars():
+            await session.delete(assoc)
+
+    sneaker = await session.get(Sneaker, sneaker_id)
+    await session.delete(sneaker)
+
+    await session.commit()
+
+
 async def get_sneaker_details(
     session: AsyncSession,
     sneaker_id: int,
