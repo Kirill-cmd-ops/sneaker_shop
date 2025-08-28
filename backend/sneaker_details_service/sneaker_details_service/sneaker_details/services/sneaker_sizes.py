@@ -25,3 +25,13 @@ async def delete_sneaker_sizes(session: AsyncSession, sneaker_sizes_delete: Snea
 
     if result.rowcount == 0:
         raise HTTPException(status_code=404, detail="Размеры не найдены")
+
+
+async def read_sneaker_sizes(session: AsyncSession, sneaker_id: int):
+    stmt = (
+        select(SneakerSizeAssociation)
+        .where(SneakerSizeAssociation.sneaker_id == sneaker_id)
+    )
+    result = await session.execute(stmt)
+    sneaker_sizes = result.scalars().all()
+    return sneaker_sizes

@@ -9,6 +9,9 @@ class SneakerSizesCreate(BaseModel):
     sneaker_id: int
     sizes: list[SizeQuantity]
 
+class SneakerSizesRead(SizeQuantity):
+    ...
+
 
 class SneakerSizesDelete(BaseModel):
     sneaker_id: int
