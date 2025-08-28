@@ -6,12 +6,14 @@ from sneaker_details_service.sneaker_details.schemas.sneaker_sizes import (
     SneakerSizesCreate,
     SneakerSizesDelete,
     SneakerSizesRead,
+    SneakerSizeUpdate,
 )
 
 from sneaker_details_service.sneaker_details.services.sneaker_sizes import (
     create_sneaker_sizes,
     delete_sneaker_sizes,
     read_sneaker_sizes,
+    update_sneaker_sizes,
 )
 
 from sneaker_details_service.sneaker_details.models.db_helper import db_helper
@@ -44,3 +46,8 @@ async def call_read_sneaker_sizes(
 ):
     sizes = await read_sneaker_sizes(session, sneaker_id)
     return sizes
+
+@router.patch("/update_sneaker_sizes/")
+async def call_update_sneaker_sizes(sneaker_size_update: SneakerSizeUpdate, session: AsyncSession = Depends(db_helper.session_getter)):
+    await update_sneaker_sizes(session, sneaker_size_update)
+    return "Размер был изменен корректно"
