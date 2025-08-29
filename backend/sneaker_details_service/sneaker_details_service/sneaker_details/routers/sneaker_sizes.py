@@ -10,7 +10,6 @@ from sneaker_details_service.sneaker_details.schemas.sneaker_sizes import (
 
 from sneaker_details_service.sneaker_details.services.sneaker_sizes import (
     create_sneaker_sizes,
-    read_sneaker_sizes,
     update_sneaker_sizes,
 )
 
@@ -19,6 +18,7 @@ from sneaker_details_service.sneaker_details.models.db_helper import db_helper
 from sneaker_details_service.sneaker_details.models import SneakerSizeAssociation
 from sneaker_details_service.sneaker_details.services.sneaker_association import (
     delete_sneaker_association,
+    read_sneaker_association,
 )
 
 from sneaker_details_service.sneaker_details.schemas.sneaker_association import (
@@ -49,11 +49,11 @@ async def call_delete_sneaker_association(
 
 
 @router.get("/read_sneaker_sizes/", response_model=list[SneakerSizesRead])
-async def call_read_sneaker_sizes(
+async def call_read_sneaker_association(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    sizes = await read_sneaker_sizes(session, sneaker_id)
+    sizes = await read_sneaker_association(session, SneakerSizeAssociation, sneaker_id)
     return sizes
 
 
