@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload, contains_eager
 
@@ -14,7 +14,6 @@ from sneaker_details_service.sneaker_details.models import (
     SneakerColorAssociation,
     SneakerMaterialAssociation,
 )
-
 
 
 async def create_sneaker(
@@ -54,13 +53,11 @@ async def delete_sneaker(session: AsyncSession, sneaker_id: int):
         SneakerMaterialAssociation,
     ]
     for assoc_table in assoc_tables:
-        stmt = select(assoc_table).where(assoc_table.sneaker_id == sneaker_id)
-        result = await session.execute(stmt)
-        for assoc in result.scalars():
-            await session.delete(assoc)
+        stmt = delete(assoc_table).where(assoc_table.sneaker_id == sneaker_id)
+        await session.execute(stmt)
 
-    sneaker = await session.get(Sneaker, sneaker_id)
-    await session.delete(sneaker)
+    stmt = delete(Sneaker).where(Sneaker.id == sneaker_id)
+    await session.execute(stmt)
 
     await session.commit()
 
