@@ -19,7 +19,3 @@ class SneakerSizeUpdate(Sneaker):
 
 
 class SneakerSizesRead(SizeQuantity): ...
-
-
-class SneakerSizesDelete(Sneaker):
-    size_ids: list[int]
