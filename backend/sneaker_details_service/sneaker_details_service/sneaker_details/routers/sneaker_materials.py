@@ -10,8 +10,12 @@ from sneaker_details_service.sneaker_details.schemas.sneaker_association import 
 from sneaker_details_service.sneaker_details.services.sneaker_association import (
     create_sneaker_association,
     delete_sneaker_association,
+    read_sneaker_association,
 )
 
+from sneaker_details_service.sneaker_details.schemas.sneaker_materials import (
+    SneakerMaterialsRead,
+)
 
 router = APIRouter()
 
@@ -36,3 +40,14 @@ async def call_delete_sneaker_association(
         session, sneaker_assoc_delete, SneakerMaterialAssociation, "material_id"
     )
     return "Материалы товара успешно удалены"
+
+
+@router.get("/read_sneaker_materials/", response_model=list[SneakerMaterialsRead])
+async def call_read_sneaker_association(
+    sneaker_id: int,
+    session: AsyncSession = Depends(db_helper.session_getter),
+):
+    materials = await read_sneaker_association(
+        session, SneakerMaterialAssociation, sneaker_id
+    )
+    return materials
