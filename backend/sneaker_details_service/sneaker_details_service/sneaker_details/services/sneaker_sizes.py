@@ -22,18 +22,6 @@ async def create_sneaker_sizes(
     await session.commit()
 
 
-async def read_sneaker_sizes(session: AsyncSession, sneaker_id: int):
-    """
-    Функция для чтения записи в ассоциативных таблицах
-    """
-    stmt = select(SneakerSizeAssociation).where(
-        SneakerSizeAssociation.sneaker_id == sneaker_id
-    )
-    result = await session.execute(stmt)
-    sneaker_sizes = result.scalars().all()
-    return sneaker_sizes
-
-
 async def update_sneaker_sizes(
     session: AsyncSession, sneaker_size_update: SneakerSizeUpdate
 ):
