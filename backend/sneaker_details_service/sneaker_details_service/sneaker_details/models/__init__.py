@@ -8,7 +8,8 @@ __all__ = (
     "Sneaker",
     "SneakerColorAssociation",
     "SneakerMaterialAssociation",
-    "SneakerSizeAssociation"
+    "SneakerSizeAssociation",
+    "db_helper",
 )
 
 from .base import Base
@@ -21,3 +22,4 @@ from .sneaker import Sneaker
 from .sneaker_color import SneakerColorAssociation
 from .sneaker_material import SneakerMaterialAssociation
 from .sneaker_size import SneakerSizeAssociation
+from .db_helper import db_helper
