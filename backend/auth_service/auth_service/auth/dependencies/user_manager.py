@@ -1,13 +1,10 @@
-from typing import Annotated, TYPE_CHECKING
+from typing import Annotated
 
 from fastapi import Depends
 
 from auth_service.auth.authentication.user_manager import UserManager
 
 from .users import get_users_db
-
-if TYPE_CHECKING:
-    from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 
 
 async def get_user_manager(

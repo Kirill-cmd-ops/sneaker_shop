@@ -1,14 +1,10 @@
 from typing import (
-    TYPE_CHECKING,
     Annotated,
 )
 
 from fastapi import Depends
 
 from auth_service.auth.models import db_helper, User
-
-if TYPE_CHECKING:
-    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def get_users_db(

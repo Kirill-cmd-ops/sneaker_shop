@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth_service.auth.models.refresh_token import RefreshToken
+from auth_service.auth.models import RefreshToken
 from auth_service.auth.refresh.utils.encode_token import encode_refresh_token
 
 
