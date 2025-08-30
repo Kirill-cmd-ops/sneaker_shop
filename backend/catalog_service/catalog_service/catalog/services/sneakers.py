@@ -1,10 +1,57 @@
 from typing import Optional
 
-from sqlalchemy import select, func
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload, selectinload, contains_eager
-
 from catalog_service.catalog.models import Sneaker, Brand, SneakerSizeAssociation, Size
+
+
+from sqlalchemy import select, delete, func
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import contains_eager
+
+from catalog_service.catalog.schemas.sneaker import (
+    SneakerCreate,
+    SneakerUpdate,
+)
+
+
+async def create_sneaker(
+    session: AsyncSession,
+    quantity: int,
+    sneaker_create: SneakerCreate,
+):
+    sneaker = Sneaker(**sneaker_create.dict(exclude="size_ids"))
+    session.add(sneaker)
+    await session.flush()
+
+    for size_id in sneaker_create.size_ids:
+        sneaker_sizes = SneakerSizeAssociation(
+            sneaker_id=sneaker.id, size_id=size_id, quantity=quantity
+        )
+        session.add(sneaker_sizes)
+
+    await session.commit()
+
+
+async def delete_sneaker(session: AsyncSession, sneaker_id: int):
+    assoc_table = SneakerSizeAssociation
+    stmt = delete(assoc_table).where(assoc_table.sneaker_id == sneaker_id)
+    await session.execute(stmt)
+
+    stmt = delete(Sneaker).where(Sneaker.id == sneaker_id)
+    await session.execute(stmt)
+
+    await session.commit()
+
+
+async def update_sneaker(
+    session: AsyncSession, sneaker_id: int, sneaker_update: SneakerUpdate
+):
+    sneaker = await session.get(Sneaker, sneaker_id)
+    update_data = sneaker_update.dict(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(sneaker, field, value)
+
+    session.add(sneaker)
+    await session.commit()
 
 
 async def get_sneakers_details(
@@ -29,10 +76,7 @@ async def get_sneakers_details(
         .join(Size)
         .where(Sneaker.is_active == True)
         .where(SneakerSizeAssociation.quantity > 0)
-        .options(
-            contains_eager(Sneaker.sizes),
-            contains_eager(Sneaker.brand)
-        )
+        .options(contains_eager(Sneaker.sizes), contains_eager(Sneaker.brand))
     )
     if name:
         stmt = stmt.filter(Sneaker.name.ilike(f"%{name}%"))
@@ -64,14 +108,10 @@ async def get_sneakers_details(
                 sort_column.desc() if order == "desc" else sort_column.asc()
             )
 
-    stmt = (
-        stmt.offset(offset)
-        .limit(limit)
-    )
+    stmt = stmt.offset(offset).limit(limit)
 
     result = await session.execute(stmt)
     sneakers = result.unique().scalars().all()
-
 
     count_stmt = stmt.with_only_columns(func.count(func.distinct(Sneaker.id))).order_by(
         None
