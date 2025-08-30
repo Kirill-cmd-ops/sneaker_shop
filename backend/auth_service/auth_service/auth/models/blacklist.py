@@ -2,7 +2,7 @@ from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
 
-from auth_service.auth.models import Base
+from auth_service.auth.models.base import Base
 from auth_service.auth.models.mixins import IntIdPkMixin
 
 

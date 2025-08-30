@@ -4,8 +4,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from auth_service.auth.types.user_id import UserIdType
 
-from auth_service.auth.models import OAuthAccount
-from auth_service.auth.models import Base
+from auth_service.auth.models.oauth_account import OAuthAccount
+from auth_service.auth.models.base import Base
 from auth_service.auth.models.mixins import IntIdPkMixin
 
 
