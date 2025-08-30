@@ -23,7 +23,7 @@ from auth_service.auth.refresh.services.refresh_checks import check_refresh_toke
 from auth_service.auth.refresh.utils.encode_token import encode_refresh_token
 from auth_service.auth.refresh.utils.generate_token import generate_refresh_token
 from auth_service.auth.refresh.utils.set_cookie import set_value_in_cookie
-from auth_service.auth.schemas.user import UserCreate
+from auth_service.auth.schemas import UserCreate
 from auth_service.auth.types.user_id import UserIdType
 
 from kafka.producer import send_user_registered

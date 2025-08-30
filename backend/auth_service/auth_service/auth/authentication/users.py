@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from auth_service.auth.authentication.fastapi_users import fastapi_users
 from auth_service.auth.config import settings
-from auth_service.auth.schemas.user import (
+from auth_service.auth.schemas import (
     UserRead,
     UserUpdate,
 )
