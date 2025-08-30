@@ -3,7 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
 
 from auth_service.auth.models import Base
-from auth_service.auth.models.mixins.int_id_pk import IntIdPkMixin
+from auth_service.auth.models.mixins import IntIdPkMixin
 
 
 class Blacklist(IntIdPkMixin, Base):

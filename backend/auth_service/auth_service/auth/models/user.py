@@ -1,17 +1,12 @@
-from typing import TYPE_CHECKING
-
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 from sqlalchemy import String
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from auth_service.auth.types.user_id import UserIdType
-from .oauth_account import OAuthAccount
-from .base import Base
-from .mixins.int_id_pk import IntIdPkMixin
 
-if TYPE_CHECKING:
-    from sqlalchemy.ext.asyncio import AsyncSession
+from auth_service.auth.models import OAuthAccount
+from auth_service.auth.models import Base
+from auth_service.auth.models.mixins import IntIdPkMixin
 
 
 class User(Base, IntIdPkMixin, SQLAlchemyBaseUserTable[UserIdType]):
