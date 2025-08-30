@@ -1,5 +1,6 @@
-from .transport import cookie_transport
-from .custom_strategy import get_jwt_strategy
+from auth_service.auth.authentication.transport import cookie_transport
+from auth_service.auth.authentication.custom_strategy import get_jwt_strategy
+
 from fastapi_users.authentication import AuthenticationBackend
 
 

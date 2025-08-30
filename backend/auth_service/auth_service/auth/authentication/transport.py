@@ -1,4 +1,5 @@
 from fastapi_users.authentication import CookieTransport
+
 from auth_service.auth.config import settings
 
 cookie_transport = CookieTransport(
