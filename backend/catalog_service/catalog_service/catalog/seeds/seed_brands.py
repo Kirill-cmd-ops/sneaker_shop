@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from catalog_service.catalog.models.brand import Brand
+from catalog_service.catalog.models import Brand
 
 async def seed_brands(db: AsyncSession):
     brands = [

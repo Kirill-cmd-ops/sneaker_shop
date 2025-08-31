@@ -13,9 +13,8 @@ from catalog_service.catalog.services.sneaker_sizes import (
     update_sneaker_sizes,
 )
 
-from catalog_service.catalog.models.db_helper import db_helper
+from catalog_service.catalog.models import db_helper, SneakerSizeAssociation
 
-from catalog_service.catalog.models import SneakerSizeAssociation
 from catalog_service.catalog.services.sneaker_association import (
     delete_sneaker_association,
     read_sneaker_association,
