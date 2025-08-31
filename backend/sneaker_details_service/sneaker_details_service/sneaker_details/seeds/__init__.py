@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sneaker_details_service.sneaker_details.models.db_helper import db_helper
+from sneaker_details_service.sneaker_details.models import db_helper
 from sneaker_details_service.sneaker_details.seeds.seed_brands import seed_brands
 from sneaker_details_service.sneaker_details.seeds.seed_sizes import seed_sizes
 from sneaker_details_service.sneaker_details.seeds.seed_sneakers import seed_sneakers

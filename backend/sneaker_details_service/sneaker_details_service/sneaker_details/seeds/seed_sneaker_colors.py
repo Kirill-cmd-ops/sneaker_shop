@@ -1,9 +1,12 @@
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sneaker_details_service.sneaker_details.models import SneakerColorAssociation
-from sneaker_details_service.sneaker_details.models import Sneaker
-from sneaker_details_service.sneaker_details.models import Color
+from sneaker_details_service.sneaker_details.models import (
+    SneakerColorAssociation,
+    Sneaker,
+    Color,
+)
 import random
+
 
 async def seed_sneaker_colors(db: AsyncSession):
     sneakers = (await db.execute(select(Sneaker))).scalars().all()

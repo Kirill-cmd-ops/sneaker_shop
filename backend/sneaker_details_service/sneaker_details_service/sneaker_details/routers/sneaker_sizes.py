@@ -13,9 +13,10 @@ from sneaker_details_service.sneaker_details.services.sneaker_sizes import (
     update_sneaker_sizes,
 )
 
-from sneaker_details_service.sneaker_details.models.db_helper import db_helper
-
-from sneaker_details_service.sneaker_details.models import SneakerSizeAssociation
+from sneaker_details_service.sneaker_details.models import (
+    SneakerSizeAssociation,
+    db_helper,
+)
 from sneaker_details_service.sneaker_details.services.sneaker_association import (
     delete_sneaker_association,
     read_sneaker_association,

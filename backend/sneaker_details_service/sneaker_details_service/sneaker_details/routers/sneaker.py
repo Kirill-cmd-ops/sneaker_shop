@@ -1,10 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.models.db_helper import db_helper
+from sneaker_details_service.sneaker_details.models import db_helper
 from sneaker_details_service.sneaker_details.services.sneaker import get_sneaker_details
 
-from sneaker_details_service.sneaker_details.schemas.sneaker import SneakerCreate, SneakerUpdate
+from sneaker_details_service.sneaker_details.schemas.sneaker import (
+    SneakerCreate,
+    SneakerUpdate,
+)
 from sneaker_details_service.sneaker_details.services.sneaker import (
     create_sneaker,
     delete_sneaker,

@@ -1,9 +1,11 @@
 import random
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sneaker_details_service.sneaker_details.models import SneakerSizeAssociation
-from sneaker_details_service.sneaker_details.models import Sneaker
-from sneaker_details_service.sneaker_details.models import Size
+from sneaker_details_service.sneaker_details.models import (
+    SneakerSizeAssociation,
+    Sneaker,
+    Size,
+)
 
 
 async def seed_sneaker_sizes(db: AsyncSession):
@@ -17,7 +19,11 @@ async def seed_sneaker_sizes(db: AsyncSession):
 
         for size in assigned_sizes:
             quantity = random.randint(1, 10)
-            associations.append(SneakerSizeAssociation(sneaker_id=sneaker.id, size_id=size.id, quantity=quantity))
+            associations.append(
+                SneakerSizeAssociation(
+                    sneaker_id=sneaker.id, size_id=size.id, quantity=quantity
+                )
+            )
 
     db.add_all(associations)
     await db.flush()

@@ -2,17 +2,16 @@ from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload, contains_eager
 
-from sneaker_details_service.sneaker_details.models.sneaker import Sneaker
-
-from sneaker_details_service.sneaker_details.models.sneaker_size import (
-    SneakerSizeAssociation,
+from sneaker_details_service.sneaker_details.schemas.sneaker import (
+    SneakerCreate,
+    SneakerUpdate,
 )
-
-from sneaker_details_service.sneaker_details.schemas.sneaker import SneakerCreate, SneakerUpdate
 
 from sneaker_details_service.sneaker_details.models import (
     SneakerColorAssociation,
     SneakerMaterialAssociation,
+    SneakerSizeAssociation,
+    Sneaker,
 )
 
 
@@ -63,9 +62,7 @@ async def delete_sneaker(session: AsyncSession, sneaker_id: int):
 
 
 async def update_sneaker(
-    session: AsyncSession,
-    sneaker_id: int,
-    sneaker_update: SneakerUpdate
+    session: AsyncSession, sneaker_id: int, sneaker_update: SneakerUpdate
 ):
     sneaker = await session.get(Sneaker, sneaker_id)
     update_data = sneaker_update.dict(exclude_unset=True)

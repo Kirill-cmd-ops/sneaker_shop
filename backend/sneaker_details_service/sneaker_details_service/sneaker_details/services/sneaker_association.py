@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.models import Base, SneakerColorAssociation
+from sneaker_details_service.sneaker_details.models import Base
 from sneaker_details_service.sneaker_details.schemas.sneaker_association import (
     SneakerAssocsCreate,
     SneakerAssocsDelete,
