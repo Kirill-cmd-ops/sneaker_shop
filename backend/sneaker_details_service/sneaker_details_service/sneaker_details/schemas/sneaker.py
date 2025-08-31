@@ -3,6 +3,9 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, condecimal
 
+class SneakerSizeQuantity(BaseModel):
+    size_id: int
+    quantity: int = 0
 
 class SneakerUpdate(BaseModel):
     name: Optional[str] = Field(None, max_length=100)
@@ -25,6 +28,6 @@ class SneakerCreate(BaseModel):
     is_active: bool = Field(default=True)
     gender: str = Field(default="унисекс")
 
-    size_ids: list[int] = []
+    size_ids: list[SneakerSizeQuantity] = []
     color_ids: list[int] = []
     material_ids: list[int] = []

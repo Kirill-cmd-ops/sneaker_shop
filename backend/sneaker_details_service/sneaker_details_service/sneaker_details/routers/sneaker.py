@@ -21,10 +21,9 @@ router = APIRouter()
 @router.post("/create_sneaker/")
 async def call_create_sneaker(
     sneaker_create: SneakerCreate,
-    sneaker_quantity: int = 0,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    await create_sneaker(session, sneaker_quantity, sneaker_create)
+    await create_sneaker(session, sneaker_create)
     return "Товар успешно создан"
 
 
