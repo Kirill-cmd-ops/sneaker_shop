@@ -7,6 +7,11 @@ from catalog_service.catalog.schemas.brand import BrandRead
 from catalog_service.catalog.schemas.size import SizeRead
 
 
+class SneakerSizeQuantity(BaseModel):
+    size_id: int
+    quantity: int = 0
+
+
 class SneakerStandard(BaseModel):
     id: int
     name: str = Field(max_length=100)
@@ -43,4 +48,4 @@ class SneakerCreate(BaseModel):
     is_active: bool = Field(default=True)
     gender: str = Field(default="унисекс")
 
-    size_ids: list[int] = []
+    size_ids: list[SneakerSizeQuantity] = []
