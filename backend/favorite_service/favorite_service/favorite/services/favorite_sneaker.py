@@ -2,8 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from favorite_service.favorite.models.favorite import Favorite
-from favorite_service.favorite.models.favorite_sneaker import FavoriteSneakerAssociation
+from favorite_service.favorite.models import Favorite, FavoriteSneakerAssociation
 
 
 

@@ -1,13 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from favorite_service.favorite.models.db_helper import db_helper
+from favorite_service.favorite.models import db_helper, Favorite
 from favorite_service.favorite.schemas.favorite_sneaker import FavoriteSneakerCreate
 from favorite_service.favorite.services.favorite_sneaker import (
     create_sneaker_to_favorite,
     delete_sneaker_to_favorite,
 )
-from favorite_service.favorite.models import Favorite
 from favorite_service.favorite.dependencies.get_current_user import get_user_by_header
 from favorite_service.favorite.config import settings
 
