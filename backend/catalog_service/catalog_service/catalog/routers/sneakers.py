@@ -5,46 +5,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from catalog_service.catalog.models import db_helper
 
-from catalog_service.catalog.schemas import (
-    SneakerCreate,
-    SneakerUpdate,
-)
+
 from catalog_service.catalog.services.sneakers import (
     get_sneakers_details,
-    create_sneaker,
-    delete_sneaker,
-    update_sneaker,
 )
 
 router = APIRouter()
-
-
-@router.post("/create_sneaker/")
-async def call_create_sneaker(
-    sneaker_create: SneakerCreate,
-    session: AsyncSession = Depends(db_helper.session_getter),
-):
-    await create_sneaker(session, sneaker_create)
-    return "Товар успешно создан"
-
-
-@router.delete("/delete_sneaker/")
-async def call_delete_sneaker(
-    sneaker_id: int,
-    session: AsyncSession = Depends(db_helper.session_getter),
-):
-    await delete_sneaker(session, sneaker_id)
-    return "Товар успешно удален"
-
-
-@router.patch("/update_sneaker/")
-async def call_update_sneaker(
-    sneaker_id: int,
-    sneaker_update: SneakerUpdate,
-    session: AsyncSession = Depends(db_helper.session_getter),
-):
-    await update_sneaker(session, sneaker_id, sneaker_update)
-    return "Товар успешно обновлен"
 
 
 @router.get("/sneakers/")
