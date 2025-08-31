@@ -5,9 +5,10 @@ from sneaker_details_service.sneaker_details.models import (
     SneakerMaterialAssociation,
     db_helper,
 )
-from sneaker_details_service.sneaker_details.schemas.sneaker_association import (
+from sneaker_details_service.sneaker_details.schemas import (
     SneakerAssocsCreate,
     SneakerAssocsDelete,
+    SneakerMaterialsRead,
 )
 from sneaker_details_service.sneaker_details.services.sneaker_association import (
     create_sneaker_association,
@@ -15,9 +16,6 @@ from sneaker_details_service.sneaker_details.services.sneaker_association import
     read_sneaker_association,
 )
 
-from sneaker_details_service.sneaker_details.schemas.sneaker_materials import (
-    SneakerMaterialsRead,
-)
 
 router = APIRouter()
 

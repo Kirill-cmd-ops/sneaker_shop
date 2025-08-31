@@ -2,7 +2,7 @@ from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload, contains_eager
 
-from sneaker_details_service.sneaker_details.schemas.sneaker import (
+from sneaker_details_service.sneaker_details.schemas import (
     SneakerCreate,
     SneakerUpdate,
 )

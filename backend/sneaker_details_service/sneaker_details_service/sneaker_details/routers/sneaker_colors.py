@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.schemas.sneaker_association import (
+from sneaker_details_service.sneaker_details.schemas import (
     SneakerAssocsCreate,
     SneakerAssocsDelete,
+    SneakerColorsRead,
 )
 from sneaker_details_service.sneaker_details.services.sneaker_association import (
     create_sneaker_association,
@@ -14,10 +15,6 @@ from sneaker_details_service.sneaker_details.services.sneaker_association import
 from sneaker_details_service.sneaker_details.models import (
     SneakerColorAssociation,
     db_helper,
-)
-
-from sneaker_details_service.sneaker_details.schemas.sneaker_colors import (
-    SneakerColorsRead,
 )
 
 
