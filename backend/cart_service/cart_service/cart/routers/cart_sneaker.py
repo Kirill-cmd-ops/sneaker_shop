@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from cart_service.cart.models import db_helper, Cart
-from cart_service.cart.schemas.cart_sneaker import CartSneakerCreate, CartSneakerUpdate
+from cart_service.cart.schemas import CartSneakerCreate, CartSneakerUpdate
 from cart_service.cart.services.cart_sneaker import (
     create_sneaker_to_cart,
     delete_sneaker_to_cart,
