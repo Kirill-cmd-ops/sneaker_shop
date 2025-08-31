@@ -2,10 +2,11 @@ from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from catalog_service.catalog.schemas.sneaker_sizes import (
+from catalog_service.catalog.schemas import (
     SneakerSizesCreate,
     SneakerSizesRead,
     SneakerSizeUpdate,
+    SneakerAssocsDelete,
 )
 
 from catalog_service.catalog.services.sneaker_sizes import (
@@ -18,10 +19,6 @@ from catalog_service.catalog.models import db_helper, SneakerSizeAssociation
 from catalog_service.catalog.services.sneaker_association import (
     delete_sneaker_association,
     read_sneaker_association,
-)
-
-from catalog_service.catalog.schemas.sneaker_association import (
-    SneakerAssocsDelete,
 )
 
 router = APIRouter()

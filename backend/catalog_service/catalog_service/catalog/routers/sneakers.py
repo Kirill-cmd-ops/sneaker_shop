@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from catalog_service.catalog.models import db_helper
 
-from catalog_service.catalog.schemas.sneaker import (
+from catalog_service.catalog.schemas import (
     SneakerCreate,
     SneakerUpdate,
 )

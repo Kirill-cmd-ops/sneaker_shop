@@ -5,7 +5,7 @@ from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from catalog_service.catalog.models import Base
-from catalog_service.catalog.schemas.sneaker_association import (
+from catalog_service.catalog.schemas import (
     SneakerAssocsDelete,
 )
 

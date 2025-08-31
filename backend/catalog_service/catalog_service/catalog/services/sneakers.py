@@ -1,13 +1,18 @@
 from typing import Optional
 
-from catalog_service.catalog.models import Sneaker, Brand, SneakerSizeAssociation, Size
+from catalog_service.catalog.models import (
+    Sneaker,
+    Brand,
+    SneakerSizeAssociation,
+    Size,
+)
 
 
 from sqlalchemy import select, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import contains_eager
 
-from catalog_service.catalog.schemas.sneaker import (
+from catalog_service.catalog.schemas import (
     SneakerCreate,
     SneakerUpdate,
 )

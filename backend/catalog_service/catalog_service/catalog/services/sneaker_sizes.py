@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from catalog_service.catalog.schemas.sneaker_sizes import (
+from catalog_service.catalog.schemas import (
     SneakerSizesCreate,
     SneakerSizeUpdate,
 )
