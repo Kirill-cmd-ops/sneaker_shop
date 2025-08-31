@@ -2,8 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cart_service.cart.models.cart import Cart
-from cart_service.cart.models.cart_sneaker import CartSneakerAssociation
+from cart_service.cart.models import Cart, CartSneakerAssociation
 
 
 
