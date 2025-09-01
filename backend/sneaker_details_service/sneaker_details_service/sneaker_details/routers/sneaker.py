@@ -23,8 +23,8 @@ async def call_create_sneaker(
     sneaker_create: SneakerCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    await create_sneaker(session, sneaker_create)
-    return "Товар успешно создан"
+    sneaker = await create_sneaker(session, sneaker_create)
+    return sneaker
 
 
 @router.delete("/delete_sneaker/")

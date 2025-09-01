@@ -42,6 +42,7 @@ async def create_sneaker(
         session.add(sneaker_materials)
 
     await session.commit()
+    return sneaker
 
 
 async def delete_sneaker(session: AsyncSession, sneaker_id: int):
