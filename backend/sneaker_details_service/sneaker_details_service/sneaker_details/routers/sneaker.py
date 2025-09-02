@@ -1,6 +1,21 @@
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Optional
+
+from aiokafka import AIOKafkaProducer
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from sneaker_details_service.sneaker_details.dependencies.get_kafka_producer import (
+    get_kafka_producer,
+)
+from sneaker_details_service.sneaker_details.kafka.producer_event.create_sneaker_data import (
+    send_create_sneaker_data,
+)
+from sneaker_details_service.sneaker_details.kafka.producer_event.delete_sneaker_data import (
+    send_delete_sneaker_data,
+)
+from sneaker_details_service.sneaker_details.kafka.producer_event.update_sneaker_data import (
+    send_update_sneaker_data,
+)
 from sneaker_details_service.sneaker_details.models import db_helper
 from sneaker_details_service.sneaker_details.services.sneaker import get_sneaker_details
 
@@ -22,8 +37,10 @@ router = APIRouter()
 async def call_create_sneaker(
     sneaker_create: SneakerCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
+    producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     sneaker = await create_sneaker(session, sneaker_create)
+    await send_create_sneaker_data(producer, sneaker.id, sneaker_create)
     return sneaker
 
 
@@ -31,8 +48,10 @@ async def call_create_sneaker(
 async def call_delete_sneaker(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
+    producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     await delete_sneaker(session, sneaker_id)
+    await send_delete_sneaker_data(producer, sneaker_id)
     return "Товар успешно удален"
 
 
@@ -41,8 +60,10 @@ async def call_update_sneaker(
     sneaker_id: int,
     sneaker_update: SneakerUpdate,
     session: AsyncSession = Depends(db_helper.session_getter),
+    producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     await update_sneaker(session, sneaker_id, sneaker_update)
+    await send_update_sneaker_data(producer, sneaker_id, sneaker_update)
     return "Товар успешно обновлен"
 
 
