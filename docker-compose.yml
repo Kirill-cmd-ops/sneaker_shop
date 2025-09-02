@@ -205,6 +205,10 @@ services:
     depends_on:
       catalog_db:
         condition: service_healthy
+      kafka:
+        condition: service_healthy
+    volumes:
+      - ./kafka:/app/catalog_service/kafka
     ports:
       - "8005:8005"
     environment:
@@ -236,6 +240,10 @@ services:
     depends_on:
       sneaker_details_db:
         condition: service_healthy
+      kafka:
+        condition: service_healthy
+    volumes:
+      - ./kafka:/app/sneaker_details_service/kafka
     ports:
       - "8006:8006"
     environment:
