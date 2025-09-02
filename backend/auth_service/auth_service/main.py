@@ -14,7 +14,7 @@ from kafka.producer import start_producer, close_producer
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
-    producer = await start_producer()
+    producer = await start_producer(settings.kafka_config.kafka_bootstrap_servers)
     app.state.kafka_producer = producer
     yield
     # shutdown
