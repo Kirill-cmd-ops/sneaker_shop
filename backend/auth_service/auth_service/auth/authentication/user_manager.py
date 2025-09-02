@@ -14,6 +14,7 @@ from fastapi_users import (
 from starlette.responses import Response
 
 from auth_service.auth.config import settings
+from auth_service.auth.kafka.producer_event.user_registered import send_user_registered
 
 from auth_service.auth.models import User, db_helper
 from auth_service.auth.refresh.dependencies.get_token_id import get_refresh_token_id
@@ -26,7 +27,6 @@ from auth_service.auth.refresh.utils.set_cookie import set_value_in_cookie
 from auth_service.auth.schemas import UserCreate
 from auth_service.auth.types.user_id import UserIdType
 
-from kafka.producer import send_user_registered
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
