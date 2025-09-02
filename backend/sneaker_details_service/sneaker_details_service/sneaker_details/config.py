@@ -39,7 +39,14 @@ class DatabaseConfig(BaseModel):
     }
 
 
+class KafkaConfig(BaseModel):
+    kafka_bootstrap_servers: str
+    sneaker_work_topic: str
+    sneaker_sizes_work_topic: str
+
+
 ENV_DIR = Path(__file__).parent.parent.parent
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -51,6 +58,7 @@ class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig
+    kafka_config: KafkaConfig
 
 
 settings = Settings()
