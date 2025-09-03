@@ -11,7 +11,8 @@ async def send_update_sneaker_data(
 ):
     sneaker_update_payload = {
         "event_type": "sneaker_updated",
-        "data": sneaker_update.dict(exclude={"description", "country_id"}),
+        "sneaker_id": sneaker_id,
+        "data": sneaker_update.dict(exclude_unset=True, exclude={"description", "country_id"}),
     }
 
     await producer.send_and_wait(
