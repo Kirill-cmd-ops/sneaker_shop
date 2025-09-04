@@ -18,6 +18,6 @@ class Permission(IntIdPkMixin, Base):
     )
 
     roles: Mapped[list["Role"]] = relationship(
-        secondary="role_permission_association",
+        secondary="role_permission_associations",
         viewonly=True
     )

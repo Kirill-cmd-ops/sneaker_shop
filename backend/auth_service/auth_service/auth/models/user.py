@@ -26,7 +26,7 @@ class User(Base, IntIdPkMixin, SQLAlchemyBaseUserTable[UserIdType]):
     )
 
     roles: Mapped[list["Role"]] = relationship(
-        secondary="user_role_association",
+        secondary="user_role_associations",
         viewonly=True
     )
 
