@@ -5,6 +5,10 @@ __all__ = (
     "OAuthAccount",
     "RefreshToken",
     "Blacklist",
+    "Role",
+    "Permission",
+    "RolePermissionAssociation",
+    "UserRoleAssociation",
 )
 
 from .db_helper import db_helper
@@ -13,3 +17,7 @@ from .user import User
 from .oauth_account import OAuthAccount
 from .refresh_token import RefreshToken
 from .blacklist import Blacklist
+from .role import Role
+from .permission import Permission
+from .role_permission import RolePermissionAssociation
+from .user_role import UserRoleAssociation
