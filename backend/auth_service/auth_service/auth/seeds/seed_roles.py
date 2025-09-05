@@ -7,7 +7,6 @@ async def seed_roles(db: AsyncSession):
     await db.execute(
         insert(Role),
         [
-            {"name": "guest"},
             {"name": "user"},
             {"name": "content_manager"},
             {"name": "admin"},
