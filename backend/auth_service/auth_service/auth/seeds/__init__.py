@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from auth_service.auth.models import db_helper
 from auth_service.auth.seeds.seed_roles import seed_roles
+from auth_service.auth.seeds.seed_permissions import seed_permission
 
 
 async def run_seeds():
@@ -10,6 +11,7 @@ async def run_seeds():
 
     try:
         await seed_roles(session)
+        await seed_permission(session)
         await session.commit()
         print("All seeds completed successfully!")
     except Exception as e:
