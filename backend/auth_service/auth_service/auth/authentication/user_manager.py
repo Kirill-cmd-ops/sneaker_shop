@@ -25,6 +25,7 @@ from auth_service.auth.refresh.utils.encode_token import encode_refresh_token
 from auth_service.auth.refresh.utils.generate_token import generate_refresh_token
 from auth_service.auth.refresh.utils.set_cookie import set_value_in_cookie
 from auth_service.auth.schemas import UserCreate
+from auth_service.auth.services.add_role_in_db import add_role_db
 from auth_service.auth.types.user_id import UserIdType
 
 
@@ -68,6 +69,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         producer: AIOKafkaProducer = request.app.state.kafka_producer
         await send_user_registered(producer, str(user.id))
+        await add_role_db(user.id, "user")
 
     async def on_after_update(
         self,
