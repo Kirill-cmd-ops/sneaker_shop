@@ -4,6 +4,8 @@ from fastapi_users import models
 from fastapi_users.authentication import JWTStrategy
 from fastapi_users.jwt import generate_jwt, SecretType
 
+from auth_service.auth.services.get_user_role import get_user_role
+
 
 class MyJWTStrategy(JWTStrategy):
     def __init__(
@@ -31,10 +33,13 @@ class MyJWTStrategy(JWTStrategy):
             raise ValueError("Значение aud некорректно для access токена, который вы пытаетесь создать")
 
         sub = getattr(user, "id", user)
+        role = await get_user_role(sub)
+
         data = {
             "sub": str(sub),
             "iss": self.issuer,
             "aud": self.token_audience,
+            "role": role,
         }
         return generate_jwt(
             data, self.encode_key, self.lifetime_seconds, algorithm=self.algorithm
