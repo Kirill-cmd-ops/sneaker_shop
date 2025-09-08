@@ -7,12 +7,12 @@ from favorite_service.favorite.dependencies.get_current_user import get_user_by_
 from favorite_service.favorite.services.favorite import read_favorite
 
 router = APIRouter(
-    prefix=settings.api.v1.favorite,
+    prefix=settings.api.build_path(settings.api.root, settings.api.v1.prefix),
     tags=["Favorite"],
 )
 
 
-@router.get("/favorite")
+@router.get("/view")
 async def call_get_favorite(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
