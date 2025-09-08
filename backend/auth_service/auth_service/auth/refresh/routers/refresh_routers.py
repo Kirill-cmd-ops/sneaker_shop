@@ -17,7 +17,11 @@ from auth_service.auth.refresh.utils.encode_token import encode_refresh_token
 from auth_service.auth.refresh.utils.generate_token import generate_refresh_token
 from auth_service.auth.refresh.utils.set_cookie import set_value_in_cookie
 
-refresh_router = APIRouter()
+refresh_router = APIRouter(
+    prefix=settings.api.build_path(
+        settings.api.v1.refresh,
+    )
+)
 
 
 @refresh_router.post("/refresh")

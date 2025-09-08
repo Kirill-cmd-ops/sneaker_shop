@@ -8,7 +8,11 @@ from auth_service.auth.schemas import (
 )
 
 router = APIRouter(
-    prefix=settings.api.v1.users,
+    prefix=settings.api.build_path(
+        settings.api.root,
+        settings.api.v1.prefix,
+        settings.api.v1.users,
+    ),
     tags=["Users"],
 )
 

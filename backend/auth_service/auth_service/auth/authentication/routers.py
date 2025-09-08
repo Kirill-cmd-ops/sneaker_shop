@@ -17,7 +17,7 @@ fastapi_users = FastAPIUsers[User, UserIdType](
 )
 
 router = APIRouter(
-    prefix=settings.api.v1.auth,
+    prefix=settings.api.build_path(settings.api.root, settings.api.v1.prefix),
     tags=["Auth"],
 )
 
