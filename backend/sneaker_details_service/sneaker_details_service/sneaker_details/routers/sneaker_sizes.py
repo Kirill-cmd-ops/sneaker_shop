@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from sneaker_details_service.sneaker_details.config import settings
 from sneaker_details_service.sneaker_details.dependencies.get_kafka_producer import get_kafka_producer
 from sneaker_details_service.sneaker_details.kafka.producer_event.create_sneaker_sizes_data import (
     send_create_sneaker_sizes_data,
@@ -35,10 +36,17 @@ from sneaker_details_service.sneaker_details.services.sneaker_association import
 )
 
 
-router = APIRouter()
+router = APIRouter(
+    prefix=settings.api.build_path(
+        settings.api.root,
+        settings.api.v1.prefix,
+        settings.api.v1.sneaker_sizes,
+    ),
+    tags=["Sneaker Sizes"],
+)
 
 
-@router.post("/create_sneaker_sizes/")
+@router.post("/create/")
 async def call_create_sneaker_sizes(
     sneaker_sizes_create: SneakerSizesCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -49,7 +57,7 @@ async def call_create_sneaker_sizes(
     return "Запись нового размера прошла успешно"
 
 
-@router.delete("/delete_sneaker_sizes/")
+@router.delete("/delete/")
 async def call_delete_sneaker_association(
     sneaker_sizes_delete: SneakerAssocsDelete,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -62,7 +70,7 @@ async def call_delete_sneaker_association(
     return "Размеры товара успешно удалены"
 
 
-@router.patch("/update_sneaker_sizes/")
+@router.patch("/update/")
 async def call_update_sneaker_sizes(
     sneaker_size_update: SneakerSizeUpdate,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -73,7 +81,7 @@ async def call_update_sneaker_sizes(
     return "Размер был изменен корректно"
 
 
-@router.get("/read_sneaker_sizes/", response_model=list[SneakerSizesRead])
+@router.get("/view/", response_model=list[SneakerSizesRead])
 async def call_read_sneaker_association(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),

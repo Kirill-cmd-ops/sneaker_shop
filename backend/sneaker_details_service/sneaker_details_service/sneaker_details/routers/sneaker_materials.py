@@ -1,6 +1,7 @@
 from fastapi import Depends, APIRouter
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from sneaker_details_service.sneaker_details.config import settings
 from sneaker_details_service.sneaker_details.models import (
     SneakerMaterialAssociation,
     db_helper,
@@ -17,10 +18,17 @@ from sneaker_details_service.sneaker_details.services.sneaker_association import
 )
 
 
-router = APIRouter()
+router = APIRouter(
+    prefix=settings.api.build_path(
+        settings.api.root,
+        settings.api.v1.prefix,
+        settings.api.v1.sneaker_materials,
+    ),
+    tags=["Sneaker Materials"],
+)
 
 
-@router.post("/create_sneaker_materials/")
+@router.post("/create/")
 async def call_create_sneaker_association(
     sneaker_associations_create: SneakerAssocsCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -31,7 +39,7 @@ async def call_create_sneaker_association(
     return "Запись нового материала прошла успешно"
 
 
-@router.delete("/delete_sneaker_materials/")
+@router.delete("/delete/")
 async def call_delete_sneaker_association(
     sneaker_assoc_delete: SneakerAssocsDelete,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -42,7 +50,7 @@ async def call_delete_sneaker_association(
     return "Материалы товара успешно удалены"
 
 
-@router.get("/read_sneaker_materials/", response_model=list[SneakerMaterialsRead])
+@router.get("/view/", response_model=list[SneakerMaterialsRead])
 async def call_read_sneaker_association(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),

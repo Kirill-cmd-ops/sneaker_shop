@@ -4,6 +4,7 @@ from aiokafka import AIOKafkaProducer
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from sneaker_details_service.sneaker_details.config import settings
 from sneaker_details_service.sneaker_details.dependencies.get_kafka_producer import (
     get_kafka_producer,
 )
@@ -30,10 +31,17 @@ from sneaker_details_service.sneaker_details.services.sneaker import (
 )
 
 
-router = APIRouter()
+router = APIRouter(
+    prefix=settings.api.build_path(
+        settings.api.root,
+        settings.api.v1.prefix,
+        settings.api.v1.sneakers,
+    ),
+    tags=["Sneaker"],
+)
 
 
-@router.post("/create_sneaker/")
+@router.post("/create/")
 async def call_create_sneaker(
     sneaker_create: SneakerCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -44,7 +52,7 @@ async def call_create_sneaker(
     return sneaker
 
 
-@router.delete("/delete_sneaker/")
+@router.delete("/delete/")
 async def call_delete_sneaker(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -55,7 +63,7 @@ async def call_delete_sneaker(
     return "Товар успешно удален"
 
 
-@router.patch("/update_sneaker/")
+@router.patch("/update/")
 async def call_update_sneaker(
     sneaker_id: int,
     sneaker_update: SneakerUpdate,
@@ -67,7 +75,7 @@ async def call_update_sneaker(
     return "Товар успешно обновлен"
 
 
-@router.get("/sneaker/{sneaker_id}")
+@router.get("/view/{sneaker_id}")
 async def call_get_sneaker_details(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
