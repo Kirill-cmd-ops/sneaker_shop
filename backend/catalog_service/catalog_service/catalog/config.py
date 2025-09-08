@@ -14,13 +14,16 @@ class RunConfig(BaseModel):
 
 
 class ApiV1Prefix(BaseModel):
-    prefix: str = "/v1"
-    catalog: str = "/catalog"
+    prefix: str = "/v1/catalog"
+    sneakers: str = "/sneakers"
 
 
 class ApiPrefix(BaseModel):
-    prefix: str = "/api"
+    root: str = "/api"
     v1: ApiV1Prefix = ApiV1Prefix()
+
+    def build_path(self, *args: str):
+        return "/" + "/".join(p.strip("/") for p in args if p)
 
 
 class DatabaseConfig(BaseModel):

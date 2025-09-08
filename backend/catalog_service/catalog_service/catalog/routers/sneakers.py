@@ -3,6 +3,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from catalog_service.catalog.config import settings
 from catalog_service.catalog.models import db_helper
 
 
@@ -10,10 +11,17 @@ from catalog_service.catalog.services.sneakers import (
     get_sneakers_details,
 )
 
-router = APIRouter()
+router = APIRouter(
+    prefix=settings.api.build_path(
+        settings.api.root,
+        settings.api.v1.prefix,
+        settings.api.v1.sneakers,
+    ),
+    tags=["Catalog"],
+)
 
 
-@router.get("/sneakers/")
+@router.get("/view/")
 async def call_get_sneakers_details(
     session: AsyncSession = Depends(db_helper.session_getter),
     page: Optional[int] = 1,
