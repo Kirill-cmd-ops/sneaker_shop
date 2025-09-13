@@ -16,7 +16,8 @@ class RunConfig(BaseModel):
 class ApiV1Prefix(BaseModel):
     prefix: str = "/v1/auth"
     users: str = "/users"
-    refresh: str = "refresh"
+    refresh: str = "/refresh"
+    role_permissions: str = "role_permissions"
 
 
 class ApiPrefix(BaseModel):
@@ -92,6 +93,10 @@ class KafkaConfig(BaseModel):
     registered_topic: str
 
 
+class RedisConfig(BaseModel):
+    redis_password: str
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(str(ENV_DIR / ".env.template"), str(ENV_DIR / ".env")),
@@ -106,6 +111,7 @@ class Settings(BaseSettings):
     auth_config: AuthConfig
     access_token: AccessToken
     kafka_config: KafkaConfig
+    redis_config: RedisConfig
 
 
 settings = Settings()
