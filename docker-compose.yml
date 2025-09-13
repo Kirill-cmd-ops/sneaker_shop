@@ -97,6 +97,7 @@ services:
     volumes:
       - ./backend/secrets:/app/secrets
       - ./kafka:/app/auth_service/kafka
+      - ./redis_data:/app/auth_service/redis_data
     ports:
       - "8002:8002"
     environment:
@@ -121,6 +122,7 @@ services:
       - ./backend/auth_service:/app/auth_service
       - ./backend/secrets:/app/secrets
       - ./kafka:/app/auth_service/kafka
+      - ./redis_data:/app/auth_service/redis_data
     command: [ "upgrade", "head" ]
 
   favorite_service:
@@ -302,6 +304,7 @@ services:
     command: >
       sh -c "kong migrations bootstrap && kong start"
 
+
   nginx:
     image: nginx:latest
     ports:
@@ -355,7 +358,20 @@ services:
     volumes:
       - ./frontend:/app/frontend
 
-
+  redis:
+    image: redis:latest
+    container_name: project-redis-1
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis_data:/data
+      - ./redis_data/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      retries: 5
 
 volumes:
   auth_pgdata:
