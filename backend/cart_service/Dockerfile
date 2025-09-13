@@ -14,4 +14,4 @@ RUN pip install poetry && \
 RUN python -m pip freeze
 
 
-EXPOSE 8002
+EXPOSE 8004
