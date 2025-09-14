@@ -63,6 +63,10 @@ class KafkaConfig(BaseModel):
     cart_group_id: str
 
 
+class RedisConfig(BaseModel):
+    redis_password: str
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(str(ENV_DIR / ".env.template"), str(ENV_DIR / ".env")),
@@ -75,6 +79,7 @@ class Settings(BaseSettings):
     db: DatabaseConfig
     auth_config: AuthConfig
     kafka_config: KafkaConfig
+    redis_config: RedisConfig
 
 
 settings = Settings()
