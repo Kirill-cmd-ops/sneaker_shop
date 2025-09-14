@@ -1,28 +1,28 @@
-import functools
-
 import redis.asyncio as aioredis
-from fastapi import HTTPException
+from fastapi import HTTPException, Depends
 from starlette.requests import Request
 
+from auth_service.auth.dependencies.get_current_user_role import get_user_role_by_header
+from redis_data.connection import get_redis
 
 
-def check_role_permissions(permission: str):
-    def decorator(func):
-        @functools.wraps(func)
-        async def wrapper(*args, **kwargs):
-            request: Request = kwargs.get("request")
-            redis_client: aioredis.Redis = kwargs.get("redis_client")
+def check_role_permissions(
+    permission: str,
+):
+    async def checker(
+        request: Request,
+        redis_client: aioredis.Redis = Depends(get_redis),
+        user_role: str = Depends(get_user_role_by_header),
+    ):
+        request.state.redis_client = redis_client
+        request.state.user_role = user_role
 
-            user_role = request.headers.get("X-User-Role")
-            if not user_role:
-                raise HTTPException(status_code=401, detail="Не указан X-User-Role")
+        if not user_role:
+            raise HTTPException(status_code=401, detail="Не указан X-User-Role")
 
-            key = f"role:{user_role}"
-            has_permission = await redis_client.sismember(key, permission)
+        key = f"role:{user_role}"
+        has_permission = await redis_client.sismember(key, permission)
 
-            if not has_permission:
-                raise HTTPException(status_code=403, detail="У пользователя нет доступа")
-
-            return await func(*args, **kwargs)
-        return wrapper
-    return decorator
+        if not has_permission:
+            raise HTTPException(status_code=403, detail="У пользователя нет доступа")
+    return checker
