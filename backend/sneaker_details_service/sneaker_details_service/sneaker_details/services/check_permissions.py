@@ -1,0 +1,28 @@
+import redis.asyncio as aioredis
+from fastapi import HTTPException, Depends
+from starlette.requests import Request
+
+from sneaker_details_service.sneaker_details.dependencies.get_current_user_role import get_user_role_by_header
+from redis_data.connection import get_redis
+
+
+def check_role_permissions(
+    permission: str,
+):
+    async def checker(
+        request: Request,
+        redis_client: aioredis.Redis = Depends(get_redis),
+        user_role: str = Depends(get_user_role_by_header),
+    ):
+        request.state.redis_client = redis_client
+        request.state.user_role = user_role
+
+        if not user_role:
+            raise HTTPException(status_code=401, detail="Не указан X-User-Role")
+
+        key = f"role:{user_role}"
+        has_permission = await redis_client.sismember(key, permission)
+
+        if not has_permission:
+            raise HTTPException(status_code=403, detail="У пользователя нет доступа")
+    return checker
