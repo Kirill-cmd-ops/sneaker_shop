@@ -51,6 +51,10 @@ class KafkaConfig(BaseModel):
     sneaker_sizes_work_topic: str
 
 
+class RedisConfig(BaseModel):
+    redis_password: str
+
+
 ENV_DIR = Path(__file__).parent.parent.parent
 
 
@@ -65,6 +69,7 @@ class Settings(BaseSettings):
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig
     kafka_config: KafkaConfig
+    redis_config: RedisConfig
 
 
 settings = Settings()
