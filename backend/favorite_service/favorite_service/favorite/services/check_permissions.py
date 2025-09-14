@@ -2,8 +2,11 @@ import redis.asyncio as aioredis
 from fastapi import HTTPException, Depends
 from starlette.requests import Request
 
-from favorite_service.favorite.dependencies.get_current_user_role import get_user_role_by_header
-from redis_data.connection import get_redis
+from favorite_service.favorite.config import settings
+from favorite_service.favorite.dependencies.get_current_user_role import (
+    get_user_role_by_header,
+)
+from redis_data.connection import get_redis_factory
 
 
 def check_role_permissions(
@@ -11,7 +14,9 @@ def check_role_permissions(
 ):
     async def checker(
         request: Request,
-        redis_client: aioredis.Redis = Depends(get_redis),
+        redis_client: aioredis.Redis = Depends(
+            get_redis_factory(settings.redis_config.redis_password)
+        ),
         user_role: str = Depends(get_user_role_by_header),
     ):
         request.state.redis_client = redis_client
@@ -25,4 +30,5 @@ def check_role_permissions(
 
         if not has_permission:
             raise HTTPException(status_code=403, detail="У пользователя нет доступа")
+
     return checker
