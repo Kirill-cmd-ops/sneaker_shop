@@ -5,15 +5,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.requests import Request
 
 from auth_service.auth.config import settings
-from auth_service.auth.dependencies.get_current_user_role import get_user_role_by_header
 from auth_service.auth.models import db_helper, Permission
 from auth_service.auth.schemas.permissions import UpdatePermissions
 from auth_service.auth.services.check_permissions import check_role_permissions
 from auth_service.auth.services.role_permissions import update_role_permissions
-
-import redis.asyncio as aioredis
-
-from redis_data.connection import get_redis
 
 router = APIRouter(
     prefix=settings.api.build_path(
@@ -24,15 +19,18 @@ router = APIRouter(
 )
 
 
-@router.put("/update")
-@check_role_permissions("favorite.view")
-async def call_update_role_permissions( # это делать может только админ
+@router.put(
+    "/update",
+    dependencies=(Depends(check_role_permissions("favorite.view")),),
+)
+async def call_update_role_permissions(
     request: Request,
     update_permissions: UpdatePermissions,
-    user_role: str = Depends(get_user_role_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
-    redis_client: aioredis.Redis = Depends(get_redis),
 ):
+    redis_client = request.state.redis_client
+    user_role = request.state.user_role
+
     if update_permissions.list_permission:
         await update_role_permissions(
             user_role=user_role,
@@ -40,14 +38,16 @@ async def call_update_role_permissions( # это делать может тол�
             session=session,
         )
 
-        stmt = select(Permission.name).where(Permission.id.in_(update_permissions.list_permission))
+        stmt = select(Permission.name).where(
+            Permission.id.in_(update_permissions.list_permission)
+        )
         result = await session.execute(stmt)
         name_permissions = [permission[0] for permission in result.all()]
 
         async with redis_client.pipeline() as pipe:
             await pipe.delete(f"role:{user_role}")
             if name_permissions:
-                await pipe.sadd(f"role:{user_role}",*name_permissions)
+                await pipe.sadd(f"role:{user_role}", *name_permissions)
                 await pipe.execute()
 
     return {"status": "ok"}
