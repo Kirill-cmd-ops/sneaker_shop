@@ -2,10 +2,14 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from sneaker_details_service.sneaker_details.config import settings
+
 from sneaker_details_service.sneaker_details.schemas import (
     SneakerAssocsCreate,
     SneakerAssocsDelete,
     SneakerColorsRead,
+)
+from sneaker_details_service.sneaker_details.services.check_permissions import (
+    check_role_permissions,
 )
 from sneaker_details_service.sneaker_details.services.sneaker_association import (
     create_sneaker_association,
@@ -18,6 +22,8 @@ from sneaker_details_service.sneaker_details.models import (
     db_helper,
 )
 
+from starlette.requests import Request
+
 
 router = APIRouter(
     prefix=settings.api.build_path(
@@ -29,7 +35,10 @@ router = APIRouter(
 )
 
 
-@router.post("/create/")
+@router.post(
+    "/create/",
+    dependencies=(Depends(check_role_permissions("details.sneaker.color.create")),),
+)
 async def call_create_sneaker_association(
     sneaker_associations_create: SneakerAssocsCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -40,7 +49,10 @@ async def call_create_sneaker_association(
     return "Запись нового цвета прошла успешно"
 
 
-@router.delete("/delete/")
+@router.delete(
+    "/delete/",
+    dependencies=(Depends(check_role_permissions("details.sneaker.color.delete")),),
+)
 async def call_delete_sneaker_association(
     sneaker_assoc_delete: SneakerAssocsDelete,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -51,7 +63,11 @@ async def call_delete_sneaker_association(
     return "Цвета товара успешно удалены"
 
 
-@router.get("/view/", response_model=list[SneakerColorsRead])
+@router.get(
+    "/view/",
+    response_model=list[SneakerColorsRead],
+    dependencies=(Depends(check_role_permissions("details.sneaker.color.view")),),
+)
 async def call_read_sneaker_association(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),

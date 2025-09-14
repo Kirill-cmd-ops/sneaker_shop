@@ -1,9 +1,10 @@
-from typing import Optional
-
 from aiokafka import AIOKafkaProducer
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from sneaker_details_service.sneaker_details.services.check_permissions import (
+    check_role_permissions,
+)
 from sneaker_details_service.sneaker_details.config import settings
 from sneaker_details_service.sneaker_details.dependencies.get_kafka_producer import (
     get_kafka_producer,
@@ -30,7 +31,6 @@ from sneaker_details_service.sneaker_details.services.sneaker import (
     update_sneaker,
 )
 
-
 router = APIRouter(
     prefix=settings.api.build_path(
         settings.api.root,
@@ -41,7 +41,10 @@ router = APIRouter(
 )
 
 
-@router.post("/create/")
+@router.post(
+    "/create/",
+    dependencies=(Depends(check_role_permissions("details.sneaker.create")),),
+)
 async def call_create_sneaker(
     sneaker_create: SneakerCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -52,7 +55,10 @@ async def call_create_sneaker(
     return sneaker
 
 
-@router.delete("/delete/")
+@router.delete(
+    "/delete/",
+    dependencies=(Depends(check_role_permissions("details.sneaker.size.delete")),),
+)
 async def call_delete_sneaker(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -63,7 +69,10 @@ async def call_delete_sneaker(
     return "Товар успешно удален"
 
 
-@router.patch("/update/")
+@router.patch(
+    "/update/",
+    dependencies=(Depends(check_role_permissions("details.sneaker.update")),),
+)
 async def call_update_sneaker(
     sneaker_id: int,
     sneaker_update: SneakerUpdate,
@@ -75,7 +84,10 @@ async def call_update_sneaker(
     return "Товар успешно обновлен"
 
 
-@router.get("/view/{sneaker_id}")
+@router.get(
+    "/view/{sneaker_id}",
+    dependencies=(Depends(check_role_permissions("details.sneaker.size.view")),),
+)
 async def call_get_sneaker_details(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
