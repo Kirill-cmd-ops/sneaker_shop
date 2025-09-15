@@ -387,6 +387,15 @@ services:
       interval: 5s
       retries: 5
 
+  sneaker_check_price_bot:
+    build:
+      context: ./sneaker_check_price_bot
+      dockerfile: Dockerfile
+    container_name: sneaker_check_price_bot
+    working_dir: /app/sneaker_check_price_bot
+    command: [ "python", "-m", "sneaker_bot.main" ]
+    restart: unless-stopped
+
 volumes:
   auth_pgdata:
   favorite_pgdata:
