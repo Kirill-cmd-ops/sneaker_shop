@@ -94,6 +94,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - ./backend/secrets:/app/secrets
       - ./kafka:/app/auth_service/kafka
@@ -135,6 +137,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - ./kafka:/app/favorite_service/kafka
       - ./redis_data:/app/favorite_service/redis_data
@@ -173,6 +177,8 @@ services:
       cart_db:
         condition: service_healthy
       kafka:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     volumes:
       - ./kafka:/app/cart_service/kafka
@@ -247,6 +253,8 @@ services:
       sneaker_details_db:
         condition: service_healthy
       kafka:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     volumes:
       - ./kafka:/app/sneaker_details_service/kafka
