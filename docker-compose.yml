@@ -84,6 +84,95 @@ services:
       timeout: 5s
       retries: 5
 
+  auth_test_db:
+    image: postgres:16-alpine
+    container_name: auth_test_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: meteor906587
+      POSTGRES_DB: sneaker_shop_test_auth
+    volumes:
+      - auth_test_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5442:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+  favorite_test_db:
+    image: postgres:16-alpine
+    container_name: favorite_test_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: meteor906587
+      POSTGRES_DB: sneaker_shop_test_favorite
+    volumes:
+      - favorite_test_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5443:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+  cart_test_db:
+    image: postgres:16-alpine
+    container_name: cart_test_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: meteor906587
+      POSTGRES_DB: sneaker_shop_test_cart
+    volumes:
+      - cart_test_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5444:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+  catalog_test_db:
+    image: postgres:16-alpine
+    container_name: catalog_test_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: meteor906587
+      POSTGRES_DB: sneaker_shop_test_catalog
+    volumes:
+      - catalog_test_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5445:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+  sneaker_details_test_db:
+    image: postgres:16-alpine
+    container_name: sneaker_details_test_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: meteor906587
+      POSTGRES_DB: sneaker_shop_test_sneaker_details
+    volumes:
+      - sneaker_details_test_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5446:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   auth_service:
     build:
       context: ./backend/auth_service
@@ -91,6 +180,8 @@ services:
     container_name: auth_service
     depends_on:
       auth_db:
+        condition: service_healthy
+      auth_test_db:
         condition: service_healthy
       kafka:
         condition: service_healthy
@@ -102,8 +193,6 @@ services:
       - ./redis_data:/app/auth_service/redis_data
     ports:
       - "8002:8002"
-    environment:
-      - DATABASE_URL=postgresql://postgres:meteor906587@auth_db:5432/sneaker_shop_auth
     working_dir: /app/auth_service
     command: [ "python", "-m", "uvicorn", "auth_service.main:app", "--host", "0.0.0.0", "--port", "8002" ]
     restart: unless-stopped
@@ -116,8 +205,8 @@ services:
     depends_on:
       auth_db:
         condition: service_healthy
-    environment:
-      - DATABASE_URL=postgresql://postgres:meteor906587@auth_db:5432/sneaker_shop_auth
+      auth_test_db:
+        condition: service_healthy
     working_dir: /app/auth_service
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
@@ -144,8 +233,6 @@ services:
       - ./redis_data:/app/favorite_service/redis_data
     ports:
       - "8003:8003"
-    environment:
-      - DATABASE_URL=postgresql://postgres:meteor906587@favorite_db:5432/sneaker_shop_favorite
     working_dir: /app/favorite_service
     command: [ "python", "-m", "uvicorn", "favorite_service.main:app", "--host", "0.0.0.0", "--port", "8003" ]
     restart: unless-stopped
@@ -158,8 +245,6 @@ services:
     depends_on:
       favorite_db:
         condition: service_healthy
-    environment:
-      - DATABASE_URL=postgresql://postgres:meteor906587@favorite_db:5432/sneaker_shop_favorite
     working_dir: /app/favorite_service
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
@@ -185,8 +270,6 @@ services:
       - ./redis_data:/app/cart_service/redis_data
     ports:
       - "8004:8004"
-    environment:
-      - DATABASE_URL=postgresql://postgres:meteor906587@cart_db:5432/sneaker_shop_cart
     working_dir: /app/cart_service
     command: [ "python", "-m", "uvicorn", "cart_service.main:app", "--host", "0.0.0.0", "--port", "8004" ]
     restart: unless-stopped
@@ -199,8 +282,6 @@ services:
     depends_on:
       cart_db:
         condition: service_healthy
-    environment:
-      - DATABASE_URL=postgresql://postgres:meteor906587@cart_db:5432/sneaker_shop_cart
     working_dir: /app/cart_service
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
@@ -223,8 +304,6 @@ services:
       - ./kafka:/app/catalog_service/kafka
     ports:
       - "8005:8005"
-    environment:
-      - DATABASE_URL=postgresql://postgres:meteor906587@catalog_db:5432/sneaker_shop_catalog
     command: [ "python", "-m", "uvicorn", "catalog_service.main:app", "--host", "0.0.0.0", "--port", "8005" ]
     restart: unless-stopped
 
@@ -236,8 +315,6 @@ services:
     depends_on:
       catalog_db:
         condition: service_healthy
-    environment:
-      - DATABASE_URL=postgresql://postgres:meteor906587@catalog_db:5432/sneaker_shop_catalog
     working_dir: /app/catalog_service
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
@@ -261,8 +338,6 @@ services:
       - ./redis_data:/app/sneaker_details_service/redis_data
     ports:
       - "8006:8006"
-    environment:
-      - DATABASE_URL=postgresql://postgres:meteor906587@sneaker_details_db:5432/sneaker_shop_sneaker_details
     command: [ "python", "-m", "uvicorn", "sneaker_details_service.main:app", "--host", "0.0.0.0", "--port", "8006" ]
     restart: unless-stopped
 
@@ -274,8 +349,6 @@ services:
     depends_on:
       sneaker_details_db:
         condition: service_healthy
-    environment:
-      - DATABASE_URL=postgresql://postgres:meteor906587@sneaker_details_db:5432/sneaker_shop_sneaker_details
     working_dir: /app/sneaker_details_service
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
@@ -402,5 +475,10 @@ volumes:
   cart_pgdata:
   catalog_pgdata:
   sneaker_details_pgdata:
+  auth_test_pgdata:
   kong-data:
   kafka-data:
+  favorite_test_pgdata:
+  cart_test_pgdata:
+  catalog_test_pgdata:
+  sneaker_details_test_pgdata:
