@@ -48,6 +48,7 @@ class DatabaseConfig(BaseModel):
 
 class KafkaConfig(BaseModel):
     kafka_bootstrap_servers: str
+    sneaker_viewed_topic: str
     sneaker_work_topic: str
     sneaker_sizes_work_topic: str
 
