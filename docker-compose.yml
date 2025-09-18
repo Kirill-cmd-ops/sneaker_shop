@@ -356,6 +356,24 @@ services:
       - ./redis_data:/app/sneaker_details_service/redis_data
     command: [ "upgrade", "head" ]
 
+  sneaker_views_redis_writer:
+    build:
+      context: ./backend/sneaker_views_redis_writer
+      dockerfile: Dockerfile
+    container_name: sneaker_views_redis_writer
+    depends_on:
+      kafka:
+        condition: service_healthy
+    volumes:
+      - ./kafka:/app/sneaker_views_redis_writer/kafka
+      - ./redis_data:/app/sneaker_views_redis_writer/redis_data
+    ports:
+      - "8007:8007"
+    working_dir: /app/sneaker_views_redis_writer
+    command: [ "python", "-m", "uvicorn", "sneaker_views_redis_writer.main:app", "--host", "0.0.0.0", "--port", "8007" ]
+    restart: unless-stopped
+
+
   kong-database:
     image: postgres:16-alpine
     environment:
