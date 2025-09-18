@@ -57,7 +57,7 @@ async def call_create_sneaker(
 
 @router.delete(
     "/delete/",
-    dependencies=(Depends(check_role_permissions("details.sneaker.size.delete")),),
+    dependencies=(Depends(check_role_permissions("details.sneaker.delete")),),
 )
 async def call_delete_sneaker(
     sneaker_id: int,
@@ -84,10 +84,7 @@ async def call_update_sneaker(
     return "Товар успешно обновлен"
 
 
-@router.get(
-    "/view/{sneaker_id}",
-    dependencies=(Depends(check_role_permissions("details.sneaker.size.view")),),
-)
+@router.get("/view/{sneaker_id}")
 async def call_get_sneaker_details(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),

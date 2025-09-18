@@ -83,7 +83,7 @@ async def call_delete_sneaker_association(
 
 @router.patch(
     "/update/",
-    dependencies=(Depends(check_role_permissions("details.sneaker.size.view")),),
+    dependencies=(Depends(check_role_permissions("details.sneaker.size.update")),),
 )
 async def call_update_sneaker_sizes(
     sneaker_size_update: SneakerSizeUpdate,
@@ -98,7 +98,7 @@ async def call_update_sneaker_sizes(
 @router.get(
     "/view/",
     response_model=list[SneakerSizesRead],
-    dependencies=(Depends(check_role_permissions("details.sneaker.material.delete")),),
+    dependencies=(Depends(check_role_permissions("details.sneaker.size.view")),),
 )
 async def call_read_sneaker_association(
     sneaker_id: int,
