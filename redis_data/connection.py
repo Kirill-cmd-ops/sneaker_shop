@@ -5,7 +5,7 @@ def get_redis_factory(
     password: str,
     host: str = "redis",
     port: int = 6379,
-    db=0,
+    db: int = 0,
 ):
     async def get_redis():
         redis_client = aioredis.Redis(
