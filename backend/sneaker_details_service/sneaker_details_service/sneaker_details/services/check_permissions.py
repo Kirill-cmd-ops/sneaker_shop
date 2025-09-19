@@ -4,7 +4,7 @@ from starlette.requests import Request
 
 from sneaker_details_service.sneaker_details.config import settings
 from sneaker_details_service.sneaker_details.dependencies.get_current_user_role import get_user_role_by_header
-from redis_data.connection import get_redis_factory
+from redis_client.redis_connection.connection import get_redis_factory
 
 
 def check_role_permissions(
