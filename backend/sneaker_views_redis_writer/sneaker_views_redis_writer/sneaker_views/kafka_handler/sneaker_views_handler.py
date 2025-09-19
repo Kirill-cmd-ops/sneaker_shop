@@ -2,9 +2,9 @@ import time
 
 import redis.asyncio as aioredis
 from fastapi import Depends
-from starlette.requests import Request
 
-from redis_data.connection import get_redis_factory
+from redis_client.redis_connection.connection import get_redis_factory
+
 from sneaker_views_redis_writer.sneaker_views.config import settings
 
 
