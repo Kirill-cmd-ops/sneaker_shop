@@ -6,7 +6,7 @@ from favorite_service.favorite.config import settings
 from favorite_service.favorite.dependencies.get_current_user_role import (
     get_user_role_by_header,
 )
-from redis_client.redis_connection.connection import get_redis_factory
+from redis_client.redis_connection.factory import get_redis_factory
 
 
 def check_role_permissions(
