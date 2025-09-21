@@ -2,6 +2,10 @@ from aiokafka import AIOKafkaProducer
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from sneaker_details_service.sneaker_details.dependencies.get_current_user import get_user_by_header
+from sneaker_details_service.sneaker_details.kafka.producer_event.recently_viewed_sneakers import (
+    send_viewed_sneaker,
+)
 from sneaker_details_service.sneaker_details.services.check_permissions import (
     check_role_permissions,
 )
@@ -88,10 +92,18 @@ async def call_update_sneaker(
 async def call_get_sneaker_details(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
+    producer: AIOKafkaProducer = Depends(get_kafka_producer),
+    user_id: int = Depends(get_user_by_header)
 ):
     sneaker_info = await get_sneaker_details(session=session, sneaker_id=sneaker_id)
 
     if not sneaker_info:
         raise HTTPException(status_code=404, detail="Кроссовки не найдены")
 
+    if user_id is not None:
+        await send_viewed_sneaker(
+            producer=producer,
+            sneaker_id=sneaker_id,
+            user_id=user_id,
+        )
     return sneaker_info
