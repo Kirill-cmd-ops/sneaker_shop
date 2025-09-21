@@ -190,7 +190,7 @@ services:
     volumes:
       - ./backend/secrets:/app/secrets
       - ./kafka:/app/auth_service/kafka
-      - ./redis_data:/app/auth_service/redis_data
+      - ./redis_client/redis_connection:/app/auth_service/redis_client/redis_connection
     ports:
       - "8002:8002"
     working_dir: /app/auth_service
@@ -213,7 +213,7 @@ services:
       - ./backend/auth_service:/app/auth_service
       - ./backend/secrets:/app/secrets
       - ./kafka:/app/auth_service/kafka
-      - ./redis_data:/app/auth_service/redis_data
+      - ./redis_client/redis_connection:/app/auth_service/redis_client/redis_connection
     command: [ "upgrade", "head" ]
 
   favorite_service:
@@ -230,7 +230,7 @@ services:
         condition: service_healthy
     volumes:
       - ./kafka:/app/favorite_service/kafka
-      - ./redis_data:/app/favorite_service/redis_data
+      - ./redis_client/redis_connection:/app/favorite_service/redis_client/redis_connection
     ports:
       - "8003:8003"
     working_dir: /app/favorite_service
@@ -250,7 +250,7 @@ services:
     volumes:
       - ./backend/favorite_service:/app/favorite_service
       - ./kafka:/app/favorite_service/kafka
-      - ./redis_data:/app/favorite_service/redis_data
+      - ./redis_client/redis_connection:/app/favorite_service/redis_client/redis_connection
     command: [ "upgrade", "head" ]
 
   cart_service:
@@ -267,7 +267,7 @@ services:
         condition: service_healthy
     volumes:
       - ./kafka:/app/cart_service/kafka
-      - ./redis_data:/app/cart_service/redis_data
+      - ./redis_client/redis_connection:/app/cart_service/redis_client/redis_connection
     ports:
       - "8004:8004"
     working_dir: /app/cart_service
@@ -287,7 +287,7 @@ services:
     volumes:
       - ./backend/cart_service:/app/cart_service
       - ./kafka:/app/cart_service/kafka
-      - ./redis_data:/app/cart_service/redis_data
+      - ./redis_client/redis_connection:/app/cart_service/redis_client/redis_connection
     command: [ "upgrade", "head" ]
 
   catalog_service:
@@ -335,7 +335,7 @@ services:
         condition: service_healthy
     volumes:
       - ./kafka:/app/sneaker_details_service/kafka
-      - ./redis_data:/app/sneaker_details_service/redis_data
+      - ./redis_client/redis_connection:/app/sneaker_details_service/redis_client/redis_connection
     ports:
       - "8006:8006"
     command: [ "python", "-m", "uvicorn", "sneaker_details_service.main:app", "--host", "0.0.0.0", "--port", "8006" ]
@@ -353,7 +353,7 @@ services:
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
       - ./backend/sneaker_details_service:/app/sneaker_details_service
-      - ./redis_data:/app/sneaker_details_service/redis_data
+      - ./redis_client/redis_connection:/app/sneaker_details_service/redis_client/redis_connection
     command: [ "upgrade", "head" ]
 
   sneaker_views_redis_writer:
@@ -366,7 +366,7 @@ services:
         condition: service_healthy
     volumes:
       - ./kafka:/app/sneaker_views_redis_writer/kafka
-      - ./redis_data:/app/sneaker_views_redis_writer/redis_data
+      - ./redis_client/redis_connection:/app/sneaker_views_redis_writer/redis_client/redis_connection
     ports:
       - "8007:8007"
     working_dir: /app/sneaker_views_redis_writer
@@ -408,6 +408,8 @@ services:
       - "8444:8444"   # для Admin API (HTTPS)
     command: >
       sh -c "kong migrations bootstrap && kong start"
+    volumes:
+      - ./kong/kong.yml:/opt/kong/kong.yml
 
 
   nginx:
@@ -470,8 +472,23 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./redis_data:/data
-      - ./redis_data/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis_client/redis_data:/data
+      - ./redis_client/redis_config/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      retries: 5
+
+  redis_cache:
+    image: redis:latest
+    container_name: project-redis-cache-1
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - ./redis_client/redis_cache_data:/data
+      - ./redis_client/redis_config/redis_cache.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
