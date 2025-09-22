@@ -512,6 +512,24 @@ services:
       interval: 5s
       retries: 5
 
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./clickhouse/clickhouse_data:/var/lib/clickhouse
+      - ./clickhouse/clickhouse_log:/var/log/clickhouse-server
+    environment:
+      CLICKHOUSE_USER: "kirill"
+      CLICKHOUSE_PASSWORD: "Meteor906587"
+    healthcheck:
+      test: ["CMD-SHELL", "clickhouse-client --query='SELECT 1' --host=localhost --port=9000 --user=kirill --password=Meteor906587"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+
   sneaker_check_price_bot:
     build:
       context: ./sneaker_check_price_bot
