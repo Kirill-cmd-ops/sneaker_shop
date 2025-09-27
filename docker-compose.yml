@@ -390,6 +390,22 @@ services:
     command: [ "python", "-m", "uvicorn", "sneaker_views_clickhouse_writer.main:app", "--host", "0.0.0.0", "--port", "8008" ]
     restart: unless-stopped
 
+  sneaker_views_clickhouse_alembic:
+    build:
+      context: ./backend/sneaker_views_clickhouse_writer
+      dockerfile: Dockerfile
+    container_name: sneaker_views_alembic_migrations
+    depends_on:
+      clickhouse:
+        condition: service_healthy
+    working_dir: /app/sneaker_views_clickhouse_writer
+    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
+    volumes:
+      - ./backend/sneaker_views_clickhouse_writer:/app/sneaker_views_clickhouse_writer
+      - ./kafka:/app/sneaker_views_clickhouse_writer/kafka
+      - ./clickhouse/clickhouse_connection:/app/sneaker_views_clickhouse_writer/clickhouse/clickhouse_connection
+    command: [ "upgrade", "head" ]
+
 
   kong-database:
     image: postgres:16-alpine
@@ -523,11 +539,11 @@ services:
       CLICKHOUSE_USER: "kirill"
       CLICKHOUSE_PASSWORD: "Meteor906587"
     healthcheck:
-      test: ["CMD-SHELL", "clickhouse-client --query='SELECT 1' --host=localhost --port=9000 --user=kirill --password=Meteor906587"]
+      test: [ "CMD-SHELL", "clickhouse-client --query='SELECT 1' --user=kirill --password=Meteor906587" ]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 20s
+      start_period: 30s
 
 
   sneaker_check_price_bot:
