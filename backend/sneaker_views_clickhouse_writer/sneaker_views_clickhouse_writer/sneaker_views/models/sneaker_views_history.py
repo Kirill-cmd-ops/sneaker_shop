@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import Mapped, mapped_column
 
-from sneaker_views_clickhouse_writer.sneaker_views.models.base import Base
+from sneaker_views_clickhouse_writer.sneaker_views.models import Base
 from clickhouse_sqlalchemy import types as ch_types, engines
 
 
@@ -15,7 +15,8 @@ class SneakerViewsHistory(Base):
     )
 
     __table_args__ = (
-        engines.MergeTree(
-            order_by=("view_timestamp",),
+        engines.ReplacingMergeTree(
+            order_by=("user_id", "sneaker_id"),
+            version="view_timestamp",
         ),
     )
