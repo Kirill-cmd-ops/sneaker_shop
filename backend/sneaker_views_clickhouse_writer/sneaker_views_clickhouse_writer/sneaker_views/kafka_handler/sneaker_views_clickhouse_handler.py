@@ -6,16 +6,20 @@ from sneaker_views_clickhouse_writer.sneaker_views.models import (
 )
 
 
+# TODO: без try-except почему-то обработчик падает, обрабатывая только одно событиее
 async def handle_sneaker_view_to_clickhouse(
     key: str | None,
     value: dict,
 ):
-    user_id = value.get("user_id")
-    sneaker_id = value.get("sneaker_id")
+    try:
+        user_id = value.get("user_id")
+        sneaker_id = value.get("sneaker_id")
 
-    await asyncio.get_event_loop().run_in_executor(
-        None, lambda: _sync_insert(user_id, sneaker_id)
-    )
+        await asyncio.get_event_loop().run_in_executor(
+            None, lambda: _sync_insert(user_id, sneaker_id)
+        )
+    except Exception as e:
+        print(e)
 
 
 def _sync_insert(user_id: int, sneaker_id: int):
