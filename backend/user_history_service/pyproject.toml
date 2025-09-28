@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "user-history-service"
+version = "0.1.0"
+description = ""
+authors = ["Kirill <bondarenkokirill150208@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+uvicorn = "^0.35.0"
+fastapi = {version = "0.115.12", extras = ["standard"]}
+pydantic = {version = "2.11.5", extras = ["email"]}
+pydantic-settings = "2.9.1"
+redis = {version = "6.4.0", extras = ["hiredis"]}
+clickhouse-sqlalchemy = {version = "0.3.2", extras = ["alembic"]}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
