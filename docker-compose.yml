@@ -16,6 +16,7 @@ services:
       timeout: 5s
       retries: 5
 
+
   favorite_db:
     image: postgres:16-alpine
     container_name: favorite_db
@@ -32,6 +33,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
 
   cart_db:
     image: postgres:16-alpine
@@ -50,6 +52,7 @@ services:
       timeout: 5s
       retries: 5
 
+
   catalog_db:
     image: postgres:16-alpine
     container_name: catalog_db
@@ -67,6 +70,7 @@ services:
       timeout: 5s
       retries: 5
 
+
   sneaker_details_db:
     image: postgres:16-alpine
     container_name: sneaker_details_db
@@ -83,6 +87,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
 
   auth_test_db:
     image: postgres:16-alpine
@@ -173,6 +178,7 @@ services:
       timeout: 5s
       retries: 5
 
+
   auth_service:
     build:
       context: ./backend/auth_service
@@ -197,6 +203,7 @@ services:
     command: [ "python", "-m", "uvicorn", "auth_service.main:app", "--host", "0.0.0.0", "--port", "8002" ]
     restart: unless-stopped
 
+
   auth_alembic:
     build:
       context: ./backend/auth_service
@@ -215,6 +222,7 @@ services:
       - ./kafka:/app/auth_service/kafka
       - ./redis_client/redis_connection:/app/auth_service/redis_client/redis_connection
     command: [ "upgrade", "head" ]
+
 
   favorite_service:
     build:
@@ -237,6 +245,7 @@ services:
     command: [ "python", "-m", "uvicorn", "favorite_service.main:app", "--host", "0.0.0.0", "--port", "8003" ]
     restart: unless-stopped
 
+
   favorite_alembic:
     build:
       context: ./backend/favorite_service
@@ -252,6 +261,7 @@ services:
       - ./kafka:/app/favorite_service/kafka
       - ./redis_client/redis_connection:/app/favorite_service/redis_client/redis_connection
     command: [ "upgrade", "head" ]
+
 
   cart_service:
     build:
@@ -274,6 +284,7 @@ services:
     command: [ "python", "-m", "uvicorn", "cart_service.main:app", "--host", "0.0.0.0", "--port", "8004" ]
     restart: unless-stopped
 
+
   cart_alembic:
     build:
       context: ./backend/cart_service
@@ -289,6 +300,7 @@ services:
       - ./kafka:/app/cart_service/kafka
       - ./redis_client/redis_connection:/app/cart_service/redis_client/redis_connection
     command: [ "upgrade", "head" ]
+
 
   catalog_service:
     build:
@@ -307,6 +319,7 @@ services:
     command: [ "python", "-m", "uvicorn", "catalog_service.main:app", "--host", "0.0.0.0", "--port", "8005" ]
     restart: unless-stopped
 
+
   catalog_alembic:
     build:
       context: ./backend/catalog_service
@@ -320,6 +333,7 @@ services:
     volumes:
       - ./backend/catalog_service:/app/catalog_service
     command: [ "upgrade", "head" ]
+
 
   sneaker_details_service:
     build:
@@ -341,6 +355,7 @@ services:
     command: [ "python", "-m", "uvicorn", "sneaker_details_service.main:app", "--host", "0.0.0.0", "--port", "8006" ]
     restart: unless-stopped
 
+
   sneaker_details_alembic:
     build:
       context: ./backend/sneaker_details_service
@@ -355,6 +370,7 @@ services:
       - ./backend/sneaker_details_service:/app/sneaker_details_service
       - ./redis_client/redis_connection:/app/sneaker_details_service/redis_client/redis_connection
     command: [ "upgrade", "head" ]
+
 
   sneaker_views_redis_writer:
     build:
@@ -373,6 +389,7 @@ services:
     command: [ "python", "-m", "uvicorn", "sneaker_views_redis_writer.main:app", "--host", "0.0.0.0", "--port", "8007" ]
     restart: unless-stopped
 
+
   sneaker_views_clickhouse_writer:
     build:
       context: ./backend/sneaker_views_clickhouse_writer
@@ -383,12 +400,12 @@ services:
         condition: service_healthy
     volumes:
       - ./kafka:/app/sneaker_views_clickhouse_writer/kafka
-      - ./clickhouse/clickhouse_connection:/app/sneaker_views_clickhouse_writer/clickhouse/clickhouse_connection
     ports:
       - "8008:8008"
     working_dir: /app/sneaker_views_clickhouse_writer
     command: [ "python", "-m", "uvicorn", "sneaker_views_clickhouse_writer.main:app", "--host", "0.0.0.0", "--port", "8008" ]
     restart: unless-stopped
+
 
   sneaker_views_clickhouse_alembic:
     build:
@@ -407,6 +424,25 @@ services:
     command: [ "upgrade", "head" ]
 
 
+  user_history_service:
+    build:
+      context: ./backend/user_history_service
+      dockerfile: Dockerfile
+    container_name: user_history_service
+    depends_on:
+      redis:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+    volumes:
+      - ./redis_client/redis_connection:/app/user_history_service/redis_client/redis_connection
+    ports:
+      - "8009:8009"
+    working_dir: /app/user_history_service
+    command: [ "python", "-m", "uvicorn", "user_history_service.main:app", "--host", "0.0.0.0", "--port", "8009" ]
+    restart: unless-stopped
+
+
   kong-database:
     image: postgres:16-alpine
     environment:
@@ -420,6 +456,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
 
   kong:
     image: kong:latest
@@ -487,6 +524,7 @@ services:
     volumes:
       - kafka-data:/bitnami/kafka
 
+
   frontend:
     build:
       context: ./frontend
@@ -497,6 +535,7 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/app/frontend
+
 
   redis:
     image: redis:latest
@@ -513,6 +552,7 @@ services:
       interval: 5s
       retries: 5
 
+
   redis_cache:
     image: redis:latest
     container_name: project-redis-cache-1
@@ -527,6 +567,7 @@ services:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 5s
       retries: 5
+
 
   clickhouse:
     image: clickhouse/clickhouse-server:latest
