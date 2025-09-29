@@ -14,8 +14,8 @@ class RunConfig(BaseModel):
 
 
 class ApiV1Prefix(BaseModel):
-    prefix: str = ""
-    sneaker: str = ""
+    prefix: str = "/v1/history"
+    recent_sneakers_views: str = "/recent_sneakers_views"
 
 
 class ApiPrefix(BaseModel):
@@ -31,6 +31,9 @@ ENV_DIR = Path(__file__).parent.parent.parent
 
 class RedisConfig(BaseModel):
     redis_password: str
+    redis_host: str
+    redis_port: int
+    redis_db: int
 
 
 class ClickHouseConfig(BaseModel):
