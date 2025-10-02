@@ -7,16 +7,18 @@ from clickhouse_sqlalchemy import types as ch_types, engines
 
 
 class SneakerViewsHistory(Base):
-    id: Mapped[int] = mapped_column(ch_types.UInt64, primary_key=True)
-    user_id: Mapped[int] = mapped_column(ch_types.UInt32)
-    sneaker_id: Mapped[int] = mapped_column(ch_types.UInt32)
+    user_id: Mapped[int] = mapped_column(ch_types.UInt32, primary_key=True)
+    sneaker_id: Mapped[int] = mapped_column(ch_types.UInt32, primary_key=True)
     view_timestamp: Mapped[datetime] = mapped_column(
         ch_types.DateTime, default=datetime.utcnow
     )
+    sign: Mapped[int] = mapped_column(ch_types.Int8, default=1)
+    version: Mapped[int] = mapped_column(ch_types.UInt64, default=1)
 
     __table_args__ = (
-        engines.ReplacingMergeTree(
+        engines.VersionedCollapsingMergeTree(
             order_by=("user_id", "sneaker_id"),
-            version="view_timestamp",
+            sign_col="sign",
+            version_col="version",
         ),
     )
