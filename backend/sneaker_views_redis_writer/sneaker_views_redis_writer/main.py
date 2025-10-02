@@ -6,7 +6,9 @@ from fastapi import FastAPI
 from kafka.consumer import start_consumer, close_consumer
 from sneaker_views_redis_writer.sneaker_views.config import settings
 from sneaker_views_redis_writer.add_middleware import add_middleware
-from sneaker_views_redis_writer.sneaker_views.kafka_handler.sneaker_views_handler import handle_sneaker_view_to_redis
+from sneaker_views_redis_writer.sneaker_views.kafka_handler.sneaker_views_redis_handler import (
+    handle_sneaker_view_to_redis,
+)
 
 
 @asynccontextmanager
