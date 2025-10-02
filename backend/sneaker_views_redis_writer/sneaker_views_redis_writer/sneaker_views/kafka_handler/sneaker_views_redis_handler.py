@@ -34,5 +34,5 @@ async def handle_sneaker_view_to_redis(
         async with redis_client.pipeline() as pipe:
             await pipe.zadd(user_views_key, value_payload)
             await pipe.expire(user_views_key, 2592000)
-            await pipe.zremrangebyrank(user_views_key, 0, -51)
+            await pipe.zremrangebyrank(user_views_key, 0, -31)
             await pipe.execute()
