@@ -22,7 +22,7 @@ from sneaker_views_history_service.user_history.services.get_sneaker_views_click
     clickhouse_select,
 )
 from sneaker_views_history_service.user_history.services.add_sneaker_views_redis import (
-    sneaker_view_to_redis,
+    redis_insert,
 )
 
 router = APIRouter(
@@ -66,7 +66,7 @@ async def get_sneaker_views(
         records = await clickhouse_select(session, user_id, 30)
 
         task = create_task(
-            sneaker_view_to_redis(
+            redis_insert(
                 records=records,
             )
         )

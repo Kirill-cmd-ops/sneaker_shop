@@ -13,7 +13,7 @@ redis_factory = get_redis_factory(
 )
 
 
-async def sneaker_view_to_redis(records):
+async def redis_insert(records):
     async for redis_client in redis_factory():
         user_data = {}
 
