@@ -42,9 +42,6 @@ class ClickHouseConfig(BaseModel):
     }
 
 
-ENV_DIR = Path(__file__).parent.parent.parent
-
-
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(str(ENV_DIR / ".env.template"), str(ENV_DIR / ".env")),
