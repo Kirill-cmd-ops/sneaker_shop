@@ -4,8 +4,8 @@ from clickhouse_sqlalchemy.drivers.native.base import dialect as clickhouse_dial
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 
-from sneaker_views_clickhouse_writer.sneaker_views.config import settings
-from sneaker_views_clickhouse_writer.sneaker_views.models import Base
+from sneaker_views_clickhouse_writer.clickhouse_writer.config import settings
+from sneaker_views_clickhouse_writer.clickhouse_writer.models import Base
 
 from alembic.ddl import impl
 
