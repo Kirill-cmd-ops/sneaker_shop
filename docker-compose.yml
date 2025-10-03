@@ -431,23 +431,23 @@ services:
     command: [ "upgrade", "head" ]
 
 
-  user_history_service:
+  sneaker_views_history_service:
     build:
-      context: ./backend/user_history_service
+      context: ./backend/sneaker_views_history_service
       dockerfile: Dockerfile
-    container_name: user_history_service
+    container_name: sneaker_views_history_service
     depends_on:
       redis:
         condition: service_healthy
       clickhouse:
         condition: service_healthy
     volumes:
-      - ./backend/user_history_service:/app/user_history_service
-      - ./redis_client/redis_connection:/app/user_history_service/redis_client/redis_connection
+      - ./backend/sneaker_views_history_service:/app/sneaker_views_history_service
+      - ./redis_client/redis_connection:/app/sneaker_views_history_service/redis_client/redis_connection
     ports:
       - "8009:8009"
-    working_dir: /app/user_history_service
-    command: [ "python", "-m", "uvicorn", "user_history_service.main:app", "--host", "0.0.0.0", "--port", "8009", "--reload" ]
+    working_dir: /app/sneaker_views_history_service
+    command: [ "python", "-m", "uvicorn", "sneaker_views_history_service.main:app", "--host", "0.0.0.0", "--port", "8009", "--reload" ]
     restart: unless-stopped
 
 
