@@ -3,7 +3,7 @@ import asyncio
 from clickhouse_sqlalchemy import select
 from sqlalchemy import desc
 
-from sneaker_views_clickhouse_writer.sneaker_views.models import (
+from sneaker_views_clickhouse_writer.clickhouse_writer.models import (
     SneakerViewsHistory,
     db_helper,
 )
