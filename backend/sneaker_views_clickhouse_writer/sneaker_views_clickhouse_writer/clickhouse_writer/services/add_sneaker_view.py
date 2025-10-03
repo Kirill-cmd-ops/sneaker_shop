@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sneaker_views_clickhouse_writer.sneaker_views.models import (
+from sneaker_views_clickhouse_writer.clickhouse_writer.models import (
     db_helper,
     SneakerViewsHistory,
 )
