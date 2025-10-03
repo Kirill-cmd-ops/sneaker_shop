@@ -1,28 +1,34 @@
-from sqlalchemy import select
+import asyncio
+
+from sqlalchemy import select, text, desc
 from sqlalchemy.orm import Session
 
 from user_history_service.user_history.models import SneakerViewsHistory
 
 
-# TODO: Переписать на более оптимальный вариант, используй скользящие окна, группировка или что-то иное
 async def get_sneaker_views_clickhouse(
     session: Session,
     user_id: int,
+    limit: int | None = None,
 ):
-    """
-    Функция занимается получением данных из ClickHouse
-    :param session: Синхронная сессия, которая обеспечивает связь с ClickHouse
-    :param user_id: Идентификатор пользователя
-    :return: Список обьектов, либо пустой список, если обьекты не найдены
-    """
     stmt = (
         select(SneakerViewsHistory)
-        .where(SneakerViewsHistory.user_id == user_id)
-        .order_by(SneakerViewsHistory.view_timestamp.desc())
-        .limit(40)
+        .where(
+            SneakerViewsHistory.user_id == user_id,
+            SneakerViewsHistory.sign == 1,
+            )
+        .order_by(
+            SneakerViewsHistory.sneaker_id,
+            desc(SneakerViewsHistory.version),
+        )
+        .distinct(SneakerViewsHistory.sneaker_id)
     )
-    result = session.execute(stmt).unique()
-    records_history = result.scalars().all()
-    print("Часть где работает онли ClickHouse: ", records_history)
+    if limit is not None:
+        stmt = stmt.limit(30)
+
+
+    records_history = await asyncio.get_event_loop().run_in_executor(
+        None, lambda: session.execute(stmt).scalars().all()
+    )
 
     return records_history
