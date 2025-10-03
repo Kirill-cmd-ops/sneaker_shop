@@ -2,7 +2,7 @@ import time
 
 
 from redis_client.redis_connection.factory import get_redis_factory
-from user_history_service.user_history.config import settings
+from sneaker_views_history_service.user_history.config import settings
 
 
 redis_factory = get_redis_factory(

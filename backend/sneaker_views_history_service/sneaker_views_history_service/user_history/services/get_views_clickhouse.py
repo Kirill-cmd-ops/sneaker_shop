@@ -3,7 +3,7 @@ import asyncio
 from sqlalchemy import select, text, desc
 from sqlalchemy.orm import Session
 
-from user_history_service.user_history.models import SneakerViewsHistory
+from sneaker_views_history_service.user_history.models import SneakerViewsHistory
 
 
 async def get_sneaker_views_clickhouse(

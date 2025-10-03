@@ -1,4 +1,4 @@
-from user_history_service.user_history.config import settings
+from sneaker_views_history_service.user_history.config import settings
 
 from contextlib import contextmanager
 from typing import Generator

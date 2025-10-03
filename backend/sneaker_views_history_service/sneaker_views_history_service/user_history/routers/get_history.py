@@ -9,19 +9,19 @@ from sqlalchemy.orm import Session
 import redis.asyncio as aioredis
 
 from redis_client.redis_connection.factory import get_redis_factory
-from user_history_service.user_history.config import settings
-from user_history_service.user_history.dependencies.check_permissions import (
+from sneaker_views_history_service.user_history.config import settings
+from sneaker_views_history_service.user_history.dependencies.check_permissions import (
     check_role_permissions,
 )
-from user_history_service.user_history.dependencies.get_current_user import (
+from sneaker_views_history_service.user_history.dependencies.get_current_user import (
     get_user_by_header,
 )
-from user_history_service.user_history.models import SneakerViewsHistory
-from user_history_service.user_history.models.db_helper import db_helper
-from user_history_service.user_history.services.get_views_clickhouse import (
+from sneaker_views_history_service.user_history.models import SneakerViewsHistory
+from sneaker_views_history_service.user_history.models.db_helper import db_helper
+from sneaker_views_history_service.user_history.services.get_views_clickhouse import (
     get_sneaker_views_clickhouse,
 )
-from user_history_service.user_history.services.write_sneaker_views_redis import (
+from sneaker_views_history_service.user_history.services.write_sneaker_views_redis import (
     sneaker_view_to_redis,
 )
 

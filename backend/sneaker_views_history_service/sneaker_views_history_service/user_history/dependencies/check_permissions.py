@@ -2,8 +2,8 @@ import redis.asyncio as aioredis
 from fastapi import HTTPException, Depends
 from starlette.requests import Request
 
-from user_history_service.user_history.config import settings
-from user_history_service.user_history.dependencies.get_current_user_role import get_user_role_by_header
+from sneaker_views_history_service.user_history.config import settings
+from sneaker_views_history_service.user_history.dependencies.get_current_user_role import get_user_role_by_header
 from redis_client.redis_connection.factory import get_redis_factory
 
 

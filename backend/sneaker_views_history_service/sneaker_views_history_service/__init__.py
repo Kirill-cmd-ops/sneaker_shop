@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from user_history_service.user_history.routers.get_history import router as recent_sneakers_views_router
+from sneaker_views_history_service.user_history.routers.get_history import router as recent_sneakers_views_router
 
 router = APIRouter()
 

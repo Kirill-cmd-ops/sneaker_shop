@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import Mapped, mapped_column
 
-from user_history_service.user_history.models import Base
+from sneaker_views_history_service.user_history.models import Base
 from clickhouse_sqlalchemy import types as ch_types, engines
 
 
