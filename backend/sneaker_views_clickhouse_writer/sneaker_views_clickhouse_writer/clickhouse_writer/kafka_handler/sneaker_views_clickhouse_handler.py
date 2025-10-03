@@ -2,11 +2,11 @@ import asyncio
 
 from sqlalchemy.orm import Session
 
-from sneaker_views_clickhouse_writer.sneaker_views.services.add_data_clickhouse import (
+from sneaker_views_clickhouse_writer.clickhouse_writer.services.add_sneaker_view import (
     clickhouse_insert,
 )
-from sneaker_views_clickhouse_writer.sneaker_views.services.get_view_clickhouse import (
-    get_sneaker_view_clickhouse,
+from sneaker_views_clickhouse_writer.clickhouse_writer.services.get_sneaker_view import (
+    clickhouse_select,
 )
 
 
@@ -18,7 +18,7 @@ async def handle_sneaker_view_to_clickhouse(
         user_id = value.get("user_id")
         sneaker_id = value.get("sneaker_id")
 
-        record = await get_sneaker_view_clickhouse(user_id, sneaker_id)
+        record = await clickhouse_select(user_id, sneaker_id)
 
         if record is None:
             await asyncio.get_event_loop().run_in_executor(

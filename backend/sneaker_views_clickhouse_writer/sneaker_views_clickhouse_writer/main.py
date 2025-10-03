@@ -4,9 +4,9 @@ import uvicorn
 from fastapi import FastAPI
 
 from kafka.consumer import start_consumer, close_consumer
-from sneaker_views_clickhouse_writer.sneaker_views.config import settings
+from sneaker_views_clickhouse_writer.clickhouse_writer.config import settings
 from sneaker_views_clickhouse_writer.add_middleware import add_middleware
-from sneaker_views_clickhouse_writer.sneaker_views.kafka_handler.sneaker_views_clickhouse_handler import handle_sneaker_view_to_clickhouse
+from sneaker_views_clickhouse_writer.clickhouse_writer.kafka_handler.sneaker_views_clickhouse_handler import handle_sneaker_view_to_clickhouse
 
 
 @asynccontextmanager

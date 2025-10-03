@@ -1,4 +1,4 @@
-from sneaker_views_clickhouse_writer.sneaker_views.config import settings
+from sneaker_views_clickhouse_writer.clickhouse_writer.config import settings
 
 from contextlib import contextmanager
 from typing import Generator
