@@ -33,14 +33,6 @@ router = APIRouter(
 )
 
 
-redis_factory = get_redis_factory(
-    settings.redis_config.redis_password,
-    settings.redis_config.redis_host,
-    settings.redis_config.redis_port,
-    settings.redis_config.redis_db,
-)
-
-
 @router.post("/get_history_clickhouse/")
 async def call_get_sneaker_views_clickhouse(
     session: Session = Depends(db_helper.session_getter),
@@ -50,4 +42,32 @@ async def call_get_sneaker_views_clickhouse(
     return record
 
 
+@router.post(
+    "/get_history/",
+    # dependencies=(Depends(check_role_permissions("favorite.view")),),
+)
+async def get_sneaker_views(
+    # request: Request,
+    user_id: int,
+    session: Session = Depends(db_helper.session_getter),
+    redis_client: aioredis.Redis = Depends(
+        get_redis_factory(
+            settings.redis_config.redis_password,
+            settings.redis_config.redis_host,
+            settings.redis_config.redis_port,
+            settings.redis_config.redis_db,
+        )
+    ),
+):
+    # redis_client = request.state.redis_client
 
+    records = await redis_client.zrange(f"views:{user_id}", 0, -1)
+    if not records:
+        records = await get_sneaker_views_clickhouse(session, user_id, 30)
+
+        task = create_task(
+            sneaker_view_to_redis(
+                records=records,
+            )
+        )
+    return records
