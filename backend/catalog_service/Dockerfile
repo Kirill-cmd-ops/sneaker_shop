@@ -5,7 +5,7 @@ WORKDIR /app/catalog_service
 
 RUN pip install --upgrade pip
 
-COPY . /app/catalog_service/
+COPY pyproject.toml poetry.lock* ./
 
 RUN pip install poetry && \
     poetry config virtualenvs.create false && \

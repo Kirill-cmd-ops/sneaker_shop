@@ -194,13 +194,14 @@ services:
       redis:
         condition: service_healthy
     volumes:
+      - ./backend/auth_service:/app/auth_service
       - ./backend/secrets:/app/secrets
       - ./kafka:/app/auth_service/kafka
       - ./redis_client/redis_connection:/app/auth_service/redis_client/redis_connection
     ports:
       - "8002:8002"
     working_dir: /app/auth_service
-    command: [ "python", "-m", "uvicorn", "auth_service.main:app", "--host", "0.0.0.0", "--port", "8002" ]
+    command: [ "python", "-m", "uvicorn", "auth_service.main:app", "--host", "0.0.0.0", "--port", "8002" , "--reload" ]
     restart: unless-stopped
 
 
@@ -237,12 +238,13 @@ services:
       redis:
         condition: service_healthy
     volumes:
+      - ./backend/favorite_service:/app/favorite_service
       - ./kafka:/app/favorite_service/kafka
       - ./redis_client/redis_connection:/app/favorite_service/redis_client/redis_connection
     ports:
       - "8003:8003"
     working_dir: /app/favorite_service
-    command: [ "python", "-m", "uvicorn", "favorite_service.main:app", "--host", "0.0.0.0", "--port", "8003" ]
+    command: [ "python", "-m", "uvicorn", "favorite_service.main:app", "--host", "0.0.0.0", "--port", "8003", "--reload" ]
     restart: unless-stopped
 
 
@@ -276,12 +278,13 @@ services:
       redis:
         condition: service_healthy
     volumes:
+      - ./backend/cart_service:/app/cart_service
       - ./kafka:/app/cart_service/kafka
       - ./redis_client/redis_connection:/app/cart_service/redis_client/redis_connection
     ports:
       - "8004:8004"
     working_dir: /app/cart_service
-    command: [ "python", "-m", "uvicorn", "cart_service.main:app", "--host", "0.0.0.0", "--port", "8004" ]
+    command: [ "python", "-m", "uvicorn", "cart_service.main:app", "--host", "0.0.0.0", "--port", "8004", "--reload" ]
     restart: unless-stopped
 
 
@@ -313,10 +316,11 @@ services:
       kafka:
         condition: service_healthy
     volumes:
+      - ./backend/catalog_service:/app/catalog_service
       - ./kafka:/app/catalog_service/kafka
     ports:
       - "8005:8005"
-    command: [ "python", "-m", "uvicorn", "catalog_service.main:app", "--host", "0.0.0.0", "--port", "8005" ]
+    command: [ "python", "-m", "uvicorn", "catalog_service.main:app", "--host", "0.0.0.0", "--port", "8005", "--reload" ]
     restart: unless-stopped
 
 
@@ -348,11 +352,12 @@ services:
       redis:
         condition: service_healthy
     volumes:
+      - ./backend/sneaker_details_service:/app/sneaker_details_service
       - ./kafka:/app/sneaker_details_service/kafka
       - ./redis_client/redis_connection:/app/sneaker_details_service/redis_client/redis_connection
     ports:
       - "8006:8006"
-    command: [ "python", "-m", "uvicorn", "sneaker_details_service.main:app", "--host", "0.0.0.0", "--port", "8006" ]
+    command: [ "python", "-m", "uvicorn", "sneaker_details_service.main:app", "--host", "0.0.0.0", "--port", "8006", "--reload" ]
     restart: unless-stopped
 
 
@@ -381,12 +386,13 @@ services:
       kafka:
         condition: service_healthy
     volumes:
+      - ./backend/sneaker_views_redis_writer:/app/sneaker_views_redis_writer
       - ./kafka:/app/sneaker_views_redis_writer/kafka
       - ./redis_client/redis_connection:/app/sneaker_views_redis_writer/redis_client/redis_connection
     ports:
       - "8007:8007"
     working_dir: /app/sneaker_views_redis_writer
-    command: [ "python", "-m", "uvicorn", "sneaker_views_redis_writer.main:app", "--host", "0.0.0.0", "--port", "8007" ]
+    command: [ "python", "-m", "uvicorn", "sneaker_views_redis_writer.main:app", "--host", "0.0.0.0", "--port", "8007", "--reload" ]
     restart: unless-stopped
 
 
@@ -399,11 +405,12 @@ services:
       kafka:
         condition: service_healthy
     volumes:
+      - ./backend/sneaker_views_clickhouse_writer:/app/sneaker_views_clickhouse_writer
       - ./kafka:/app/sneaker_views_clickhouse_writer/kafka
     ports:
       - "8008:8008"
     working_dir: /app/sneaker_views_clickhouse_writer
-    command: [ "python", "-m", "uvicorn", "sneaker_views_clickhouse_writer.main:app", "--host", "0.0.0.0", "--port", "8008" ]
+    command: [ "python", "-m", "uvicorn", "sneaker_views_clickhouse_writer.main:app", "--host", "0.0.0.0", "--port", "8008", "--reload" ]
     restart: unless-stopped
 
 
@@ -435,11 +442,12 @@ services:
       clickhouse:
         condition: service_healthy
     volumes:
+      - ./backend/user_history_service:/app/user_history_service
       - ./redis_client/redis_connection:/app/user_history_service/redis_client/redis_connection
     ports:
       - "8009:8009"
     working_dir: /app/user_history_service
-    command: [ "python", "-m", "uvicorn", "user_history_service.main:app", "--host", "0.0.0.0", "--port", "8009" ]
+    command: [ "python", "-m", "uvicorn", "user_history_service.main:app", "--host", "0.0.0.0", "--port", "8009", "--reload" ]
     restart: unless-stopped
 
 

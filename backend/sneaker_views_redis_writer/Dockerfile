@@ -5,7 +5,7 @@ WORKDIR /app/sneaker_views_redis_writer
 
 RUN pip install --upgrade pip
 
-COPY . /app/sneaker_views_redis_writer/
+COPY pyproject.toml poetry.lock* ./
 
 RUN pip install poetry && \
     poetry config virtualenvs.create false && \
