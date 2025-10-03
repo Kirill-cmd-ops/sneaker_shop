@@ -18,10 +18,10 @@ from sneaker_views_history_service.user_history.dependencies.get_current_user im
 )
 from sneaker_views_history_service.user_history.models import SneakerViewsHistory
 from sneaker_views_history_service.user_history.models.db_helper import db_helper
-from sneaker_views_history_service.user_history.services.get_sneaker_views import (
+from sneaker_views_history_service.user_history.services.get_sneaker_views_clickhouse import (
     clickhouse_select,
 )
-from sneaker_views_history_service.user_history.services.write_sneaker_views_redis import (
+from sneaker_views_history_service.user_history.services.add_sneaker_views_redis import (
     sneaker_view_to_redis,
 )
 
