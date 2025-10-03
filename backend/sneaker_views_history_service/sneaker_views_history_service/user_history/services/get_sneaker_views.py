@@ -1,6 +1,6 @@
 import asyncio
 
-from sqlalchemy import select, text, desc
+from sqlalchemy import select, desc
 from sqlalchemy.orm import Session
 
 from sneaker_views_history_service.user_history.models import SneakerViewsHistory
