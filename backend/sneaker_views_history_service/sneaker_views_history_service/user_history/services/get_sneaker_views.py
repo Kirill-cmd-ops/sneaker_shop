@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from sneaker_views_history_service.user_history.models import SneakerViewsHistory
 
 
-async def get_sneaker_views_clickhouse(
+async def clickhouse_select(
     session: Session,
     user_id: int,
     limit: int | None = None,

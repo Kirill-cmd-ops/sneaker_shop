@@ -19,7 +19,7 @@ from sneaker_views_history_service.user_history.dependencies.get_current_user im
 from sneaker_views_history_service.user_history.models import SneakerViewsHistory
 from sneaker_views_history_service.user_history.models.db_helper import db_helper
 from sneaker_views_history_service.user_history.services.get_sneaker_views import (
-    get_sneaker_views_clickhouse,
+    clickhouse_select,
 )
 from sneaker_views_history_service.user_history.services.write_sneaker_views_redis import (
     sneaker_view_to_redis,
@@ -38,7 +38,7 @@ async def call_get_sneaker_views_clickhouse(
     session: Session = Depends(db_helper.session_getter),
     user_id: int = Depends(get_user_by_header),
 ):
-    record = await get_sneaker_views_clickhouse(session, user_id)
+    record = await clickhouse_select(session, user_id)
     return record
 
 
@@ -63,7 +63,7 @@ async def get_sneaker_views(
 
     records = await redis_client.zrange(f"views:{user_id}", 0, -1)
     if not records:
-        records = await get_sneaker_views_clickhouse(session, user_id, 30)
+        records = await clickhouse_select(session, user_id, 30)
 
         task = create_task(
             sneaker_view_to_redis(
