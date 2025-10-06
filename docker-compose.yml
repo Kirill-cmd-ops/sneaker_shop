@@ -472,6 +472,7 @@ services:
       kong-database:
         condition: service_healthy
     environment:
+      KONG_DECLARATIVE_CONFIG: "/etc/kong/kong.yml"
       KONG_DATABASE: postgres
       KONG_PG_HOST: kong-database
       KONG_PG_USER: kong
@@ -485,9 +486,11 @@ services:
       - "8001:8001"   # для Admin API (HTTP)
       - "8444:8444"   # для Admin API (HTTPS)
     command: >
-      sh -c "kong migrations bootstrap && kong start"
+      sh -c "kong migrations bootstrap && 
+             kong config db_import /etc/kong/kong.yml && 
+             kong start"
     volumes:
-      - ./kong/kong.yml:/opt/kong/kong.yml
+      - ./kong/kong.yml:/etc/kong/kong.yml
 
 
   nginx:
