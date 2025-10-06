@@ -1,0 +1,648 @@
+_format_version: '3.0'
+_transform: false
+consumers:
+  - tags: ~
+    id: cb5afde6-01fc-4db1-9351-2c1f3197ece1
+    created_at: 1753610345
+    updated_at: 1753610345
+    custom_id: ~
+    username: auth_consumer
+parameters:
+  - created_at: ~
+    value: cf73a379-880c-42a0-9ea7-8481b055c8f0
+    key: cluster_id
+services:
+  - path: ~
+    host: cart_service
+    port: 8004
+    read_timeout: 60000
+    tls_verify: ~
+    tls_verify_depth: ~
+    tags: ~
+    ca_certificates: ~
+    write_timeout: 60000
+    name: cart_service
+    id: 2b33ea7d-187a-4845-95c7-3c74b177e85a
+    created_at: 1749507395
+    updated_at: 1756129264
+    retries: 5
+    client_certificate: ~
+    enabled: true
+    protocol: http
+    connect_timeout: 60000
+  - path: ~
+    host: catalog_service
+    port: 8005
+    read_timeout: 60000
+    tls_verify: ~
+    tls_verify_depth: ~
+    tags: ~
+    ca_certificates: ~
+    write_timeout: 60000
+    name: catalog_service
+    id: 3606c6d6-6d3d-4bb8-862b-411df930f0a1
+    created_at: 1749507416
+    updated_at: 1756129278
+    retries: 5
+    client_certificate: ~
+    enabled: true
+    protocol: http
+    connect_timeout: 60000
+  - path: ~
+    host: auth_service
+    port: 8002
+    read_timeout: 60000
+    tls_verify: ~
+    tls_verify_depth: ~
+    tags: ~
+    ca_certificates: ~
+    write_timeout: 60000
+    name: auth_service
+    id: ae44ad1e-4acd-4016-8256-020eb89ee26f
+    created_at: 1749505771
+    updated_at: 1756129225
+    retries: 5
+    client_certificate: ~
+    enabled: true
+    protocol: http
+    connect_timeout: 60000
+  - path: ~
+    host: favorite_service
+    port: 8003
+    read_timeout: 60000
+    tls_verify: ~
+    tls_verify_depth: ~
+    tags: ~
+    ca_certificates: ~
+    write_timeout: 60000
+    name: favorite_service
+    id: b009a798-63e6-4858-bb3d-06f0cad4a20e
+    created_at: 1749507324
+    updated_at: 1756129249
+    retries: 5
+    client_certificate: ~
+    enabled: true
+    protocol: http
+    connect_timeout: 60000
+  - path: ~
+    host: sneaker_details_service
+    port: 8006
+    read_timeout: 60000
+    tls_verify: ~
+    tls_verify_depth: ~
+    tags: ~
+    ca_certificates: ~
+    write_timeout: 60000
+    name: sneaker_details_service
+    id: e742d879-4a3f-4f88-9038-39e94b039f69
+    created_at: 1756021993
+    updated_at: 1756129320
+    retries: 5
+    client_certificate: ~
+    enabled: true
+    protocol: http
+    connect_timeout: 60000
+routes:
+  - response_buffering: true
+    destinations: ~
+    hosts:
+      - 127.0.0.1:8000
+      - 127.0.0.1:4455
+    methods: ~
+    tags: ~
+    service: 3606c6d6-6d3d-4bb8-862b-411df930f0a1
+    paths:
+      - /api/v1/catalog/sneakers/view
+    preserve_host: false
+    id: 3354dd1c-e82f-4108-b5fb-9503a5ed43bd
+    created_at: 1750288382
+    updated_at: 1757404170
+    name: ~
+    protocols:
+      - http
+      - https
+    regex_priority: 0
+    https_redirect_status_code: 426
+    headers: ~
+    strip_path: false
+    path_handling: v0
+    sources: ~
+    request_buffering: true
+    snis: ~
+  - response_buffering: true
+    destinations: ~
+    hosts:
+      - 127.0.0.1:8000
+      - 127.0.0.1:4455
+    methods: ~
+    tags: ~
+    service: ae44ad1e-4acd-4016-8256-020eb89ee26f
+    paths:
+      - /api/v1/auth
+      - /api/v1/auth/users
+    preserve_host: false
+    id: 912ed51e-0f88-4d6f-8968-b3c4a6223e22
+    created_at: 1750418939
+    updated_at: 1757405800
+    name: ~
+    protocols:
+      - http
+      - https
+    regex_priority: 0
+    https_redirect_status_code: 426
+    headers: ~
+    strip_path: false
+    path_handling: v0
+    sources: ~
+    request_buffering: true
+    snis: ~
+  - response_buffering: true
+    destinations: ~
+    hosts:
+      - 127.0.0.1:8000
+      - 127.0.0.1:4455
+    methods: ~
+    tags: ~
+    service: 2b33ea7d-187a-4845-95c7-3c74b177e85a
+    paths:
+      - /api/v1/cart/view
+      - /api/v1/cart/sneaker
+    preserve_host: false
+    id: 9b79e9d8-d438-4bfb-8417-457cf8331d0c
+    created_at: 1750288234
+    updated_at: 1757404918
+    name: ~
+    protocols:
+      - http
+      - https
+    regex_priority: 0
+    https_redirect_status_code: 426
+    headers: ~
+    strip_path: false
+    path_handling: v0
+    sources: ~
+    request_buffering: true
+    snis: ~
+  - response_buffering: true
+    destinations: ~
+    hosts:
+      - 127.0.0.1:8000
+      - 127.0.0.1:4455
+    methods: ~
+    tags: ~
+    service: b009a798-63e6-4858-bb3d-06f0cad4a20e
+    paths:
+      - /api/v1/favorite/view
+      - /api/v1/favorite/sneaker
+    preserve_host: false
+    id: 9fb40d7b-0f06-4a97-a9ab-5fda4694a9c9
+    created_at: 1750288800
+    updated_at: 1757404628
+    name: ~
+    protocols:
+      - http
+      - https
+    regex_priority: 0
+    https_redirect_status_code: 426
+    headers: ~
+    strip_path: false
+    path_handling: v0
+    sources: ~
+    request_buffering: true
+    snis: ~
+  - response_buffering: true
+    destinations: ~
+    hosts: ~
+    methods: ~
+    tags: ~
+    service: e742d879-4a3f-4f88-9038-39e94b039f69
+    paths:
+      - /api/v1/details/sneaker
+      - /api/v1/details/sneaker_sizes
+      - /api/v1/details/sneaker_colors
+      - /api/v1/details/sneaker_materials
+    preserve_host: false
+    id: c802170b-0282-40e6-82c8-bdc91e29c39c
+    created_at: 1757416153
+    updated_at: 1757417242
+    name: ~
+    protocols:
+      - http
+      - https
+    regex_priority: 0
+    https_redirect_status_code: 426
+    headers: ~
+    strip_path: false
+    path_handling: v0
+    sources: ~
+    request_buffering: true
+    snis: ~
+  - response_buffering: true
+    destinations: ~
+    hosts: ~
+    methods: ~
+    tags: ~
+    service: e742d879-4a3f-4f88-9038-39e94b039f69
+    paths:
+      - /api/v1/details/sneaker/view
+    preserve_host: false
+    id: eb8dde2f-d5a9-44ad-9b75-aea57e1e2b9b
+    created_at: 1756022268
+    updated_at: 1757406490
+    name: ~
+    protocols:
+      - http
+      - https
+    regex_priority: 0
+    https_redirect_status_code: 426
+    headers: ~
+    strip_path: false
+    path_handling: v0
+    sources: ~
+    request_buffering: true
+    snis: ~
+plugins:
+  - name: jwt
+    id: 52ec0c87-a373-47ca-80b7-a031e8d2f6b9
+    created_at: 1753978364
+    consumer: ~
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+    instance_name: ~
+    route: ~
+    tags: ~
+    config:
+      maximum_expiration: 0
+      uri_param_names:
+        - jwt
+      realm: ~
+      key_claim_name: iss
+      secret_is_base64: false
+      claims_to_verify:
+        - exp
+      header_names:
+        - Authorization
+      cookie_names:
+        - jwt_session_cookie
+      run_on_preflight: true
+      anonymous: ~
+    enabled: true
+    updated_at: 1754841949
+    service: 2b33ea7d-187a-4845-95c7-3c74b177e85a
+  - name: jwt
+    id: 5ee5130f-3d19-4305-a24a-211b255b1379
+    created_at: 1753898529
+    consumer: ~
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+    instance_name: ~
+    route: ~
+    tags: ~
+    config:
+      maximum_expiration: 0
+      uri_param_names:
+        - jwt
+      realm: ~
+      key_claim_name: iss
+      secret_is_base64: false
+      claims_to_verify:
+        - exp
+      header_names:
+        - Authorization
+      cookie_names:
+        - jwt_session_cookie
+      run_on_preflight: true
+      anonymous: ~
+    enabled: true
+    updated_at: 1754842778
+    service: b009a798-63e6-4858-bb3d-06f0cad4a20e
+  - name: post-function
+    id: 635e1b7a-8da7-46cd-9ba7-5aed41bd8ef0
+    created_at: 1757428943
+    consumer: ~
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+    instance_name: ~
+    route: c802170b-0282-40e6-82c8-bdc91e29c39c
+    tags: ~
+    config:
+      rewrite: [ ]
+      access:
+        - "local function post_handler()\n    local raw_payload = kong.ctx.shared.jwt_raw_payload\n
+      \   if raw_payload then\n        -- Извлекаем sub, aud и role из JSON\n        local
+      sub = raw_payload:match(\"\\\"sub\\\":\\\"([^\\\"]+)\\\"\")\n        local aud
+      = raw_payload:match(\"\\\"aud\\\":%[\\\"([^\\\"]+)\\\"%]\")\n        local role
+      = raw_payload:match(\"\\\"role\\\":\\\"([^\\\"]+)\\\"\")\n        \n        --
+      Проверяем что aud = sneaker_details_service\n        if aud == \"sneaker_details_service\"
+      then\n            if sub then\n                kong.service.request.set_header(\"X-User-Id\",
+      sub)\n                kong.log.err(\"POST-FUNCTION: X-User-Id header set to
+      \", sub)\n                \n                if role then\n                    --
+      Проверяем что роль из списка [content_manager, admin ]\n                    if
+      role == \"content_manager\" or role == \"admin\" then\n                        kong.service.request.set_header(\"X-User-Role\",
+      role)\n                        kong.log.err(\"POST-FUNCTION: X-User-Role header
+      set to \", role)\n                    else\n                        kong.log.err(\"POST-FUNCTION:
+      Forbidden - invalid role: \", role)\n                        return kong.response.exit(403,
+      { message = \"Forbidden: Invalid role\" })\n                    end\n                else\n
+      \                   kong.log.err(\"POST-FUNCTION: User role not found in JWT
+      payload\")\n                    return kong.response.exit(403, { message = \"Forbidden:
+      Role not found\" })\n                end\n            end\n        else\n            kong.log.err(\"POST-FUNCTION:
+      Invalid aud - \", aud)\n            return kong.response.exit(403, { message
+      = \"Forbidden: Invalid audience\" })\n        end\n    end\nend\nreturn post_handler"
+      certificate: [ ]
+      header_filter: [ ]
+      body_filter: [ ]
+      log: [ ]
+    enabled: true
+    updated_at: 1757432691
+    service: ~
+  - name: post-function
+    id: 950b2e4c-bb3e-4ed5-9750-e06d2bcdc7b0
+    created_at: 1755801709
+    consumer: ~
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+    instance_name: ~
+    route: ~
+    tags: ~
+    config:
+      rewrite: [ ]
+      access:
+        - "local function post_handler()\n    local raw_payload = kong.ctx.shared.jwt_raw_payload\n
+      \   if raw_payload then\n        -- Извлекаем sub, aud и role из JSON\n        local
+      sub = raw_payload:match(\"\\\"sub\\\":\\\"([^\\\"]+)\\\"\")\n        local aud
+      = raw_payload:match(\"\\\"aud\\\":%[\\\"([^\\\"]+)\\\"%]\")\n        local role
+      = raw_payload:match(\"\\\"role\\\":\\\"([^\\\"]+)\\\"\")\n        \n        --
+      Проверяем что aud = favorite_service\n        if aud == \"favorite_service\"
+      then\n            if sub then\n                kong.service.request.set_header(\"X-User-Id\",
+      sub)\n                kong.log.err(\"POST-FUNCTION: X-User-Id header set to
+      \", sub)\n                \n                if role then\n                    --
+      Проверяем что роль из списка [user, admin]\n                    if role == \"user\"
+      or role == \"admin\" then\n                        kong.service.request.set_header(\"X-User-Role\",
+      role)\n                        kong.log.err(\"POST-FUNCTION: X-User-Role header
+      set to \", role)\n                    else\n                        kong.log.err(\"POST-FUNCTION:
+      Forbidden - invalid role: \", role)\n                        return kong.response.exit(403,
+      { message = \"Forbidden: Invalid role\" })\n                    end\n                else\n
+      \                   kong.log.err(\"POST-FUNCTION: User role not found in JWT
+      payload\")\n                    return kong.response.exit(403, { message = \"Forbidden:
+      Role not found\" })\n                end\n            end\n        else\n            kong.log.err(\"POST-FUNCTION:
+      Invalid aud - \", aud)\n            return kong.response.exit(403, { message
+      = \"Forbidden: Invalid audience\" })\n        end\n    end\nend\nreturn post_handler"
+      certificate: [ ]
+      header_filter: [ ]
+      body_filter: [ ]
+      log: [ ]
+    enabled: true
+    updated_at: 1757323093
+    service: b009a798-63e6-4858-bb3d-06f0cad4a20e
+  - name: pre-function
+    id: 978f5538-7287-411e-9050-703bd5d9bb7b
+    created_at: 1756025006
+    consumer: ~
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+    instance_name: ~
+    route: ~
+    tags: ~
+    config:
+      rewrite: [ ]
+      access:
+        - "local function pre_handler()\n    local auth_header = kong.request.get_header(\"Authorization\")\n
+      \   if not auth_header then return end\n    \n    local token = string.match(auth_header,
+      \"[Bb]earer%s+(.+)\")\n    if not token then return end\n    \n    local jwt_parts
+      = {}\n    for part in string.gmatch(token, \"[^%.]+\") do\n        table.insert(jwt_parts,
+      part)\n    end\n    if #jwt_parts ~= 3 then return end\n    \n    -- PURE LUA
+      base64url decode\n    local function base64url_decode(data)\n        local base64
+      = data:gsub(\"-\", \"+\"):gsub(\"_\", \"/\")\n        local padding = #base64
+      % 4\n        if padding > 0 then\n            base64 = base64 .. string.rep(\"=\",
+      4 - padding)\n        end\n        \n        -- Manual base64 decoding\n        local
+      chars = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\"\n
+      \       local result = \"\"\n        \n        for i = 1, #base64, 4 do\n            local
+      a = chars:find(base64:sub(i, i)) or 0\n            local b = chars:find(base64:sub(i+1,
+      i+1)) or 0\n            local c = chars:find(base64:sub(i+2, i+2)) or 0\n            local
+      d = chars:find(base64:sub(i+3, i+3)) or 0\n            \n            local n
+      = (a-1) * 0x40000 + (b-1) * 0x1000 + (c-1) * 0x40 + (d-1)\n            \n            result
+      = result .. string.char(\n                math.floor(n / 0x10000) % 0x100,\n
+      \               math.floor(n / 0x100) % 0x100,\n                n % 0x100\n
+      \           )\n        end\n        \n        -- Remove padding null bytes\n
+      \       return result:gsub(\"%z*$\", \"\")\n    end\n    \n    local payload_json
+      = base64url_decode(jwt_parts[2])\n    if not payload_json then return end\n
+      \   \n    -- ОЧИСТКА: удаляем все после последней }\n    local last_bracket
+      = payload_json:find(\"}\")\n    if last_bracket then\n        payload_json =
+      payload_json:sub(1, last_bracket)\n    end\n    \n    -- ГАРАНТИРОВАННОЕ СОХРАНЕНИЕ\n
+      \   kong.ctx.shared.jwt_raw_payload = payload_json\n    \n    -- Пробуем распарсить,
+      но не важно если не получится\n    local ok, payload = pcall(function()\n        return
+      kong.json.decode(payload_json)\n    end)\n    \n    if ok and payload then\n
+      \       kong.ctx.shared.jwt_payload = payload\n    end\n    \n    kong.log.err(\"SAVED
+      TO SHARED: \", payload_json)\nend\nreturn pre_handler"
+      certificate: [ ]
+      header_filter: [ ]
+      body_filter: [ ]
+      log: [ ]
+    enabled: true
+    updated_at: 1756025006
+    service: 2b33ea7d-187a-4845-95c7-3c74b177e85a
+  - name: pre-function
+    id: a2eceb3f-8382-4ef5-ac88-5404725ea67e
+    created_at: 1755713230
+    consumer: ~
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+    instance_name: ~
+    route: ~
+    tags: ~
+    config:
+      rewrite: [ ]
+      access:
+        - "local function pre_handler()\n    local auth_header = kong.request.get_header(\"Authorization\")\n
+      \   if not auth_header then return end\n    \n    local token = string.match(auth_header,
+      \"[Bb]earer%s+(.+)\")\n    if not token then return end\n    \n    local jwt_parts
+      = {}\n    for part in string.gmatch(token, \"[^%.]+\") do\n        table.insert(jwt_parts,
+      part)\n    end\n    if #jwt_parts ~= 3 then return end\n    \n    -- PURE LUA
+      base64url decode\n    local function base64url_decode(data)\n        local base64
+      = data:gsub(\"-\", \"+\"):gsub(\"_\", \"/\")\n        local padding = #base64
+      % 4\n        if padding > 0 then\n            base64 = base64 .. string.rep(\"=\",
+      4 - padding)\n        end\n        \n        -- Manual base64 decoding\n        local
+      chars = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\"\n
+      \       local result = \"\"\n        \n        for i = 1, #base64, 4 do\n            local
+      a = chars:find(base64:sub(i, i)) or 0\n            local b = chars:find(base64:sub(i+1,
+      i+1)) or 0\n            local c = chars:find(base64:sub(i+2, i+2)) or 0\n            local
+      d = chars:find(base64:sub(i+3, i+3)) or 0\n            \n            local n
+      = (a-1) * 0x40000 + (b-1) * 0x1000 + (c-1) * 0x40 + (d-1)\n            \n            result
+      = result .. string.char(\n                math.floor(n / 0x10000) % 0x100,\n
+      \               math.floor(n / 0x100) % 0x100,\n                n % 0x100\n
+      \           )\n        end\n        \n        -- Remove padding null bytes\n
+      \       return result:gsub(\"%z*$\", \"\")\n    end\n    \n    local payload_json
+      = base64url_decode(jwt_parts[2])\n    if not payload_json then return end\n
+      \   \n    -- ОЧИСТКА: удаляем все после последней }\n    local last_bracket
+      = payload_json:find(\"}\")\n    if last_bracket then\n        payload_json =
+      payload_json:sub(1, last_bracket)\n    end\n    \n    -- ГАРАНТИРОВАННОЕ СОХРАНЕНИЕ\n
+      \   kong.ctx.shared.jwt_raw_payload = payload_json\n    \n    -- Пробуем распарсить,
+      но не важно если не получится\n    local ok, payload = pcall(function()\n        return
+      kong.json.decode(payload_json)\n    end)\n    \n    if ok and payload then\n
+      \       kong.ctx.shared.jwt_payload = payload\n    end\n    \n    kong.log.err(\"SAVED
+      TO SHARED: \", payload_json)\nend\nreturn pre_handler"
+      certificate: [ ]
+      header_filter: [ ]
+      body_filter: [ ]
+      log: [ ]
+    enabled: true
+    updated_at: 1755797679
+    service: b009a798-63e6-4858-bb3d-06f0cad4a20e
+  - name: jwt
+    id: defc59e4-6d3f-4bb2-9c70-fd88766142e4
+    created_at: 1757428752
+    consumer: ~
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+    instance_name: ~
+    route: c802170b-0282-40e6-82c8-bdc91e29c39c
+    tags: ~
+    config:
+      maximum_expiration: 0
+      uri_param_names:
+        - jwt
+      realm: ~
+      key_claim_name: iss
+      secret_is_base64: false
+      claims_to_verify:
+        - exp
+      header_names:
+        - Authorization
+      cookie_names:
+        - jwt_session_cookie
+      run_on_preflight: true
+      anonymous: ~
+    enabled: true
+    updated_at: 1757428752
+    service: ~
+  - name: post-function
+    id: eccbdc98-5656-42ef-9116-0f5a164b4fdd
+    created_at: 1756025148
+    consumer: ~
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+    instance_name: ~
+    route: ~
+    tags: ~
+    config:
+      rewrite: [ ]
+      access:
+        - "local function post_handler()\n    local raw_payload = kong.ctx.shared.jwt_raw_payload\n
+      \   if raw_payload then\n        -- Извлекаем sub, aud и role из JSON\n        local
+      sub = raw_payload:match(\"\\\"sub\\\":\\\"([^\\\"]+)\\\"\")\n        local aud
+      = raw_payload:match(\"\\\"aud\\\":%[\\\"([^\\\"]+)\\\"%]\")\n        local role
+      = raw_payload:match(\"\\\"role\\\":\\\"([^\\\"]+)\\\"\")\n        \n        --
+      Проверяем что aud = cart_service\n        if aud == \"cart_service\" then\n
+      \           if sub then\n                kong.service.request.set_header(\"X-User-Id\",
+      sub)\n                kong.log.err(\"POST-FUNCTION: X-User-Id header set to
+      \", sub)\n                \n                if role then\n                    --
+      Проверяем что роль из списка [user, admin]\n                    if role == \"user\"
+      or role == \"admin\" then\n                        kong.service.request.set_header(\"X-User-Role\",
+      role)\n                        kong.log.err(\"POST-FUNCTION: X-User-Role header
+      set to \", role)\n                    else\n                        kong.log.err(\"POST-FUNCTION:
+      Forbidden - invalid role: \", role)\n                        return kong.response.exit(403,
+      { message = \"Forbidden: Invalid role\" })\n                    end\n                else\n
+      \                   kong.log.err(\"POST-FUNCTION: User role not found in JWT
+      payload\")\n                    return kong.response.exit(403, { message = \"Forbidden:
+      Role not found\" })\n                end\n            end\n        else\n            kong.log.err(\"POST-FUNCTION:
+      Invalid aud - \", aud)\n            return kong.response.exit(403, { message
+      = \"Forbidden: Invalid audience\" })\n        end\n    end\nend\nreturn post_handler"
+      certificate: [ ]
+      header_filter: [ ]
+      body_filter: [ ]
+      log: [ ]
+    enabled: true
+    updated_at: 1757324287
+    service: 2b33ea7d-187a-4845-95c7-3c74b177e85a
+  - name: pre-function
+    id: f8245b9c-dfc8-4f80-95ef-1ccd953caf23
+    created_at: 1757426633
+    consumer: ~
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+    instance_name: ~
+    route: c802170b-0282-40e6-82c8-bdc91e29c39c
+    tags: ~
+    config:
+      rewrite: [ ]
+      access:
+        - "local function pre_handler()\n    local auth_header = kong.request.get_header(\"Authorization\")\n
+      \   if not auth_header then return end\n    \n    local token = string.match(auth_header,
+      \"[Bb]earer%s+(.+)\")\n    if not token then return end\n    \n    local jwt_parts
+      = {}\n    for part in string.gmatch(token, \"[^%.]+\") do\n        table.insert(jwt_parts,
+      part)\n    end\n    if #jwt_parts ~= 3 then return end\n    \n    -- PURE LUA
+      base64url decode\n    local function base64url_decode(data)\n        local base64
+      = data:gsub(\"-\", \"+\"):gsub(\"_\", \"/\")\n        local padding = #base64
+      % 4\n        if padding > 0 then\n            base64 = base64 .. string.rep(\"=\",
+      4 - padding)\n        end\n        \n        -- Manual base64 decoding\n        local
+      chars = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\"\n
+      \       local result = \"\"\n        \n        for i = 1, #base64, 4 do\n            local
+      a = chars:find(base64:sub(i, i)) or 0\n            local b = chars:find(base64:sub(i+1,
+      i+1)) or 0\n            local c = chars:find(base64:sub(i+2, i+2)) or 0\n            local
+      d = chars:find(base64:sub(i+3, i+3)) or 0\n            \n            local n
+      = (a-1) * 0x40000 + (b-1) * 0x1000 + (c-1) * 0x40 + (d-1)\n            \n            result
+      = result .. string.char(\n                math.floor(n / 0x10000) % 0x100,\n
+      \               math.floor(n / 0x100) % 0x100,\n                n % 0x100\n
+      \           )\n        end\n        \n        -- Remove padding null bytes\n
+      \       return result:gsub(\"%z*$\", \"\")\n    end\n    \n    local payload_json
+      = base64url_decode(jwt_parts[2])\n    if not payload_json then return end\n
+      \   \n    -- ОЧИСТКА: удаляем все после последней }\n    local last_bracket
+      = payload_json:find(\"}\")\n    if last_bracket then\n        payload_json =
+      payload_json:sub(1, last_bracket)\n    end\n    \n    -- ГАРАНТИРОВАННОЕ СОХРАНЕНИЕ\n
+      \   kong.ctx.shared.jwt_raw_payload = payload_json\n    \n    -- Пробуем распарсить,
+      но не важно если не получится\n    local ok, payload = pcall(function()\n        return
+      kong.json.decode(payload_json)\n    end)\n    \n    if ok and payload then\n
+      \       kong.ctx.shared.jwt_payload = payload\n    end\n    \n    kong.log.err(\"SAVED
+      TO SHARED: \", payload_json)\nend\nreturn pre_handler"
+      certificate: [ ]
+      header_filter: [ ]
+      body_filter: [ ]
+      log: [ ]
+    enabled: true
+    updated_at: 1757426633
+    service: ~
+jwt_secrets:
+  - id: b7343c76-f1ee-47d0-bf41-776c31511689
+    created_at: 1754842471
+    consumer: cb5afde6-01fc-4db1-9351-2c1f3197ece1
+    algorithm: RS256
+    tags: ~
+    secret: FApLw372oAYKNUbxeE4MEObwvGQZqIg7
+    rsa_public_key: |
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAinGCpe5yJMThQePHz3Zz
+      3UYaYOvBMDb5XozaQ2iAgkO2xCrPuYg0vL3lU+OtLS61/EmkvS9HOF+zSD/QjM+3
+      a3hnG4mQJFfUaNFHihvR4JdWId6kqEKhtEgleALSSoy+DihTNOnrUFMCihcDhcvZ
+      yGRzlorY/PDPEK0Dpv5tqorftPB8XA/qIwpJQHCKcHKraqQh2NBoGrHoDZtucc/r
+      YnFd7XsgepEBSDSjQ9V46GhdRgXaXCBe+W2Wr7+dGzpNxmW03r4e84TfNnctYqWk
+      l+9XlfNVunG6kb05INehGtCfMVHSlN41y17I7T6tlbFlc0sRwZjpaMU6dKa9Mkd3
+      lQIDAQAB
+      -----END PUBLIC KEY-----
+    key: http://127.0.0.1:8002
