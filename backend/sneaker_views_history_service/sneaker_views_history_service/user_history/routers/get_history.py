@@ -48,7 +48,7 @@ async def call_get_sneaker_views_clickhouse(
 )
 async def get_sneaker_views(
     # request: Request,
-    user_id: int,
+    user_id: int = Depends(get_user_by_header),
     session: Session = Depends(db_helper.session_getter),
     redis_client: aioredis.Redis = Depends(
         get_redis_factory(
