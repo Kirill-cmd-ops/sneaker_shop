@@ -461,8 +461,116 @@ plugins:
       - grpcs
       - http
       - https
+    name: post-function
+    tags: ~
+    config:
+      rewrite: [ ]
+      access:
+        - "local function post_handler()\n    local raw_payload = kong.ctx.shared.jwt_raw_payload\n
+      \   if raw_payload then\n        -- Извлекаем sub, aud и role из JSON\n        local
+      sub = raw_payload:match(\"\\\"sub\\\":\\\"([^\\\"]+)\\\"\")\n        local aud
+      = raw_payload:match(\"\\\"aud\\\":%[\\\"([^\\\"]+)\\\"%]\")\n        local role
+      = raw_payload:match(\"\\\"role\\\":\\\"([^\\\"]+)\\\"\")\n        \n        --
+      Проверяем что aud = sneaker_details_service\n        if aud == \"sneaker_details_service\"
+      then\n            if sub then\n                kong.service.request.set_header(\"X-User-Id\",
+      sub)\n                kong.log.err(\"POST-FUNCTION: X-User-Id header set to
+      \", sub)\n                \n                if role then\n                    --
+      Проверяем что роль из списка [user, admin]\n                    if role == \"user\"
+      or role == \"admin\" then\n                        kong.service.request.set_header(\"X-User-Role\",
+      role)\n                        kong.log.err(\"POST-FUNCTION: X-User-Role header
+      set to \", role)\n                    else\n                        kong.log.err(\"POST-FUNCTION:
+      Forbidden - invalid role: \", role)\n                        return kong.response.exit(403,
+      { message = \"Forbidden: Invalid role\" })\n                    end\n                else\n
+      \                   kong.log.err(\"POST-FUNCTION: User role not found in JWT
+      payload\")\n                    return kong.response.exit(403, { message = \"Forbidden:
+      Role not found\" })\n                end\n            end\n        else\n            kong.log.err(\"POST-FUNCTION:
+      Invalid aud - \", aud)\n            return kong.response.exit(403, { message
+      = \"Forbidden: Invalid audience\" })\n        end\n    end\nend\nreturn post_handler"
+      header_filter: [ ]
+      body_filter: [ ]
+      certificate: [ ]
+      log: [ ]
+    service: ~
+  - route: eb8dde2f-d5a9-44ad-9b75-aea57e1e2b9b
+    enabled: true
+    consumer: ~
+    instance_name: ~
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+    name: pre-function
+    tags: ~
+    config:
+      rewrite: [ ]
+      access:
+        - "local function pre_handler()\n    kong.log.err(\"=== JWT DEBUG START ===\")\n\n
+      \   -- Проверяем Authorization header\n    local auth_header = kong.request.get_header(\"Authorization\")\n
+      \   kong.log.err(\"[DEBUG] Authorization header: \", auth_header or \"NOT FOUND\")\n\n
+      \   local token\n\n    -- Пробуем извлечь токен из Authorization header\n    if
+      auth_header then\n        token = string.match(auth_header, \"[Bb]earer%s+(.+)\")\n
+      \       kong.log.err(\"[DEBUG] Token from Authorization: \", token and \"PRESENT\"
+      or \"NOT FOUND\")\n    end\n\n    -- Если нет токена в Authorization, проверяем
+      cookie jwt_session_cookie\n    if not token then\n        local cookie_header
+      = kong.request.get_header(\"Cookie\")\n        kong.log.err(\"[DEBUG] Cookie
+      header: \", cookie_header or \"NOT FOUND\")\n\n        if cookie_header then\n
+      \           -- Ищем jwt_session_cookie в cookies\n            token = string.match(cookie_header,
+      \"jwt_session_cookie=([^;]+)\")\n            kong.log.err(\"[DEBUG] Token from
+      jwt_session_cookie: \", token and \"PRESENT\" or \"NOT FOUND\")\n        end\n
+      \   end\n\n    if not token then \n        kong.log.err(\"[DEBUG] No JWT token
+      found in Authorization header or jwt_session_cookie - EXITING\")\n        return
+      \n    end\n\n    local jwt_parts = {}\n    for part in string.gmatch(token,
+      \"[^%.]+\") do\n        table.insert(jwt_parts, part)\n    end\n\n    kong.log.err(\"[DEBUG]
+      JWT parts count: \", #jwt_parts)\n\n    if #jwt_parts ~= 3 then \n        kong.log.err(\"[DEBUG]
+      Invalid JWT structure: expected 3 parts, got \", #jwt_parts, \" - EXITING\")\n
+      \       return \n    end\n\n    -- PURE LUA base64url decode\n    local function
+      base64url_decode(data)\n        kong.log.err(\"[BASE64] Decoding JWT payload
+      part\")\n        local base64 = data:gsub(\"-\", \"+\"):gsub(\"_\", \"/\")\n
+      \       local padding = #base64 % 4\n        if padding > 0 then\n            base64
+      = base64 .. string.rep(\"=\", 4 - padding)\n        end\n\n        -- Manual
+      base64 decoding\n        local chars = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\"\n
+      \       local result = \"\"\n\n        for i = 1, #base64, 4 do\n            local
+      a = chars:find(base64:sub(i, i)) or 0\n            local b = chars:find(base64:sub(i+1,
+      i+1)) or 0\n            local c = chars:find(base64:sub(i+2, i+2)) or 0\n            local
+      d = chars:find(base64:sub(i+3, i+3)) or 0\n\n            local n = (a-1) * 0x40000
+      + (b-1) * 0x1000 + (c-1) * 0x40 + (d-1)\n\n            result = result .. string.char(\n
+      \               math.floor(n / 0x10000) % 0x100,\n                math.floor(n
+      / 0x100) % 0x100,\n                n % 0x100\n            )\n        end\n\n
+      \       -- Remove padding null bytes\n        return result:gsub(\"%z*$\", \"\")\n
+      \   end\n\n    local payload_json = base64url_decode(jwt_parts[2])\n    kong.log.err(\"[DEBUG]
+      Raw payload JSON length: \", payload_json and #payload_json or \"NIL\")\n\n
+      \   if not payload_json then \n        kong.log.err(\"[DEBUG] Failed to decode
+      payload - EXITING\")\n        return \n    end\n\n    -- ОЧИСТКА: удаляем все
+      после последней }\n    local last_bracket = payload_json:find(\"}\")\n    kong.log.err(\"[DEBUG]
+      Last bracket position: \", last_bracket or \"NOT FOUND\")\n\n    if last_bracket
+      then\n        payload_json = payload_json:sub(1, last_bracket)\n        kong.log.err(\"[DEBUG]
+      Cleaned payload JSON: \", payload_json)\n    end\n\n    -- ГАРАНТИРОВАННОЕ СОХРАНЕНИЕ\n
+      \   kong.ctx.shared.jwt_raw_payload = payload_json\n    kong.log.err(\"[STORAGE]
+      Saved to kong.ctx.shared.jwt_raw_payload\")\n\n    -- Пробуем распарсить, но
+      не важно если не получится\n    local ok, payload = pcall(function()\n        return
+      kong.json.decode(payload_json)\n    end)\n\n    if ok and payload then\n        kong.ctx.shared.jwt_payload
+      = payload\n        kong.log.err(\"[PARSING] Successfully parsed JWT payload:\")\n
+      \       for k, v in pairs(payload) do\n            kong.log.err(\"[PARSING]
+      \  \", k, \" = \", tostring(v))\n        end\n    else\n        kong.log.err(\"[PARSING]
+      Failed to parse JSON payload\")\n    end\n\n    kong.log.err(\"SAVED TO SHARED:
+      \", payload_json)\n    kong.log.err(\"=== JWT DEBUG END ===\")\nend\nreturn
+      pre_handler\n"
+      header_filter: [ ]
+      body_filter: [ ]
+      certificate: [ ]
+      log: [ ]
+    service: ~
+  - route: eb8dde2f-d5a9-44ad-9b75-aea57e1e2b9b
+    enabled: true
+    consumer: ~
+    instance_name: ~
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
     name: jwt
-    created_at: 1753978364
     tags: ~
     config:
       maximum_expiration: 0
@@ -479,9 +587,7 @@ plugins:
         - jwt_session_cookie
       run_on_preflight: true
       anonymous: ~
-    updated_at: 1759920046
-    id: 52ec0c87-a373-47ca-80b7-a031e8d2f6b9
-    service: 2b33ea7d-187a-4845-95c7-3c74b177e85a
+    service: ~
   - route: ~
     enabled: true
     consumer: ~
@@ -512,6 +618,45 @@ plugins:
     updated_at: 1759920046
     id: 5ee5130f-3d19-4305-a24a-211b255b1379
     service: b009a798-63e6-4858-bb3d-06f0cad4a20e
+  - route: eb8dde2f-d5a9-44ad-9b75-aea57e1e2b9b
+    enabled: true
+    consumer: ~
+    instance_name: ~
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+    name: post-function
+    tags: ~
+    config:
+      rewrite: [ ]
+      access:
+        - "local function post_handler()\n    local raw_payload = kong.ctx.shared.jwt_raw_payload\n
+      \   if raw_payload then\n        -- Извлекаем sub, aud и role из JSON\n        local
+      sub = raw_payload:match(\"\\\"sub\\\":\\\"([^\\\"]+)\\\"\")\n        local aud
+      = raw_payload:match(\"\\\"aud\\\":%[\\\"([^\\\"]+)\\\"%]\")\n        local role
+      = raw_payload:match(\"\\\"role\\\":\\\"([^\\\"]+)\\\"\")\n        \n        --
+      Проверяем что aud = sneaker_details_service\n        if aud == \"sneaker_details_service\"
+      then\n            if sub then\n                kong.service.request.set_header(\"X-User-Id\",
+      sub)\n                kong.log.err(\"POST-FUNCTION: X-User-Id header set to
+      \", sub)\n                \n                if role then\n                    --
+      Проверяем что роль из списка [content_manager, admin ]\n                    if
+      role == \"content_manager\" or role == \"admin\" then\n                        kong.service.request.set_header(\"X-User-Role\",
+      role)\n                        kong.log.err(\"POST-FUNCTION: X-User-Role header
+      set to \", role)\n                    else\n                        kong.log.err(\"POST-FUNCTION:
+      Forbidden - invalid role: \", role)\n                        return kong.response.exit(403,
+      { message = \"Forbidden: Invalid role\" })\n                    end\n                else\n
+      \                   kong.log.err(\"POST-FUNCTION: User role not found in JWT
+      payload\")\n                    return kong.response.exit(403, { message = \"Forbidden:
+      Role not found\" })\n                end\n            end\n        else\n            kong.log.err(\"POST-FUNCTION:
+      Invalid aud - \", aud)\n            return kong.response.exit(403, { message
+      = \"Forbidden: Invalid audience\" })\n        end\n    end\nend\nreturn post_handler"
+      header_filter: [ ]
+      body_filter: [ ]
+      certificate: [ ]
+      log: [ ]
+    service: ~
   - route: c802170b-0282-40e6-82c8-bdc91e29c39c
     enabled: true
     consumer: ~
