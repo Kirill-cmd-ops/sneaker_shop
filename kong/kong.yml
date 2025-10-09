@@ -1,12 +1,18 @@
-_format_version: '3.0'
 _transform: false
+_format_version: '3.0'
 consumers:
-  - id: cb5afde6-01fc-4db1-9351-2c1f3197ece1
+  - custom_id: ~
+    tags: ~
+    updated_at: 1760002409
+    created_at: 1759996624
+    username: anonymous
+    id: 5ea9b2c2-bf76-4533-a7f3-63ae663ffcc8
+  - custom_id: ~
+    tags: ~
+    updated_at: 1760002409
     created_at: 1753610345
     username: auth_consumer
-    tags: ~
-    custom_id: ~
-    updated_at: 1759920046
+    id: cb5afde6-01fc-4db1-9351-2c1f3197ece1
 parameters:
   - key: cluster_id
     created_at: 1759765546
@@ -14,457 +20,376 @@ parameters:
 services:
   - host: cart_service
     port: 8004
-    connect_timeout: 60000
+    read_timeout: 60000
+    name: cart_service
+    created_at: 1749507395
+    protocol: http
+    id: 2b33ea7d-187a-4845-95c7-3c74b177e85a
+    write_timeout: 60000
     tls_verify: ~
-    tags: ~
     tls_verify_depth: ~
     client_certificate: ~
-    id: 2b33ea7d-187a-4845-95c7-3c74b177e85a
-    ca_certificates: ~
     path: ~
-    enabled: true
-    protocol: http
-    write_timeout: 60000
-    created_at: 1749507395
-    updated_at: 1759920046
-    name: cart_service
     retries: 5
-    read_timeout: 60000
+    ca_certificates: ~
+    enabled: true
+    connect_timeout: 60000
+    tags: ~
+    updated_at: 1760002409
   - host: catalog_service
     port: 8005
-    connect_timeout: 60000
+    read_timeout: 60000
+    name: catalog_service
+    created_at: 1749507416
+    protocol: http
+    id: 3606c6d6-6d3d-4bb8-862b-411df930f0a1
+    write_timeout: 60000
     tls_verify: ~
-    tags: ~
     tls_verify_depth: ~
     client_certificate: ~
-    id: 3606c6d6-6d3d-4bb8-862b-411df930f0a1
-    ca_certificates: ~
     path: ~
-    enabled: true
-    protocol: http
-    write_timeout: 60000
-    created_at: 1749507416
-    updated_at: 1759920046
-    name: catalog_service
     retries: 5
-    read_timeout: 60000
+    ca_certificates: ~
+    enabled: true
+    connect_timeout: 60000
+    tags: ~
+    updated_at: 1760002409
   - host: auth_service
     port: 8002
-    connect_timeout: 60000
+    read_timeout: 60000
+    name: auth_service
+    created_at: 1749505771
+    protocol: http
+    id: ae44ad1e-4acd-4016-8256-020eb89ee26f
+    write_timeout: 60000
     tls_verify: ~
-    tags: ~
     tls_verify_depth: ~
     client_certificate: ~
-    id: ae44ad1e-4acd-4016-8256-020eb89ee26f
-    ca_certificates: ~
     path: ~
-    enabled: true
-    protocol: http
-    write_timeout: 60000
-    created_at: 1749505771
-    updated_at: 1759920046
-    name: auth_service
     retries: 5
-    read_timeout: 60000
+    ca_certificates: ~
+    enabled: true
+    connect_timeout: 60000
+    tags: ~
+    updated_at: 1760002409
   - host: favorite_service
     port: 8003
-    connect_timeout: 60000
+    read_timeout: 60000
+    name: favorite_service
+    created_at: 1749507324
+    protocol: http
+    id: b009a798-63e6-4858-bb3d-06f0cad4a20e
+    write_timeout: 60000
     tls_verify: ~
-    tags: ~
     tls_verify_depth: ~
     client_certificate: ~
-    id: b009a798-63e6-4858-bb3d-06f0cad4a20e
-    ca_certificates: ~
     path: ~
-    enabled: true
-    protocol: http
-    write_timeout: 60000
-    created_at: 1749507324
-    updated_at: 1759920046
-    name: favorite_service
     retries: 5
-    read_timeout: 60000
+    ca_certificates: ~
+    enabled: true
+    connect_timeout: 60000
+    tags: ~
+    updated_at: 1760002409
   - host: sneaker_details_service
     port: 8006
-    connect_timeout: 60000
+    read_timeout: 60000
+    name: sneaker_details_service
+    created_at: 1756021993
+    protocol: http
+    id: e742d879-4a3f-4f88-9038-39e94b039f69
+    write_timeout: 60000
     tls_verify: ~
-    tags: ~
     tls_verify_depth: ~
     client_certificate: ~
-    id: e742d879-4a3f-4f88-9038-39e94b039f69
-    ca_certificates: ~
     path: ~
-    enabled: true
-    protocol: http
-    write_timeout: 60000
-    created_at: 1756021993
-    updated_at: 1759920046
-    name: sneaker_details_service
     retries: 5
-    read_timeout: 60000
+    ca_certificates: ~
+    enabled: true
+    connect_timeout: 60000
+    tags: ~
+    updated_at: 1760002409
   - host: sneaker_views_history_service
     port: 8009
-    connect_timeout: 60000
+    read_timeout: 60000
+    name: sneaker_views_history_service
+    created_at: 1759768817
+    protocol: http
+    id: f5f9d47e-7b6d-5f0e-8692-70da1e991965
+    write_timeout: 60000
     tls_verify: ~
-    tags: ~
     tls_verify_depth: ~
     client_certificate: ~
-    id: f5f9d47e-7b6d-5f0e-8692-70da1e991965
-    ca_certificates: ~
     path: ~
-    enabled: true
-    protocol: http
-    write_timeout: 60000
-    created_at: 1759768817
-    updated_at: 1759920046
-    name: sneaker_views_history_service
     retries: 5
-    read_timeout: 60000
+    ca_certificates: ~
+    enabled: true
+    connect_timeout: 60000
+    tags: ~
+    updated_at: 1760002409
 routes:
-  - methods: ~
-    hosts:
+  - hosts:
       - 127.0.0.1:8000
       - 127.0.0.1:4455
-    snis: ~
-    headers: ~
-    tags: ~
-    regex_priority: 0
-    service: 3606c6d6-6d3d-4bb8-862b-411df930f0a1
-    id: 3354dd1c-e82f-4108-b5fb-9503a5ed43bd
-    https_redirect_status_code: 426
-    paths:
-      - /api/v1/catalog/sneakers/view
-    strip_path: false
-    path_handling: v0
-    preserve_host: false
-    sources: ~
-    request_buffering: true
     name: ~
-    updated_at: 1759920046
-    destinations: ~
-    response_buffering: true
     created_at: 1750288382
+    updated_at: 1760002409
+    id: 3354dd1c-e82f-4108-b5fb-9503a5ed43bd
+    destinations: ~
     protocols:
       - http
       - https
-  - methods: ~
-    hosts:
+    regex_priority: 0
+    methods: ~
+    preserve_host: false
+    https_redirect_status_code: 426
+    strip_path: false
+    path_handling: v0
+    request_buffering: true
+    service: 3606c6d6-6d3d-4bb8-862b-411df930f0a1
+    response_buffering: true
+    tags: ~
+    headers: ~
+    paths:
+      - /api/v1/catalog/sneakers/view
+    snis: ~
+    sources: ~
+  - hosts:
       - 127.0.0.1:8000
       - 127.0.0.1:4455
-    snis: ~
-    headers: ~
-    tags: ~
-    regex_priority: 0
-    service: f5f9d47e-7b6d-5f0e-8692-70da1e991965
+    name: ~
+    created_at: 1759767971
+    updated_at: 1760002409
     id: 6555a106-4d73-4f47-a772-e781fde942ef
+    destinations: ~
+    protocols:
+      - http
+      - https
+    regex_priority: 0
+    methods: ~
+    preserve_host: false
     https_redirect_status_code: 426
+    strip_path: false
+    path_handling: v0
+    request_buffering: true
+    service: f5f9d47e-7b6d-5f0e-8692-70da1e991965
+    response_buffering: true
+    tags: ~
+    headers: ~
     paths:
       - /api/v1/history/recent_sneakers_views/get_history_clickhouse
       - /api/v1/history/recent_sneakers_views/get_history
-    strip_path: false
-    path_handling: v0
-    preserve_host: false
+    snis: ~
     sources: ~
-    request_buffering: true
+  - hosts:
+      - 127.0.0.1:8000
+      - 127.0.0.1:4455
     name: ~
-    updated_at: 1759920046
+    created_at: 1750418939
+    updated_at: 1760002409
+    id: 912ed51e-0f88-4d6f-8968-b3c4a6223e22
     destinations: ~
-    response_buffering: true
-    created_at: 1759767971
     protocols:
       - http
       - https
-  - methods: ~
-    hosts:
-      - 127.0.0.1:8000
-      - 127.0.0.1:4455
-    snis: ~
-    headers: ~
-    tags: ~
     regex_priority: 0
-    service: ae44ad1e-4acd-4016-8256-020eb89ee26f
-    id: 912ed51e-0f88-4d6f-8968-b3c4a6223e22
+    methods: ~
+    preserve_host: false
     https_redirect_status_code: 426
+    strip_path: false
+    path_handling: v0
+    request_buffering: true
+    service: ae44ad1e-4acd-4016-8256-020eb89ee26f
+    response_buffering: true
+    tags: ~
+    headers: ~
     paths:
       - /api/v1/auth
       - /api/v1/auth/users
-    strip_path: false
-    path_handling: v0
-    preserve_host: false
+    snis: ~
     sources: ~
-    request_buffering: true
+  - hosts:
+      - 127.0.0.1:8000
+      - 127.0.0.1:4455
     name: ~
-    updated_at: 1759920046
+    created_at: 1750288234
+    updated_at: 1760002409
+    id: 9b79e9d8-d438-4bfb-8417-457cf8331d0c
     destinations: ~
-    response_buffering: true
-    created_at: 1750418939
     protocols:
       - http
       - https
-  - methods: ~
-    hosts:
-      - 127.0.0.1:8000
-      - 127.0.0.1:4455
-    snis: ~
-    headers: ~
-    tags: ~
     regex_priority: 0
-    service: 2b33ea7d-187a-4845-95c7-3c74b177e85a
-    id: 9b79e9d8-d438-4bfb-8417-457cf8331d0c
+    methods: ~
+    preserve_host: false
     https_redirect_status_code: 426
+    strip_path: false
+    path_handling: v0
+    request_buffering: true
+    service: 2b33ea7d-187a-4845-95c7-3c74b177e85a
+    response_buffering: true
+    tags: ~
+    headers: ~
     paths:
       - /api/v1/cart/view
       - /api/v1/cart/sneaker
-    strip_path: false
-    path_handling: v0
-    preserve_host: false
+    snis: ~
     sources: ~
-    request_buffering: true
+  - hosts:
+      - 127.0.0.1:8000
+      - 127.0.0.1:4455
     name: ~
-    updated_at: 1759920046
+    created_at: 1750288800
+    updated_at: 1760002409
+    id: 9fb40d7b-0f06-4a97-a9ab-5fda4694a9c9
     destinations: ~
-    response_buffering: true
-    created_at: 1750288234
     protocols:
       - http
       - https
-  - methods: ~
-    hosts:
-      - 127.0.0.1:8000
-      - 127.0.0.1:4455
-    snis: ~
-    headers: ~
-    tags: ~
     regex_priority: 0
-    service: b009a798-63e6-4858-bb3d-06f0cad4a20e
-    id: 9fb40d7b-0f06-4a97-a9ab-5fda4694a9c9
+    methods: ~
+    preserve_host: false
     https_redirect_status_code: 426
+    strip_path: false
+    path_handling: v0
+    request_buffering: true
+    service: b009a798-63e6-4858-bb3d-06f0cad4a20e
+    response_buffering: true
+    tags: ~
+    headers: ~
     paths:
       - /api/v1/favorite/view
       - /api/v1/favorite/sneaker
-    strip_path: false
-    path_handling: v0
-    preserve_host: false
+    snis: ~
     sources: ~
-    request_buffering: true
+  - hosts: ~
     name: ~
-    updated_at: 1759920046
+    created_at: 1757416153
+    updated_at: 1760002409
+    id: c802170b-0282-40e6-82c8-bdc91e29c39c
     destinations: ~
-    response_buffering: true
-    created_at: 1750288800
     protocols:
       - http
       - https
-  - methods: ~
-    hosts: ~
-    snis: ~
-    headers: ~
-    tags: ~
     regex_priority: 0
-    service: e742d879-4a3f-4f88-9038-39e94b039f69
-    id: c802170b-0282-40e6-82c8-bdc91e29c39c
+    methods: ~
+    preserve_host: false
     https_redirect_status_code: 426
+    strip_path: false
+    path_handling: v0
+    request_buffering: true
+    service: e742d879-4a3f-4f88-9038-39e94b039f69
+    response_buffering: true
+    tags: ~
+    headers: ~
     paths:
       - /api/v1/details/sneaker
       - /api/v1/details/sneaker_sizes
       - /api/v1/details/sneaker_colors
       - /api/v1/details/sneaker_materials
-    strip_path: false
-    path_handling: v0
-    preserve_host: false
+    snis: ~
     sources: ~
-    request_buffering: true
+  - hosts: ~
     name: ~
-    updated_at: 1759920046
+    created_at: 1756022268
+    updated_at: 1760002409
+    id: eb8dde2f-d5a9-44ad-9b75-aea57e1e2b9b
     destinations: ~
-    response_buffering: true
-    created_at: 1757416153
     protocols:
       - http
       - https
-  - methods: ~
-    hosts: ~
-    snis: ~
-    headers: ~
-    tags: ~
     regex_priority: 0
-    service: e742d879-4a3f-4f88-9038-39e94b039f69
-    id: eb8dde2f-d5a9-44ad-9b75-aea57e1e2b9b
+    methods: ~
+    preserve_host: false
     https_redirect_status_code: 426
+    strip_path: false
+    path_handling: v0
+    request_buffering: true
+    service: e742d879-4a3f-4f88-9038-39e94b039f69
+    response_buffering: true
+    tags: ~
+    headers: ~
     paths:
       - /api/v1/details/sneaker/view
-    strip_path: false
-    path_handling: v0
-    preserve_host: false
+    snis: ~
     sources: ~
-    request_buffering: true
-    name: ~
-    updated_at: 1759920046
-    destinations: ~
-    response_buffering: true
-    created_at: 1756022268
-    protocols:
-      - http
-      - https
 plugins:
-  - route: ~
-    enabled: true
-    consumer: ~
+  - consumer: ~
+    route: eb8dde2f-d5a9-44ad-9b75-aea57e1e2b9b
+    name: post-function
+    created_at: 1759996452
+    updated_at: 1760002409
+    id: 0e02422d-7364-5a0e-abdb-c561aa1b5535
+    service: ~
     instance_name: ~
+    tags: ~
+    config:
+      header_filter: [ ]
+      body_filter: [ ]
+      certificate: [ ]
+      rewrite: [ ]
+      log: [ ]
+      access:
+        - |
+          local function post_handler()
+              local raw_payload = kong.ctx.shared.jwt_raw_payload
+          
+              if not raw_payload then
+                  kong.log.err("POST-FUNCTION: No JWT data in shared storage - skipping headers")
+                  return  -- Просто выходим, не устанавливаем заголовки и не выдаем ошибку
+              end
+          
+              -- Извлекаем sub, aud и role из JSON
+              local sub = raw_payload:match("\"sub\":\"([^\"]+)\"")
+              local aud = raw_payload:match("\"aud\":%[\"([^\"]+)\"%]")
+              local role = raw_payload:match("\"role\":\"([^\"]+)\"")
+          
+              -- Проверяем что aud = sneaker_details_service
+              if aud == "sneaker_details_service" then
+                  if sub then
+                      kong.service.request.set_header("X-User-Id", sub)
+                      kong.log.err("POST-FUNCTION: X-User-Id header set to ", sub)
+          
+                      if role then
+                          -- Проверяем что роль из списка [user, admin]
+                          if role == "user" or role == "admin" then
+                              kong.service.request.set_header("X-User-Role", role)
+                              kong.log.err("POST-FUNCTION: X-User-Role header set to ", role)
+                          else
+                              kong.log.err("POST-FUNCTION: Forbidden - invalid role: ", role)
+                              return kong.response.exit(403, { message = "Forbidden: Invalid role" })
+                          end
+                      else
+                          kong.log.err("POST-FUNCTION: User role not found in JWT payload")
+                          return kong.response.exit(403, { message = "Forbidden: Role not found" })
+                      end
+                  end
+              else
+                  kong.log.err("POST-FUNCTION: Invalid aud - ", aud)
+                  return kong.response.exit(403, { message = "Forbidden: Invalid audience" })
+              end
+          end
+          return post_handler
+    enabled: true
     protocols:
       - grpc
       - grpcs
       - http
       - https
+  - consumer: ~
+    route: ~
     name: post-function
     created_at: 1759768817
-    tags: ~
-    config:
-      rewrite: [ ]
-      access:
-        - "local function post_handler()\n    local raw_payload = kong.ctx.shared.jwt_raw_payload\n
-      \   if raw_payload then\n        -- Извлекаем sub, aud и role из JSON\n        local
-      sub = raw_payload:match(\"\\\"sub\\\":\\\"([^\\\"]+)\\\"\")\n        local aud
-      = raw_payload:match(\"\\\"aud\\\":%[\\\"([^\\\"]+)\\\"%]\")\n        local role
-      = raw_payload:match(\"\\\"role\\\":\\\"([^\\\"]+)\\\"\")\n        \n        --
-      Проверяем что aud = sneaker_details_service\n        if aud == \"sneaker_details_service\"
-      then\n            if sub then\n                kong.service.request.set_header(\"X-User-Id\",
-      sub)\n                kong.log.err(\"POST-FUNCTION: X-User-Id header set to
-      \", sub)\n                \n                if role then\n                    --
-      Проверяем что роль из списка [user, admin]\n                    if role == \"user\"
-      or role == \"admin\" then\n                        kong.service.request.set_header(\"X-User-Role\",
-      role)\n                        kong.log.err(\"POST-FUNCTION: X-User-Role header
-      set to \", role)\n                    else\n                        kong.log.err(\"POST-FUNCTION:
-      Forbidden - invalid role: \", role)\n                        return kong.response.exit(403,
-      { message = \"Forbidden: Invalid role\" })\n                    end\n                else\n
-      \                   kong.log.err(\"POST-FUNCTION: User role not found in JWT
-      payload\")\n                    return kong.response.exit(403, { message = \"Forbidden:
-      Role not found\" })\n                end\n            end\n        else\n            kong.log.err(\"POST-FUNCTION:
-      Invalid aud - \", aud)\n            return kong.response.exit(403, { message
-      = \"Forbidden: Invalid audience\" })\n        end\n    end\nend\nreturn post_handler"
-      header_filter: [ ]
-      body_filter: [ ]
-      certificate: [ ]
-      log: [ ]
-    updated_at: 1759920046
+    updated_at: 1760002409
     id: 0ee0ac02-725c-5471-9478-f528880b8a19
     service: f5f9d47e-7b6d-5f0e-8692-70da1e991965
-  - route: ~
-    enabled: true
-    consumer: ~
     instance_name: ~
-    protocols:
-      - grpc
-      - grpcs
-      - http
-      - https
-    name: pre-function
-    created_at: 1759768817
     tags: ~
     config:
-      rewrite: [ ]
-      access:
-        - "local function pre_handler()\n    kong.log.err(\"=== JWT DEBUG START ===\")\n\n
-      \   -- Проверяем Authorization header\n    local auth_header = kong.request.get_header(\"Authorization\")\n
-      \   kong.log.err(\"[DEBUG] Authorization header: \", auth_header or \"NOT FOUND\")\n\n
-      \   local token\n\n    -- Пробуем извлечь токен из Authorization header\n    if
-      auth_header then\n        token = string.match(auth_header, \"[Bb]earer%s+(.+)\")\n
-      \       kong.log.err(\"[DEBUG] Token from Authorization: \", token and \"PRESENT\"
-      or \"NOT FOUND\")\n    end\n\n    -- Если нет токена в Authorization, проверяем
-      cookie jwt_session_cookie\n    if not token then\n        local cookie_header
-      = kong.request.get_header(\"Cookie\")\n        kong.log.err(\"[DEBUG] Cookie
-      header: \", cookie_header or \"NOT FOUND\")\n\n        if cookie_header then\n
-      \           -- Ищем jwt_session_cookie в cookies\n            token = string.match(cookie_header,
-      \"jwt_session_cookie=([^;]+)\")\n            kong.log.err(\"[DEBUG] Token from
-      jwt_session_cookie: \", token and \"PRESENT\" or \"NOT FOUND\")\n        end\n
-      \   end\n\n    if not token then \n        kong.log.err(\"[DEBUG] No JWT token
-      found in Authorization header or jwt_session_cookie - EXITING\")\n        return
-      \n    end\n\n    local jwt_parts = {}\n    for part in string.gmatch(token,
-      \"[^%.]+\") do\n        table.insert(jwt_parts, part)\n    end\n\n    kong.log.err(\"[DEBUG]
-      JWT parts count: \", #jwt_parts)\n\n    if #jwt_parts ~= 3 then \n        kong.log.err(\"[DEBUG]
-      Invalid JWT structure: expected 3 parts, got \", #jwt_parts, \" - EXITING\")\n
-      \       return \n    end\n\n    -- PURE LUA base64url decode\n    local function
-      base64url_decode(data)\n        kong.log.err(\"[BASE64] Decoding JWT payload
-      part\")\n        local base64 = data:gsub(\"-\", \"+\"):gsub(\"_\", \"/\")\n
-      \       local padding = #base64 % 4\n        if padding > 0 then\n            base64
-      = base64 .. string.rep(\"=\", 4 - padding)\n        end\n\n        -- Manual
-      base64 decoding\n        local chars = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\"\n
-      \       local result = \"\"\n\n        for i = 1, #base64, 4 do\n            local
-      a = chars:find(base64:sub(i, i)) or 0\n            local b = chars:find(base64:sub(i+1,
-      i+1)) or 0\n            local c = chars:find(base64:sub(i+2, i+2)) or 0\n            local
-      d = chars:find(base64:sub(i+3, i+3)) or 0\n\n            local n = (a-1) * 0x40000
-      + (b-1) * 0x1000 + (c-1) * 0x40 + (d-1)\n\n            result = result .. string.char(\n
-      \               math.floor(n / 0x10000) % 0x100,\n                math.floor(n
-      / 0x100) % 0x100,\n                n % 0x100\n            )\n        end\n\n
-      \       -- Remove padding null bytes\n        return result:gsub(\"%z*$\", \"\")\n
-      \   end\n\n    local payload_json = base64url_decode(jwt_parts[2])\n    kong.log.err(\"[DEBUG]
-      Raw payload JSON length: \", payload_json and #payload_json or \"NIL\")\n\n
-      \   if not payload_json then \n        kong.log.err(\"[DEBUG] Failed to decode
-      payload - EXITING\")\n        return \n    end\n\n    -- ОЧИСТКА: удаляем все
-      после последней }\n    local last_bracket = payload_json:find(\"}\")\n    kong.log.err(\"[DEBUG]
-      Last bracket position: \", last_bracket or \"NOT FOUND\")\n\n    if last_bracket
-      then\n        payload_json = payload_json:sub(1, last_bracket)\n        kong.log.err(\"[DEBUG]
-      Cleaned payload JSON: \", payload_json)\n    end\n\n    -- ГАРАНТИРОВАННОЕ СОХРАНЕНИЕ\n
-      \   kong.ctx.shared.jwt_raw_payload = payload_json\n    kong.log.err(\"[STORAGE]
-      Saved to kong.ctx.shared.jwt_raw_payload\")\n\n    -- Пробуем распарсить, но
-      не важно если не получится\n    local ok, payload = pcall(function()\n        return
-      kong.json.decode(payload_json)\n    end)\n\n    if ok and payload then\n        kong.ctx.shared.jwt_payload
-      = payload\n        kong.log.err(\"[PARSING] Successfully parsed JWT payload:\")\n
-      \       for k, v in pairs(payload) do\n            kong.log.err(\"[PARSING]
-      \  \", k, \" = \", tostring(v))\n        end\n    else\n        kong.log.err(\"[PARSING]
-      Failed to parse JSON payload\")\n    end\n\n    kong.log.err(\"SAVED TO SHARED:
-      \", payload_json)\n    kong.log.err(\"=== JWT DEBUG END ===\")\nend\nreturn
-      pre_handler\n"
       header_filter: [ ]
       body_filter: [ ]
       certificate: [ ]
-      log: [ ]
-    updated_at: 1759920046
-    id: 27b0972b-6718-592e-8ba7-9c21b18d6e50
-    service: f5f9d47e-7b6d-5f0e-8692-70da1e991965
-  - route: ~
-    enabled: true
-    consumer: ~
-    instance_name: ~
-    protocols:
-      - grpc
-      - grpcs
-      - http
-      - https
-    name: jwt
-    created_at: 1759768817
-    tags: ~
-    config:
-      maximum_expiration: 0
-      uri_param_names:
-        - jwt
-      realm: ~
-      key_claim_name: iss
-      secret_is_base64: false
-      claims_to_verify:
-        - exp
-      header_names:
-        - Authorization
-      cookie_names:
-        - jwt_session_cookie
-      run_on_preflight: true
-      anonymous: ~
-    updated_at: 1759920046
-    id: 51db222d-1454-5fc0-8c23-77806571d541
-    service: f5f9d47e-7b6d-5f0e-8692-70da1e991965
-  - route: ~
-    enabled: true
-    consumer: ~
-    instance_name: ~
-    protocols:
-      - grpc
-      - grpcs
-      - http
-      - https
-    name: post-function
-    tags: ~
-    config:
       rewrite: [ ]
+      log: [ ]
       access:
         - "local function post_handler()\n    local raw_payload = kong.ctx.shared.jwt_raw_payload\n
       \   if raw_payload then\n        -- Извлекаем sub, aud и role из JSON\n        local
@@ -486,24 +411,27 @@ plugins:
       Role not found\" })\n                end\n            end\n        else\n            kong.log.err(\"POST-FUNCTION:
       Invalid aud - \", aud)\n            return kong.response.exit(403, { message
       = \"Forbidden: Invalid audience\" })\n        end\n    end\nend\nreturn post_handler"
-      header_filter: [ ]
-      body_filter: [ ]
-      certificate: [ ]
-      log: [ ]
-    service: ~
-  - route: eb8dde2f-d5a9-44ad-9b75-aea57e1e2b9b
     enabled: true
-    consumer: ~
-    instance_name: ~
     protocols:
       - grpc
       - grpcs
       - http
       - https
+  - consumer: ~
+    route: ~
     name: pre-function
+    created_at: 1759768817
+    updated_at: 1760002409
+    id: 27b0972b-6718-592e-8ba7-9c21b18d6e50
+    service: f5f9d47e-7b6d-5f0e-8692-70da1e991965
+    instance_name: ~
     tags: ~
     config:
+      header_filter: [ ]
+      body_filter: [ ]
+      certificate: [ ]
       rewrite: [ ]
+      log: [ ]
       access:
         - "local function pre_handler()\n    kong.log.err(\"=== JWT DEBUG START ===\")\n\n
       \   -- Проверяем Authorization header\n    local auth_header = kong.request.get_header(\"Authorization\")\n
@@ -556,121 +484,87 @@ plugins:
       Failed to parse JSON payload\")\n    end\n\n    kong.log.err(\"SAVED TO SHARED:
       \", payload_json)\n    kong.log.err(\"=== JWT DEBUG END ===\")\nend\nreturn
       pre_handler\n"
-      header_filter: [ ]
-      body_filter: [ ]
-      certificate: [ ]
-      log: [ ]
-    service: ~
-  - route: eb8dde2f-d5a9-44ad-9b75-aea57e1e2b9b
     enabled: true
-    consumer: ~
-    instance_name: ~
     protocols:
       - grpc
       - grpcs
       - http
       - https
+  - consumer: ~
+    route: ~
     name: jwt
+    created_at: 1759768817
+    updated_at: 1760002409
+    id: 51db222d-1454-5fc0-8c23-77806571d541
+    service: f5f9d47e-7b6d-5f0e-8692-70da1e991965
+    instance_name: ~
     tags: ~
     config:
-      maximum_expiration: 0
-      uri_param_names:
-        - jwt
       realm: ~
       key_claim_name: iss
       secret_is_base64: false
       claims_to_verify:
         - exp
+      run_on_preflight: true
       header_names:
         - Authorization
+      maximum_expiration: 0
       cookie_names:
         - jwt_session_cookie
-      run_on_preflight: true
       anonymous: ~
-    service: ~
-  - route: ~
+      uri_param_names:
+        - jwt
     enabled: true
-    consumer: ~
-    instance_name: ~
     protocols:
       - grpc
       - grpcs
       - http
       - https
+  - consumer: ~
+    route: ~
     name: jwt
     created_at: 1753898529
+    updated_at: 1760002409
+    id: 5ee5130f-3d19-4305-a24a-211b255b1379
+    service: b009a798-63e6-4858-bb3d-06f0cad4a20e
+    instance_name: ~
     tags: ~
     config:
-      maximum_expiration: 0
-      uri_param_names:
-        - jwt
       realm: ~
       key_claim_name: iss
       secret_is_base64: false
       claims_to_verify:
         - exp
+      run_on_preflight: true
       header_names:
         - Authorization
+      maximum_expiration: 0
       cookie_names:
         - jwt_session_cookie
-      run_on_preflight: true
       anonymous: ~
-    updated_at: 1759920046
-    id: 5ee5130f-3d19-4305-a24a-211b255b1379
-    service: b009a798-63e6-4858-bb3d-06f0cad4a20e
-  - route: eb8dde2f-d5a9-44ad-9b75-aea57e1e2b9b
+      uri_param_names:
+        - jwt
     enabled: true
-    consumer: ~
-    instance_name: ~
     protocols:
       - grpc
       - grpcs
       - http
       - https
-    name: post-function
-    tags: ~
-    config:
-      rewrite: [ ]
-      access:
-        - "local function post_handler()\n    local raw_payload = kong.ctx.shared.jwt_raw_payload\n
-      \   if raw_payload then\n        -- Извлекаем sub, aud и role из JSON\n        local
-      sub = raw_payload:match(\"\\\"sub\\\":\\\"([^\\\"]+)\\\"\")\n        local aud
-      = raw_payload:match(\"\\\"aud\\\":%[\\\"([^\\\"]+)\\\"%]\")\n        local role
-      = raw_payload:match(\"\\\"role\\\":\\\"([^\\\"]+)\\\"\")\n        \n        --
-      Проверяем что aud = sneaker_details_service\n        if aud == \"sneaker_details_service\"
-      then\n            if sub then\n                kong.service.request.set_header(\"X-User-Id\",
-      sub)\n                kong.log.err(\"POST-FUNCTION: X-User-Id header set to
-      \", sub)\n                \n                if role then\n                    --
-      Проверяем что роль из списка [content_manager, admin ]\n                    if
-      role == \"content_manager\" or role == \"admin\" then\n                        kong.service.request.set_header(\"X-User-Role\",
-      role)\n                        kong.log.err(\"POST-FUNCTION: X-User-Role header
-      set to \", role)\n                    else\n                        kong.log.err(\"POST-FUNCTION:
-      Forbidden - invalid role: \", role)\n                        return kong.response.exit(403,
-      { message = \"Forbidden: Invalid role\" })\n                    end\n                else\n
-      \                   kong.log.err(\"POST-FUNCTION: User role not found in JWT
-      payload\")\n                    return kong.response.exit(403, { message = \"Forbidden:
-      Role not found\" })\n                end\n            end\n        else\n            kong.log.err(\"POST-FUNCTION:
-      Invalid aud - \", aud)\n            return kong.response.exit(403, { message
-      = \"Forbidden: Invalid audience\" })\n        end\n    end\nend\nreturn post_handler"
-      header_filter: [ ]
-      body_filter: [ ]
-      certificate: [ ]
-      log: [ ]
-    service: ~
-  - route: c802170b-0282-40e6-82c8-bdc91e29c39c
-    enabled: true
-    consumer: ~
-    instance_name: ~
-    protocols:
-      - grpc
-      - grpcs
-      - http
-      - https
+  - consumer: ~
+    route: c802170b-0282-40e6-82c8-bdc91e29c39c
     name: post-function
     created_at: 1757428943
+    updated_at: 1760002409
+    id: 635e1b7a-8da7-46cd-9ba7-5aed41bd8ef0
+    service: ~
+    instance_name: ~
     tags: ~
     config:
+      header_filter: [ ]
+      body_filter: [ ]
+      certificate: [ ]
       rewrite: [ ]
+      log: [ ]
       access:
         - "local function post_handler()\n    local raw_payload = kong.ctx.shared.jwt_raw_payload\n
       \   if raw_payload then\n        -- Извлекаем sub, aud и role из JSON\n        local
@@ -692,27 +586,103 @@ plugins:
       Role not found\" })\n                end\n            end\n        else\n            kong.log.err(\"POST-FUNCTION:
       Invalid aud - \", aud)\n            return kong.response.exit(403, { message
       = \"Forbidden: Invalid audience\" })\n        end\n    end\nend\nreturn post_handler"
-      header_filter: [ ]
-      body_filter: [ ]
-      certificate: [ ]
-      log: [ ]
-    updated_at: 1759920046
-    id: 635e1b7a-8da7-46cd-9ba7-5aed41bd8ef0
-    service: ~
-  - route: ~
     enabled: true
-    consumer: ~
-    instance_name: ~
     protocols:
       - grpc
       - grpcs
       - http
       - https
-    name: post-function
-    created_at: 1755801709
+  - consumer: ~
+    route: eb8dde2f-d5a9-44ad-9b75-aea57e1e2b9b
+    name: pre-function
+    created_at: 1759996452
+    updated_at: 1760002409
+    id: 860920f2-228c-52ab-af68-44ce3a7ec8f2
+    service: ~
+    instance_name: ~
     tags: ~
     config:
+      header_filter: [ ]
+      body_filter: [ ]
+      certificate: [ ]
       rewrite: [ ]
+      log: [ ]
+      access:
+        - "local function pre_handler()\n    kong.log.err(\"=== JWT DEBUG START ===\")\n\n
+      \   -- Проверяем Authorization header\n    local auth_header = kong.request.get_header(\"Authorization\")\n
+      \   kong.log.err(\"[DEBUG] Authorization header: \", auth_header or \"NOT FOUND\")\n\n
+      \   local token\n\n    -- Пробуем извлечь токен из Authorization header\n    if
+      auth_header then\n        token = string.match(auth_header, \"[Bb]earer%s+(.+)\")\n
+      \       kong.log.err(\"[DEBUG] Token from Authorization: \", token and \"PRESENT\"
+      or \"NOT FOUND\")\n    end\n\n    -- Если нет токена в Authorization, проверяем
+      cookie jwt_session_cookie\n    if not token then\n        local cookie_header
+      = kong.request.get_header(\"Cookie\")\n        kong.log.err(\"[DEBUG] Cookie
+      header: \", cookie_header or \"NOT FOUND\")\n\n        if cookie_header then\n
+      \           -- Ищем jwt_session_cookie в cookies\n            token = string.match(cookie_header,
+      \"jwt_session_cookie=([^;]+)\")\n            kong.log.err(\"[DEBUG] Token from
+      jwt_session_cookie: \", token and \"PRESENT\" or \"NOT FOUND\")\n        end\n
+      \   end\n\n    if not token then \n        kong.log.err(\"[DEBUG] No JWT token
+      found - skipping JWT processing\")\n        kong.log.err(\"=== JWT DEBUG END
+      ===\")\n        return  -- Просто выходим, ничего не сохраняем\n    end\n\n
+      \   local jwt_parts = {}\n    for part in string.gmatch(token, \"[^%.]+\") do\n
+      \       table.insert(jwt_parts, part)\n    end\n\n    kong.log.err(\"[DEBUG]
+      JWT parts count: \", #jwt_parts)\n\n    if #jwt_parts ~= 3 then \n        kong.log.err(\"[DEBUG]
+      Invalid JWT structure: expected 3 parts, got \", #jwt_parts, \" - skipping\")\n
+      \       kong.log.err(\"=== JWT DEBUG END ===\")\n        return  -- Просто выходим,
+      ничего не сохраняем\n    end\n\n    -- PURE LUA base64url decode\n    local
+      function base64url_decode(data)\n        kong.log.err(\"[BASE64] Decoding JWT
+      payload part\")\n        local base64 = data:gsub(\"-\", \"+\"):gsub(\"_\",
+      \"/\")\n        local padding = #base64 % 4\n        if padding > 0 then\n            base64
+      = base64 .. string.rep(\"=\", 4 - padding)\n        end\n\n        -- Manual
+      base64 decoding\n        local chars = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\"\n
+      \       local result = \"\"\n\n        for i = 1, #base64, 4 do\n            local
+      a = chars:find(base64:sub(i, i)) or 0\n            local b = chars:find(base64:sub(i+1,
+      i+1)) or 0\n            local c = chars:find(base64:sub(i+2, i+2)) or 0\n            local
+      d = chars:find(base64:sub(i+3, i+3)) or 0\n\n            local n = (a-1) * 0x40000
+      + (b-1) * 0x1000 + (c-1) * 0x40 + (d-1)\n\n            result = result .. string.char(\n
+      \               math.floor(n / 0x10000) % 0x100,\n                math.floor(n
+      / 0x100) % 0x100,\n                n % 0x100\n            )\n        end\n\n
+      \       -- Remove padding null bytes\n        return result:gsub(\"%z*$\", \"\")\n
+      \   end\n\n    local payload_json = base64url_decode(jwt_parts[2])\n    kong.log.err(\"[DEBUG]
+      Raw payload JSON length: \", payload_json and #payload_json or \"NIL\")\n\n
+      \   if not payload_json then \n        kong.log.err(\"[DEBUG] Failed to decode
+      payload - skipping\")\n        kong.log.err(\"=== JWT DEBUG END ===\")\n        return
+      \ -- Просто выходим, ничего не сохраняем\n    end\n\n    -- ОЧИСТКА: удаляем
+      все после последней }\n    local last_bracket = payload_json:find(\"}\")\n    kong.log.err(\"[DEBUG]
+      Last bracket position: \", last_bracket or \"NOT FOUND\")\n\n    if last_bracket
+      then\n        payload_json = payload_json:sub(1, last_bracket)\n        kong.log.err(\"[DEBUG]
+      Cleaned payload JSON: \", payload_json)\n    end\n\n    -- ГАРАНТИРОВАННОЕ СОХРАНЕНИЕ\n
+      \   kong.ctx.shared.jwt_raw_payload = payload_json\n    kong.log.err(\"[STORAGE]
+      Saved to kong.ctx.shared.jwt_raw_payload\")\n\n    -- Пробуем распарсить, но
+      не важно если не получится\n    local ok, payload = pcall(function()\n        return
+      kong.json.decode(payload_json)\n    end)\n\n    if ok and payload then\n        kong.ctx.shared.jwt_payload
+      = payload\n        kong.log.err(\"[PARSING] Successfully parsed JWT payload:\")\n
+      \       for k, v in pairs(payload) do\n            kong.log.err(\"[PARSING]
+      \  \", k, \" = \", tostring(v))\n        end\n    else\n        kong.log.err(\"[PARSING]
+      Failed to parse JSON payload\")\n    end\n\n    kong.log.err(\"SAVED TO SHARED:
+      \", payload_json)\n    kong.log.err(\"=== JWT DEBUG END ===\")\nend\nreturn
+      pre_handler\n"
+    enabled: true
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+  - consumer: ~
+    route: ~
+    name: post-function
+    created_at: 1755801709
+    updated_at: 1760002409
+    id: 950b2e4c-bb3e-4ed5-9750-e06d2bcdc7b0
+    service: b009a798-63e6-4858-bb3d-06f0cad4a20e
+    instance_name: ~
+    tags: ~
+    config:
+      header_filter: [ ]
+      body_filter: [ ]
+      certificate: [ ]
+      rewrite: [ ]
+      log: [ ]
       access:
         - "local function post_handler()\n    local raw_payload = kong.ctx.shared.jwt_raw_payload\n
       \   if raw_payload then\n        -- Извлекаем sub, aud и role из JSON\n        local
@@ -734,100 +704,27 @@ plugins:
       Role not found\" })\n                end\n            end\n        else\n            kong.log.err(\"POST-FUNCTION:
       Invalid aud - \", aud)\n            return kong.response.exit(403, { message
       = \"Forbidden: Invalid audience\" })\n        end\n    end\nend\nreturn post_handler"
-      header_filter: [ ]
-      body_filter: [ ]
-      certificate: [ ]
-      log: [ ]
-    updated_at: 1759920046
-    id: 950b2e4c-bb3e-4ed5-9750-e06d2bcdc7b0
-    service: b009a798-63e6-4858-bb3d-06f0cad4a20e
-  - route: ~
     enabled: true
-    consumer: ~
-    instance_name: ~
     protocols:
       - grpc
       - grpcs
       - http
       - https
+  - consumer: ~
+    route: ~
     name: pre-function
     created_at: 1756025006
-    tags: ~
-    config:
-      rewrite: [ ]
-      access:
-        - "local function pre_handler()\n    kong.log.err(\"=== JWT DEBUG START ===\")\n\n
-      \   -- Проверяем Authorization header\n    local auth_header = kong.request.get_header(\"Authorization\")\n
-      \   kong.log.err(\"[DEBUG] Authorization header: \", auth_header or \"NOT FOUND\")\n\n
-      \   local token\n\n    -- Пробуем извлечь токен из Authorization header\n    if
-      auth_header then\n        token = string.match(auth_header, \"[Bb]earer%s+(.+)\")\n
-      \       kong.log.err(\"[DEBUG] Token from Authorization: \", token and \"PRESENT\"
-      or \"NOT FOUND\")\n    end\n\n    -- Если нет токена в Authorization, проверяем
-      cookie jwt_session_cookie\n    if not token then\n        local cookie_header
-      = kong.request.get_header(\"Cookie\")\n        kong.log.err(\"[DEBUG] Cookie
-      header: \", cookie_header or \"NOT FOUND\")\n\n        if cookie_header then\n
-      \           -- Ищем jwt_session_cookie в cookies\n            token = string.match(cookie_header,
-      \"jwt_session_cookie=([^;]+)\")\n            kong.log.err(\"[DEBUG] Token from
-      jwt_session_cookie: \", token and \"PRESENT\" or \"NOT FOUND\")\n        end\n
-      \   end\n\n    if not token then \n        kong.log.err(\"[DEBUG] No JWT token
-      found in Authorization header or jwt_session_cookie - EXITING\")\n        return
-      \n    end\n\n    local jwt_parts = {}\n    for part in string.gmatch(token,
-      \"[^%.]+\") do\n        table.insert(jwt_parts, part)\n    end\n\n    kong.log.err(\"[DEBUG]
-      JWT parts count: \", #jwt_parts)\n\n    if #jwt_parts ~= 3 then \n        kong.log.err(\"[DEBUG]
-      Invalid JWT structure: expected 3 parts, got \", #jwt_parts, \" - EXITING\")\n
-      \       return \n    end\n\n    -- PURE LUA base64url decode\n    local function
-      base64url_decode(data)\n        kong.log.err(\"[BASE64] Decoding JWT payload
-      part\")\n        local base64 = data:gsub(\"-\", \"+\"):gsub(\"_\", \"/\")\n
-      \       local padding = #base64 % 4\n        if padding > 0 then\n            base64
-      = base64 .. string.rep(\"=\", 4 - padding)\n        end\n\n        -- Manual
-      base64 decoding\n        local chars = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\"\n
-      \       local result = \"\"\n\n        for i = 1, #base64, 4 do\n            local
-      a = chars:find(base64:sub(i, i)) or 0\n            local b = chars:find(base64:sub(i+1,
-      i+1)) or 0\n            local c = chars:find(base64:sub(i+2, i+2)) or 0\n            local
-      d = chars:find(base64:sub(i+3, i+3)) or 0\n\n            local n = (a-1) * 0x40000
-      + (b-1) * 0x1000 + (c-1) * 0x40 + (d-1)\n\n            result = result .. string.char(\n
-      \               math.floor(n / 0x10000) % 0x100,\n                math.floor(n
-      / 0x100) % 0x100,\n                n % 0x100\n            )\n        end\n\n
-      \       -- Remove padding null bytes\n        return result:gsub(\"%z*$\", \"\")\n
-      \   end\n\n    local payload_json = base64url_decode(jwt_parts[2])\n    kong.log.err(\"[DEBUG]
-      Raw payload JSON length: \", payload_json and #payload_json or \"NIL\")\n\n
-      \   if not payload_json then \n        kong.log.err(\"[DEBUG] Failed to decode
-      payload - EXITING\")\n        return \n    end\n\n    -- ОЧИСТКА: удаляем все
-      после последней }\n    local last_bracket = payload_json:find(\"}\")\n    kong.log.err(\"[DEBUG]
-      Last bracket position: \", last_bracket or \"NOT FOUND\")\n\n    if last_bracket
-      then\n        payload_json = payload_json:sub(1, last_bracket)\n        kong.log.err(\"[DEBUG]
-      Cleaned payload JSON: \", payload_json)\n    end\n\n    -- ГАРАНТИРОВАННОЕ СОХРАНЕНИЕ\n
-      \   kong.ctx.shared.jwt_raw_payload = payload_json\n    kong.log.err(\"[STORAGE]
-      Saved to kong.ctx.shared.jwt_raw_payload\")\n\n    -- Пробуем распарсить, но
-      не важно если не получится\n    local ok, payload = pcall(function()\n        return
-      kong.json.decode(payload_json)\n    end)\n\n    if ok and payload then\n        kong.ctx.shared.jwt_payload
-      = payload\n        kong.log.err(\"[PARSING] Successfully parsed JWT payload:\")\n
-      \       for k, v in pairs(payload) do\n            kong.log.err(\"[PARSING]
-      \  \", k, \" = \", tostring(v))\n        end\n    else\n        kong.log.err(\"[PARSING]
-      Failed to parse JSON payload\")\n    end\n\n    kong.log.err(\"SAVED TO SHARED:
-      \", payload_json)\n    kong.log.err(\"=== JWT DEBUG END ===\")\nend\nreturn
-      pre_handler\n"
-      header_filter: [ ]
-      body_filter: [ ]
-      certificate: [ ]
-      log: [ ]
-    updated_at: 1759920046
+    updated_at: 1760002409
     id: 978f5538-7287-411e-9050-703bd5d9bb7b
     service: 2b33ea7d-187a-4845-95c7-3c74b177e85a
-  - route: ~
-    enabled: true
-    consumer: ~
     instance_name: ~
-    protocols:
-      - grpc
-      - grpcs
-      - http
-      - https
-    name: pre-function
-    created_at: 1755713230
     tags: ~
     config:
+      header_filter: [ ]
+      body_filter: [ ]
+      certificate: [ ]
       rewrite: [ ]
+      log: [ ]
       access:
         - "local function pre_handler()\n    kong.log.err(\"=== JWT DEBUG START ===\")\n\n
       \   -- Проверяем Authorization header\n    local auth_header = kong.request.get_header(\"Authorization\")\n
@@ -880,57 +777,202 @@ plugins:
       Failed to parse JSON payload\")\n    end\n\n    kong.log.err(\"SAVED TO SHARED:
       \", payload_json)\n    kong.log.err(\"=== JWT DEBUG END ===\")\nend\nreturn
       pre_handler\n"
-      header_filter: [ ]
-      body_filter: [ ]
-      certificate: [ ]
-      log: [ ]
-    updated_at: 1759920046
-    id: a2eceb3f-8382-4ef5-ac88-5404725ea67e
-    service: b009a798-63e6-4858-bb3d-06f0cad4a20e
-  - route: c802170b-0282-40e6-82c8-bdc91e29c39c
     enabled: true
-    consumer: ~
-    instance_name: ~
     protocols:
       - grpc
       - grpcs
       - http
       - https
-    name: jwt
-    created_at: 1757428752
+  - consumer: ~
+    route: ~
+    name: pre-function
+    created_at: 1755713230
+    updated_at: 1760002409
+    id: a2eceb3f-8382-4ef5-ac88-5404725ea67e
+    service: b009a798-63e6-4858-bb3d-06f0cad4a20e
+    instance_name: ~
     tags: ~
     config:
-      maximum_expiration: 0
-      uri_param_names:
-        - jwt
+      header_filter: [ ]
+      body_filter: [ ]
+      certificate: [ ]
+      rewrite: [ ]
+      log: [ ]
+      access:
+        - "local function pre_handler()\n    kong.log.err(\"=== JWT DEBUG START ===\")\n\n
+      \   -- Проверяем Authorization header\n    local auth_header = kong.request.get_header(\"Authorization\")\n
+      \   kong.log.err(\"[DEBUG] Authorization header: \", auth_header or \"NOT FOUND\")\n\n
+      \   local token\n\n    -- Пробуем извлечь токен из Authorization header\n    if
+      auth_header then\n        token = string.match(auth_header, \"[Bb]earer%s+(.+)\")\n
+      \       kong.log.err(\"[DEBUG] Token from Authorization: \", token and \"PRESENT\"
+      or \"NOT FOUND\")\n    end\n\n    -- Если нет токена в Authorization, проверяем
+      cookie jwt_session_cookie\n    if not token then\n        local cookie_header
+      = kong.request.get_header(\"Cookie\")\n        kong.log.err(\"[DEBUG] Cookie
+      header: \", cookie_header or \"NOT FOUND\")\n\n        if cookie_header then\n
+      \           -- Ищем jwt_session_cookie в cookies\n            token = string.match(cookie_header,
+      \"jwt_session_cookie=([^;]+)\")\n            kong.log.err(\"[DEBUG] Token from
+      jwt_session_cookie: \", token and \"PRESENT\" or \"NOT FOUND\")\n        end\n
+      \   end\n\n    if not token then \n        kong.log.err(\"[DEBUG] No JWT token
+      found in Authorization header or jwt_session_cookie - EXITING\")\n        return
+      \n    end\n\n    local jwt_parts = {}\n    for part in string.gmatch(token,
+      \"[^%.]+\") do\n        table.insert(jwt_parts, part)\n    end\n\n    kong.log.err(\"[DEBUG]
+      JWT parts count: \", #jwt_parts)\n\n    if #jwt_parts ~= 3 then \n        kong.log.err(\"[DEBUG]
+      Invalid JWT structure: expected 3 parts, got \", #jwt_parts, \" - EXITING\")\n
+      \       return \n    end\n\n    -- PURE LUA base64url decode\n    local function
+      base64url_decode(data)\n        kong.log.err(\"[BASE64] Decoding JWT payload
+      part\")\n        local base64 = data:gsub(\"-\", \"+\"):gsub(\"_\", \"/\")\n
+      \       local padding = #base64 % 4\n        if padding > 0 then\n            base64
+      = base64 .. string.rep(\"=\", 4 - padding)\n        end\n\n        -- Manual
+      base64 decoding\n        local chars = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\"\n
+      \       local result = \"\"\n\n        for i = 1, #base64, 4 do\n            local
+      a = chars:find(base64:sub(i, i)) or 0\n            local b = chars:find(base64:sub(i+1,
+      i+1)) or 0\n            local c = chars:find(base64:sub(i+2, i+2)) or 0\n            local
+      d = chars:find(base64:sub(i+3, i+3)) or 0\n\n            local n = (a-1) * 0x40000
+      + (b-1) * 0x1000 + (c-1) * 0x40 + (d-1)\n\n            result = result .. string.char(\n
+      \               math.floor(n / 0x10000) % 0x100,\n                math.floor(n
+      / 0x100) % 0x100,\n                n % 0x100\n            )\n        end\n\n
+      \       -- Remove padding null bytes\n        return result:gsub(\"%z*$\", \"\")\n
+      \   end\n\n    local payload_json = base64url_decode(jwt_parts[2])\n    kong.log.err(\"[DEBUG]
+      Raw payload JSON length: \", payload_json and #payload_json or \"NIL\")\n\n
+      \   if not payload_json then \n        kong.log.err(\"[DEBUG] Failed to decode
+      payload - EXITING\")\n        return \n    end\n\n    -- ОЧИСТКА: удаляем все
+      после последней }\n    local last_bracket = payload_json:find(\"}\")\n    kong.log.err(\"[DEBUG]
+      Last bracket position: \", last_bracket or \"NOT FOUND\")\n\n    if last_bracket
+      then\n        payload_json = payload_json:sub(1, last_bracket)\n        kong.log.err(\"[DEBUG]
+      Cleaned payload JSON: \", payload_json)\n    end\n\n    -- ГАРАНТИРОВАННОЕ СОХРАНЕНИЕ\n
+      \   kong.ctx.shared.jwt_raw_payload = payload_json\n    kong.log.err(\"[STORAGE]
+      Saved to kong.ctx.shared.jwt_raw_payload\")\n\n    -- Пробуем распарсить, но
+      не важно если не получится\n    local ok, payload = pcall(function()\n        return
+      kong.json.decode(payload_json)\n    end)\n\n    if ok and payload then\n        kong.ctx.shared.jwt_payload
+      = payload\n        kong.log.err(\"[PARSING] Successfully parsed JWT payload:\")\n
+      \       for k, v in pairs(payload) do\n            kong.log.err(\"[PARSING]
+      \  \", k, \" = \", tostring(v))\n        end\n    else\n        kong.log.err(\"[PARSING]
+      Failed to parse JSON payload\")\n    end\n\n    kong.log.err(\"SAVED TO SHARED:
+      \", payload_json)\n    kong.log.err(\"=== JWT DEBUG END ===\")\nend\nreturn
+      pre_handler\n"
+    enabled: true
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+  - consumer: ~
+    route: ~
+    name: post-function
+    created_at: 1759996452
+    updated_at: 1760002409
+    id: c6b8f9e0-94d7-5fc0-9d9b-f7d6007d46a3
+    service: ~
+    instance_name: ~
+    tags: ~
+    config:
+      header_filter: [ ]
+      body_filter: [ ]
+      certificate: [ ]
+      rewrite: [ ]
+      log: [ ]
+      access:
+        - "local function post_handler()\n    local raw_payload = kong.ctx.shared.jwt_raw_payload\n
+      \   if raw_payload then\n        -- Извлекаем sub, aud и role из JSON\n        local
+      sub = raw_payload:match(\"\\\"sub\\\":\\\"([^\\\"]+)\\\"\")\n        local aud
+      = raw_payload:match(\"\\\"aud\\\":%[\\\"([^\\\"]+)\\\"%]\")\n        local role
+      = raw_payload:match(\"\\\"role\\\":\\\"([^\\\"]+)\\\"\")\n        \n        --
+      Проверяем что aud = sneaker_details_service\n        if aud == \"sneaker_details_service\"
+      then\n            if sub then\n                kong.service.request.set_header(\"X-User-Id\",
+      sub)\n                kong.log.err(\"POST-FUNCTION: X-User-Id header set to
+      \", sub)\n                \n                if role then\n                    --
+      Проверяем что роль из списка [user, admin]\n                    if role == \"user\"
+      or role == \"admin\" then\n                        kong.service.request.set_header(\"X-User-Role\",
+      role)\n                        kong.log.err(\"POST-FUNCTION: X-User-Role header
+      set to \", role)\n                    else\n                        kong.log.err(\"POST-FUNCTION:
+      Forbidden - invalid role: \", role)\n                        return kong.response.exit(403,
+      { message = \"Forbidden: Invalid role\" })\n                    end\n                else\n
+      \                   kong.log.err(\"POST-FUNCTION: User role not found in JWT
+      payload\")\n                    return kong.response.exit(403, { message = \"Forbidden:
+      Role not found\" })\n                end\n            end\n        else\n            kong.log.err(\"POST-FUNCTION:
+      Invalid aud - \", aud)\n            return kong.response.exit(403, { message
+      = \"Forbidden: Invalid audience\" })\n        end\n    end\nend\nreturn post_handler"
+    enabled: true
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+  - consumer: ~
+    route: c802170b-0282-40e6-82c8-bdc91e29c39c
+    name: jwt
+    created_at: 1757428752
+    updated_at: 1760002409
+    id: defc59e4-6d3f-4bb2-9c70-fd88766142e4
+    service: ~
+    instance_name: ~
+    tags: ~
+    config:
       realm: ~
       key_claim_name: iss
       secret_is_base64: false
       claims_to_verify:
         - exp
+      run_on_preflight: true
       header_names:
         - Authorization
+      maximum_expiration: 0
       cookie_names:
         - jwt_session_cookie
-      run_on_preflight: true
       anonymous: ~
-    updated_at: 1759920046
-    id: defc59e4-6d3f-4bb2-9c70-fd88766142e4
-    service: ~
-  - route: ~
+      uri_param_names:
+        - jwt
     enabled: true
-    consumer: ~
-    instance_name: ~
     protocols:
       - grpc
       - grpcs
       - http
       - https
-    name: post-function
-    created_at: 1756025148
+  - consumer: ~
+    route: eb8dde2f-d5a9-44ad-9b75-aea57e1e2b9b
+    name: jwt
+    created_at: 1760002409
+    updated_at: 1760002409
+    id: e669e3b8-406f-5295-9e08-6a09f914c509
+    service: ~
+    instance_name: ~
     tags: ~
     config:
+      realm: ~
+      key_claim_name: iss
+      secret_is_base64: false
+      claims_to_verify:
+        - exp
+      run_on_preflight: true
+      header_names:
+        - Authorization
+      maximum_expiration: 0
+      cookie_names:
+        - jwt_session_cookie
+      anonymous: anonymous
+      uri_param_names:
+        - jwt
+    enabled: true
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+  - consumer: ~
+    route: ~
+    name: post-function
+    created_at: 1756025148
+    updated_at: 1760002409
+    id: eccbdc98-5656-42ef-9116-0f5a164b4fdd
+    service: 2b33ea7d-187a-4845-95c7-3c74b177e85a
+    instance_name: ~
+    tags: ~
+    config:
+      header_filter: [ ]
+      body_filter: [ ]
+      certificate: [ ]
       rewrite: [ ]
+      log: [ ]
       access:
         - "local function post_handler()\n    local raw_payload = kong.ctx.shared.jwt_raw_payload\n
       \   if raw_payload then\n        -- Извлекаем sub, aud и role из JSON\n        local
@@ -952,27 +994,27 @@ plugins:
       Role not found\" })\n                end\n            end\n        else\n            kong.log.err(\"POST-FUNCTION:
       Invalid aud - \", aud)\n            return kong.response.exit(403, { message
       = \"Forbidden: Invalid audience\" })\n        end\n    end\nend\nreturn post_handler"
-      header_filter: [ ]
-      body_filter: [ ]
-      certificate: [ ]
-      log: [ ]
-    updated_at: 1759920046
-    id: eccbdc98-5656-42ef-9116-0f5a164b4fdd
-    service: 2b33ea7d-187a-4845-95c7-3c74b177e85a
-  - route: c802170b-0282-40e6-82c8-bdc91e29c39c
     enabled: true
-    consumer: ~
-    instance_name: ~
     protocols:
       - grpc
       - grpcs
       - http
       - https
+  - consumer: ~
+    route: c802170b-0282-40e6-82c8-bdc91e29c39c
     name: pre-function
     created_at: 1757426633
+    updated_at: 1760002409
+    id: f8245b9c-dfc8-4f80-95ef-1ccd953caf23
+    service: ~
+    instance_name: ~
     tags: ~
     config:
+      header_filter: [ ]
+      body_filter: [ ]
+      certificate: [ ]
       rewrite: [ ]
+      log: [ ]
       access:
         - "local function pre_handler()\n    kong.log.err(\"=== JWT DEBUG START ===\")\n\n
       \   -- Проверяем Authorization header\n    local auth_header = kong.request.get_header(\"Authorization\")\n
@@ -1025,20 +1067,20 @@ plugins:
       Failed to parse JSON payload\")\n    end\n\n    kong.log.err(\"SAVED TO SHARED:
       \", payload_json)\n    kong.log.err(\"=== JWT DEBUG END ===\")\nend\nreturn
       pre_handler\n"
-      header_filter: [ ]
-      body_filter: [ ]
-      certificate: [ ]
-      log: [ ]
-    updated_at: 1759920046
-    id: f8245b9c-dfc8-4f80-95ef-1ccd953caf23
-    service: ~
+    enabled: true
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
 jwt_secrets:
   - algorithm: RS256
+    secret: FApLw372oAYKNUbxeE4MEObwvGQZqIg7
+    created_at: 1754842471
     id: b7343c76-f1ee-47d0-bf41-776c31511689
     key: http://127.0.0.1:8002
-    created_at: 1754842471
     tags: ~
-    secret: FApLw372oAYKNUbxeE4MEObwvGQZqIg7
+    consumer: cb5afde6-01fc-4db1-9351-2c1f3197ece1
     rsa_public_key: |
       -----BEGIN PUBLIC KEY-----
       MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAinGCpe5yJMThQePHz3Zz
@@ -1049,4 +1091,3 @@ jwt_secrets:
       l+9XlfNVunG6kb05INehGtCfMVHSlN41y17I7T6tlbFlc0sRwZjpaMU6dKa9Mkd3
       lQIDAQAB
       -----END PUBLIC KEY-----
-    consumer: cb5afde6-01fc-4db1-9351-2c1f3197ece1
