@@ -10,6 +10,7 @@ if TYPE_CHECKING:
 class CartSneakerAssociation(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     cart_id: Mapped[int] = mapped_column(ForeignKey("carts.id"))
+    quantity: Mapped[int] = mapped_column(default=1)
     sneaker_id: Mapped[int]
     sneaker_size: Mapped[float]
 
