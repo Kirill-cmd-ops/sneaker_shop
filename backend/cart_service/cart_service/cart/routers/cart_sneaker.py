@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from cart_service.cart.models import db_helper, Cart
+from cart_service.cart.models import db_helper, Cart, CartSneakerAssociation
 from cart_service.cart.schemas import CartSneakerCreate, CartSneakerUpdate
 from cart_service.cart.services.cart_sneaker import (
     create_sneaker_to_cart,
@@ -38,13 +38,26 @@ async def call_create_sneaker_to_cart(
     if not user_cart:
         raise HTTPException(status_code=404, detail="Корзина пользователя не найдена")
 
-    new_item = await create_sneaker_to_cart(
-        session,
-        cart_id=user_cart.id,
-        sneaker_id=item.sneaker_id,
-        sneaker_size=item.sneaker_size,
+    stmt = select(CartSneakerAssociation).where(
+        CartSneakerAssociation.cart_id == user_cart.id,
+        CartSneakerAssociation.sneaker_id == item.sneaker_id,
+        CartSneakerAssociation.sneaker_size == item.sneaker_size,
     )
-    return {"status": "Элемент добавлен", "item_id": new_item.id}
+    result = await session.execute(stmt)
+    sneaker_record = result.scalar_one_or_none()
+
+    if sneaker_record is None:
+        await create_sneaker_to_cart(
+            session,
+            cart_id=user_cart.id,
+            sneaker_id=item.sneaker_id,
+            sneaker_size=item.sneaker_size,
+        )
+    else:
+        sneaker_record.quantity += 1
+        await session.commit()
+
+    return {"status": "Элемент добавлен либо quantity + 1"}
 
 
 @router.put(
@@ -73,5 +86,7 @@ async def call_delete_sneaker_to_cart(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
+    # TODO: делаем проверку что quantity > 1, если это так, то отнимаем от quantity - 1
+
     await delete_sneaker_to_cart(session, user_id=user_id, sneaker_id=sneaker_id)
     return {"status": "Элемент удалён"}
