@@ -87,31 +87,49 @@ async def call_delete_sneaker_to_cart(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    stmt = select(Cart).filter(Cart.user_id == user_id)
-    result = await session.execute(stmt)
-    user_cart = result.scalar_one_or_none()
-    if not user_cart:
-        raise HTTPException(status_code=404, detail="Корзина пользователя не найдена")
-
-    stmt = select(CartSneakerAssociation).where(
-        CartSneakerAssociation.cart_id == user_cart.id,
-        CartSneakerAssociation.sneaker_id == item_delete.sneaker_id,
-        CartSneakerAssociation.sneaker_size == item_delete.sneaker_size,
-        CartSneakerAssociation.quantity > 1,
+    await delete_sneaker_to_cart(
+        session,
+        item_delete=item_delete,
+        user_id=user_id,
     )
+    return {"status": "Элемент удалён"}
 
-    result = await session.execute(stmt)
-    sneaker_record = result.scalar_one_or_none()
 
-    if sneaker_record:
-        sneaker_record.quantity -= 1
-
-        await session.commit()
-    else:
-        await delete_sneaker_to_cart(
-            session,
-            item_delete=item_delete,
-            user_id=user_id,
-        )
-
-    return {"status": "Элемент удалён либо quantity -1"}
+# @router.delete(
+#     "/delete/{sneaker_id}",
+#     response_model=dict,
+#     dependencies=(Depends(check_role_permissions("cart.sneaker.delete")),),
+# )
+# async def call_delete_sneaker_to_cart(
+#     item_delete: CartSneakerDelete,
+#     user_id: int = Depends(get_user_by_header),
+#     session: AsyncSession = Depends(db_helper.session_getter),
+# ):
+#     stmt = select(Cart).filter(Cart.user_id == user_id)
+#     result = await session.execute(stmt)
+#     user_cart = result.scalar_one_or_none()
+#     if not user_cart:
+#         raise HTTPException(status_code=404, detail="Корзина пользователя не найдена")
+#
+#     stmt = select(CartSneakerAssociation).where(
+#         CartSneakerAssociation.cart_id == user_cart.id,
+#         CartSneakerAssociation.sneaker_id == item_delete.sneaker_id,
+#         CartSneakerAssociation.sneaker_size == item_delete.sneaker_size,
+#         CartSneakerAssociation.quantity > 1,
+#     )
+#
+#     result = await session.execute(stmt)
+#     sneaker_record = result.scalar_one_or_none()
+#
+#     if sneaker_record:
+#         sneaker_record.quantity -= 1
+#
+#         await session.commit()
+#     else:
+#         await delete_sneaker_to_cart(
+#             session,
+#             item_delete=item_delete,
+#             user_id=user_id,
+#         )
+#
+#     return {"status": "Элемент удалён либо quantity -1"}
