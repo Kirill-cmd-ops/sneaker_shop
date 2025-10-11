@@ -4,6 +4,7 @@ from sqlalchemy import select
 
 from cart_service.cart.models import db_helper, Cart, CartSneakerAssociation
 from cart_service.cart.schemas import CartSneakerCreate, CartSneakerUpdate
+from cart_service.cart.schemas.cart_sneaker import CartSneakerDelete
 from cart_service.cart.services.cart_sneaker import (
     create_sneaker_to_cart,
     delete_sneaker_to_cart,
@@ -28,7 +29,7 @@ router = APIRouter(
     dependencies=(Depends(check_role_permissions("cart.sneaker.add")),),
 )
 async def call_create_sneaker_to_cart(
-    item: CartSneakerCreate,
+    item_create: CartSneakerCreate,
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
@@ -40,8 +41,8 @@ async def call_create_sneaker_to_cart(
 
     stmt = select(CartSneakerAssociation).where(
         CartSneakerAssociation.cart_id == user_cart.id,
-        CartSneakerAssociation.sneaker_id == item.sneaker_id,
-        CartSneakerAssociation.sneaker_size == item.sneaker_size,
+        CartSneakerAssociation.sneaker_id == item_create.sneaker_id,
+        CartSneakerAssociation.sneaker_size == item_create.sneaker_size,
     )
     result = await session.execute(stmt)
     sneaker_record = result.scalar_one_or_none()
@@ -50,8 +51,8 @@ async def call_create_sneaker_to_cart(
         await create_sneaker_to_cart(
             session,
             cart_id=user_cart.id,
-            sneaker_id=item.sneaker_id,
-            sneaker_size=item.sneaker_size,
+            sneaker_id=item_create.sneaker_id,
+            sneaker_size=item_create.sneaker_size,
         )
     else:
         sneaker_record.quantity += 1
@@ -82,11 +83,35 @@ async def call_update_sneaker_to_cart(
     dependencies=(Depends(check_role_permissions("cart.sneaker.delete")),),
 )
 async def call_delete_sneaker_to_cart(
-    sneaker_id: int,
+    item_delete: CartSneakerDelete,
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    # TODO: делаем проверку что quantity > 1, если это так, то отнимаем от quantity - 1
+    stmt = select(Cart).filter(Cart.user_id == user_id)
+    result = await session.execute(stmt)
+    user_cart = result.scalar_one_or_none()
+    if not user_cart:
+        raise HTTPException(status_code=404, detail="Корзина пользователя не найдена")
 
-    await delete_sneaker_to_cart(session, user_id=user_id, sneaker_id=sneaker_id)
-    return {"status": "Элемент удалён"}
+    stmt = select(CartSneakerAssociation).where(
+        CartSneakerAssociation.cart_id == user_cart.id,
+        CartSneakerAssociation.sneaker_id == item_delete.sneaker_id,
+        CartSneakerAssociation.sneaker_size == item_delete.sneaker_size,
+        CartSneakerAssociation.quantity > 1,
+    )
+
+    result = await session.execute(stmt)
+    sneaker_record = result.scalar_one_or_none()
+
+    if sneaker_record:
+        sneaker_record.quantity -= 1
+
+        await session.commit()
+    else:
+        await delete_sneaker_to_cart(
+            session,
+            user_id=user_id,
+            sneaker_id=item_delete.sneaker_id,
+        )
+
+    return {"status": "Элемент удалён либо quantity -1"}
