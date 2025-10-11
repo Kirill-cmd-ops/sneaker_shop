@@ -110,8 +110,8 @@ async def call_delete_sneaker_to_cart(
     else:
         await delete_sneaker_to_cart(
             session,
+            item_delete=item_delete,
             user_id=user_id,
-            sneaker_id=item_delete.sneaker_id,
         )
 
     return {"status": "Элемент удалён либо quantity -1"}
