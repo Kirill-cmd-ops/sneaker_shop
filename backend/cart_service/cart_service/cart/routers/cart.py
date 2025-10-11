@@ -25,8 +25,3 @@ async def call_get_cart(
 ):
     items = await read_cart(session, user_id=user_id)
     return items
-
-
-@router.get("/cart/ss")
-async def get_role(role: str = Header(..., alias="X-User-Role")):
-    return {"role": role}
