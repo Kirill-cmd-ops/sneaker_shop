@@ -9,6 +9,9 @@ class CartSneakerCreate(BaseModel):
 class CartSneakerDelete(CartSneakerCreate):
     pass
 
+class CartSneakerQuantity(CartSneakerCreate):
+    ...
+
 
 class CartSneakerUpdate(BaseModel):
     sneaker_size: float
