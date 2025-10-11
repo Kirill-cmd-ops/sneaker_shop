@@ -4,7 +4,10 @@ from sqlalchemy import select
 
 from cart_service.cart.models import db_helper, Cart, CartSneakerAssociation
 from cart_service.cart.schemas import CartSneakerCreate, CartSneakerUpdate
-from cart_service.cart.schemas.cart_sneaker import CartSneakerDelete
+from cart_service.cart.schemas.cart_sneaker import (
+    CartSneakerDelete,
+    CartSneakerQuantity,
+)
 from cart_service.cart.services.cart_sneaker import (
     create_sneaker_to_cart,
     delete_sneaker_to_cart,
@@ -103,7 +106,7 @@ async def call_delete_sneaker_to_cart(
     ),  # Update after
 )
 async def decrease_cart_sneaker_quantity(
-    item_delete: CartSneakerDelete,
+    item_quantity: CartSneakerQuantity,
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
@@ -115,8 +118,8 @@ async def decrease_cart_sneaker_quantity(
 
     stmt = select(CartSneakerAssociation).where(
         CartSneakerAssociation.cart_id == user_cart.id,
-        CartSneakerAssociation.sneaker_id == item_delete.sneaker_id,
-        CartSneakerAssociation.sneaker_size == item_delete.sneaker_size,
+        CartSneakerAssociation.sneaker_id == item_quantity.sneaker_id,
+        CartSneakerAssociation.sneaker_size == item_quantity.sneaker_size,
         CartSneakerAssociation.quantity > 1,
     )
 
@@ -139,7 +142,7 @@ async def decrease_cart_sneaker_quantity(
     ),  # Update after
 )
 async def increase_cart_sneaker_quantity(
-    item_delete: CartSneakerDelete,
+    item_quantity: CartSneakerQuantity,
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
@@ -151,8 +154,8 @@ async def increase_cart_sneaker_quantity(
 
     stmt = select(CartSneakerAssociation).where(
         CartSneakerAssociation.cart_id == user_cart.id,
-        CartSneakerAssociation.sneaker_id == item_delete.sneaker_id,
-        CartSneakerAssociation.sneaker_size == item_delete.sneaker_size,
+        CartSneakerAssociation.sneaker_id == item_quantity.sneaker_id,
+        CartSneakerAssociation.sneaker_size == item_quantity.sneaker_size,
     )
 
     result = await session.execute(stmt)
