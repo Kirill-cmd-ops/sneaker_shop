@@ -129,3 +129,38 @@ async def decrease_cart_sneaker_quantity(
         await session.commit()
         return {"status": "quantity -= 1"}
     return {"status": "quantity = 1"}
+
+
+@router.patch(
+    "/patch/increase/{sneaker_id}",
+    response_model=dict,
+    dependencies=(
+        Depends(check_role_permissions("cart.sneaker.delete")),
+    ),  # Update after
+)
+async def increase_cart_sneaker_quantity(
+    item_delete: CartSneakerDelete,
+    user_id: int = Depends(get_user_by_header),
+    session: AsyncSession = Depends(db_helper.session_getter),
+):
+    stmt = select(Cart).filter(Cart.user_id == user_id)
+    result = await session.execute(stmt)
+    user_cart = result.scalar_one_or_none()
+    if not user_cart:
+        raise HTTPException(status_code=404, detail="Корзина пользователя не найдена")
+
+    stmt = select(CartSneakerAssociation).where(
+        CartSneakerAssociation.cart_id == user_cart.id,
+        CartSneakerAssociation.sneaker_id == item_delete.sneaker_id,
+        CartSneakerAssociation.sneaker_size == item_delete.sneaker_size,
+    )
+
+    result = await session.execute(stmt)
+    sneaker_record = result.scalar_one_or_none()
+
+    if sneaker_record:
+        sneaker_record.quantity += 1
+
+        await session.commit()
+        return {"status": "quantity += 1"}
+    return {"status": "there is no such record"}
