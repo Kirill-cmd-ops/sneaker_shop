@@ -96,13 +96,13 @@ async def call_delete_sneaker_to_cart(
 
 
 @router.patch(
-    "/patch/{sneaker_id}",
+    "/patch/decrease/{sneaker_id}",
     response_model=dict,
     dependencies=(
         Depends(check_role_permissions("cart.sneaker.delete")),
     ),  # Update after
 )
-async def reduce_cart_sneaker_quantity(
+async def decrease_cart_sneaker_quantity(
     item_delete: CartSneakerDelete,
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
