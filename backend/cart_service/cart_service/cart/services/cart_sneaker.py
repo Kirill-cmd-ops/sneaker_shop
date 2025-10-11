@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cart_service.cart.models import Cart, CartSneakerAssociation
-
+from cart_service.cart.schemas.cart_sneaker import CartSneakerDelete
 
 
 async def create_sneaker_to_cart(
@@ -37,15 +37,16 @@ async def update_sneaker_to_cart(
 
 async def delete_sneaker_to_cart(
     session: AsyncSession,
+    item_delete: CartSneakerDelete,
     user_id: int,
-    sneaker_id: int,
 ) -> None:
     stmt = (
         select(CartSneakerAssociation)
         .join(Cart)
         .where(
             Cart.user_id == user_id,
-            CartSneakerAssociation.sneaker_id == sneaker_id,
+            CartSneakerAssociation.sneaker_id == item_delete.sneaker_id,
+            CartSneakerAssociation.sneaker_size == item_delete.sneaker_size,
         )
     )
     result = await session.execute(stmt)
