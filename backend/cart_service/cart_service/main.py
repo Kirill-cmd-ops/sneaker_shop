@@ -11,11 +11,17 @@ from cart_service import router as cart_router
 from kafka.consumer import start_consumer, close_consumer
 
 from cart_service.cart.kafka_handlers.cart_handler import handle_cart
+from kafka.producer import start_producer, close_producer
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
+    cart_producer = start_producer(
+        settings.kafka_config.kafka_bootstrap_servers,
+    )
+    app.state.kafka_producer = cart_producer
+
     cart_consumer, task_cart = await start_consumer(
         settings.kafka_config.registered_topic,
         settings.kafka_config.kafka_bootstrap_servers,
@@ -24,6 +30,7 @@ async def lifespan(app: FastAPI):
     )
     yield
     # shutdown
+    await close_producer(cart_producer)
     await close_consumer(cart_consumer, task_cart)
     await db_helper.dispose()
 
