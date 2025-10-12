@@ -10,7 +10,7 @@ from cart_service import router as cart_router
 
 from kafka.consumer import start_consumer, close_consumer
 
-from cart_service.cart.kafka_handlers.cart_handler import handle_cart
+from cart_service.cart.kafka.kafka_handlers.cart_handler import handle_cart
 from kafka.producer import start_producer, close_producer
 
 
