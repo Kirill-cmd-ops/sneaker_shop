@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .cart_sneaker import CartSneakerAssociation
-
+    from .sneaker import Sneaker
 
 
 class Cart(Base):
@@ -14,4 +14,9 @@ class Cart(Base):
     sneaker_associations: Mapped[list["CartSneakerAssociation"]] = relationship(
         "CartSneakerAssociation",
         back_populates="cart",
+    )
+
+    sneakers: Mapped[list["Sneaker"]] = relationship(
+        secondary="cart_sneaker_associations",
+        viewonly=True,
     )
