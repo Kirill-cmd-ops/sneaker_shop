@@ -10,12 +10,12 @@ async def create_sneaker_to_cart(
     session: AsyncSession,
     cart_id: int,
     sneaker_id: int,
-    sneaker_size: float,
+    size_id: float,
 ):
     new_sneaker = CartSneakerAssociation(
         cart_id=cart_id,
         sneaker_id=sneaker_id,
-        sneaker_size=sneaker_size,
+        size_id=size_id,
     )
     session.add(new_sneaker)
     await session.commit()
@@ -24,12 +24,12 @@ async def create_sneaker_to_cart(
 
 
 async def update_sneaker_to_cart(
-    session: AsyncSession, association_id: int, sneaker_size: float
+    session: AsyncSession, association_id: int, size_id: float
 ) -> CartSneakerAssociation:
     current_sneaker = await session.get(CartSneakerAssociation, association_id)
     if not current_sneaker:
         raise HTTPException(status_code=404, detail="Элемент корзины не найден")
-    current_sneaker.sneaker_size = sneaker_size
+    current_sneaker.size_id = size_id
     await session.commit()
     await session.refresh(current_sneaker)
     return current_sneaker
@@ -46,7 +46,7 @@ async def delete_sneaker_to_cart(
         .where(
             Cart.user_id == user_id,
             CartSneakerAssociation.sneaker_id == item_delete.sneaker_id,
-            CartSneakerAssociation.sneaker_size == item_delete.sneaker_size,
+            CartSneakerAssociation.size_id == item_delete.size_id,
         )
     )
     result = await session.execute(stmt)
