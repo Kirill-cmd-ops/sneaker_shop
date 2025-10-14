@@ -14,4 +14,4 @@ class CartSneakerQuantity(CartSneakerCreate):
 
 
 class CartSneakerUpdate(BaseModel):
-    sneaker_size: float
+    size_id: float
