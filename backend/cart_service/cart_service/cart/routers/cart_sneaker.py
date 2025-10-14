@@ -78,11 +78,8 @@ async def call_create_sneaker_to_cart(
             sneaker_id=item_create.sneaker_id,
             size_id=item_create.size_id,
         )
-    else:
-        sneaker_record.quantity += 1
-        await session.commit()
-
-    return {"status": "Элемент добавлен либо quantity + 1"}
+        return {"status": "Элемент добавлен"}
+    return {"status": "Товар уже есть в коризне"}
 
 
 @router.put(
