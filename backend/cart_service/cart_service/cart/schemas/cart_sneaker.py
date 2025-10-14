@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 class CartSneakerCreate(BaseModel):
     sneaker_id: int
-    sneaker_size: float
+    size_id: int
 
 
 class CartSneakerDelete(CartSneakerCreate):
