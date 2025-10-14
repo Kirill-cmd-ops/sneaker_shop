@@ -2,7 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from cart_service.cart.models import db_helper, Cart, CartSneakerAssociation
+from cart_service.cart.models import (
+    db_helper,
+    Cart,
+    CartSneakerAssociation,
+    Sneaker,
+    SneakerSizeAssociation,
+)
 from cart_service.cart.schemas import CartSneakerCreate, CartSneakerUpdate
 from cart_service.cart.schemas.cart_sneaker import (
     CartSneakerDelete,
@@ -42,10 +48,25 @@ async def call_create_sneaker_to_cart(
     if not user_cart:
         raise HTTPException(status_code=404, detail="Корзина пользователя не найдена")
 
+    check_sneaker = await session.get(Sneaker, item_create.sneaker_id)
+    if not check_sneaker:
+        raise HTTPException(status_code=404, detail="Товар не найден в каталоге")
+
+
+    check_sizes_stmt = select(Sneaker).join(SneakerSizeAssociation).where(
+        Sneaker.id == item_create.sneaker_id,
+        SneakerSizeAssociation.size_id == item_create.size_id,
+    )
+    result = await session.execute(check_sizes_stmt)
+    check_sneaker_size = result.scalar_one_or_none()
+
+    if not check_sneaker_size:
+        raise HTTPException(status_code=404, detail="Размер данной модели не найден")
+
     stmt = select(CartSneakerAssociation).where(
         CartSneakerAssociation.cart_id == user_cart.id,
         CartSneakerAssociation.sneaker_id == item_create.sneaker_id,
-        CartSneakerAssociation.sneaker_size == item_create.sneaker_size,
+        CartSneakerAssociation.size_id == item_create.size_id,
     )
     result = await session.execute(stmt)
     sneaker_record = result.scalar_one_or_none()
@@ -55,7 +76,7 @@ async def call_create_sneaker_to_cart(
             session,
             cart_id=user_cart.id,
             sneaker_id=item_create.sneaker_id,
-            sneaker_size=item_create.sneaker_size,
+            size_id=item_create.size_id,
         )
     else:
         sneaker_record.quantity += 1
@@ -75,7 +96,7 @@ async def call_update_sneaker_to_cart(
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     updated_item = await update_sneaker_to_cart(
-        session, association_id=association_id, sneaker_size=item_data.sneaker_size
+        session, association_id=association_id, size_id=item_data.size_id
     )
     return {"status": "Элемент обновлён", "item_id": updated_item.id}
 
@@ -119,7 +140,7 @@ async def decrease_cart_sneaker_quantity(
     stmt = select(CartSneakerAssociation).where(
         CartSneakerAssociation.cart_id == user_cart.id,
         CartSneakerAssociation.sneaker_id == item_quantity.sneaker_id,
-        CartSneakerAssociation.sneaker_size == item_quantity.sneaker_size,
+        CartSneakerAssociation.size_id == item_quantity.size_id,
         CartSneakerAssociation.quantity > 1,
     )
 
@@ -155,7 +176,7 @@ async def increase_cart_sneaker_quantity(
     stmt = select(CartSneakerAssociation).where(
         CartSneakerAssociation.cart_id == user_cart.id,
         CartSneakerAssociation.sneaker_id == item_quantity.sneaker_id,
-        CartSneakerAssociation.sneaker_size == item_quantity.sneaker_size,
+        CartSneakerAssociation.size_id == item_quantity.size_id,
     )
 
     result = await session.execute(stmt)
