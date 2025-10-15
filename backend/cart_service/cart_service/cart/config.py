@@ -61,6 +61,10 @@ class AuthConfig(BaseModel):
 class KafkaConfig(BaseModel):
     kafka_bootstrap_servers: str
     registered_topic: str
+    sneaker_work_topic: str
+    sneaker_sizes_work_topic: str
+    sneaker_group_id: str
+    sneaker_sizes_group_id: str
     cart_group_id: str
 
 
