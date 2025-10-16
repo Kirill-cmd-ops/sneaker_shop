@@ -18,10 +18,16 @@ router = APIRouter(
 @router.get(
     "/view/",
     dependencies=(Depends(check_role_permissions("cart.view")),),
+    response_model=...,
 )
 async def call_get_cart(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     items = await read_cart(session, user_id=user_id)
-    return items
+
+    total_price = 0
+    for cart_association in items.sneaker_associations:
+        total_price += cart_association.sneaker.price * cart_association.quantity
+
+    return {"Цена корзины: ": total_price, "Кроссовки": items}
