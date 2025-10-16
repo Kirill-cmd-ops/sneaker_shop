@@ -11,8 +11,16 @@ async def create_cart(session: AsyncSession, user_id: int):
     await session.commit()
     await session.refresh(new_cart)
 
+
 async def read_cart(session: AsyncSession, user_id: int):
-    stmt = select(Cart).where(Cart.user_id == user_id).options(selectinload(Cart.sneaker_associations))
+    stmt = (
+        select(Cart)
+        .where(Cart.user_id == user_id)
+        .options(
+            selectinload(Cart.sneaker_associations),
+            selectinload(Cart.sneakers),
+        )
+    )
     result = await session.execute(stmt)
     cart = result.scalar_one_or_none()
     if cart is None:
@@ -20,4 +28,4 @@ async def read_cart(session: AsyncSession, user_id: int):
             status_code=404, detail="У данного пользователя нету корзины"
         )
 
-    return cart.sneaker_associations
+    return cart
