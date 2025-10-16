@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .favorite import Favorite
+    from .sneaker import Sneaker
 
 
 class FavoriteSneakerAssociation(Base):
@@ -16,4 +17,9 @@ class FavoriteSneakerAssociation(Base):
     favorite: Mapped["Favorite"] = relationship(
         "Favorite",
         back_populates="sneaker_associations",
+    )
+
+    sneaker: Mapped["Sneaker"] = relationship(
+        "Sneaker",
+        back_populates="favorite_associations",
     )
