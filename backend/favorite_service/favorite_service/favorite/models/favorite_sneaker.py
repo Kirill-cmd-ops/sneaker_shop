@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 class FavoriteSneakerAssociation(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     favorite_id: Mapped[int] = mapped_column(ForeignKey("favorites.id"))
-    sneaker_id: Mapped[int]
+    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id"))
 
     favorite: Mapped["Favorite"] = relationship(
         "Favorite",
