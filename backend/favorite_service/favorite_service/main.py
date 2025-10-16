@@ -4,13 +4,13 @@ import uvicorn
 from fastapi import FastAPI
 
 from favorite_service.favorite.config import settings
+from favorite_service.favorite.kafka.kafka_handlers.favorite_handler import handle_favorite
 from favorite_service.favorite.models import db_helper
 from favorite_service.add_middleware import add_middleware
 from favorite_service import router as favorite_router
 
 from kafka.consumer import start_consumer, close_consumer
 
-from favorite_service.favorite.kafka_handler.favorite_handler import handle_favorite
 
 
 @asynccontextmanager
