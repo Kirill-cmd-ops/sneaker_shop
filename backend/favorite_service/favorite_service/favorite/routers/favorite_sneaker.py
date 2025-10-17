@@ -2,7 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from favorite_service.favorite.models import db_helper, Favorite
+from favorite_service.favorite.models import (
+    db_helper,
+    Favorite,
+    FavoriteSneakerAssociation,
+)
 from favorite_service.favorite.schemas import FavoriteSneakerCreate
 from favorite_service.favorite.services.check_permissions import check_role_permissions
 from favorite_service.favorite.services.favorite_sneaker import (
@@ -36,12 +40,24 @@ async def call_create_sneaker_to_favorite(
     if not user_favorite:
         raise HTTPException(status_code=404, detail="Избранное пользователя не найдена")
 
-    new_item = await create_sneaker_to_favorite(
-        session,
-        favorite_id=user_favorite.id,
-        sneaker_id=item.sneaker_id,
+    stmt = (
+        select(FavoriteSneakerAssociation)
+        .where(
+            FavoriteSneakerAssociation.favorite_id == user_favorite.id,
+            FavoriteSneakerAssociation.sneaker_id == item.sneaker_id,
+            )
     )
-    return {"status": "Элемент добавлен", "item_id": new_item.id}
+    result = await session.execute(stmt)
+    sneaker_record = result.scalar_one_or_none()
+
+    if not sneaker_record:
+        new_item = await create_sneaker_to_favorite(
+            session,
+            favorite_id=user_favorite.id,
+            sneaker_id=item.sneaker_id,
+        )
+        return {"status": "Элемент добавлен", "item_id": new_item.id}
+    return {"status": "Такая запись уже есть в избранном"}
 
 
 @router.delete(
