@@ -4,13 +4,13 @@ version = "0.1.0"
 description = ""
 authors = ["Kirill <bondarenkokirill150208@gmail.com>"]
 readme = "README.md"
+packages = [{ include = "sneaker_views_clickhouse_writer" }]
 
 [tool.poetry.dependencies]
 python = "^3.12"
 uvicorn = "^0.36.0"
 pydantic-settings = "^2.10.1"
 aiokafka = "^0.12.0"
-clickhouse-driver = "^0.2.9"
 sqlalchemy = {extras = ["asyncio"], version = "^2.0.43"}
 clickhouse-sqlalchemy = {extras = ["alembic"], version = "^0.3.2"}
 alembic = "1.16.1"

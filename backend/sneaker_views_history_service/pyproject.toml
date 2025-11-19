@@ -1,9 +1,10 @@
 [tool.poetry]
-name = "user-history-service"
+name = "sneaker_views_history_service"
 version = "0.1.0"
 description = ""
 authors = ["Kirill <bondarenkokirill150208@gmail.com>"]
 readme = "README.md"
+packages = [{ include = "sneaker_views_history_service" }]
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -13,6 +14,7 @@ pydantic = {version = "2.11.5", extras = ["email"]}
 pydantic-settings = "2.9.1"
 redis = {version = "6.4.0", extras = ["hiredis"]}
 clickhouse-sqlalchemy = {version = "0.3.2", extras = ["alembic"]}
+alembic = "1.16.1"
 
 
 [build-system]
