@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.12-bookworm
 
 WORKDIR /app/sneaker_views_clickhouse_writer
 # ENV PYTHONPATH=/app/sneaker_views_redis_writer/

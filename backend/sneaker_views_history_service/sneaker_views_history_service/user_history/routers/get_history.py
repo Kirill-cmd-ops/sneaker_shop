@@ -1,8 +1,5 @@
 from asyncio import create_task
 
-from starlette.requests import Request
-
-
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
@@ -10,13 +7,9 @@ import redis.asyncio as aioredis
 
 from redis_client.redis_connection.factory import get_redis_factory
 from sneaker_views_history_service.user_history.config import settings
-from sneaker_views_history_service.user_history.dependencies.check_permissions import (
-    check_role_permissions,
-)
 from sneaker_views_history_service.user_history.dependencies.get_current_user import (
     get_user_by_header,
 )
-from sneaker_views_history_service.user_history.models import SneakerViewsHistory
 from sneaker_views_history_service.user_history.models.db_helper import db_helper
 from sneaker_views_history_service.user_history.services.get_sneaker_views_clickhouse import (
     clickhouse_select,
@@ -33,7 +26,7 @@ router = APIRouter(
 )
 
 
-@router.post("/get_history_clickhouse/")
+@router.get("/get_history_clickhouse/")
 async def call_get_sneaker_views_clickhouse(
     session: Session = Depends(db_helper.session_getter),
     user_id: int = Depends(get_user_by_header),
@@ -42,7 +35,7 @@ async def call_get_sneaker_views_clickhouse(
     return record
 
 
-@router.post(
+@router.get(
     "/get_history/",
     # dependencies=(Depends(check_role_permissions("favorite.view")),),
 )
