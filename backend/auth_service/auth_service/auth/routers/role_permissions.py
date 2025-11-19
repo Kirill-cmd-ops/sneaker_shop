@@ -7,7 +7,7 @@ from starlette.requests import Request
 from auth_service.auth.config import settings
 from auth_service.auth.models import db_helper, Permission
 from auth_service.auth.schemas.permissions import UpdatePermissions
-from auth_service.auth.services.check_permissions import check_role_permissions
+from auth_service.auth.dependencies.check_permissions import check_role_permissions
 from auth_service.auth.services.role_permissions import update_role_permissions
 
 router = APIRouter(
