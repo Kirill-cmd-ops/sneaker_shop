@@ -1,7 +1,6 @@
 from logging.config import fileConfig
 
-from clickhouse_sqlalchemy.drivers.native.base import dialect as clickhouse_dialect
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import engine_from_config, pool, text
 from alembic import context
 
 from sneaker_views_clickhouse_writer.clickhouse_writer.config import settings
@@ -43,6 +42,12 @@ def run_migrations_online() -> None:
         poolclass=pool.NullPool,
     )
     with connectable.connect() as connection:
+        connection.execute(text("""
+                    CREATE TABLE IF NOT EXISTS alembic_version (
+                        version_num String
+                    ) ENGINE = TinyLog
+                """))
+
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
