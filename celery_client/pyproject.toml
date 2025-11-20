@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "celery_client"
+version = "0.1.0"
+description = "Пакет для работы с celery"
+authors = ["Kirill <bondarenkokirill150208@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "celery_client" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+celery = "^5.5.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
