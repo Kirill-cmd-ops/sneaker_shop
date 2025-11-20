@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "redis_client"
+version = "0.1.0"
+description = "Пакет с логикой redis"
+authors = ["Kirill <bondarenkokirill150208@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "redis_client" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+redis = {extras = ["hiredis"], version = "^6.4.0"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
