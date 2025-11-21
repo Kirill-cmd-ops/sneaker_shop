@@ -79,9 +79,9 @@ async def get_sneakers_details(
         .join(SneakerSizeAssociation)
         .join(Size)
         .where(Sneaker.is_active == True)
-        .where(SneakerSizeAssociation.quantity > 0)
         .distinct()
         .options(contains_eager(Sneaker.brand))
+        .options(contains_eager(Sneaker.size_associations))
     )
     if name:
         stmt = stmt.filter(Sneaker.name.ilike(f"%{name}%"))
