@@ -79,14 +79,12 @@ async def get_sneaker_details(
 ):
     stmt = (
         select(Sneaker)
-        .join(Sneaker.size_associations)
-        .join(SneakerSizeAssociation.size)
         .where(Sneaker.id == sneaker_id)
         .where(Sneaker.is_active == True)
         .options(
-            contains_eager(Sneaker.sizes),
             joinedload(Sneaker.brand),
             joinedload(Sneaker.country),
+            selectinload(Sneaker.sizes),
             selectinload(Sneaker.colors),
             selectinload(Sneaker.materials),
         )
