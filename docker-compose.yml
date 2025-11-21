@@ -281,6 +281,8 @@ services:
       - ./backend/cart_service:/app/cart_service
       - ./kafka:/app/cart_service/kafka
       - ./redis_client/redis_connection:/app/cart_service/redis_client/redis_connection
+      - ./message_sender:/app/cart_service/message_sender
+      - ./celery_client:/app/cart_service/celery_client
     ports:
       - "8004:8004"
     working_dir: /app/cart_service
@@ -302,6 +304,8 @@ services:
       - ./backend/cart_service:/app/cart_service
       - ./kafka:/app/cart_service/kafka
       - ./redis_client/redis_connection:/app/cart_service/redis_client/redis_connection
+      - ./message_sender:/app/cart_service/message_sender
+      - ./celery_client:/app/cart_service/celery_client
     command: [ "upgrade", "head" ]
 
 
@@ -501,7 +505,7 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d
 
   kafka:
-    image: bitnami/kafka:4.0.0
+    image: bitnamilegacy/kafka:4.0.0
     container_name: kafka-kraft
 
     ports:
@@ -547,7 +551,7 @@ services:
     volumes:
       - ./frontend:/app/frontend
 
-
+# TODO: вместо использования нескольких redisов, лучше использовать просто разные бд в одном redisе
   redis:
     image: redis:latest
     container_name: project-redis-1
@@ -580,6 +584,36 @@ services:
       retries: 5
 
 
+  redis_queue:
+    image: redis:latest
+    container_name: project-redis-queue-1
+    restart: unless-stopped
+    ports:
+      - "6381:6379"
+    volumes:
+      - ./redis_client/redis_queue_data:/data
+      - ./redis_client/redis_config/redis_queue.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      retries: 5
+
+
+  celery_worker:
+    image: python:3.12-slim
+    command: >
+      sh -c "
+      pip install celery redis &&
+      celery -A celery_client.celery_handler.cart_view_handler:celery_client worker --loglevel=info
+      "
+    volumes:
+      - .:/app
+    working_dir: /app
+    depends_on:
+      - redis_queue
+
+
   clickhouse:
     image: clickhouse/clickhouse-server:latest
     ports:
@@ -598,14 +632,14 @@ services:
       start_period: 30s
 
 
-  sneaker_check_price_bot:
-    build:
-      context: ./sneaker_check_price_bot
-      dockerfile: Dockerfile
-    container_name: sneaker_check_price_bot
-    working_dir: /app/sneaker_check_price_bot
-    command: [ "python", "-m", "sneaker_bot.main" ]
-    restart: unless-stopped
+#  sneaker_check_price_bot:
+#    build:
+#      context: ./sneaker_check_price_bot
+#      dockerfile: Dockerfile
+#    container_name: sneaker_check_price_bot
+#    working_dir: /app/sneaker_check_price_bot
+#    command: [ "python", "-m", "sneaker_bot.main" ]
+#    restart: unless-stopped
 
 volumes:
   auth_pgdata:
