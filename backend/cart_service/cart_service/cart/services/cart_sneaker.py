@@ -2,7 +2,11 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cart_service.cart.models import Cart, CartSneakerAssociation
+from cart_service.cart.models import (
+    Cart,
+    CartSneakerAssociation,
+    SneakerSizeAssociation,
+)
 from cart_service.cart.schemas.cart_sneaker import CartSneakerDelete
 
 
@@ -26,10 +30,27 @@ async def create_sneaker_to_cart(
 async def update_sneaker_to_cart(
     session: AsyncSession, association_id: int, size_id: float
 ) -> CartSneakerAssociation:
-    current_sneaker = await session.get(CartSneakerAssociation, association_id)
-    if not current_sneaker:
+    request_get_sneaker = select(CartSneakerAssociation).where(
+        CartSneakerAssociation.id == association_id
+    )
+    result = await session.execute(request_get_sneaker)
+    current_sneaker = result.scalar()
+    if not current_sneaker.sneaker_id:
         raise HTTPException(status_code=404, detail="Элемент корзины не найден")
-    current_sneaker.size_id = size_id
+
+    request_get_sneaker_sizes = select(SneakerSizeAssociation.size_id).where(
+        SneakerSizeAssociation.sneaker_id == current_sneaker.sneaker_id
+    )
+    result_sneaker_sizes = await session.execute(request_get_sneaker_sizes)
+    allowed_sneaker_sizes = result_sneaker_sizes.scalars().all()
+
+    if size_id in allowed_sneaker_sizes:
+        current_sneaker.size_id = size_id
+    else:
+        raise HTTPException(
+            status_code=404, detail="У данной модели кроссовок этот размер отсутствует"
+        )
+
     await session.commit()
     await session.refresh(current_sneaker)
     return current_sneaker
