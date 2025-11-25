@@ -198,6 +198,8 @@ services:
       - ./backend/secrets:/app/secrets
       - ./kafka:/app/auth_service/kafka
       - ./redis_client/redis_connection:/app/auth_service/redis_client/redis_connection
+      - ./celery_client:/app/auth_service/celery_client
+      - ./message_sender:/app/auth_service/message_sender
     ports:
       - "8002:8002"
     working_dir: /app/auth_service
@@ -222,6 +224,8 @@ services:
       - ./backend/secrets:/app/secrets
       - ./kafka:/app/auth_service/kafka
       - ./redis_client/redis_connection:/app/auth_service/redis_client/redis_connection
+      - ./celery_client:/app/auth_service/celery_client
+      - ./message_sender:/app/auth_service/message_sender
     command: [ "upgrade", "head" ]
 
 
@@ -605,7 +609,7 @@ services:
     command: >
       sh -c "
       pip install celery redis &&
-      celery -A celery_client.celery_handler.cart_view_handler:celery_client worker --loglevel=info
+      celery -A celery_client.celery_handler.handlers:celery_client worker --loglevel=info
       "
     volumes:
       - .:/app
