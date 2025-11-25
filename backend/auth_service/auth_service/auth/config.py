@@ -101,6 +101,14 @@ class RedisConfig(BaseModel):
     redis_db: int
 
 
+class SMTPConfig(BaseModel):
+    smtp_start_tls: bool = True
+    smtp_hostname: str
+    smtp_port: int
+    smtp_username: str
+    smtp_password: str
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(str(ENV_DIR / ".env.template"), str(ENV_DIR / ".env")),
@@ -116,6 +124,7 @@ class Settings(BaseSettings):
     access_token: AccessToken
     kafka_config: KafkaConfig
     redis_config: RedisConfig
+    smtp_config: SMTPConfig
 
 
 settings = Settings()
