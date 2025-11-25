@@ -461,6 +461,7 @@ services:
 
   kong-database:
     image: postgres:16-alpine
+    container_name: kong_database
     environment:
       POSTGRES_USER: kong
       POSTGRES_DB: kong
@@ -476,6 +477,7 @@ services:
 
   kong:
     image: kong:latest
+    container_name: kong
     depends_on:
       kong-database:
         condition: service_healthy
@@ -502,6 +504,7 @@ services:
 
 
   nginx:
+    container_name: nginx
     image: nginx:latest
     ports:
       - "8080:8080"
@@ -549,7 +552,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       target: frontend_builder
-    container_name: nextjs_app
+    container_name: nextjs
     ports:
       - "3000:3000"
     volumes:
@@ -558,7 +561,7 @@ services:
 # TODO: вместо использования нескольких redisов, лучше использовать просто разные бд в одном redisе
   redis:
     image: redis:latest
-    container_name: project-redis-1
+    container_name: redis
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -574,7 +577,7 @@ services:
 
   redis_cache:
     image: redis:latest
-    container_name: project-redis-cache-1
+    container_name: redis_cache
     restart: unless-stopped
     ports:
       - "6380:6379"
@@ -590,7 +593,7 @@ services:
 
   redis_queue:
     image: redis:latest
-    container_name: project-redis-queue-1
+    container_name: redis_queue
     restart: unless-stopped
     ports:
       - "6381:6379"
@@ -606,6 +609,7 @@ services:
 
   celery_worker:
     image: python:3.12-slim
+    container_name: celery_worker
     command: >
       sh -c "
       pip install celery redis &&
@@ -620,6 +624,7 @@ services:
 
   clickhouse:
     image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse
     ports:
       - "9000:9000"
     volumes:
