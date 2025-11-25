@@ -9,12 +9,16 @@ def send_message(
     start_tls: bool,
     username: str,
     password: str,
+    sender_gmail: str,
+    recipient_gmail: str,
+    email_title: str,
+    body_title: str,
 ):
     message = get_message(
-        sender_gmail="Sneaker Shop <bondarenkokirill150208@gmail.com>",
-        recipient_gmail="kugoshoping@gmail.com",
-        email_title="Проверочный код",
-        body_title="Ваш проверочный код: 666777",
+        sender_gmail=sender_gmail,
+        recipient_gmail=recipient_gmail,
+        email_title=email_title,
+        body_title=body_title,
     )
 
     with smtplib.SMTP(hostname, port) as smtp:
