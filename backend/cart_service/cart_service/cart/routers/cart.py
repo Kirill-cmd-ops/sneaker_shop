@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-from fastapi.params import Header
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cart_service.cart.config import settings
@@ -8,7 +7,6 @@ from cart_service.cart.dependencies.get_current_user import get_user_by_header
 from cart_service.cart.services.cart import read_cart
 from cart_service.cart.services.check_permissions import check_role_permissions
 from cart_service.cart.services.total_price import calculate_total_price
-from celery_client.celery_handler.cart_view_handler import handle_cart_view
 
 
 router = APIRouter(
@@ -30,16 +28,3 @@ async def call_get_cart(
     total_price = calculate_total_price(items)
 
     return {"Цена корзины: ": total_price, "Кроссовки": items}
-
-
-@router.get("/send_message/")
-async def send_messages():
-    handle_cart_view.delay(
-        settings.smtp_config.smtp_hostname,
-        settings.smtp_config.smtp_port,
-        settings.smtp_config.smtp_start_tls,
-        settings.smtp_config.smtp_username,
-        settings.smtp_config.smtp_password,
-    )
-
-    return {"message was sent successfully!"}
