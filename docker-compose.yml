@@ -609,7 +609,7 @@ services:
     command: >
       sh -c "
       pip install celery redis &&
-      celery -A celery_client.celery_handler.handlers:celery_client worker --loglevel=info
+      celery -A celery_client.celery_handlers:celery_client worker --loglevel=info
       "
     volumes:
       - .:/app
