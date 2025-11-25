@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from pydantic import BaseModel, Field, PostgresDsn
+from pydantic import BaseModel, Field, PostgresDsn, computed_field
 from pydantic_settings import (
     BaseSettings,
     SettingsConfigDict,
@@ -29,6 +29,7 @@ class ApiPrefix(BaseModel):
 
 
 class DatabaseConfig(BaseModel):
+    use_test_db: bool = False
     url: PostgresDsn
     test_url: PostgresDsn
     echo: bool = False
@@ -43,6 +44,11 @@ class DatabaseConfig(BaseModel):
         "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
         "pk": "pk_%(table_name)s",
     }
+
+    @computed_field
+    @property
+    def database_url(self) -> PostgresDsn:
+        return self.url if self.use_test_db == False else self.test_url
 
 
 class CookieConfig(BaseModel):
