@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "stock_notification_service"
+version = "0.1.0"
+description = "Микросервис для работы с системой уведомления пользователя при поступлении товара"
+authors = ["Kirill <bondarenkokirill150208@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "stock_notification_service" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+sqlalchemy = { extras = ["asyncio"], version = "^2.0.41" }
+fastapi = { extras = ["standard"], version = "^0.115.12" }
+uvicorn = { extras = ["standard"], version = "^0.34.3" }
+pydantic = { extras = ["email"], version = "^2.11.5" }
+pydantic-settings = "^2.9.1"
+asyncpg = "^0.30.0"
+alembic = "^1.16.1"
+fastapi-users = { extras = ["sqlalchemy"], version = "^14.0.1" }
+fastapi-mail = "^1.5.0"
+aiokafka = "^0.12.0"
+redis = { extras = ["hiredis"], version = "^6.4.0" }
+celery = "^5.5.3"
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+stock_notification_seeds = "stock_notification_service.stock_notification.seed:start_seeds"
+
