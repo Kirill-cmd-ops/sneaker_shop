@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "kafka"
+version = "0.1.0"
+description = "Пакет с логикой продюсера и консьюмера"
+authors = ["Kirill <bondarenkokirill150208@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "kafka" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+aiokafka = "0.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
