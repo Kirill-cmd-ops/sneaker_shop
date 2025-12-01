@@ -89,6 +89,24 @@ services:
       retries: 5
 
 
+  stock_notification_db:
+    image: postgres:16-alpine
+    container_name: stock_notification_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: meteor906587
+      POSTGRES_DB: sneaker_shop_stock_notification
+    volumes:
+      - stock_notification_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5437:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
   auth_test_db:
     image: postgres:16-alpine
     container_name: auth_test_db
@@ -172,6 +190,24 @@ services:
       - sneaker_details_test_pgdata:/var/lib/postgresql/data
     ports:
       - "5446:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+  stock_notification_test_db:
+    image: postgres:16-alpine
+    container_name: stock_notification_test_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: meteor906587
+      POSTGRES_DB: sneaker_shop_test_stock_notification
+    volumes:
+      - stock_notification_test_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5447:5432"
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
@@ -459,6 +495,46 @@ services:
     restart: unless-stopped
 
 
+  stock_notification_service:
+    build:
+      context: ./backend/stock_notification_service
+      dockerfile: Dockerfile
+    container_name: stock_notification_service
+    depends_on:
+      stock_notification_db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/stock_notification_service:/app/stock_notification_service
+      - ./kafka:/app/stock_notification_service/kafka
+      - ./redis_client/redis_connection:/app/stock_notification_service/redis_client/redis_connection
+    ports:
+      - "8010:8010"
+    working_dir: /app/stock_notification_service
+    command: [ "python", "-m", "uvicorn", "stock_notification_service.main:app", "--host", "0.0.0.0", "--port", "8010", "--reload" ]
+    restart: unless-stopped
+
+
+  stock_notification_alembic:
+    build:
+      context: ./backend/stock_notification_service
+      dockerfile: Dockerfile
+    container_name: stock_notification_alembic_migrations
+    depends_on:
+      stock_notification_db:
+        condition: service_healthy
+    working_dir: /app/stock_notification_service
+    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
+    volumes:
+      - ./backend/stock_notification_service:/app/stock_notification_service
+      - ./kafka:/app/stock_notification_service/kafka
+      - ./redis_client/redis_connection:/app/stock_notification_service/redis_client/redis_connection
+    command: [ "upgrade", "head" ]
+
+
   kong-database:
     image: postgres:16-alpine
     container_name: kong_database
@@ -656,6 +732,7 @@ volumes:
   cart_pgdata:
   catalog_pgdata:
   sneaker_details_pgdata:
+  stock_notification_pgdata:
   auth_test_pgdata:
   kong-data:
   kafka-data:
@@ -663,3 +740,4 @@ volumes:
   cart_test_pgdata:
   catalog_test_pgdata:
   sneaker_details_test_pgdata:
+  stock_notification_test_pgdata:
