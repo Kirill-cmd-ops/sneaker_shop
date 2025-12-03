@@ -98,6 +98,7 @@ class AccessToken(BaseModel):
 class KafkaConfig(BaseModel):
     kafka_bootstrap_servers: str
     registered_topic: str
+    user_work_topic: str
 
 
 class RedisConfig(BaseModel):
