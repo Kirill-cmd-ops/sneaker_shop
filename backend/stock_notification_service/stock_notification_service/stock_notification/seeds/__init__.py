@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from stock_notification_service.stock_notification.models import db_helper
 from stock_notification_service.stock_notification.seeds.seed_brands import seed_brands
+from stock_notification_service.stock_notification.seeds.seed_sizes import seed_sizes
 from stock_notification_service.stock_notification.seeds.seed_sneakers import (
     seed_sneakers,
 )
@@ -13,6 +14,7 @@ async def run_seeds():
 
     try:
         await seed_brands(session)
+        await seed_sizes(session)
         await seed_sneakers(session)
         await seed_users(session)
         await session.commit()
