@@ -9,6 +9,7 @@ from stock_notification_service.stock_notification.models.mixins import IntIdPkM
 if TYPE_CHECKING:
     from .user_sneaker_subscription import UserSneakerSubscription
     from .sneaker import Sneaker
+    from .size import Size
 
 
 class User(Base, IntIdPkMixin):
@@ -18,12 +19,17 @@ class User(Base, IntIdPkMixin):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
-    sneaker_associations: Mapped[list["UserSneakerSubscription"]] = relationship(
+    sneaker_size_subscriptions: Mapped[list["UserSneakerSubscription"]] = relationship(
         "UserSneakerSubscription",
         back_populates="user",
     )
 
-    sneakers: Mapped[list["Sneaker"]] = relationship(
+    available_sneakers: Mapped[list["Sneaker"]] = relationship(
+        secondary="user_sneaker_subscriptions",
+        viewonly=True,
+    )
+
+    available_sizes: Mapped[list["Size"]] = relationship(
         secondary="user_sneaker_subscriptions",
         viewonly=True,
     )
