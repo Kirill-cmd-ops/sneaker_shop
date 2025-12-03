@@ -4,7 +4,7 @@ from auth_service.auth.authentication.backends import auth_backend
 from auth_service.auth.authentication.fastapi_users_custom import FastAPIUsersCustom
 from auth_service.auth.refresh.routers.refresh_routers import refresh_router
 from auth_service.auth.dependencies.user_manager import get_user_manager
-from auth_service.auth.schemas import UserRead, UserCreate
+from auth_service.auth.schemas import UserRead, UserCreate, UserUpdate
 
 from auth_service.auth.authentication.oauth import google_oauth_client
 from auth_service.auth.config import settings
@@ -29,6 +29,13 @@ router.include_router(
         UserRead,
         UserCreate,
     ),
+)
+
+router.include_router(
+    fastapi_users_custom.get_users_router(
+        UserRead,
+        UserUpdate,
+    )
 )
 
 router.include_router(
