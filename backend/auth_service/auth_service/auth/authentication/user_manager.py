@@ -30,7 +30,7 @@ from auth_service.auth.schemas import UserCreate
 from auth_service.auth.services.add_role_in_db import add_role_db
 from auth_service.auth.types.user_id import UserIdType
 
-from celery_client.celery_handlers import (
+from auth_service.auth.celery_tasks.auth_tasks import (
     handle_request_verify,
     handle_request_reset,
     handle_after_register,
