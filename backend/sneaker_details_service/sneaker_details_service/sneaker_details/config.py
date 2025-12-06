@@ -57,6 +57,8 @@ class KafkaConfig(BaseModel):
     sneaker_viewed_topic: str
     sneaker_work_topic: str
     sneaker_sizes_work_topic: str
+    brand_work_topic: str
+    size_work_topic: str
 
 
 class RedisConfig(BaseModel):
