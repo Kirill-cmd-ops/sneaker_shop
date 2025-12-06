@@ -395,8 +395,6 @@ services:
       - ./backend/sneaker_details_service:/app/sneaker_details_service
       - ./kafka:/app/sneaker_details_service/kafka
       - ./redis_client/redis_connection:/app/sneaker_details_service/redis_client/redis_connection
-      - ./celery_client:/app/sneaker_details_service/celery_client
-      - ./message_sender:/app/sneaker_details_service/message_sender
     ports:
       - "8006:8006"
     command: [ "python", "-m", "uvicorn", "sneaker_details_service.main:app", "--host", "0.0.0.0", "--port", "8006", "--reload" ]
@@ -509,6 +507,8 @@ services:
       - ./backend/stock_notification_service:/app/stock_notification_service
       - ./kafka:/app/stock_notification_service/kafka
       - ./redis_client/redis_connection:/app/stock_notification_service/redis_client/redis_connection
+      - ./celery_client:/app/stock_notification_service/celery_client
+      - ./message_sender:/app/stock_notification_service/message_sender
     ports:
       - "8010:8010"
     working_dir: /app/stock_notification_service
@@ -681,9 +681,9 @@ services:
       retries: 5
 
 
-  celery_worker:
+  celery_worker_auth:
     image: python:3.12-slim
-    container_name: celery_worker
+    container_name: celery_worker_auth
     command: >
       sh -c "
       pip install celery redis &&
@@ -691,6 +691,23 @@ services:
       "
     volumes:
       - ./backend/auth_service/auth_service/auth/celery_tasks:/app/celery_tasks
+      - ./celery_client:/app/celery_client
+      - ./message_sender:/app/message_sender
+    working_dir: /app
+    depends_on:
+      - redis_queue
+
+
+  celery_worker_stock_notification:
+    image: python:3.12-slim
+    container_name: celery_worker_stock_notification
+    command: >
+      sh -c "
+      pip install celery redis &&
+      celery -A celery_tasks.update_tasks:celery_client worker --loglevel=info
+      "
+    volumes:
+      - ./backend/stock_notification_service/stock_notification_service/stock_notification/celery_tasks:/app/celery_tasks
       - ./celery_client:/app/celery_client
       - ./message_sender:/app/message_sender
     working_dir: /app
