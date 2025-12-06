@@ -1,0 +1,46 @@
+from aiokafka import AIOKafkaProducer
+from fastapi import APIRouter
+from fastapi.params import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from sneaker_details_service.sneaker_details.dependencies.get_kafka_producer import (
+    get_kafka_producer,
+)
+from sneaker_details_service.sneaker_details.kafka.producer_event.create_brand_data import (
+    send_create_brand_data,
+)
+from sneaker_details_service.sneaker_details.kafka.producer_event.delete_brand_data import (
+    send_delete_brand_data,
+)
+from sneaker_details_service.sneaker_details.models import db_helper, Brand
+from sneaker_details_service.sneaker_details.schemas.brand import BrandCreate
+from sneaker_details_service.sneaker_details.services.record import (
+    create_record,
+    delete_record,
+)
+
+router = APIRouter()
+
+
+@router.post("/create_brand/")
+async def call_create_brand(
+    brand_create: BrandCreate,
+    session: AsyncSession = Depends(db_helper.session_getter),
+    producer: AIOKafkaProducer = Depends(get_kafka_producer),
+):
+    new_brand = await create_record(session, Brand, brand_create)
+
+    await send_create_brand_data(producer, new_brand.id, brand_create)
+    return new_brand
+
+
+@router.delete("/delete_brand/")
+async def call_delete_brand(
+    brand_id: int,
+    session: AsyncSession = Depends(db_helper.session_getter),
+    producer: AIOKafkaProducer = Depends(get_kafka_producer),
+):
+    result = await delete_record(session, Brand, brand_id)
+
+    await send_delete_brand_data(producer, brand_id)
+    return result
