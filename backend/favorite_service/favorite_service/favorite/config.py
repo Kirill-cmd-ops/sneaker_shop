@@ -14,7 +14,7 @@ class RunConfig(BaseModel):
 
 
 class ApiV1Prefix(BaseModel):
-    prefix: str = "/v1/favorite"
+    prefix: str = "/v1/favorites"
     sneaker: str = "/sneaker"
 
 
@@ -69,8 +69,12 @@ class KafkaConfig(BaseModel):
     registered_topic: str
     sneaker_work_topic: str
     sneaker_sizes_work_topic: str
+    brand_work_topic: str
+    size_work_topic: str
     sneaker_group_id: str
     sneaker_sizes_group_id: str
+    brand_group_id: str
+    size_group_id: str
     favorite_group_id: str
 
 
