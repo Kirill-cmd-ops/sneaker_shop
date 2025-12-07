@@ -1,5 +1,5 @@
 from favorite_service.favorite.models import db_helper, Brand
-from favorite_service.favorite.schemas.brand import BrandCreate
+from favorite_service.favorite.schemas import BrandCreate
 from favorite_service.favorite.services.record import create_record, delete_record
 
 
