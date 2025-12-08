@@ -53,8 +53,12 @@ class KafkaConfig(BaseModel):
     kafka_bootstrap_servers: str
     sneaker_work_topic: str
     sneaker_sizes_work_topic: str
+    brand_work_topic: str
+    size_work_topic: str
     sneaker_group_id: str
     sneaker_sizes_group_id: str
+    brand_group_id: str
+    size_group_id: str
 
 
 ENV_DIR = Path(__file__).parent.parent.parent
