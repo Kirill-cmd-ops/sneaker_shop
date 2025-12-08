@@ -7,6 +7,8 @@ from fastapi import FastAPI
 
 from kafka.consumer import start_consumer, close_consumer
 from stock_notification_service.stock_notification.config import settings
+from stock_notification_service.stock_notification.kafka.kafka_handlers.brand_handler import handle_brand
+from stock_notification_service.stock_notification.kafka.kafka_handlers.size_handler import handle_size
 from stock_notification_service.stock_notification.kafka.kafka_handlers.sneaker_handler import (
     handle_sneaker,
 )
@@ -31,6 +33,20 @@ async def lifespan(app: FastAPI):
         handle_sneaker,
     )
 
+    brand_consumer, task_brand = await start_consumer(
+        settings.kafka_config.brand_work_topic,
+        settings.kafka_config.kafka_bootstrap_servers,
+        settings.kafka_config.brand_group_id,
+        handle_brand,
+    )
+
+    size_consumer, task_size = await start_consumer(
+        settings.kafka_config.size_work_topic,
+        settings.kafka_config.kafka_bootstrap_servers,
+        settings.kafka_config.size_group_id,
+        handle_size,
+    )
+
     sneaker_sizes_consumer, task_sneaker_sizes = await start_consumer(
         settings.kafka_config.sneaker_sizes_work_topic,
         settings.kafka_config.kafka_bootstrap_servers,
@@ -46,10 +62,12 @@ async def lifespan(app: FastAPI):
     )
     yield
     task1 = create_task(close_consumer(sneaker_consumer, task_sneaker))
-    task2 = create_task(close_consumer(sneaker_sizes_consumer, task_sneaker_sizes))
-    task3 = create_task(close_consumer(user_consumer, task_user))
+    task2 = create_task(close_consumer(brand_consumer, task_brand))
+    task3 = create_task(close_consumer(size_consumer, task_size))
+    task4 = create_task(close_consumer(sneaker_sizes_consumer, task_sneaker_sizes))
+    task5 = create_task(close_consumer(user_consumer, task_user))
 
-    await asyncio.gather(task1, task2, task3)
+    await asyncio.gather(task1, task2, task3, task4, task5)
 
     await db_helper.dispose()
 
