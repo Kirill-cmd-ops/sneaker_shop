@@ -7,6 +7,8 @@ __all__ = (
     "SneakerSizeUpdate",
     "SneakerSizesRead",
     "SneakerAssocsDelete",
+    "SizeCreate",
+    "BrandCreate",
 )
 
 from .sneaker import (
@@ -23,3 +25,6 @@ from .sneaker_sizes import (
     SneakerSizesRead,
 )
 from .sneaker_association import SneakerAssocsDelete
+
+from .size import SizeCreate
+from .brand import BrandCreate
