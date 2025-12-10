@@ -2,7 +2,8 @@ from fastapi import HTTPException
 from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth_service.auth.models import Role, RolePermissionAssociation
+from auth_service.auth.models import Role, RolePermissionAssociation, Permission
+from auth_service.auth.schemas.permissions import UpdatePermissions
 
 
 async def update_role_permissions(
@@ -35,3 +36,14 @@ async def update_role_permissions(
     )
 
     await session.commit()
+
+
+async def get_role_permissions(
+    session: AsyncSession,
+    update_permissions: UpdatePermissions,
+):
+    stmt = select(Permission.name).where(
+        Permission.id.in_(update_permissions.list_permission)
+    )
+    result = await session.execute(stmt)
+    return result
