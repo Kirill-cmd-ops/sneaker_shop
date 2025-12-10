@@ -1,11 +1,7 @@
 from pydantic import BaseModel
 
 
-class Sneaker(BaseModel):
-    sneaker_id: int
-
-
-class SneakerAssocsGeneral(Sneaker):
+class SneakerAssocsGeneral(BaseModel):
     assoc_ids: list[int]
 
 
