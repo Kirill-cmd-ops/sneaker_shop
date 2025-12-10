@@ -14,11 +14,13 @@ class RunConfig(BaseModel):
 
 
 class ApiV1Prefix(BaseModel):
-    prefix: str = "/v1/details"
-    sneakers: str = "/sneaker"
-    sneaker_sizes: str = "/sneaker_sizes"
-    sneaker_colors: str = "/sneaker_colors"
-    sneaker_materials: str = "/sneaker_materials"
+    prefix: str = "/v1"
+    sneakers: str = "/sneakers"
+    sizes: str = "/sizes"
+    brands: str = "/brands"
+    colors: str = "/colors"
+    materials: str = "/materials"
+    countries: str = "/countries"
 
 
 class ApiPrefix(BaseModel):
