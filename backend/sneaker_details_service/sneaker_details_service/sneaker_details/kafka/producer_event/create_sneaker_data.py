@@ -11,9 +11,7 @@ async def send_create_sneaker_data(
 ):
     sneaker_create_payload = {
         "event_type": "sneaker_created",
-        "data": sneaker_create.dict(
-            exclude={"description", "country_id", "color_ids", "material_ids"}
-        ),
+        "data": sneaker_create.dict(),
     }
 
     await producer.send_and_wait(

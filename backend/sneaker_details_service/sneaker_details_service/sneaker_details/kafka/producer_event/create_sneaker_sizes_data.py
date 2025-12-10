@@ -4,6 +4,7 @@ from sneaker_details_service.sneaker_details.schemas import SneakerSizesCreate
 
 async def send_create_sneaker_sizes_data(
     producer,
+    sneaker_id: int,
     sneaker_sizes_create: SneakerSizesCreate,
 ):
     sneaker_sizes_create_payload = {
@@ -12,6 +13,6 @@ async def send_create_sneaker_sizes_data(
     }
     await producer.send_and_wait(
         settings.kafka_config.sneaker_sizes_work_topic,
-        key=str(sneaker_sizes_create.sneaker_id),
+        key=str(sneaker_id),
         value=sneaker_sizes_create_payload,
     )
