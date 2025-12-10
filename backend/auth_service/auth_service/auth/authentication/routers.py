@@ -2,7 +2,6 @@ from fastapi import APIRouter
 
 from auth_service.auth.authentication.backends import auth_backend
 from auth_service.auth.authentication.fastapi_users_custom import FastAPIUsersCustom
-from auth_service.auth.refresh.routers.refresh_routers import refresh_router
 from auth_service.auth.dependencies.user_manager import get_user_manager
 from auth_service.auth.schemas import UserRead, UserCreate, UserUpdate
 
@@ -63,5 +62,3 @@ router.include_router(
         settings.auth_config.state_secret,
     ),
 )
-
-router.include_router(refresh_router)

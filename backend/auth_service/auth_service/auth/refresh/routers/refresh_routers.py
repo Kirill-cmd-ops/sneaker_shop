@@ -19,12 +19,15 @@ from auth_service.auth.refresh.utils.set_cookie import set_value_in_cookie
 
 refresh_router = APIRouter(
     prefix=settings.api.build_path(
+        settings.api.root,
+        settings.api.v1.prefix,
         settings.api.v1.refresh,
-    )
+    ),
+    tags=["Refresh Token"],
 )
 
 
-@refresh_router.post("/refresh")
+@refresh_router.post("/")
 async def all_logic_refresh_token(
     response: Response,
     token_aud: list[str],
