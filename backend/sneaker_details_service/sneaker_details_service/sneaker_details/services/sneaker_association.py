@@ -13,6 +13,7 @@ from sneaker_details_service.sneaker_details.schemas import (
 
 async def create_sneaker_association(
     session: AsyncSession,
+    sneaker_id: int,
     sneaker_associations_create: SneakerAssocsCreate,
     sneaker_association_model: Type[Base],
     field_name: str,
@@ -22,7 +23,7 @@ async def create_sneaker_association(
     """
     for assoc_id in sneaker_associations_create.assoc_ids:
         assoc_data = {
-            "sneaker_id": sneaker_associations_create.sneaker_id,
+            "sneaker_id": sneaker_id,
             field_name: assoc_id,
         }
 
@@ -33,6 +34,7 @@ async def create_sneaker_association(
 
 async def delete_sneaker_association(
     session: AsyncSession,
+    sneaker_id: int,
     sneaker_assoc_delete: SneakerAssocsDelete,
     sneaker_association_model: Type[Base],
     field_name: str,
@@ -43,7 +45,7 @@ async def delete_sneaker_association(
     field = getattr(sneaker_association_model, field_name)
     stmt = (
         delete(sneaker_association_model)
-        .where(sneaker_association_model.sneaker_id == sneaker_assoc_delete.sneaker_id)
+        .where(sneaker_association_model.sneaker_id == sneaker_id)
         .where(field.in_(sneaker_assoc_delete.assoc_ids))
     )
     result = await session.execute(stmt)
