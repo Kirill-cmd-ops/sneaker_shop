@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from sneaker_details_service.sneaker_details.config import settings
 from sneaker_details_service.sneaker_details.dependencies.get_kafka_producer import (
     get_kafka_producer,
 )
@@ -19,10 +20,17 @@ from sneaker_details_service.sneaker_details.services.record import (
     delete_record,
 )
 
-router = APIRouter()
+router = APIRouter(
+    prefix=settings.api.build_path(
+        settings.api.root,
+        settings.api.v1.prefix,
+        settings.api.v1.brands,
+    ),
+    tags=["Brand"],
+)
 
 
-@router.post("/create_brand/")
+@router.post("/")
 async def call_create_brand(
     brand_create: BrandCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -34,7 +42,7 @@ async def call_create_brand(
     return new_brand
 
 
-@router.delete("/delete_brand/")
+@router.delete("/{brand_id}")
 async def call_delete_brand(
     brand_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),

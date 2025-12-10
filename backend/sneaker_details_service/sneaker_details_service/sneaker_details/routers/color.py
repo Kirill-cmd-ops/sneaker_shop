@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from sneaker_details_service.sneaker_details.config import settings
 from sneaker_details_service.sneaker_details.models import db_helper, Color
 from sneaker_details_service.sneaker_details.schemas.color import ColorCreate
 from sneaker_details_service.sneaker_details.services.record import (
@@ -8,9 +9,16 @@ from sneaker_details_service.sneaker_details.services.record import (
     delete_record,
 )
 
-router = APIRouter()
+router = APIRouter(
+    prefix=settings.api.build_path(
+        settings.api.root,
+        settings.api.v1.prefix,
+        settings.api.v1.colors,
+    ),
+    tags=["Color"],
+)
 
-@router.post("/create_color/")
+@router.post("/")
 async def call_create_color(
     color_create: ColorCreate, session: AsyncSession = Depends(db_helper.session_getter)
 ):
@@ -18,7 +26,7 @@ async def call_create_color(
     return new_color
 
 
-@router.delete("/delete_color/")
+@router.delete("/{color_id}")
 async def call_delete_color(
     color_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),

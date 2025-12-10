@@ -6,7 +6,6 @@ from sneaker_details_service.sneaker_details.config import settings
 from sneaker_details_service.sneaker_details.schemas import (
     SneakerAssocsCreate,
     SneakerAssocsDelete,
-    SneakerColorsRead,
 )
 from sneaker_details_service.sneaker_details.services.check_permissions import (
     check_role_permissions,
@@ -29,43 +28,52 @@ router = APIRouter(
     prefix=settings.api.build_path(
         settings.api.root,
         settings.api.v1.prefix,
-        settings.api.v1.sneaker_colors,
+        settings.api.v1.sneakers,
     ),
     tags=["Sneaker Colors"],
 )
 
 
 @router.post(
-    "/create/",
+    "/{sneaker_id}/colors",
     dependencies=(Depends(check_role_permissions("details.sneaker.color.create")),),
 )
 async def call_create_sneaker_association(
+    sneaker_id: int,
     sneaker_associations_create: SneakerAssocsCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     await create_sneaker_association(
-        session, sneaker_associations_create, SneakerColorAssociation, "color_id"
+        session,
+        sneaker_id,
+        sneaker_associations_create,
+        SneakerColorAssociation,
+        "color_id",
     )
     return "Запись нового цвета прошла успешно"
 
 
 @router.delete(
-    "/delete/",
+    "/{sneaker_id}/colors",
     dependencies=(Depends(check_role_permissions("details.sneaker.color.delete")),),
 )
 async def call_delete_sneaker_association(
+    sneaker_id: int,
     sneaker_assoc_delete: SneakerAssocsDelete,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     await delete_sneaker_association(
-        session, sneaker_assoc_delete, SneakerColorAssociation, "color_id"
+        session,
+        sneaker_id,
+        sneaker_assoc_delete,
+        SneakerColorAssociation,
+        "color_id",
     )
     return "Цвета товара успешно удалены"
 
 
 @router.get(
-    "/view/",
-    response_model=list[SneakerColorsRead],
+    "/{sneaker_id}/colors",
     dependencies=(Depends(check_role_permissions("details.sneaker.color.view")),),
 )
 async def call_read_sneaker_association(

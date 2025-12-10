@@ -19,7 +19,6 @@ from sneaker_details_service.sneaker_details.kafka.producer_event.update_sneaker
 )
 from sneaker_details_service.sneaker_details.schemas import (
     SneakerSizesCreate,
-    SneakerSizesRead,
     SneakerSizeUpdate,
     SneakerAssocsDelete,
 )
@@ -45,59 +44,65 @@ router = APIRouter(
     prefix=settings.api.build_path(
         settings.api.root,
         settings.api.v1.prefix,
-        settings.api.v1.sneaker_sizes,
+        settings.api.v1.sneakers,
     ),
     tags=["Sneaker Sizes"],
 )
 
 
 @router.post(
-    "/create/",
+    "/{sneaker_id}/sizes",
     dependencies=(Depends(check_role_permissions("details.sneaker.size.create")),),
 )
 async def call_create_sneaker_sizes(
+    sneaker_id: int,
     sneaker_sizes_create: SneakerSizesCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
-    await create_sneaker_sizes(session, sneaker_sizes_create)
-    await send_create_sneaker_sizes_data(producer, sneaker_sizes_create)
+    await create_sneaker_sizes(session, sneaker_id, sneaker_sizes_create)
+    await send_create_sneaker_sizes_data(producer, sneaker_id, sneaker_sizes_create)
     return "Запись нового размера прошла успешно"
 
 
 @router.delete(
-    "/delete/",
+    "/{sneaker_id}/sizes",
     dependencies=(Depends(check_role_permissions("details.sneaker.size.delete")),),
 )
 async def call_delete_sneaker_association(
+    sneaker_id: int,
     sneaker_sizes_delete: SneakerAssocsDelete,
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     await delete_sneaker_association(
-        session, sneaker_sizes_delete, SneakerSizeAssociation, "size_id"
+        session,
+        sneaker_id,
+        sneaker_sizes_delete,
+        SneakerSizeAssociation,
+        "size_id",
     )
-    await send_delete_sneaker_sizes_data(producer, sneaker_sizes_delete)
+    await send_delete_sneaker_sizes_data(producer, sneaker_id, sneaker_sizes_delete)
     return "Размеры товара успешно удалены"
 
 
 @router.patch(
-    "/update/",
+    "/{sneaker_id}/sizes",
     dependencies=(Depends(check_role_permissions("details.sneaker.size.update")),),
 )
 async def call_update_sneaker_sizes(
+    sneaker_id: int,
     sneaker_size_update: SneakerSizeUpdate,
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
-    await update_sneaker_sizes(session, sneaker_size_update)
-    await send_update_sneaker_sizes_data(producer, sneaker_size_update)
+    await update_sneaker_sizes(session, sneaker_id, sneaker_size_update)
+    await send_update_sneaker_sizes_data(producer, sneaker_id, sneaker_size_update)
     return "Размер был изменен корректно"
 
 
 @router.get(
-    "/view/",
-    response_model=list[SneakerSizesRead],
+    "/{sneaker_id}/sizes",
     dependencies=(Depends(check_role_permissions("details.sneaker.size.view")),),
 )
 async def call_read_sneaker_association(

@@ -46,7 +46,7 @@ router = APIRouter(
 
 
 @router.post(
-    "/create/",
+    "/",
     dependencies=(Depends(check_role_permissions("details.sneaker.create")),),
 )
 async def call_create_sneaker(
@@ -60,7 +60,7 @@ async def call_create_sneaker(
 
 
 @router.delete(
-    "/delete/",
+    "/{sneaker_id}",
     dependencies=(Depends(check_role_permissions("details.sneaker.delete")),),
 )
 async def call_delete_sneaker(
@@ -74,7 +74,7 @@ async def call_delete_sneaker(
 
 
 @router.patch(
-    "/update/",
+    "/{sneaker_id}",
     dependencies=(Depends(check_role_permissions("details.sneaker.update")),),
 )
 async def call_update_sneaker(
@@ -88,7 +88,7 @@ async def call_update_sneaker(
     return "Товар успешно обновлен"
 
 
-@router.get("/view/{sneaker_id}")
+@router.get("/{sneaker_id}")
 async def call_get_sneaker_details(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
