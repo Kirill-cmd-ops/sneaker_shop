@@ -2,18 +2,18 @@ from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from stock_notification_service.stock_notification.models import UserSneakerSubscription
+from stock_notification_service.stock_notification.schemas.subscription import SubscriptionCreate
 
 
 async def add_user_subscriptions(
-    sneaker_id: int,
-    size_id: int,
+    subscription_create: SubscriptionCreate,
     user_id: int,
     session: AsyncSession,
 ):
     user_subscription = UserSneakerSubscription(
         user_id=user_id,
-        sneaker_id=sneaker_id,
-        size_id=size_id,
+        sneaker_id=subscription_create.sneaker_id,
+        size_id=subscription_create.size_id,
     )
     session.add(user_subscription)
     await session.commit()
@@ -21,16 +21,14 @@ async def add_user_subscriptions(
 
 
 async def delete_user_subscriptions(
-    sneaker_id: int,
-    size_id: int,
+    subscription_id: int,
     user_id: int,
     session: AsyncSession,
 ):
     request_delete_subscription_user = (
         delete(UserSneakerSubscription)
         .where(UserSneakerSubscription.user_id == user_id)
-        .where(UserSneakerSubscription.sneaker_id == sneaker_id)
-        .where(UserSneakerSubscription.size_id == size_id)
+        .where(UserSneakerSubscription.id == subscription_id)
     )
 
     await session.execute(request_delete_subscription_user)

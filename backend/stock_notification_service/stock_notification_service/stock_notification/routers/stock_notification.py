@@ -9,6 +9,9 @@ from stock_notification_service.stock_notification.dependencies.get_current_user
 from stock_notification_service.stock_notification.models import (
     db_helper,
 )
+from stock_notification_service.stock_notification.schemas.subscription import (
+    SubscriptionCreate,
+)
 from stock_notification_service.stock_notification.services.stock_notification import (
     add_user_subscriptions,
     delete_user_subscriptions,
@@ -20,23 +23,20 @@ router = APIRouter(
     prefix=settings.api.build_path(
         settings.api.root,
         settings.api.v1.prefix,
-        settings.api.v1.sneaker,
     ),
     tags=["Sneaker Stock Notification"],
 )
 
 
-@router.post("/add/")
+@router.post("/")
 async def call_add_user_subscriptions(
-    sneaker_id: int,
-    size_id: int,
+    subscription_create: SubscriptionCreate,
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     try:
         result = await add_user_subscriptions(
-            sneaker_id=sneaker_id,
-            size_id=size_id,
+            subscription_create=subscription_create,
             user_id=user_id,
             session=session,
         )
@@ -49,19 +49,15 @@ async def call_add_user_subscriptions(
         )
 
 
-@router.delete("/delete/")
+@router.delete("/{subscription_id}")
 async def call_delete_user_subscriptions(
-    sneaker_id: int,
-    size_id: int,
+    subscription_id: int,
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     try:
         result = await delete_user_subscriptions(
-            sneaker_id=sneaker_id,
-            size_id=size_id,
-            user_id=user_id,
-            session=session,
+            subscription_id=subscription_id, user_id=user_id, session=session
         )
         return result
 
@@ -72,7 +68,7 @@ async def call_delete_user_subscriptions(
         )
 
 
-@router.delete("/all/delete/")
+@router.delete("/")
 async def call_delete_all_user_subscriptions(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -91,7 +87,7 @@ async def call_delete_all_user_subscriptions(
         )
 
 
-@router.get("/view/")
+@router.get("/")
 async def call_get_user_subscriptions_for_notifications(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
