@@ -7,7 +7,6 @@ from cart_service.cart.models import (
     CartSneakerAssociation,
     SneakerSizeAssociation,
 )
-from cart_service.cart.schemas.cart_sneaker import CartSneakerDelete
 
 
 async def create_sneaker_to_cart(
@@ -28,10 +27,10 @@ async def create_sneaker_to_cart(
 
 
 async def update_sneaker_to_cart(
-    session: AsyncSession, association_id: int, size_id: float
+    session: AsyncSession, cart_sneaker_id: int, size_id: float
 ) -> CartSneakerAssociation:
     request_get_sneaker = select(CartSneakerAssociation).where(
-        CartSneakerAssociation.id == association_id
+        CartSneakerAssociation.id == cart_sneaker_id
     )
     result = await session.execute(request_get_sneaker)
     current_sneaker = result.scalar()
@@ -58,7 +57,7 @@ async def update_sneaker_to_cart(
 
 async def delete_sneaker_to_cart(
     session: AsyncSession,
-    item_delete: CartSneakerDelete,
+    cart_sneaker_id: int,
     user_id: int,
 ) -> None:
     stmt = (
@@ -66,8 +65,7 @@ async def delete_sneaker_to_cart(
         .join(Cart)
         .where(
             Cart.user_id == user_id,
-            CartSneakerAssociation.sneaker_id == item_delete.sneaker_id,
-            CartSneakerAssociation.size_id == item_delete.size_id,
+            CartSneakerAssociation.id == cart_sneaker_id,
         )
     )
     result = await session.execute(stmt)
