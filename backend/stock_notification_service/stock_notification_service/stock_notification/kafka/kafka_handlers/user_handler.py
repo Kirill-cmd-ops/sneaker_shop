@@ -25,7 +25,7 @@ async def handle_user(key: str | None, value: dict):
                 user_update = UserUpdate.model_validate(data, strict=False)
                 await update_user(session, user_id, user_update)
 
-            else:
+            elif event_type == "user_deleted":
                 user_id = value.get("user_id")
                 await delete_user(session, user_id)
     except Exception as e:
