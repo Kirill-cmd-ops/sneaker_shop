@@ -15,7 +15,7 @@ class RunConfig(BaseModel):
 
 class ApiV1Prefix(BaseModel):
     prefix: str = "/v1/cart"
-    sneaker: str = "/sneaker"
+    sneakers: str = "/sneakers"
 
 
 class ApiPrefix(BaseModel):
