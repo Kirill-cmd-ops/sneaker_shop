@@ -1,19 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 
-from cart_service.cart.models import (
-    db_helper,
-    Cart,
-    CartSneakerAssociation,
-    Sneaker,
-    SneakerSizeAssociation,
-)
+from cart_service.cart.models import db_helper
 from cart_service.cart.schemas import CartSneakerCreate, CartSneakerUpdate
-from cart_service.cart.schemas.cart_sneaker import (
-    CartSneakerDelete,
-    CartSneakerQuantity,
-)
 from cart_service.cart.services.cart_sneaker import (
     create_sneaker_to_cart,
     delete_sneaker_to_cart,
@@ -21,19 +10,26 @@ from cart_service.cart.services.cart_sneaker import (
 )
 from cart_service.cart.dependencies.get_current_user import get_user_by_header
 from cart_service.cart.config import settings
+from cart_service.cart.services.check_cart import check_cart_exists
 from cart_service.cart.services.check_permissions import check_role_permissions
-
+from cart_service.cart.services.check_sneaker import check_sneaker_exists
+from cart_service.cart.services.check_sneaker_in_cart import (
+    check_sneaker_in_cart_exists,
+)
+from cart_service.cart.services.check_sneaker_size import check_sneaker_size_exists
+from cart_service.cart.services.decrease_quantity import decrease_sneaker_quantity
+from cart_service.cart.services.increase_quantity import increase_sneaker_quantity
 
 router = APIRouter(
     prefix=settings.api.build_path(
-        settings.api.root, settings.api.v1.prefix, settings.api.v1.sneaker
+        settings.api.root, settings.api.v1.prefix, settings.api.v1.sneakers
     ),
     tags=["Cart Sneaker"],
 )
 
 
 @router.post(
-    "/add/",
+    "/",
     response_model=dict,
     dependencies=(Depends(check_role_permissions("cart.sneaker.add")),),
 )
@@ -42,39 +38,15 @@ async def call_create_sneaker_to_cart(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    stmt = select(Cart).filter(Cart.user_id == user_id)
-    result = await session.execute(stmt)
-    user_cart = result.scalar_one_or_none()
-    if not user_cart:
-        raise HTTPException(status_code=404, detail="Корзина пользователя не найдена")
-
-    check_sneaker = await session.get(Sneaker, item_create.sneaker_id)
-    if not check_sneaker:
-        raise HTTPException(status_code=404, detail="Товар не найден в каталоге")
-
-
-    check_sizes_stmt = select(Sneaker).join(SneakerSizeAssociation).where(
-        Sneaker.id == item_create.sneaker_id,
-        SneakerSizeAssociation.size_id == item_create.size_id,
-    )
-    result = await session.execute(check_sizes_stmt)
-    check_sneaker_size = result.scalar_one_or_none()
-
-    if not check_sneaker_size:
-        raise HTTPException(status_code=404, detail="Размер данной модели не найден")
-
-    stmt = select(CartSneakerAssociation).where(
-        CartSneakerAssociation.cart_id == user_cart.id,
-        CartSneakerAssociation.sneaker_id == item_create.sneaker_id,
-        CartSneakerAssociation.size_id == item_create.size_id,
-    )
-    result = await session.execute(stmt)
-    sneaker_record = result.scalar_one_or_none()
+    cart_id = await check_cart_exists(session, user_id)
+    await check_sneaker_exists(session, item_create)
+    await check_sneaker_size_exists(session, item_create)
+    sneaker_record = await check_sneaker_in_cart_exists(session, cart_id, item_create)
 
     if sneaker_record is None:
         await create_sneaker_to_cart(
             session,
-            cart_id=user_cart.id,
+            cart_id=cart_id,
             sneaker_id=item_create.sneaker_id,
             size_id=item_create.size_id,
         )
@@ -83,105 +55,54 @@ async def call_create_sneaker_to_cart(
 
 
 @router.put(
-    "/update/{association_id}",
+    "/{cart_sneaker_id}",
     response_model=dict,
     dependencies=(Depends(check_role_permissions("cart.sneaker.update")),),
 )
 async def call_update_sneaker_to_cart(
-    association_id: int,
+    cart_sneaker_id: int,
     item_data: CartSneakerUpdate,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     updated_item = await update_sneaker_to_cart(
-        session, association_id=association_id, size_id=item_data.size_id
+        session, cart_sneaker_id=cart_sneaker_id, size_id=item_data.size_id
     )
     return {"status": "Элемент обновлён", "item_id": updated_item.id}
 
 
 @router.delete(
-    "/delete/{sneaker_id}",
+    "/{cart_sneaker_id}",
     response_model=dict,
     dependencies=(Depends(check_role_permissions("cart.sneaker.delete")),),
 )
 async def call_delete_sneaker_to_cart(
-    item_delete: CartSneakerDelete,
+    cart_sneaker_id: int,
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     await delete_sneaker_to_cart(
         session,
-        item_delete=item_delete,
+        cart_sneaker_id=cart_sneaker_id,
         user_id=user_id,
     )
     return {"status": "Элемент удалён"}
 
 
 @router.patch(
-    "/patch/decrease/{sneaker_id}",
+    "/{cart_sneaker_id}",
     response_model=dict,
-    dependencies=(
-        Depends(check_role_permissions("cart.sneaker.delete")),
-    ),  # Update after
+    dependencies=(Depends(check_role_permissions("cart.sneaker.delete")),),
 )
-async def decrease_cart_sneaker_quantity(
-    item_quantity: CartSneakerQuantity,
+async def cart_sneaker_quantity(
+    cart_sneaker_id: int,
+    action: int = Query(..., ge=0, le=1),
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    stmt = select(Cart).filter(Cart.user_id == user_id)
-    result = await session.execute(stmt)
-    user_cart = result.scalar_one_or_none()
-    if not user_cart:
-        raise HTTPException(status_code=404, detail="Корзина пользователя не найдена")
+    cart_id = await check_cart_exists(session, user_id)
 
-    stmt = select(CartSneakerAssociation).where(
-        CartSneakerAssociation.cart_id == user_cart.id,
-        CartSneakerAssociation.sneaker_id == item_quantity.sneaker_id,
-        CartSneakerAssociation.size_id == item_quantity.size_id,
-        CartSneakerAssociation.quantity > 1,
-    )
-
-    result = await session.execute(stmt)
-    sneaker_record = result.scalar_one_or_none()
-
-    if sneaker_record:
-        sneaker_record.quantity -= 1
-
-        await session.commit()
-        return {"status": "quantity -= 1"}
-    return {"status": "quantity = 1"}
-
-
-@router.patch(
-    "/patch/increase/{sneaker_id}",
-    response_model=dict,
-    dependencies=(
-        Depends(check_role_permissions("cart.sneaker.delete")),
-    ),  # Update after
-)
-async def increase_cart_sneaker_quantity(
-    item_quantity: CartSneakerQuantity,
-    user_id: int = Depends(get_user_by_header),
-    session: AsyncSession = Depends(db_helper.session_getter),
-):
-    stmt = select(Cart).filter(Cart.user_id == user_id)
-    result = await session.execute(stmt)
-    user_cart = result.scalar_one_or_none()
-    if not user_cart:
-        raise HTTPException(status_code=404, detail="Корзина пользователя не найдена")
-
-    stmt = select(CartSneakerAssociation).where(
-        CartSneakerAssociation.cart_id == user_cart.id,
-        CartSneakerAssociation.sneaker_id == item_quantity.sneaker_id,
-        CartSneakerAssociation.size_id == item_quantity.size_id,
-    )
-
-    result = await session.execute(stmt)
-    sneaker_record = result.scalar_one_or_none()
-
-    if sneaker_record:
-        sneaker_record.quantity += 1
-
-        await session.commit()
-        return {"status": "quantity += 1"}
-    return {"status": "there is no such record"}
+    if action == 1:
+        result = await increase_sneaker_quantity(cart_sneaker_id, cart_id, session)
+    else:
+        result = await decrease_sneaker_quantity(cart_sneaker_id, cart_id, session)
+    return result
