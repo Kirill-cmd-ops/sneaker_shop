@@ -14,8 +14,8 @@ class RunConfig(BaseModel):
 
 
 class ApiV1Prefix(BaseModel):
-    prefix: str = "/v1/favorites"
-    sneaker: str = "/sneaker"
+    prefix: str = "/v1/favorite"
+    sneakers: str = "/sneakers"
 
 
 class ApiPrefix(BaseModel):
