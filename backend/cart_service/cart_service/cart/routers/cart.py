@@ -16,7 +16,7 @@ router = APIRouter(
 
 
 @router.get(
-    "/view/",
+    "/",
     dependencies=(Depends(check_role_permissions("cart.view")),),
 )
 async def call_get_cart(
