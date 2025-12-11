@@ -5,7 +5,6 @@ __all__ = (
     "UserCreate",
     "SneakerSizesCreate",
     "SneakerSizeUpdate",
-    "SneakerSizesRead",
     "SneakerAssocsDelete",
     "SizeCreate",
     "BrandCreate",
@@ -22,7 +21,6 @@ from .user import (
 from .sneaker_sizes import (
     SneakerSizesCreate,
     SneakerSizeUpdate,
-    SneakerSizesRead,
 )
 from .sneaker_association import SneakerAssocsDelete
 
