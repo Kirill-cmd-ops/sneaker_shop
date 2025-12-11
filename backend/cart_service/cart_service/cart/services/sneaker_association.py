@@ -9,8 +9,10 @@ from cart_service.cart.schemas import (
     SneakerAssocsDelete,
 )
 
+
 async def delete_sneaker_association(
     session: AsyncSession,
+    sneaker_id: int,
     sneaker_assoc_delete: SneakerAssocsDelete,
     sneaker_association_model: Type[Base],
     field_name: str,
@@ -21,7 +23,7 @@ async def delete_sneaker_association(
     field = getattr(sneaker_association_model, field_name)
     stmt = (
         delete(sneaker_association_model)
-        .where(sneaker_association_model.sneaker_id == sneaker_assoc_delete.sneaker_id)
+        .where(sneaker_association_model.sneaker_id == sneaker_id)
         .where(field.in_(sneaker_assoc_delete.assoc_ids))
     )
     result = await session.execute(stmt)
@@ -32,6 +34,7 @@ async def delete_sneaker_association(
         )
 
     await session.commit()
+
 
 async def read_sneaker_association(
     session: AsyncSession,
