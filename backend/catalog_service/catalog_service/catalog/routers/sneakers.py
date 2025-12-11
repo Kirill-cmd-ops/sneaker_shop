@@ -15,13 +15,12 @@ router = APIRouter(
     prefix=settings.api.build_path(
         settings.api.root,
         settings.api.v1.prefix,
-        settings.api.v1.sneakers,
     ),
     tags=["Catalog"],
 )
 
 
-@router.get("/view/")
+@router.get("/")
 async def call_get_sneakers_details(
     session: AsyncSession = Depends(db_helper.session_getter),
     page: Optional[int] = 1,
