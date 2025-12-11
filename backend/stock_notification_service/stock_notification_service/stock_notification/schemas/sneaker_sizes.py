@@ -6,16 +6,9 @@ class SizeQuantity(BaseModel):
     quantity: int = 0
 
 
-class Sneaker(BaseModel):
-    sneaker_id: int
-
-
-class SneakerSizesCreate(Sneaker):
+class SneakerSizesCreate(BaseModel):
     sizes: list[SizeQuantity]
 
 
-class SneakerSizeUpdate(Sneaker):
+class SneakerSizeUpdate(BaseModel):
     size: SizeQuantity
-
-
-class SneakerSizesRead(SizeQuantity): ...
