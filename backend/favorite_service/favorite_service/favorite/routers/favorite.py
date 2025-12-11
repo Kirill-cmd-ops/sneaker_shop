@@ -15,7 +15,7 @@ router = APIRouter(
 
 
 @router.get(
-    "/view",
+    "/",
     dependencies=(Depends(check_role_permissions("favorite.view")),),
 )
 async def call_get_favorite(
