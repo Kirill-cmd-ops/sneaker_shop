@@ -1,14 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 
 from favorite_service.favorite.models import (
     db_helper,
-    Favorite,
-    FavoriteSneakerAssociation,
 )
 from favorite_service.favorite.schemas import FavoriteSneakerCreate
+from favorite_service.favorite.services.check_favorite import check_favorite_exists
 from favorite_service.favorite.services.check_permissions import check_role_permissions
+from favorite_service.favorite.services.check_sneaker_in_favorite import (
+    check_sneaker_in_favorite_exists,
+)
 from favorite_service.favorite.services.favorite_sneaker import (
     create_sneaker_to_favorite,
     delete_sneaker_to_favorite,
@@ -25,50 +26,41 @@ router = APIRouter(
 
 
 @router.post(
-    "/add/",
+    "/",
     response_model=dict,
     dependencies=(Depends(check_role_permissions("favorite.sneaker.add")),),
 )
 async def call_create_sneaker_to_favorite(
-    item: FavoriteSneakerCreate,
+    item_create: FavoriteSneakerCreate,
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    stmt = select(Favorite).filter(Favorite.user_id == user_id)
-    result = await session.execute(stmt)
-    user_favorite = result.scalar_one_or_none()
-    if not user_favorite:
-        raise HTTPException(status_code=404, detail="Избранное пользователя не найдена")
-
-    stmt = (
-        select(FavoriteSneakerAssociation)
-        .where(
-            FavoriteSneakerAssociation.favorite_id == user_favorite.id,
-            FavoriteSneakerAssociation.sneaker_id == item.sneaker_id,
-            )
+    favorite_id = await check_favorite_exists(session, user_id)
+    sneaker_record = await check_sneaker_in_favorite_exists(
+        session, favorite_id, item_create
     )
-    result = await session.execute(stmt)
-    sneaker_record = result.scalar_one_or_none()
 
     if not sneaker_record:
         new_item = await create_sneaker_to_favorite(
             session,
-            favorite_id=user_favorite.id,
-            sneaker_id=item.sneaker_id,
+            favorite_id=favorite_id,
+            sneaker_id=item_create.sneaker_id,
         )
         return {"status": "Элемент добавлен", "item_id": new_item.id}
     return {"status": "Такая запись уже есть в избранном"}
 
 
 @router.delete(
-    "/delete/{sneaker_id}",
+    "/{favorite_sneaker_id}",
     response_model=dict,
     dependencies=(Depends(check_role_permissions("favorite.sneaker.delete")),),
 )
 async def call_delete_sneaker_to_favorite(
-    sneaker_id: int,
+    favorite_sneaker_id: int,
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    await delete_sneaker_to_favorite(session, user_id=user_id, sneaker_id=sneaker_id)
+    await delete_sneaker_to_favorite(
+        session, user_id=user_id, favorite_sneaker_id=favorite_sneaker_id
+    )
     return {"status": "Элемент удалён"}
