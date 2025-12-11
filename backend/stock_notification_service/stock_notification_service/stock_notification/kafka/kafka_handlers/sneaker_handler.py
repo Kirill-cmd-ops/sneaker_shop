@@ -25,7 +25,7 @@ async def handle_sneaker(key: str | None, value: dict):
                 sneaker_update = SneakerUpdate.model_validate(data, strict=False)
                 await update_sneaker(session, sneaker_id, sneaker_update)
 
-            else:
+            elif event_type == "sneaker_deleted":
                 sneaker_id = value.get("sneaker_id")
                 await delete_sneaker(session, sneaker_id)
     except Exception as e:
