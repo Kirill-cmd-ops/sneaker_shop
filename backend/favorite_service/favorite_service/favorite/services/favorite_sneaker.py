@@ -5,7 +5,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from favorite_service.favorite.models import Favorite, FavoriteSneakerAssociation
 
 
-
 async def create_sneaker_to_favorite(
     session: AsyncSession,
     favorite_id: int,
@@ -24,14 +23,14 @@ async def create_sneaker_to_favorite(
 async def delete_sneaker_to_favorite(
     session: AsyncSession,
     user_id: int,
-    sneaker_id: int,
-) -> None:
+    favorite_sneaker_id: int,
+):
     stmt = (
         select(FavoriteSneakerAssociation)
         .join(Favorite)
         .where(
             Favorite.user_id == user_id,
-            FavoriteSneakerAssociation.sneaker_id == sneaker_id,
+            FavoriteSneakerAssociation.id == favorite_sneaker_id,
         )
     )
     result = await session.execute(stmt)
