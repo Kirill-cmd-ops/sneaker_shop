@@ -26,7 +26,7 @@ async def handle_sneaker_sizes(key: str | None, value: dict):
                 data = value.get("data")
                 sneaker_sizes_update = SneakerSizeUpdate(**data)
                 await update_sneaker_sizes(session, int(key), sneaker_sizes_update)
-            else:
+            elif event_type == "sneaker_sizes_deleted":
                 data = value.get("data")
                 sneaker_assoc_delete = SneakerAssocsDelete(**data)
                 await delete_sneaker_association(
