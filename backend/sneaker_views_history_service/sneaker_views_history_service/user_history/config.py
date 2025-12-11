@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from pydantic import BaseModel
-from pydantic import PostgresDsn
 from pydantic_settings import (
     BaseSettings,
     SettingsConfigDict,
@@ -14,8 +13,8 @@ class RunConfig(BaseModel):
 
 
 class ApiV1Prefix(BaseModel):
-    prefix: str = "/v1/history"
-    recent_sneakers_views: str = "/recent_sneakers_views"
+    prefix: str = "/v1/view_history"
+    recent: str = "/recent"
 
 
 class ApiPrefix(BaseModel):
