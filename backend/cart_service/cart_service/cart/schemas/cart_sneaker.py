@@ -1,17 +1,12 @@
 from pydantic import BaseModel
 
 
-class CartSneakerCreate(BaseModel):
-    sneaker_id: int
+class CartSneakerGeneral(BaseModel):
     size_id: int
 
 
-class CartSneakerDelete(CartSneakerCreate):
-    pass
-
-class CartSneakerQuantity(CartSneakerCreate):
-    ...
+class CartSneakerUpdate(CartSneakerGeneral): ...
 
 
-class CartSneakerUpdate(BaseModel):
-    size_id: float
+class CartSneakerCreate(CartSneakerGeneral):
+    sneaker_id: int
