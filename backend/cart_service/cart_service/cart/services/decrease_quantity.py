@@ -22,6 +22,5 @@ async def decrease_sneaker_quantity(
     if sneaker_record:
         sneaker_record.quantity -= 1
 
-        await session.commit()
         return {"status": "quantity -= 1"}
     return {"status": "quantity = 1"}

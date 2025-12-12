@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cart_service.cart.models import (
@@ -21,13 +21,11 @@ async def create_sneaker_to_cart(
         size_id=size_id,
     )
     session.add(new_sneaker)
-    await session.commit()
-    await session.refresh(new_sneaker)
     return new_sneaker
 
 
 async def update_sneaker_to_cart(
-    session: AsyncSession, cart_sneaker_id: int, size_id: float
+    session: AsyncSession, cart_sneaker_id: int, size_id: int
 ) -> CartSneakerAssociation:
     request_get_sneaker = select(CartSneakerAssociation).where(
         CartSneakerAssociation.id == cart_sneaker_id
@@ -50,8 +48,6 @@ async def update_sneaker_to_cart(
             status_code=404, detail="У данной модели кроссовок этот размер отсутствует"
         )
 
-    await session.commit()
-    await session.refresh(current_sneaker)
     return current_sneaker
 
 
@@ -61,18 +57,14 @@ async def delete_sneaker_to_cart(
     user_id: int,
 ) -> None:
     stmt = (
-        select(CartSneakerAssociation)
-        .join(Cart)
+        delete(CartSneakerAssociation)
         .where(
-            Cart.user_id == user_id,
             CartSneakerAssociation.id == cart_sneaker_id,
+            CartSneakerAssociation.cart_id.in_(
+                select(Cart.id).where(Cart.user_id == user_id)
+            )
         )
     )
     result = await session.execute(stmt)
-    association = result.scalar_one_or_none()
-
-    if not association:
+    if result.rowcount == 0:
         raise HTTPException(status_code=404, detail="Объект корзины не найден")
-
-    await session.delete(association)
-    await session.commit()

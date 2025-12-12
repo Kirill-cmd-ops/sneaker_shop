@@ -38,20 +38,24 @@ async def call_create_sneaker_to_cart(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    cart_id = await check_cart_exists(session, user_id)
-    await check_sneaker_exists(session, item_create)
-    await check_sneaker_size_exists(session, item_create)
-    sneaker_record = await check_sneaker_in_cart_exists(session, cart_id, item_create)
-
-    if sneaker_record is None:
-        await create_sneaker_to_cart(
-            session,
-            cart_id=cart_id,
-            sneaker_id=item_create.sneaker_id,
-            size_id=item_create.size_id,
+    async with session.begin():
+        cart_id = await check_cart_exists(session, user_id)
+        await check_sneaker_exists(session, item_create)
+        await check_sneaker_size_exists(session, item_create)
+        sneaker_record = await check_sneaker_in_cart_exists(
+            session, cart_id, item_create
         )
-        return {"status": "Элемент добавлен"}
-    return {"status": "Товар уже есть в коризне"}
+
+        if sneaker_record is None:
+            await create_sneaker_to_cart(
+                session,
+                cart_id=cart_id,
+                sneaker_id=item_create.sneaker_id,
+                size_id=item_create.size_id,
+            )
+            return {"status": "Элемент добавлен"}
+
+    return {"status": "Товар уже есть в корзине"}
 
 
 @router.put(
@@ -64,10 +68,11 @@ async def call_update_sneaker_to_cart(
     item_data: CartSneakerUpdate,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    updated_item = await update_sneaker_to_cart(
-        session, cart_sneaker_id=cart_sneaker_id, size_id=item_data.size_id
-    )
-    return {"status": "Элемент обновлён", "item_id": updated_item.id}
+    async with session.begin():
+        updated_item = await update_sneaker_to_cart(
+            session, cart_sneaker_id=cart_sneaker_id, size_id=item_data.size_id
+        )
+        return {"status": "Элемент обновлён", "item_id": updated_item.id}
 
 
 @router.delete(
@@ -80,12 +85,13 @@ async def call_delete_sneaker_to_cart(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    await delete_sneaker_to_cart(
-        session,
-        cart_sneaker_id=cart_sneaker_id,
-        user_id=user_id,
-    )
-    return {"status": "Элемент удалён"}
+    async with session.begin():
+        await delete_sneaker_to_cart(
+            session,
+            cart_sneaker_id=cart_sneaker_id,
+            user_id=user_id,
+        )
+        return {"status": "Элемент удалён"}
 
 
 @router.patch(
@@ -99,10 +105,11 @@ async def cart_sneaker_quantity(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    cart_id = await check_cart_exists(session, user_id)
+    async with session.begin():
+        cart_id = await check_cart_exists(session, user_id)
 
-    if action == 1:
-        result = await increase_sneaker_quantity(cart_sneaker_id, cart_id, session)
-    else:
-        result = await decrease_sneaker_quantity(cart_sneaker_id, cart_id, session)
-    return result
+        if action == 1:
+            result = await increase_sneaker_quantity(cart_sneaker_id, cart_id, session)
+        else:
+            result = await decrease_sneaker_quantity(cart_sneaker_id, cart_id, session)
+        return result

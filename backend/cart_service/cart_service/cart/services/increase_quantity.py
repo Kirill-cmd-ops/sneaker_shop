@@ -21,6 +21,5 @@ async def increase_sneaker_quantity(
     if sneaker_record:
         sneaker_record.quantity += 1
 
-        await session.commit()
         return {"status": "quantity += 1"}
     return {"status": "there is no such record"}
