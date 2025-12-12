@@ -14,4 +14,3 @@ async def add_to_blacklist(
         revoked_at=datetime.utcnow(),
     )
     session.add(blacklist)
-    await session.commit()

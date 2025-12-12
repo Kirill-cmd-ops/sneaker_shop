@@ -34,30 +34,38 @@ async def all_logic_refresh_token(
     session: AsyncSession = Depends(db_helper.session_getter),
     refresh_token: str = Cookie(alias="refresh_session_cookie"),
 ):
-
-    # 1) Проверка refresh токена
-    user_id = await check_refresh_token_valid(session, refresh_token)
+    async with session.begin():
+        # 1) Проверка refresh токена
+        user_id = await check_refresh_token_valid(session, refresh_token)
 
     # 2) Создание нового access токена и прокид в cookie
     await set_jwt_token(user_id, token_aud, response)
 
-    # 3) Хэшируем старый refresh токен, перед созданием нового
-    hash_refresh_token = encode_refresh_token(refresh_token)
-
-    # 4) Получаем jti refresh токена, для добавления в blacklist
-    refresh_token_id = await get_refresh_token_id(hash_refresh_token, session)
-
-    # 5) Добавление в blacklist
-    await add_to_blacklist(session, refresh_token_id)
-
-    # 6) Создание нового refresh токена
+    # 3) Создание нового refresh токена
     raw = secrets.token_bytes(32)
-    refresh_token = generate_refresh_token(raw)
+    new_refresh_token = generate_refresh_token(raw)
 
-    # 7) Записываем refresh токен в cookie
+    # 4) Хэшируем старый refresh токен, перед созданием нового
+    hash_old_token = encode_refresh_token(refresh_token)
+
+    # 5) Хеширование нового refresh токена
+    hash_new_token = encode_refresh_token(new_refresh_token)
+
+    async with session.begin():
+        # 6) Получаем jti старого refresh токена, для добавления в blacklist
+        refresh_token_id = await get_refresh_token_id(hash_old_token, session)
+
+        # 7) Добавление в blacklist старого refresh токена
+        await add_to_blacklist(session, refresh_token_id)
+
+        # 8) Добавление нового refresh токена в бд
+        await hash_refresh_token_add_db(session, hash_new_token, user_id)
+
+
+    # 9) Записываем refresh токен в cookie
     set_value_in_cookie(
         response,
-        value=refresh_token,
+        value=new_refresh_token,
         key=settings.cookie.refresh_cookie_name,
         max_age=settings.cookie.refresh_cookie_max_age,
         path=settings.cookie.cookie_path,
@@ -66,9 +74,4 @@ async def all_logic_refresh_token(
         samesite=settings.cookie.cookie_samesite,
     )
 
-    # 7) Хеширование refresh токена
-    hash_refresh_token = encode_refresh_token(refresh_token)
-    await hash_refresh_token_add_db(session, hash_refresh_token, user_id)
-
     return {"result": "ok"}
-    # Просмотреть логику и подумать

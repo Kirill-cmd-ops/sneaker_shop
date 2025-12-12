@@ -14,4 +14,3 @@ async def hash_refresh_token_add_db(
         expires_at=datetime.utcnow() + timedelta(weeks=4),
     )
     session.add(token)
-    await session.commit()
