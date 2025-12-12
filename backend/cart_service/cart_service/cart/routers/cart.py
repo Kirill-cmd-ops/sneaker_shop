@@ -23,8 +23,9 @@ async def call_get_cart(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    items = await read_cart(session, user_id=user_id)
+    async with session.begin():
+        items = await read_cart(session, user_id=user_id)
 
-    total_price = calculate_total_price(items)
+        total_price = calculate_total_price(items)
 
-    return {"Цена корзины: ": total_price, "Кроссовки": items}
+        return {"Цена корзины: ": total_price, "Кроссовки": items}
