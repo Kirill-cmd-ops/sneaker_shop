@@ -43,14 +43,15 @@ async def call_create_sneaker_association(
     sneaker_associations_create: SneakerAssocsCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    await create_sneaker_association(
-        session,
-        sneaker_id,
-        sneaker_associations_create,
-        SneakerColorAssociation,
-        "color_id",
-    )
-    return "Запись нового цвета прошла успешно"
+    async with session.begin():
+        await create_sneaker_association(
+            session,
+            sneaker_id,
+            sneaker_associations_create,
+            SneakerColorAssociation,
+            "color_id",
+        )
+        return "Запись нового цвета прошла успешно"
 
 
 @router.delete(
@@ -62,14 +63,15 @@ async def call_delete_sneaker_association(
     sneaker_assoc_delete: SneakerAssocsDelete,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    await delete_sneaker_association(
-        session,
-        sneaker_id,
-        sneaker_assoc_delete,
-        SneakerColorAssociation,
-        "color_id",
-    )
-    return "Цвета товара успешно удалены"
+    async with session.begin():
+        await delete_sneaker_association(
+            session,
+            sneaker_id,
+            sneaker_assoc_delete,
+            SneakerColorAssociation,
+            "color_id",
+        )
+        return "Цвета товара успешно удалены"
 
 
 @router.get(
@@ -80,7 +82,8 @@ async def call_read_sneaker_association(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    colors = await read_sneaker_association(
-        session, SneakerColorAssociation, sneaker_id
-    )
-    return colors
+    async with session.begin():
+        colors = await read_sneaker_association(
+            session, SneakerColorAssociation, sneaker_id
+        )
+        return colors

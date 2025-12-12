@@ -29,7 +29,6 @@ async def create_sneaker_association(
 
         sneaker_association = sneaker_association_model(**assoc_data)
         session.add(sneaker_association)
-    await session.commit()
 
 
 async def delete_sneaker_association(
@@ -54,8 +53,6 @@ async def delete_sneaker_association(
         raise HTTPException(
             status_code=404, detail="Ничего не найдено по вашим параметрам"
         )
-
-    await session.commit()
 
 
 async def read_sneaker_association(
