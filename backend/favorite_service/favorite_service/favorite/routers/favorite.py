@@ -22,5 +22,6 @@ async def call_get_favorite(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    items = await read_favorite(session, user_id=user_id)
-    return items
+    async with session.begin():
+        items = await read_favorite(session, user_id=user_id)
+        return items
