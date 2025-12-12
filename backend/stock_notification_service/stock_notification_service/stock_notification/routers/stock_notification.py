@@ -34,19 +34,19 @@ async def call_add_user_subscriptions(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    try:
-        result = await add_user_subscriptions(
-            subscription_create=subscription_create,
-            user_id=user_id,
-            session=session,
-        )
-        return result
+    async with session.begin():
+        try:
+            result = await add_user_subscriptions(
+                subscription_create=subscription_create,
+                user_id=user_id,
+                session=session,
+            )
+            return result
 
-    except IntegrityError as e:
-        await session.rollback()
-        raise HTTPException(
-            status_code=404, detail="Не удалось найти требуемую модель кроссовок"
-        )
+        except IntegrityError as e:
+            raise HTTPException(
+                status_code=404, detail="Не удалось найти требуемую модель кроссовок"
+            )
 
 
 @router.delete("/{subscription_id}")
@@ -55,17 +55,17 @@ async def call_delete_user_subscriptions(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    try:
-        result = await delete_user_subscriptions(
-            subscription_id=subscription_id, user_id=user_id, session=session
-        )
-        return result
+    async with session.begin():
+        try:
+            result = await delete_user_subscriptions(
+                subscription_id=subscription_id, user_id=user_id, session=session
+            )
+            return result
 
-    except IntegrityError as e:
-        await session.rollback()
-        raise HTTPException(
-            status_code=404, detail="Не удалось найти требуемую модель кроссовок"
-        )
+        except IntegrityError as e:
+            raise HTTPException(
+                status_code=404, detail="Не удалось найти требуемую модель кроссовок"
+            )
 
 
 @router.delete("/")
@@ -73,18 +73,18 @@ async def call_delete_all_user_subscriptions(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    try:
-        result = await delete_all_user_subscriptions(
-            user_id=user_id,
-            session=session,
-        )
-        return result
+    async with session.begin():
+        try:
+            result = await delete_all_user_subscriptions(
+                user_id=user_id,
+                session=session,
+            )
+            return result
 
-    except IntegrityError as e:
-        await session.rollback()
-        raise HTTPException(
-            status_code=404, detail="Не удалось найти требуемуемые модели кроссовок"
-        )
+        except IntegrityError as e:
+            raise HTTPException(
+                status_code=404, detail="Не удалось найти требуемуемые модели кроссовок"
+            )
 
 
 @router.get("/")
@@ -92,14 +92,14 @@ async def call_get_user_subscriptions_for_notifications(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    try:
-        result = await get_user_subscriptions_for_notifications(
-            user_id=user_id,
-            session=session,
-        )
-        return result
-    except IntegrityError as e:
-        await session.rollback()
-        raise HTTPException(
-            status_code=404, detail="Не удалось найти требуемуемые модели кроссовок"
-        )
+    async with session.begin():
+        try:
+            result = await get_user_subscriptions_for_notifications(
+                user_id=user_id,
+                session=session,
+            )
+            return result
+        except IntegrityError as e:
+            raise HTTPException(
+                status_code=404, detail="Не удалось найти требуемуемые модели кроссовок"
+            )

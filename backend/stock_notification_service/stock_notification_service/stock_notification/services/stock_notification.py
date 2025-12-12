@@ -16,7 +16,6 @@ async def add_user_subscriptions(
         size_id=subscription_create.size_id,
     )
     session.add(user_subscription)
-    await session.commit()
     return {"record": user_subscription}
 
 
@@ -32,7 +31,6 @@ async def delete_user_subscriptions(
     )
 
     await session.execute(request_delete_subscription_user)
-    await session.commit()
 
     return {"record was remove"}
 
@@ -46,7 +44,6 @@ async def delete_all_user_subscriptions(
     )
 
     await session.execute(request_delete_all_subscription_user)
-    await session.commit()
 
     return {"records was remove"}
 
