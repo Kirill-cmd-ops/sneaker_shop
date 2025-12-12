@@ -41,7 +41,6 @@ async def create_sneaker(
         )
         session.add(sneaker_materials)
 
-    await session.commit()
     return sneaker
 
 
@@ -58,8 +57,6 @@ async def delete_sneaker(session: AsyncSession, sneaker_id: int):
     stmt = delete(Sneaker).where(Sneaker.id == sneaker_id)
     await session.execute(stmt)
 
-    await session.commit()
-
 
 async def update_sneaker(
     session: AsyncSession, sneaker_id: int, sneaker_update: SneakerUpdate
@@ -70,7 +67,6 @@ async def update_sneaker(
         setattr(sneaker, field, value)
 
     session.add(sneaker)
-    await session.commit()
 
 
 async def get_sneaker_details(

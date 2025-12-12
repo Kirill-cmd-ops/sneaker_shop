@@ -2,7 +2,9 @@ from aiokafka import AIOKafkaProducer
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.dependencies.get_current_user import get_user_by_header
+from sneaker_details_service.sneaker_details.dependencies.get_current_user import (
+    get_user_by_header,
+)
 from sneaker_details_service.sneaker_details.kafka.producer_event.recently_viewed_sneakers import (
     send_viewed_sneaker,
 )
@@ -54,7 +56,9 @@ async def call_create_sneaker(
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
-    sneaker = await create_sneaker(session, sneaker_create)
+    async with session.begin():
+        sneaker = await create_sneaker(session, sneaker_create)
+
     await send_create_sneaker_data(producer, sneaker.id, sneaker_create)
     return sneaker
 
@@ -68,7 +72,9 @@ async def call_delete_sneaker(
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
-    await delete_sneaker(session, sneaker_id)
+    async with session.begin():
+        await delete_sneaker(session, sneaker_id)
+
     await send_delete_sneaker_data(producer, sneaker_id)
     return "Товар успешно удален"
 
@@ -83,7 +89,9 @@ async def call_update_sneaker(
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
-    await update_sneaker(session, sneaker_id, sneaker_update)
+    async with session.begin():
+        await update_sneaker(session, sneaker_id, sneaker_update)
+
     await send_update_sneaker_data(producer, sneaker_id, sneaker_update)
     return "Товар успешно обновлен"
 
@@ -93,9 +101,10 @@ async def call_get_sneaker_details(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
-    user_id: int = Depends(get_user_by_header)
+    user_id: int = Depends(get_user_by_header),
 ):
-    sneaker_info = await get_sneaker_details(session=session, sneaker_id=sneaker_id)
+    async with session.begin():
+        sneaker_info = await get_sneaker_details(session=session, sneaker_id=sneaker_id)
 
     if not sneaker_info:
         raise HTTPException(status_code=404, detail="Кроссовки не найдены")
