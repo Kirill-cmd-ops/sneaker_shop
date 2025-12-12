@@ -35,7 +35,6 @@ async def update_role_permissions(
         )
     )
 
-    await session.commit()
 
 
 async def get_role_permissions(
