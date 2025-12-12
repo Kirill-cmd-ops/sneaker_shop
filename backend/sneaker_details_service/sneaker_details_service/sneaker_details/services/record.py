@@ -11,7 +11,6 @@ async def create_record(
 ):
     new_record = table_name(**schema_create.dict())
     session.add(new_record)
-    await session.commit()
     return new_record
 
 
@@ -22,5 +21,4 @@ async def delete_record(
 ):
     delete_record_request = delete(table_name).where(table_name.id == record_id)
     await session.execute(delete_record_request)
-    await session.commit()
     return {"result": "ok"}
