@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from favorite_service.favorite.models import Favorite, FavoriteSneakerAssociation
@@ -15,8 +15,7 @@ async def create_sneaker_to_favorite(
         sneaker_id=sneaker_id,
     )
     session.add(new_sneaker)
-    await session.commit()
-    await session.refresh(new_sneaker)
+
     return new_sneaker
 
 
@@ -26,18 +25,15 @@ async def delete_sneaker_to_favorite(
     favorite_sneaker_id: int,
 ):
     stmt = (
-        select(FavoriteSneakerAssociation)
-        .join(Favorite)
+        delete(FavoriteSneakerAssociation)
         .where(
-            Favorite.user_id == user_id,
             FavoriteSneakerAssociation.id == favorite_sneaker_id,
+            FavoriteSneakerAssociation.favorite_id.in_(
+                select(Favorite.id).where(Favorite.user_id == user_id)
+            )
         )
     )
     result = await session.execute(stmt)
-    association = result.scalar_one_or_none()
 
-    if not association:
+    if result.rowcount == 0:
         raise HTTPException(status_code=404, detail="Объект избранного не найден")
-
-    await session.delete(association)
-    await session.commit()

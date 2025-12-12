@@ -19,7 +19,7 @@ from favorite_service.favorite.config import settings
 
 router = APIRouter(
     prefix=settings.api.build_path(
-        settings.api.root, settings.api.v1.prefix, settings.api.v1.sneaker
+        settings.api.root, settings.api.v1.prefix, settings.api.v1.sneakers
     ),
     tags=["Favorite Sneaker"],
 )
@@ -35,18 +35,20 @@ async def call_create_sneaker_to_favorite(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    favorite_id = await check_favorite_exists(session, user_id)
-    sneaker_record = await check_sneaker_in_favorite_exists(
-        session, favorite_id, item_create
-    )
-
-    if not sneaker_record:
-        new_item = await create_sneaker_to_favorite(
-            session,
-            favorite_id=favorite_id,
-            sneaker_id=item_create.sneaker_id,
+    async with session.begin():
+        favorite_id = await check_favorite_exists(session, user_id)
+        sneaker_record = await check_sneaker_in_favorite_exists(
+            session, favorite_id, item_create
         )
-        return {"status": "Элемент добавлен", "item_id": new_item.id}
+
+        if not sneaker_record:
+            new_item = await create_sneaker_to_favorite(
+                session,
+                favorite_id=favorite_id,
+                sneaker_id=item_create.sneaker_id,
+            )
+            return {"status": "Элемент добавлен", "item_id": new_item.id}
+
     return {"status": "Такая запись уже есть в избранном"}
 
 
@@ -60,7 +62,8 @@ async def call_delete_sneaker_to_favorite(
     user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    await delete_sneaker_to_favorite(
-        session, user_id=user_id, favorite_sneaker_id=favorite_sneaker_id
-    )
-    return {"status": "Элемент удалён"}
+    async with session.begin():
+        await delete_sneaker_to_favorite(
+            session, user_id=user_id, favorite_sneaker_id=favorite_sneaker_id
+        )
+        return {"status": "Элемент удалён"}
