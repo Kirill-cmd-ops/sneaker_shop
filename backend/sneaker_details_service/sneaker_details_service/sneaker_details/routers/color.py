@@ -22,8 +22,9 @@ router = APIRouter(
 async def call_create_color(
     color_create: ColorCreate, session: AsyncSession = Depends(db_helper.session_getter)
 ):
-    new_color = await create_record(session, Color, color_create)
-    return new_color
+    async with session.begin():
+        new_color = await create_record(session, Color, color_create)
+        return new_color
 
 
 @router.delete("/{color_id}")
@@ -31,6 +32,6 @@ async def call_delete_color(
     color_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    result = await delete_record(session, Color, color_id)
-
-    return result
+    async with session.begin():
+        result = await delete_record(session, Color, color_id)
+        return result
