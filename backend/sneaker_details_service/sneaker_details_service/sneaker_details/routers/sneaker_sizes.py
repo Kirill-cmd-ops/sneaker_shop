@@ -60,7 +60,9 @@ async def call_create_sneaker_sizes(
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
-    await create_sneaker_sizes(session, sneaker_id, sneaker_sizes_create)
+    async with session.begin():
+        await create_sneaker_sizes(session, sneaker_id, sneaker_sizes_create)
+
     await send_create_sneaker_sizes_data(producer, sneaker_id, sneaker_sizes_create)
     return "Запись нового размера прошла успешно"
 
@@ -75,13 +77,15 @@ async def call_delete_sneaker_association(
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
-    await delete_sneaker_association(
-        session,
-        sneaker_id,
-        sneaker_sizes_delete,
-        SneakerSizeAssociation,
-        "size_id",
-    )
+    async with session.begin():
+        await delete_sneaker_association(
+            session,
+            sneaker_id,
+            sneaker_sizes_delete,
+            SneakerSizeAssociation,
+            "size_id",
+        )
+
     await send_delete_sneaker_sizes_data(producer, sneaker_id, sneaker_sizes_delete)
     return "Размеры товара успешно удалены"
 
@@ -96,7 +100,9 @@ async def call_update_sneaker_sizes(
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
-    await update_sneaker_sizes(session, sneaker_id, sneaker_size_update)
+    async with session.begin():
+        await update_sneaker_sizes(session, sneaker_id, sneaker_size_update)
+
     await send_update_sneaker_sizes_data(producer, sneaker_id, sneaker_size_update)
     return "Размер был изменен корректно"
 
@@ -109,5 +115,8 @@ async def call_read_sneaker_association(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    sizes = await read_sneaker_association(session, SneakerSizeAssociation, sneaker_id)
-    return sizes
+    async with session.begin():
+        sizes = await read_sneaker_association(
+            session, SneakerSizeAssociation, sneaker_id
+        )
+        return sizes
