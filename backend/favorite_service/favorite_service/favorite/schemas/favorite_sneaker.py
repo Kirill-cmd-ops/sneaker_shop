@@ -1,5 +1,12 @@
 from pydantic import BaseModel
 
-class FavoriteSneakerCreate(BaseModel):
-    sneaker_id: int
 
+class FavoriteSneakerGeneral(BaseModel):
+    size_id: int
+
+
+class FavoriteSneakerUpdate(FavoriteSneakerGeneral): ...
+
+
+class FavoriteSneakerCreate(FavoriteSneakerGeneral):
+    sneaker_id: int
