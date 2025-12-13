@@ -13,6 +13,7 @@ class FavoriteSneakerAssociation(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     favorite_id: Mapped[int] = mapped_column(ForeignKey("favorites.id"))
     sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id"))
+    size_id: Mapped[int] = mapped_column(ForeignKey("sizes.id"))
 
     favorite: Mapped["Favorite"] = relationship(
         "Favorite",
