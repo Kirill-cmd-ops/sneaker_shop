@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from favorite_service.favorite.models import Favorite
@@ -21,3 +21,8 @@ async def read_favorite(session: AsyncSession, user_id: int):
         )
 
     return favorite.sneaker_associations
+
+async def delete_favorite(session: AsyncSession, user_id: int):
+    stmt = delete(Favorite).where(Favorite.user_id == user_id)
+    await session.execute(stmt)
+    return {"Избранное пользователя было удалено успешно"}
