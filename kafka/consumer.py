@@ -16,10 +16,15 @@ async def start_consumer(
         topic,
         bootstrap_servers=bootstrap_servers,
         group_id=group_id,
-        enable_auto_commit=True,
-        auto_offset_reset="earliest",
+        enable_auto_commit=False,
+        auto_offset_reset="latest",
         key_deserializer=lambda k: k.decode("utf-8") if k else None,
         value_deserializer=lambda v: json.loads(v.decode("utf-8")),
+        session_timeout_ms=45000,
+        heartbeat_interval_ms=3000,
+        max_poll_interval_ms=300000,
+        request_timeout_ms=30000,
+        retry_backoff_ms=100,
     )
     await consumer.start()
     task = asyncio.create_task(_consume_loop(consumer, handler))
