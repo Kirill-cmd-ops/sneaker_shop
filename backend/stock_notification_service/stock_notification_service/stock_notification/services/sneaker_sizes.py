@@ -46,10 +46,33 @@ async def update_sneaker_sizes(
     result = await session.execute(stmt)
     sneaker_size = result.scalar_one()
 
+    sneaker_size_quantity_old = sneaker_size.quantity
+    sneaker_size_quantity_new = sneaker_size_update.size.quantity
+
     sneaker_size.quantity = sneaker_size_update.size.quantity
 
     session.add(sneaker_size)
     await session.commit()
+
+    if sneaker_size_quantity_old == 0 and sneaker_size_quantity_new > 0:
+        subscribed_users = await get_subscribed_users(
+            session,
+            sneaker_id,
+            sneaker_size_update.size.size_id,
+        )
+
+        for user_email in subscribed_users:
+            handle_update_quantity.delay(
+                hostname=settings.smtp_config.smtp_hostname,
+                port=settings.smtp_config.smtp_port,
+                start_tls=settings.smtp_config.smtp_start_tls,
+                username=settings.smtp_config.smtp_username,
+                password=settings.smtp_config.smtp_password,
+                sender_gmail="Sneaker Shop <bondarenkokirill150208@gmail.com>",
+                recipient_gmail=user_email,
+                email_title="Уведомление о поступлении товара",
+                body_title="Данная модель кроссовок поступила в наличие",
+            )
 
 
 async def delete_sneaker_association(
