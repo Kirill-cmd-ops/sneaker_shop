@@ -13,7 +13,7 @@ async def create_sneaker_to_cart(
     session: AsyncSession,
     cart_id: int,
     sneaker_id: int,
-    size_id: float,
+    size_id: int,
 ):
     new_sneaker = CartSneakerAssociation(
         cart_id=cart_id,

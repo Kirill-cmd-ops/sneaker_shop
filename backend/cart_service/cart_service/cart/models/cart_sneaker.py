@@ -13,7 +13,7 @@ class CartSneakerAssociation(Base):
     cart_id: Mapped[int] = mapped_column(ForeignKey("carts.id"))
     quantity: Mapped[int] = mapped_column(default=1)
     sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id"))
-    size_id: Mapped[float] = mapped_column(ForeignKey("sizes.id"))
+    size_id: Mapped[int] = mapped_column(ForeignKey("sizes.id"))
 
     cart: Mapped["Cart"] = relationship(
         "Cart",
