@@ -25,15 +25,19 @@ async def create_sneaker_to_favorite(
 
 
 async def update_sneaker_to_favorite(
-    session: AsyncSession, favorite_sneaker_id: int, size_id: int
+    session: AsyncSession,
+    favorite_sneaker_id: int,
+    size_id: int,
+    user_id: int,
 ) -> FavoriteSneakerAssociation:
     request_get_sneaker = select(FavoriteSneakerAssociation).where(
-        FavoriteSneakerAssociation.id == favorite_sneaker_id
+        FavoriteSneakerAssociation.id == favorite_sneaker_id,
+        FavoriteSneakerAssociation.favorite_id.in_(
+            select(Favorite.id).where(Favorite.user_id == user_id),
+        ),
     )
     result = await session.execute(request_get_sneaker)
     current_sneaker = result.scalar()
-    if not current_sneaker.sneaker_id:
-        raise HTTPException(status_code=404, detail="Элемент корзины не найден")
 
     request_get_sneaker_sizes = select(SneakerSizeAssociation.size_id).where(
         SneakerSizeAssociation.sneaker_id == current_sneaker.sneaker_id

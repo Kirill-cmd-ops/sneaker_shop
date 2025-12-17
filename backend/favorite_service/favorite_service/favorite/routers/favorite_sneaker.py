@@ -12,7 +12,9 @@ from favorite_service.favorite.services.check_sneaker import check_sneaker_exist
 from favorite_service.favorite.services.check_sneaker_in_favorite import (
     check_sneaker_in_favorite_exists,
 )
-from favorite_service.favorite.services.check_sneaker_size import check_sneaker_size_exists
+from favorite_service.favorite.services.check_sneaker_size import (
+    check_sneaker_size_exists,
+)
 from favorite_service.favorite.services.favorite_sneaker import (
     create_sneaker_to_favorite,
     delete_sneaker_to_favorite,
@@ -66,11 +68,15 @@ async def call_create_sneaker_to_favorite(
 async def call_update_sneaker_to_favorite(
     favorite_sneaker_id: int,
     item_data: FavoriteSneakerUpdate,
+    user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     async with session.begin():
         updated_item = await update_sneaker_to_favorite(
-            session, favorite_sneaker_id=favorite_sneaker_id, size_id=item_data.size_id
+            session,
+            favorite_sneaker_id=favorite_sneaker_id,
+            size_id=item_data.size_id,
+            user_id=user_id,
         )
         return {"status": "Элемент обновлён", "item_id": updated_item.id}
 
