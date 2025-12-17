@@ -25,15 +25,19 @@ async def create_sneaker_to_cart(
 
 
 async def update_sneaker_to_cart(
-    session: AsyncSession, cart_sneaker_id: int, size_id: int
+    session: AsyncSession,
+    cart_sneaker_id: int,
+    size_id: int,
+    user_id: int,
 ) -> CartSneakerAssociation:
     request_get_sneaker = select(CartSneakerAssociation).where(
-        CartSneakerAssociation.id == cart_sneaker_id
+        CartSneakerAssociation.id == cart_sneaker_id,
+        CartSneakerAssociation.cart_id.in_(
+            select(Cart.id).where(Cart.user_id == user_id),
+        ),
     )
     result = await session.execute(request_get_sneaker)
     current_sneaker = result.scalar()
-    if not current_sneaker.sneaker_id:
-        raise HTTPException(status_code=404, detail="Элемент корзины не найден")
 
     request_get_sneaker_sizes = select(SneakerSizeAssociation.size_id).where(
         SneakerSizeAssociation.sneaker_id == current_sneaker.sneaker_id
@@ -56,14 +60,11 @@ async def delete_sneaker_to_cart(
     cart_sneaker_id: int,
     user_id: int,
 ) -> None:
-    stmt = (
-        delete(CartSneakerAssociation)
-        .where(
-            CartSneakerAssociation.id == cart_sneaker_id,
-            CartSneakerAssociation.cart_id.in_(
-                select(Cart.id).where(Cart.user_id == user_id)
-            )
-        )
+    stmt = delete(CartSneakerAssociation).where(
+        CartSneakerAssociation.id == cart_sneaker_id,
+        CartSneakerAssociation.cart_id.in_(
+            select(Cart.id).where(Cart.user_id == user_id)
+        ),
     )
     result = await session.execute(stmt)
     if result.rowcount == 0:

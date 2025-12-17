@@ -66,11 +66,15 @@ async def call_create_sneaker_to_cart(
 async def call_update_sneaker_to_cart(
     cart_sneaker_id: int,
     item_data: CartSneakerUpdate,
+    user_id: int = Depends(get_user_by_header),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     async with session.begin():
         updated_item = await update_sneaker_to_cart(
-            session, cart_sneaker_id=cart_sneaker_id, size_id=item_data.size_id
+            session,
+            cart_sneaker_id=cart_sneaker_id,
+            size_id=item_data.size_id,
+            user_id=user_id,
         )
         return {"status": "Элемент обновлён", "item_id": updated_item.id}
 
