@@ -10,10 +10,10 @@ if TYPE_CHECKING:
 
 class CartSneakerAssociation(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
-    cart_id: Mapped[int] = mapped_column(ForeignKey("carts.id"))
+    cart_id: Mapped[int] = mapped_column(ForeignKey("carts.id", ondelete="CASCADE"))
     quantity: Mapped[int] = mapped_column(default=1)
-    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id"))
-    size_id: Mapped[int] = mapped_column(ForeignKey("sizes.id"))
+    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="RESTRICT"))
+    size_id: Mapped[int] = mapped_column(ForeignKey("sizes.id", ondelete="RESTRICT"))
 
     cart: Mapped["Cart"] = relationship(
         "Cart",
