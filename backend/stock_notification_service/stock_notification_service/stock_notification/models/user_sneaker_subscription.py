@@ -13,9 +13,9 @@ if TYPE_CHECKING:
 
 class UserSneakerSubscription(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id"))
-    size_id: Mapped[int] = mapped_column(ForeignKey("sizes.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="RESTRICT"))
+    size_id: Mapped[int] = mapped_column(ForeignKey("sizes.id", ondelete="RESTRICT"))
 
     __table_args__ = (
         UniqueConstraint("sneaker_id", "user_id", "size_id", name="uq_user_sneaker_size"),

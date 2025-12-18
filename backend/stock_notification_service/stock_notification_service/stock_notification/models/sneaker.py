@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 class Sneaker(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
-    brand_id: Mapped[int] = mapped_column(ForeignKey("brands.id"), index=True)
+    brand_id: Mapped[int] = mapped_column(ForeignKey("brands.id", ondelete="RESTRICT"), index=True)
     image_url: Mapped[str] = mapped_column(String(200), nullable=False)
     is_active: Mapped[bool] = mapped_column(default=True)
 
