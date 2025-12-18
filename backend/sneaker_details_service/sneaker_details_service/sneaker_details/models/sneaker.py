@@ -24,8 +24,8 @@ class Sneaker(Base):
     name: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
     description: Mapped[str] = mapped_column(String(400))
     price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
-    brand_id: Mapped[int] = mapped_column(ForeignKey("brands.id"), index=True)
-    country_id: Mapped[int] = mapped_column(ForeignKey("countries.id"), index=True)
+    brand_id: Mapped[int] = mapped_column(ForeignKey("brands.id", ondelete="RESTRICT"), index=True)
+    country_id: Mapped[int] = mapped_column(ForeignKey("countries.id", ondelete="RESTRICT"), index=True)
     image_url: Mapped[str] = mapped_column(String(200), nullable=False)
     is_active: Mapped[bool] = mapped_column(default=True)
     created_at: Mapped[datetime] = mapped_column(

@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 
 class SneakerColorAssociation(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
-    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id"))
-    color_id: Mapped[int] = mapped_column(ForeignKey("colors.id"))
+    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="CASCADE"))
+    color_id: Mapped[int] = mapped_column(ForeignKey("colors.id", ondelete="RESTRICT"))
 
     __table_args__ = (
         UniqueConstraint("sneaker_id", "color_id", name="uq_sneaker_color"),
