@@ -12,8 +12,8 @@ if TYPE_CHECKING:
 
 
 class RolePermissionAssociation(IntIdPkMixin, Base):
-    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"))
-    permission_id: Mapped[int] = mapped_column(ForeignKey("permissions.id"))
+    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id", ondelete="CASCADE"))
+    permission_id: Mapped[int] = mapped_column(ForeignKey("permissions.id", ondelete="RESTRICT"))
 
     role: Mapped["Role"] = relationship(
         "Role",
