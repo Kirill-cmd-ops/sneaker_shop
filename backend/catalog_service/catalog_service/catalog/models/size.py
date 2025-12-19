@@ -4,18 +4,18 @@ from sqlalchemy import CheckConstraint, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from catalog_service.catalog.models.base import Base
+from .mixins import IntIdPkMixin
 
 if TYPE_CHECKING:
     from .sneaker import Sneaker
     from .sneaker_size import SneakerSizeAssociation
 
 
-class Size(Base):
+class Size(Base, IntIdPkMixin):
     __table_args__ = (
         CheckConstraint("eu_size BETWEEN 15 AND 50", name="check_eu_size_range"),
     )
 
-    id: Mapped[int] = mapped_column(primary_key=True)
     eu_size: Mapped[float] = mapped_column(
         Numeric(3, 1),
         nullable=False,
