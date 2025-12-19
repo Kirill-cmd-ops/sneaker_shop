@@ -1,21 +1,22 @@
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from sneaker_details_service.sneaker_details.models import Color
 
-async def seed_colors(db: AsyncSession):
+
+async def seed_colors(session: AsyncSession):
     colors = [
-        Color(name="Красный"),
-        Color(name="Синий"),
-        Color(name="Зелёный"),
-        Color(name="Чёрный"),
-        Color(name="Белый"),
-        Color(name="Жёлтый"),
-        Color(name="Оранжевый"),
-        Color(name="Фиолетовый"),
-        Color(name="Розовый"),
-        Color(name="Коричневый"),
-        Color(name="Серый"),
+        {"name": "Красный"},
+        {"name": "Синий"},
+        {"name": "Зелёный"},
+        {"name": "Чёрный"},
+        {"name": "Белый"},
+        {"name": "Жёлтый"},
+        {"name": "Оранжевый"},
+        {"name": "Фиолетовый"},
+        {"name": "Розовый"},
+        {"name": "Коричневый"},
+        {"name": "Серый"},
     ]
-    db.add_all(colors)
-    await db.flush()
-    await db.commit()
-# обновить сиды таблицы sneakers
+    stmt = insert(Color).values(colors)
+    await session.execute(stmt)
+    await session.commit()

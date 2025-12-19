@@ -1,21 +1,23 @@
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from sneaker_details_service.sneaker_details.models import Material
 
-async def seed_materials(db: AsyncSession):
-    materials = [
-        Material(name="Сетка (Mesh)"),
-        Material(name="Кожа"),
-        Material(name="Замша"),
-        Material(name="Нубук"),
-        Material(name="Полиэстер"),
-        Material(name="Эко-кожа"),
-        Material(name="Текстиль"),
-        Material(name="Спандекс"),
-        Material(name="Резина"),
-        Material(name="Phylon"),
-        Material(name="TPU (Термополиуретан)"),
-        Material(name="EVA"),
-    ]
 
-    db.add_all(materials)
-    await db.commit()
+async def seed_materials(session: AsyncSession):
+    materials = [
+        {"name": "Сетка (Mesh)"},
+        {"name": "Кожа"},
+        {"name": "Замша"},
+        {"name": "Нубук"},
+        {"name": "Полиэстер"},
+        {"name": "Эко-кожа"},
+        {"name": "Текстиль"},
+        {"name": "Спандекс"},
+        {"name": "Резина"},
+        {"name": "Phylon"},
+        {"name": "TPU (Термополиуретан)"},
+        {"name": "EVA"},
+    ]
+    stmt = insert(Material).values(materials)
+    await session.execute(stmt)
+    await session.commit()
