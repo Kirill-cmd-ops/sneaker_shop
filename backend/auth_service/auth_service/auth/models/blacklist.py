@@ -6,7 +6,7 @@ from auth_service.auth.models.base import Base
 from auth_service.auth.models.mixins import IntIdPkMixin
 
 
-class Blacklist(IntIdPkMixin, Base):
+class Blacklist(Base, IntIdPkMixin):
     __table_args__ = (
         UniqueConstraint("refresh_token_id"),
     )

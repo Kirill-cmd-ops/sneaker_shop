@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from .user import User
 
 
-class Role(IntIdPkMixin, Base):
+class Role(Base, IntIdPkMixin):
     name: Mapped[str]
 
     permission_association: Mapped[list["RolePermissionAssociation"]] = relationship(

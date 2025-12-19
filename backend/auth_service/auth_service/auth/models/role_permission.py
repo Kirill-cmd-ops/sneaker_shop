@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from .permission import Permission
 
 
-class RolePermissionAssociation(IntIdPkMixin, Base):
+class RolePermissionAssociation(Base, IntIdPkMixin):
     role_id: Mapped[int] = mapped_column(ForeignKey("roles.id", ondelete="CASCADE"))
     permission_id: Mapped[int] = mapped_column(ForeignKey("permissions.id", ondelete="RESTRICT"))
 
