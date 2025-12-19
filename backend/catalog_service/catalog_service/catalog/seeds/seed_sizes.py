@@ -1,7 +1,10 @@
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from catalog_service.catalog.models import Size
 
-async def seed_sizes(db: AsyncSession):
-    sizes = [Size(eu_size=size) for size in range(15, 51)]
-    db.add_all(sizes)
-    await db.commit()
+
+async def seed_sizes(session: AsyncSession):
+    sizes = [{"eu_size": size} for size in range(15, 51)]
+    stmt = insert(Size).values(sizes)
+    await session.execute(stmt)
+    await session.commit()
