@@ -4,13 +4,13 @@ from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
+from .mixins import IntIdPkMixin
 
 if TYPE_CHECKING:
     from .sneaker import Sneaker
     from .color import Color
 
-class SneakerColorAssociation(Base):
-    id: Mapped[int] = mapped_column(primary_key=True)
+class SneakerColorAssociation(Base, IntIdPkMixin):
     sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="CASCADE"))
     color_id: Mapped[int] = mapped_column(ForeignKey("colors.id", ondelete="RESTRICT"))
 

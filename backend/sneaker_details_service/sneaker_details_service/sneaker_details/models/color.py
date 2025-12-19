@@ -3,13 +3,14 @@ from typing import TYPE_CHECKING
 from .base import Base
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
+from .mixins import IntIdPkMixin
+
 if TYPE_CHECKING:
     from .sneaker import Sneaker
     from .sneaker_color import SneakerColorAssociation
 
 
-class Color(Base):
-    id: Mapped[int] = mapped_column(primary_key=True)
+class Color(Base, IntIdPkMixin):
     name: Mapped[str] = mapped_column(
         String(20),
         nullable=False,
