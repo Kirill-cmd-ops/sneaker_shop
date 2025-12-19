@@ -1,4 +1,5 @@
 from sqlalchemy import select
+from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from sneaker_details_service.sneaker_details.models import (
     SneakerMaterialAssociation,
@@ -8,9 +9,9 @@ from sneaker_details_service.sneaker_details.models import (
 import random
 
 
-async def seed_sneaker_materials(db: AsyncSession):
-    sneakers = (await db.execute(select(Sneaker))).scalars().all()
-    materials = (await db.execute(select(Material))).scalars().all()
+async def seed_sneaker_materials(session: AsyncSession):
+    sneakers = (await session.execute(select(Sneaker))).scalars().all()
+    materials = (await session.execute(select(Material))).scalars().all()
 
     associations = []
 
@@ -19,10 +20,9 @@ async def seed_sneaker_materials(db: AsyncSession):
 
         for material in assigned_materials:
             associations.append(
-                SneakerMaterialAssociation(
-                    sneaker_id=sneaker.id, material_id=material.id
-                )
+                {"sneaker_id": sneaker.id, "material_id": material.id},
             )
 
-    db.add_all(associations)
-    await db.commit()
+    stmt = insert(SneakerMaterialAssociation).values(associations)
+    await session.execute(stmt)
+    await session.commit()

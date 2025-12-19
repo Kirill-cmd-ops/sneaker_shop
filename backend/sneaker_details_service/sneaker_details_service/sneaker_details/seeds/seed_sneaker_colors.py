@@ -1,3 +1,4 @@
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sneaker_details_service.sneaker_details.models import (
@@ -8,9 +9,9 @@ from sneaker_details_service.sneaker_details.models import (
 import random
 
 
-async def seed_sneaker_colors(db: AsyncSession):
-    sneakers = (await db.execute(select(Sneaker))).scalars().all()
-    colors = (await db.execute(select(Color))).scalars().all()
+async def seed_sneaker_colors(session: AsyncSession):
+    sneakers = (await session.execute(select(Sneaker))).scalars().all()
+    colors = (await session.execute(select(Color))).scalars().all()
 
     associations = []
 
@@ -18,9 +19,8 @@ async def seed_sneaker_colors(db: AsyncSession):
         assigned_colors = random.sample(colors, min(3, len(colors)))
 
         for color in assigned_colors:
-            associations.append(
-                SneakerColorAssociation(sneaker_id=sneaker.id, color_id=color.id)
-            )
+            associations.append({"sneaker_id": sneaker.id, "color_id": color.id})
 
-    db.add_all(associations)
-    await db.commit()
+    stmt = insert(SneakerColorAssociation).values(associations)
+    await session.execute(stmt)
+    await session.commit()

@@ -1,20 +1,22 @@
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from sneaker_details_service.sneaker_details.models import Country
 
-async def seed_countries(db: AsyncSession):
+
+async def seed_countries(session: AsyncSession):
     countries = [
-        Country(name="Argentina"),
-        Country(name="China"),
-        Country(name="France"),
-        Country(name="Georgia"),
-        Country(name="Germany"),
-        Country(name="Italy"),
-        Country(name="Latvia"),
-        Country(name="Lithuania"),
-        Country(name="Poland"),
-        Country(name="Portugal"),
-        Country(name="Spain"),
+        {"name": "Argentina"},
+        {"name": "China"},
+        {"name": "France"},
+        {"name": "Georgia"},
+        {"name": "Germany"},
+        {"name": "Italy"},
+        {"name": "Latvia"},
+        {"name": "Lithuania"},
+        {"name": "Poland"},
+        {"name": "Portugal"},
+        {"name": "Spain"},
     ]
-    db.add_all(countries)
-    await db.flush()
-    await db.commit()
+    stmt = insert(Country).values(countries)
+    await session.execute(stmt)
+    await session.commit()
