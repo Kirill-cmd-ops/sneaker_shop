@@ -4,14 +4,14 @@ from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
+from .mixins import IntIdPkMixin
 
 if TYPE_CHECKING:
     from .size import Size
     from .sneaker import Sneaker
 
 
-class SneakerSizeAssociation(Base):
-    id: Mapped[int] = mapped_column(primary_key=True)
+class SneakerSizeAssociation(Base, IntIdPkMixin):
     sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="CASCADE"))
     size_id: Mapped[int] = mapped_column(ForeignKey("sizes.id", ondelete="RESTRICT"))
     quantity: Mapped[int] = mapped_column(default=0)

@@ -4,6 +4,7 @@ from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from stock_notification_service.stock_notification.models.base import Base
+from .mixins import IntIdPkMixin
 
 if TYPE_CHECKING:
     from .brand import Brand
@@ -13,8 +14,7 @@ if TYPE_CHECKING:
     from .user_sneaker_subscription import UserSneakerSubscription
 
 
-class Sneaker(Base):
-    id: Mapped[int] = mapped_column(primary_key=True)
+class Sneaker(Base, IntIdPkMixin):
     name: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
     brand_id: Mapped[int] = mapped_column(ForeignKey("brands.id", ondelete="RESTRICT"), index=True)
     image_url: Mapped[str] = mapped_column(String(200), nullable=False)

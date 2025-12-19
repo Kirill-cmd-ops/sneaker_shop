@@ -4,6 +4,7 @@ from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from stock_notification_service.stock_notification.models import Base
+from .mixins import IntIdPkMixin
 
 if TYPE_CHECKING:
     from .sneaker import Sneaker
@@ -11,8 +12,7 @@ if TYPE_CHECKING:
     from .size import Size
 
 
-class UserSneakerSubscription(Base):
-    id: Mapped[int] = mapped_column(primary_key=True)
+class UserSneakerSubscription(Base, IntIdPkMixin):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="RESTRICT"))
     size_id: Mapped[int] = mapped_column(ForeignKey("sizes.id", ondelete="RESTRICT"))
