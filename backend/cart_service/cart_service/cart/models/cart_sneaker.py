@@ -4,12 +4,13 @@ from cart_service.cart.models import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
 
+from .mixins import IntIdPkMixin
+
 if TYPE_CHECKING:
     from .cart import Cart
     from .sneaker import Sneaker
 
-class CartSneakerAssociation(Base):
-    id: Mapped[int] = mapped_column(primary_key=True)
+class CartSneakerAssociation(Base, IntIdPkMixin):
     cart_id: Mapped[int] = mapped_column(ForeignKey("carts.id", ondelete="CASCADE"))
     quantity: Mapped[int] = mapped_column(default=1)
     sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="RESTRICT"))

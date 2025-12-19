@@ -2,13 +2,14 @@ from cart_service.cart.models import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
 
+from .mixins import IntIdPkMixin
+
 if TYPE_CHECKING:
     from .cart_sneaker import CartSneakerAssociation
     from .sneaker import Sneaker
 
 
-class Cart(Base):
-    id: Mapped[int] = mapped_column(primary_key=True)
+class Cart(Base, IntIdPkMixin):
     user_id: Mapped[int] = mapped_column(unique=True, index=True)
 
     sneaker_associations: Mapped[list["CartSneakerAssociation"]] = relationship(

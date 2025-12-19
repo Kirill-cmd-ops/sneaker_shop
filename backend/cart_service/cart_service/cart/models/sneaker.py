@@ -5,6 +5,7 @@ from sqlalchemy import String, CheckConstraint, Numeric, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from cart_service.cart.models.base import Base
+from .mixins import IntIdPkMixin
 
 if TYPE_CHECKING:
     from .brand import Brand
@@ -14,10 +15,9 @@ if TYPE_CHECKING:
     from .cart import Cart
 
 
-class Sneaker(Base):
+class Sneaker(Base, IntIdPkMixin):
     __table_args__ = (CheckConstraint("price > 0", name="check_price_positive"),)
 
-    id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
     price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     brand_id: Mapped[int] = mapped_column(ForeignKey("brands.id", ondelete="RESTRICT"), index=True)
