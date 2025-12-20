@@ -11,8 +11,8 @@ if TYPE_CHECKING:
     from .color import Color
 
 class SneakerColorAssociation(Base, IntIdPkMixin):
-    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="CASCADE"))
-    color_id: Mapped[int] = mapped_column(ForeignKey("colors.id", ondelete="RESTRICT"))
+    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="CASCADE"), index=True)
+    color_id: Mapped[int] = mapped_column(ForeignKey("colors.id", ondelete="RESTRICT"), index=True)
 
     __table_args__ = (
         UniqueConstraint("sneaker_id", "color_id", name="uq_sneaker_color"),
