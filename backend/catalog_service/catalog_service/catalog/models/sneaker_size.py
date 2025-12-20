@@ -12,8 +12,8 @@ if TYPE_CHECKING:
 
 
 class SneakerSizeAssociation(Base, IntIdPkMixin):
-    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="CASCADE"))
-    size_id: Mapped[int] = mapped_column(ForeignKey("sizes.id", ondelete="RESTRICT"))
+    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="CASCADE"), index=True)
+    size_id: Mapped[int] = mapped_column(ForeignKey("sizes.id", ondelete="RESTRICT"), index=True)
     quantity: Mapped[int] = mapped_column(default=0)
 
     __table_args__ = (
