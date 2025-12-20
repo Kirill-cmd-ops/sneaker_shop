@@ -15,8 +15,8 @@ if TYPE_CHECKING:
     from .role import Role
 
 class User(Base, IntIdPkMixin, SQLAlchemyBaseUserTable[UserIdType]):
-    first_name: Mapped[str] = mapped_column(String(50), nullable=True)
-    last_name: Mapped[str] = mapped_column(String(50), nullable=True)
+    first_name: Mapped[str] = mapped_column(String(50), nullable=False)
+    last_name: Mapped[str] = mapped_column(String(50), nullable=False)
 
     oauth_accounts = relationship("OAuthAccount", lazy="joined")
 

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, relationship, mapped_column
 
 from auth_service.auth.models import Base
 from auth_service.auth.models.mixins import IntIdPkMixin
@@ -10,7 +11,7 @@ if TYPE_CHECKING:
     from .role import Role
 
 class Permission(Base, IntIdPkMixin):
-    name: Mapped[str]
+    name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
 
     role_association: Mapped[list["RolePermissionAssociation"]] = relationship(
         "RolePermissionAssociation",
