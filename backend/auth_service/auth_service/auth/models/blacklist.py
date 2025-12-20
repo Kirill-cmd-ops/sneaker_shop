@@ -10,6 +10,6 @@ class Blacklist(Base, IntIdPkMixin):
     __table_args__ = (
         UniqueConstraint("refresh_token_id"),
     )
-    refresh_token_id: Mapped[int] = mapped_column(ForeignKey("refresh_tokens.id", ondelete="CASCADE"), nullable=False)
+    refresh_token_id: Mapped[int] = mapped_column(ForeignKey("refresh_tokens.id", ondelete="CASCADE"), index=True, nullable=False)
     revoked_at: Mapped[datetime] = mapped_column(nullable=False, default=datetime.utcnow)
     revoked_reason: Mapped[str] = mapped_column(nullable=False, default="The token has been replaced with a new one")

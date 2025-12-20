@@ -11,9 +11,9 @@ if TYPE_CHECKING:
     from .user import User
 
 
-class UserRoleAssociation(IntIdPkMixin, Base):
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
-    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id", ondelete="RESTRICT"))
+class UserRoleAssociation(Base, IntIdPkMixin):
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id", ondelete="RESTRICT"), index=True)
 
     role: Mapped["Role"] = relationship(
         "Role",
