@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class Favorite(Base, IntIdPkMixin):
-    user_id: Mapped[int] = mapped_column(unique=True, index=True)
+    user_id: Mapped[int] = mapped_column(nullable=False, unique=True)
 
     sneaker_associations: Mapped[list["FavoriteSneakerAssociation"]] = relationship(
         "FavoriteSneakerAssociation",
