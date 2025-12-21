@@ -13,12 +13,26 @@ if TYPE_CHECKING:
 
 
 class UserSneakerSubscription(Base, IntIdPkMixin):
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
-    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="RESTRICT"), nullable=False, index=True)
-    size_id: Mapped[int] = mapped_column(ForeignKey("sizes.id", ondelete="RESTRICT"), nullable=False, index=True)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    sneaker_id: Mapped[int] = mapped_column(
+        ForeignKey("sneakers.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+    size_id: Mapped[int] = mapped_column(
+        ForeignKey("sizes.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
 
     __table_args__ = (
-        UniqueConstraint("user_id", "sneaker_id", "size_id", name="uq_user_sneaker_size"),
+        UniqueConstraint(
+            "user_id",
+            "sneaker_id",
+            "size_id",
+            name="uq_user_sneaker_size",
+        ),
     )
 
     sneaker: Mapped["Sneaker"] = relationship(
@@ -33,5 +47,5 @@ class UserSneakerSubscription(Base, IntIdPkMixin):
 
     size: Mapped["Size"] = relationship(
         "Size",
-        back_populates="user_sneaker_notifications"
+        back_populates="user_sneaker_notifications",
     )
