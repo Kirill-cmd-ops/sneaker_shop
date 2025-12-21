@@ -10,12 +10,23 @@ if TYPE_CHECKING:
     from .sneaker import Sneaker
     from .color import Color
 
+
 class SneakerColorAssociation(Base, IntIdPkMixin):
-    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="CASCADE"), nullable=False, index=True)
-    color_id: Mapped[int] = mapped_column(ForeignKey("colors.id", ondelete="RESTRICT"), nullable=False, index=True)
+    sneaker_id: Mapped[int] = mapped_column(
+        ForeignKey("sneakers.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    color_id: Mapped[int] = mapped_column(
+        ForeignKey("colors.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
 
     __table_args__ = (
-        UniqueConstraint("sneaker_id", "color_id", name="uq_sneaker_color"),
+        UniqueConstraint(
+            "sneaker_id",
+            "color_id",
+            name="uq_sneaker_color",
+        ),
     )
 
     sneaker: Mapped["Sneaker"] = relationship(

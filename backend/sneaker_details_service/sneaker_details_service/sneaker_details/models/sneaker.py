@@ -19,19 +19,55 @@ if TYPE_CHECKING:
 
 
 class Sneaker(Base, IntIdPkMixin):
-    __table_args__ = (CheckConstraint("price > 0", name="check_price_positive"),)
-
-    name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
-    description: Mapped[str] = mapped_column(String(400), nullable=False)
-    price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
-    brand_id: Mapped[int] = mapped_column(ForeignKey("brands.id", ondelete="RESTRICT"), nullable=False, index=True)
-    country_id: Mapped[int] = mapped_column(ForeignKey("countries.id", ondelete="RESTRICT"), nullable=False, index=True)
-    image_url: Mapped[str] = mapped_column(String(200), nullable=False, unique=True)
-    is_active: Mapped[bool] = mapped_column(nullable=False, default=True)
-    created_at: Mapped[datetime] = mapped_column(
-        default=datetime.utcnow, nullable=False, server_default=func.now()
+    __table_args__ = (
+        CheckConstraint(
+            "price > 0",
+            name="check_price_positive",
+        ),
     )
-    gender: Mapped[str] = mapped_column(String(10), nullable=False, default="унисекс")
+
+    name: Mapped[str] = mapped_column(
+        String(100),
+        nullable=False,
+        unique=True,
+    )
+    description: Mapped[str] = mapped_column(
+        String(400),
+        nullable=False,
+    )
+    price: Mapped[float] = mapped_column(
+        Numeric(10, 2),
+        nullable=False,
+    )
+    brand_id: Mapped[int] = mapped_column(
+        ForeignKey("brands.id", ondelete="RESTRICT"),
+        nullable=False,
+        index=True,
+    )
+    country_id: Mapped[int] = mapped_column(
+        ForeignKey("countries.id", ondelete="RESTRICT"),
+        nullable=False,
+        index=True,
+    )
+    image_url: Mapped[str] = mapped_column(
+        String(200),
+        nullable=False,
+        unique=True,
+    )
+    is_active: Mapped[bool] = mapped_column(
+        nullable=False,
+        default=True,
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        nullable=False,
+        default=datetime.utcnow,
+        server_default=func.now(),
+    )
+    gender: Mapped[str] = mapped_column(
+        String(10),
+        nullable=False,
+        default="унисекс",
+    )
 
     country: Mapped["Country"] = relationship(
         "Country",
