@@ -12,8 +12,14 @@ if TYPE_CHECKING:
 
 
 class UserRoleAssociation(Base, IntIdPkMixin):
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
-    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id", ondelete="RESTRICT"), nullable=False, index=True)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    role_id: Mapped[int] = mapped_column(
+        ForeignKey("roles.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
 
     role: Mapped["Role"] = relationship(
         "Role",
@@ -24,4 +30,10 @@ class UserRoleAssociation(Base, IntIdPkMixin):
         "User",
         back_populates="role_association",
     )
-    __table_args__ = (UniqueConstraint("user_id", "role_id", name="uq_user_role"),)
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id",
+            "role_id",
+            name="uq_user_role",
+        ),
+    )

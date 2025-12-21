@@ -14,11 +14,21 @@ if TYPE_CHECKING:
     from .user_role import UserRoleAssociation
     from .role import Role
 
-class User(Base, IntIdPkMixin, SQLAlchemyBaseUserTable[UserIdType]):
-    first_name: Mapped[str] = mapped_column(String(50), nullable=False)
-    last_name: Mapped[str] = mapped_column(String(50), nullable=False)
 
-    oauth_accounts = relationship("OAuthAccount", lazy="joined")
+class User(Base, IntIdPkMixin, SQLAlchemyBaseUserTable[UserIdType]):
+    first_name: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+    )
+    last_name: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+    )
+
+    oauth_accounts = relationship(
+        "OAuthAccount",
+        lazy="joined",
+    )
 
     role_association: Mapped[list["UserRoleAssociation"]] = relationship(
         "UserRoleAssociation",
@@ -26,8 +36,7 @@ class User(Base, IntIdPkMixin, SQLAlchemyBaseUserTable[UserIdType]):
     )
 
     roles: Mapped[list["Role"]] = relationship(
-        secondary="user_role_associations",
-        viewonly=True
+        secondary="user_role_associations", viewonly=True
     )
 
     @classmethod

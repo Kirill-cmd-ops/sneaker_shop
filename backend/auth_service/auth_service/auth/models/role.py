@@ -14,7 +14,11 @@ if TYPE_CHECKING:
 
 
 class Role(Base, IntIdPkMixin):
-    name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+    name: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+        unique=True,
+    )
 
     permission_association: Mapped[list["RolePermissionAssociation"]] = relationship(
         "RolePermissionAssociation",
@@ -28,10 +32,10 @@ class Role(Base, IntIdPkMixin):
 
     permissions: Mapped[list["Permission"]] = relationship(
         secondary="role_permission_associations",
-        viewonly=True
+        viewonly=True,
     )
 
     users: Mapped[list["User"]] = relationship(
         secondary="user_role_associations",
-        viewonly=True
+        viewonly=True,
     )

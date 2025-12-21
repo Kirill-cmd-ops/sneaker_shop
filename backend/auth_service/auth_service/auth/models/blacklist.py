@@ -7,9 +7,16 @@ from auth_service.auth.models.mixins import IntIdPkMixin
 
 
 class Blacklist(Base, IntIdPkMixin):
-    __table_args__ = (
-        UniqueConstraint("refresh_token_id"),
+    __table_args__ = (UniqueConstraint("refresh_token_id"),)
+    refresh_token_id: Mapped[int] = mapped_column(
+        ForeignKey("refresh_tokens.id", ondelete="CASCADE"),
+        nullable=False,
     )
-    refresh_token_id: Mapped[int] = mapped_column(ForeignKey("refresh_tokens.id", ondelete="CASCADE"), nullable=False, index=True)
-    revoked_at: Mapped[datetime] = mapped_column(nullable=False, default=datetime.utcnow)
-    revoked_reason: Mapped[str] = mapped_column(nullable=False, default="The token has been replaced with a new one")
+    revoked_at: Mapped[datetime] = mapped_column(
+        nullable=False,
+        default=datetime.utcnow,
+    )
+    revoked_reason: Mapped[str] = mapped_column(
+        nullable=False,
+        default="The token has been replaced with a new one",
+    )
