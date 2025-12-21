@@ -11,12 +11,7 @@ if TYPE_CHECKING:
 
 
 class Color(Base, IntIdPkMixin):
-    name: Mapped[str] = mapped_column(
-        String(20),
-        nullable=False,
-        unique=True,
-        index=True,
-    )
+    name: Mapped[str] = mapped_column(String(20), nullable=False, unique=True)
     sneaker_associations: Mapped[list["SneakerColorAssociation"]] = relationship(
         "SneakerColorAssociation",
         back_populates="color",

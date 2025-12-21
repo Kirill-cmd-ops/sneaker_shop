@@ -10,14 +10,8 @@ if TYPE_CHECKING:
 
 
 class Country(Base, IntIdPkMixin):
-    name: Mapped[str] = mapped_column(
-        String(40),
-        nullable=False,
-        unique=True,
-        index=True,
-    )
+    name: Mapped[str] = mapped_column(String(40), nullable=False, unique=True)
 
     sneakers: Mapped[list["Sneaker"]] = relationship(
-        "Sneaker",
-        back_populates="country"
+        "Sneaker", back_populates="country"
     )

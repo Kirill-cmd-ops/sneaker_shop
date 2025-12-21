@@ -11,12 +11,7 @@ if TYPE_CHECKING:
 
 
 class Material(Base, IntIdPkMixin):
-    name: Mapped[str] = mapped_column(
-        String(40),
-        nullable=False,
-        unique=True,
-        index=True,
-    )
+    name: Mapped[str] = mapped_column(String(40), nullable=False, unique=True)
     sneaker_associations: Mapped[list["SneakerMaterialAssociation"]] = relationship(
         "SneakerMaterialAssociation",
         back_populates="material",
