@@ -15,10 +15,10 @@ if TYPE_CHECKING:
 
 
 class Sneaker(Base, IntIdPkMixin):
-    name: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
-    brand_id: Mapped[int] = mapped_column(ForeignKey("brands.id", ondelete="RESTRICT"), index=True)
-    image_url: Mapped[str] = mapped_column(String(200), nullable=False)
-    is_active: Mapped[bool] = mapped_column(default=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
+    brand_id: Mapped[int] = mapped_column(ForeignKey("brands.id", ondelete="RESTRICT"), nullable=False, index=True)
+    image_url: Mapped[str] = mapped_column(String(200), nullable=False, unique=True)
+    is_active: Mapped[bool] = mapped_column(nullable=False, default=True)
 
     brand: Mapped["Brand"] = relationship(
         "Brand",

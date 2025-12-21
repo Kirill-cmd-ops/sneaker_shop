@@ -13,9 +13,7 @@ if TYPE_CHECKING:
 
 
 class User(Base, IntIdPkMixin):
-    email: Mapped[str] = mapped_column(
-        String(length=320), unique=True, index=True, nullable=False
-    )
+    email: Mapped[str] = mapped_column(String(length=320), unique=True, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 

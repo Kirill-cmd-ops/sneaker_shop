@@ -14,10 +14,6 @@ if TYPE_CHECKING:
 
 
 class Size(Base, IntIdPkMixin):
-    __table_args__ = (
-        CheckConstraint("eu_size BETWEEN 15 AND 50", name="check_eu_size_range"),
-    )
-
     eu_size: Mapped[float] = mapped_column(
         Numeric(3, 1),
         nullable=False,
