@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import String, Boolean
+from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from stock_notification_service.stock_notification.models.base import Base
@@ -13,9 +13,19 @@ if TYPE_CHECKING:
 
 
 class User(Base, IntIdPkMixin):
-    email: Mapped[str] = mapped_column(String(length=320), unique=True, nullable=False)
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
-    is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    email: Mapped[str] = mapped_column(
+        String(length=320),
+        nullable=False,
+        unique=True,
+    )
+    is_active: Mapped[bool] = mapped_column(
+        nullable=False,
+        default=True,
+    )
+    is_verified: Mapped[bool] = mapped_column(
+        nullable=False,
+        default=False,
+    )
 
     sneaker_size_subscriptions: Mapped[list["UserSneakerSubscription"]] = relationship(
         "UserSneakerSubscription",
