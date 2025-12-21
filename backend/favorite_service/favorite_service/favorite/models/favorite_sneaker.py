@@ -12,12 +12,24 @@ if TYPE_CHECKING:
 
 
 class FavoriteSneakerAssociation(Base, IntIdPkMixin):
-    favorite_id: Mapped[int] = mapped_column(ForeignKey("favorites.id", ondelete="CASCADE"), nullable=False, index=True)
-    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="RESTRICT"), nullable=False, index=True)
-    size_id: Mapped[int] = mapped_column(ForeignKey("sizes.id", ondelete="RESTRICT"), nullable=False, index=True)
+    favorite_id: Mapped[int] = mapped_column(
+        ForeignKey("favorites.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    sneaker_id: Mapped[int] = mapped_column(
+        ForeignKey("sneakers.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+    size_id: Mapped[int] = mapped_column(
+        ForeignKey("sizes.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
 
-    __table_args__ = (
-        UniqueConstraint("favorite_id", "sneaker_id", "size_id", name="uq_favorite_sneaker_size")
+    __table_args__ = UniqueConstraint(
+        "favorite_id",
+        "sneaker_id",
+        "size_id",
+        name="uq_favorite_sneaker_size",
     )
     favorite: Mapped["Favorite"] = relationship(
         "Favorite",
