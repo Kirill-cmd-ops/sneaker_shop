@@ -12,12 +12,25 @@ if TYPE_CHECKING:
 
 
 class SneakerSizeAssociation(Base, IntIdPkMixin):
-    sneaker_id: Mapped[int] = mapped_column(ForeignKey("sneakers.id", ondelete="CASCADE"), nullable=False, index=True)
-    size_id: Mapped[int] = mapped_column(ForeignKey("sizes.id", ondelete="RESTRICT"), nullable=False, index=True)
-    quantity: Mapped[int] = mapped_column(nullable=False, default=0)
-
     __table_args__ = (
-        UniqueConstraint("sneaker_id", "size_id", name="uq_sneaker_size"),
+        UniqueConstraint(
+            "sneaker_id",
+            "size_id",
+            name="uq_sneaker_size",
+        ),
+    )
+
+    sneaker_id: Mapped[int] = mapped_column(
+        ForeignKey("sneakers.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    size_id: Mapped[int] = mapped_column(
+        ForeignKey("sizes.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+    quantity: Mapped[int] = mapped_column(
+        nullable=False,
+        default=0,
     )
 
     sneaker: Mapped["Sneaker"] = relationship(
