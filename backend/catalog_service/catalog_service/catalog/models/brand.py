@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 
 
 class Brand(Base, IntIdPkMixin):
-    name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True, index=True)
-    image_url: Mapped[str] = mapped_column(String(200), nullable=False)
+    name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
+    image_url: Mapped[str] = mapped_column(String(200), nullable=False, unique=True)
 
     sneakers: Mapped[list["Sneaker"]] = relationship(
         "Sneaker",
