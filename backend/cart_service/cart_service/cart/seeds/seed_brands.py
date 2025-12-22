@@ -11,7 +11,19 @@ async def seed_brands(session: AsyncSession):
         {"name": "Vans", "image_url": "/uploads/brands/vans.png"},
         {"name": "Salomon", "image_url": "/uploads/brands/salomon.png"},
         {"name": "Asics", "image_url": "/uploads/brands/asics.png"},
-        {"name": "New-balance", "image_url": "/uploads/brands/new-balance.png"},
+        {"name": "New balance", "image_url": "/uploads/brands/newbalance.png"},
+        {"name": "Reebok", "image_url": "/uploads/brands/reebok.png"},
+        {"name": "Converse", "image_url": "/uploads/brands/converse.png"},
+        {"name": "Jordan", "image_url": "/uploads/brands/jordan.png"},
+        {"name": "Under Armour", "image_url": "/uploads/brands/underarmour.png"},
+        {"name": "Saucony", "image_url": "/uploads/brands/saucony.png"},
+        {"name": "Fila", "image_url": "/uploads/brands/fila.png"},
+
+        {"name": "Hoka", "image_url": "/uploads/brands/hoka.png"},
+        {"name": "Mizuno", "image_url": "/uploads/brands/mizuno.png"},
+        {"name": "Diadora", "image_url": "/uploads/brands/diadora.png"},
+        {"name": "Brooks", "image_url": "/uploads/brands/brooks.png"},
+        {"name": "Kappa", "image_url": "/uploads/brands/kappa.png"},
     ]
     stmt = insert(Brand).values(brands)
     await session.execute(stmt)
