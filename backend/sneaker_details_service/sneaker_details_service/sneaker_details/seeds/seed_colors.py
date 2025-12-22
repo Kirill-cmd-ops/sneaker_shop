@@ -16,6 +16,17 @@ async def seed_colors(session: AsyncSession):
         {"name": "Розовый"},
         {"name": "Коричневый"},
         {"name": "Серый"},
+        {"name": "Бежевый"},
+        {"name": "Хаки"},
+        {"name": "Бирюзовый"},
+        {"name": "Металлик"},
+        {"name": "Золотой"},
+        {"name": "Серебряный"},
+        {"name": "Бордовый"},
+        {"name": "Лаймовый"},
+        {"name": "Аквамарин"},
+        {"name": "Небесно-голубой"},
+        {"name": "Оливковый"},
     ]
     stmt = insert(Color).values(colors)
     await session.execute(stmt)

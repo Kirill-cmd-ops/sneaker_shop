@@ -10,17 +10,80 @@ import random
 
 
 async def seed_sneaker_colors(session: AsyncSession):
-    sneakers = (await session.execute(select(Sneaker))).scalars().all()
-    colors = (await session.execute(select(Color))).scalars().all()
 
-    associations = []
+    sneaker_colors = [
+        {"sneaker_id": 1, "color_id": 4},
+        {"sneaker_id": 2, "color_id": 5},
+        {"sneaker_id": 3, "color_id": 15},
+        {"sneaker_id": 4, "color_id": 4},
+        {"sneaker_id": 5, "color_id": 11},
+        {"sneaker_id": 6, "color_id": 1},
+        {"sneaker_id": 7, "color_id": 21},
+        {"sneaker_id": 8, "color_id": 12},
+        {"sneaker_id": 9, "color_id": 4},
+        {"sneaker_id": 10, "color_id": 18},
+        {"sneaker_id": 11, "color_id": 2},
+        {"sneaker_id": 12, "color_id": 19},
+        {"sneaker_id": 13, "color_id": 6},
+        {"sneaker_id": 14, "color_id": 2},
+        {"sneaker_id": 15, "color_id": 12},
+        {"sneaker_id": 16, "color_id": 7},
+        {"sneaker_id": 17, "color_id": 4},
+        {"sneaker_id": 18, "color_id": 5},
+        {"sneaker_id": 19, "color_id": 21},
+        {"sneaker_id": 20, "color_id": 12},
+        {"sneaker_id": 21, "color_id": 4},
+        {"sneaker_id": 22, "color_id": 5},
+        {"sneaker_id": 23, "color_id": 17},
+        {"sneaker_id": 24, "color_id": 4},
+        {"sneaker_id": 25, "color_id": 2},
+        {"sneaker_id": 26, "color_id": 2},
+        {"sneaker_id": 27, "color_id": 5},
+        {"sneaker_id": 28, "color_id": 11},
+        {"sneaker_id": 29, "color_id": 11},
+        {"sneaker_id": 30, "color_id": 12},
+        {"sneaker_id": 31, "color_id": 5},
+        {"sneaker_id": 32, "color_id": 11},
+        {"sneaker_id": 33, "color_id": 18},
+        {"sneaker_id": 34, "color_id": 5},
+        {"sneaker_id": 35, "color_id": 1},
+        {"sneaker_id": 36, "color_id": 17},
+        {"sneaker_id": 37, "color_id": 5},
+        {"sneaker_id": 38, "color_id": 2},
+        {"sneaker_id": 39, "color_id": 6},
+        {"sneaker_id": 40, "color_id": 12},
+        {"sneaker_id": 41, "color_id": 5},
+        {"sneaker_id": 42, "color_id": 18},
+        {"sneaker_id": 43, "color_id": 12},
+        {"sneaker_id": 44, "color_id": 12},
+        {"sneaker_id": 45, "color_id": 2},
+        {"sneaker_id": 46, "color_id": 4},
+        {"sneaker_id": 47, "color_id": 5},
+        {"sneaker_id": 48, "color_id": 5},
+        {"sneaker_id": 49, "color_id": 2},
+        {"sneaker_id": 50, "color_id": 11},
+        {"sneaker_id": 51, "color_id": 4},
+        {"sneaker_id": 52, "color_id": 3},
+        {"sneaker_id": 53, "color_id": 21},
+        {"sneaker_id": 54, "color_id": 12},
+        {"sneaker_id": 55, "color_id": 5},
+        {"sneaker_id": 56, "color_id": 21},
+        {"sneaker_id": 57, "color_id": 5},
+        {"sneaker_id": 58, "color_id": 5},
+        {"sneaker_id": 59, "color_id": 5},
+        {"sneaker_id": 60, "color_id": 12},
+        {"sneaker_id": 61, "color_id": 5},
+        {"sneaker_id": 62, "color_id": 12},
+        {"sneaker_id": 63, "color_id": 5},
+        {"sneaker_id": 64, "color_id": 12},
+        {"sneaker_id": 65, "color_id": 4},
+        {"sneaker_id": 66, "color_id": 4},
+        {"sneaker_id": 67, "color_id": 11},
+        {"sneaker_id": 68, "color_id": 5},
+        {"sneaker_id": 69, "color_id": 4},
+        {"sneaker_id": 70, "color_id": 2},
+    ]
 
-    for sneaker in sneakers:
-        assigned_colors = random.sample(colors, min(3, len(colors)))
-
-        for color in assigned_colors:
-            associations.append({"sneaker_id": sneaker.id, "color_id": color.id})
-
-    stmt = insert(SneakerColorAssociation).values(associations)
+    stmt = insert(SneakerColorAssociation).values(sneaker_colors)
     await session.execute(stmt)
     await session.commit()

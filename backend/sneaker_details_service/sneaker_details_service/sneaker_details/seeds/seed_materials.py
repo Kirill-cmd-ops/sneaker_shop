@@ -17,6 +17,9 @@ async def seed_materials(session: AsyncSession):
         {"name": "Phylon"},
         {"name": "TPU (Термополиуретан)"},
         {"name": "EVA"},
+        {"name": "Canvas"},
+        {"name": "Flyknit"},
+        {"name": "Primeknit"},
     ]
     stmt = insert(Material).values(materials)
     await session.execute(stmt)

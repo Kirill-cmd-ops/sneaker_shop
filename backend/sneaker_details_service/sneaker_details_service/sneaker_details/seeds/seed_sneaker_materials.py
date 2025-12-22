@@ -10,19 +10,80 @@ import random
 
 
 async def seed_sneaker_materials(session: AsyncSession):
-    sneakers = (await session.execute(select(Sneaker))).scalars().all()
-    materials = (await session.execute(select(Material))).scalars().all()
 
-    associations = []
+    sneaker_materials = [
+        {"sneaker_id": 1, "material_id": 14},
+        {"sneaker_id": 2, "material_id": 15},
+        {"sneaker_id": 3, "material_id": 7},
+        {"sneaker_id": 4, "material_id": 13},
+        {"sneaker_id": 5, "material_id": 9},
+        {"sneaker_id": 6, "material_id": 12},
+        {"sneaker_id": 7, "material_id": 10},
+        {"sneaker_id": 8, "material_id": 2},
+        {"sneaker_id": 9, "material_id": 13},
+        {"sneaker_id": 10, "material_id": 2},
+        {"sneaker_id": 11, "material_id": 7},
+        {"sneaker_id": 12, "material_id": 14},
+        {"sneaker_id": 13, "material_id": 2},
+        {"sneaker_id": 14, "material_id": 12},
+        {"sneaker_id": 15, "material_id": 10},
+        {"sneaker_id": 16, "material_id": 7},
+        {"sneaker_id": 17, "material_id": 12},
+        {"sneaker_id": 18, "material_id": 13},
+        {"sneaker_id": 19, "material_id": 9},
+        {"sneaker_id": 20, "material_id": 7},
+        {"sneaker_id": 21, "material_id": 13},
+        {"sneaker_id": 22, "material_id": 2},
+        {"sneaker_id": 23, "material_id": 11},
+        {"sneaker_id": 24, "material_id": 7},
+        {"sneaker_id": 25, "material_id": 14},
+        {"sneaker_id": 26, "material_id": 7},
+        {"sneaker_id": 27, "material_id": 2},
+        {"sneaker_id": 28, "material_id": 1},
+        {"sneaker_id": 29, "material_id": 7},
+        {"sneaker_id": 30, "material_id": 2},
+        {"sneaker_id": 31, "material_id": 2},
+        {"sneaker_id": 32, "material_id": 2},
+        {"sneaker_id": 33, "material_id": 2},
+        {"sneaker_id": 34, "material_id": 2},
+        {"sneaker_id": 35, "material_id": 2},
+        {"sneaker_id": 36, "material_id": 2},
+        {"sneaker_id": 37, "material_id": 7},
+        {"sneaker_id": 38, "material_id": 2},
+        {"sneaker_id": 39, "material_id": 2},
+        {"sneaker_id": 40, "material_id": 2},
+        {"sneaker_id": 41, "material_id": 2},
+        {"sneaker_id": 42, "material_id": 2},
+        {"sneaker_id": 43, "material_id": 2},
+        {"sneaker_id": 44, "material_id": 14},
+        {"sneaker_id": 45, "material_id": 3},
+        {"sneaker_id": 46, "material_id": 3},
+        {"sneaker_id": 47, "material_id": 2},
+        {"sneaker_id": 48, "material_id": 2},
+        {"sneaker_id": 49, "material_id": 7},
+        {"sneaker_id": 50, "material_id": 3},
+        {"sneaker_id": 51, "material_id": 6},
+        {"sneaker_id": 52, "material_id": 13},
+        {"sneaker_id": 53, "material_id": 2},
+        {"sneaker_id": 54, "material_id": 7},
+        {"sneaker_id": 55, "material_id": 2},
+        {"sneaker_id": 56, "material_id": 2},
+        {"sneaker_id": 57, "material_id": 2},
+        {"sneaker_id": 58, "material_id": 2},
+        {"sneaker_id": 59, "material_id": 2},
+        {"sneaker_id": 60, "material_id": 2},
+        {"sneaker_id": 61, "material_id": 2},
+        {"sneaker_id": 62, "material_id": 2},
+        {"sneaker_id": 63, "material_id": 2},
+        {"sneaker_id": 64, "material_id": 2},
+        {"sneaker_id": 65, "material_id": 7},
+        {"sneaker_id": 66, "material_id": 2},
+        {"sneaker_id": 67, "material_id": 3},
+        {"sneaker_id": 68, "material_id": 2},
+        {"sneaker_id": 69, "material_id": 7},
+        {"sneaker_id": 70, "material_id": 6},
+    ]
 
-    for sneaker in sneakers:
-        assigned_materials = random.sample(materials, min(3, len(materials)))
-
-        for material in assigned_materials:
-            associations.append(
-                {"sneaker_id": sneaker.id, "material_id": material.id},
-            )
-
-    stmt = insert(SneakerMaterialAssociation).values(associations)
+    stmt = insert(SneakerMaterialAssociation).values(sneaker_materials)
     await session.execute(stmt)
     await session.commit()

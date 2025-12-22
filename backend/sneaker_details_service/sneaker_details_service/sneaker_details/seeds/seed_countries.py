@@ -16,6 +16,12 @@ async def seed_countries(session: AsyncSession):
         {"name": "Poland"},
         {"name": "Portugal"},
         {"name": "Spain"},
+        {"name": "USA"},
+        {"name": "UK"},
+        {"name": "Japan"},
+        {"name": "South Korea"},
+        {"name": "Canada"},
+        {"name": "Brazil"},
     ]
     stmt = insert(Country).values(countries)
     await session.execute(stmt)
