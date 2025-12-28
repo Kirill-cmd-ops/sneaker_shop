@@ -1,10 +1,11 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, UniqueConstraint
+from sqlalchemy import ForeignKey, UniqueConstraint, Enum as PgEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from stock_notification_service.stock_notification.models import Base
 from .mixins import IntIdPkMixin
+from stock_notification_service.stock_notification.enums import SubscriptionStatus
 
 if TYPE_CHECKING:
     from .sneaker import Sneaker
@@ -24,6 +25,11 @@ class UserSneakerSubscription(Base, IntIdPkMixin):
     size_id: Mapped[int] = mapped_column(
         ForeignKey("sizes.id", ondelete="RESTRICT"),
         nullable=False,
+    )
+    status: Mapped[SubscriptionStatus] = mapped_column(
+        PgEnum(SubscriptionStatus),
+        nullable=False,
+        default=SubscriptionStatus.ACTIVE,
     )
 
     __table_args__ = (
