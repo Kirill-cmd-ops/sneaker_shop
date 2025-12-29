@@ -20,24 +20,29 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     op.execute("""
-        CREATE TYPE statusenum AS ENUM (
-            'ACTIVE', 
-            'INACTIVE_BY_USER', 
-            'INACTIVE_BY_SYSTEM'
-        )
+        DO $$ 
+        BEGIN
+            IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'subscriptionstatus') THEN
+                CREATE TYPE subscriptionstatus AS ENUM (
+                    'ACTIVE',
+                    'INACTIVE_BY_USER', 
+                    'INACTIVE_BY_SYSTEM'
+                );
+            END IF;
+        END $$;
     """)
 
     op.add_column('user_sneaker_subscriptions',
         sa.Column('status',
             postgresql.ENUM('ACTIVE', 'INACTIVE_BY_USER', 'INACTIVE_BY_SYSTEM',
-                          name='statusenum', create_type=False),
+                          name='subscriptionstatus', create_type=False),
             nullable=True
         )
     )
 
     op.execute("""
         UPDATE user_sneaker_subscriptions 
-        SET status = 'ACTIVE'::statusenum
+        SET status = 'ACTIVE'::subscriptionstatus
         WHERE status IS NULL
     """)
 
@@ -50,4 +55,4 @@ def upgrade() -> None:
 def downgrade() -> None:
     op.drop_column('user_sneaker_subscriptions', 'status')
 
-    op.execute("DROP TYPE statusenum")
+    op.execute("DROP TYPE subscriptionstatus")
