@@ -32,6 +32,10 @@ class SneakerSizeAssociation(Base, IntIdPkMixin):
         nullable=False,
         default=0,
     )
+    is_active: Mapped[bool] = mapped_column(
+        nullable=False,
+        default=True,
+    )
 
     sneaker: Mapped["Sneaker"] = relationship(
         "Sneaker",

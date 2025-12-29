@@ -29,11 +29,13 @@ class CartSneakerAssociation(Base, IntIdPkMixin):
         nullable=False,
     )
 
-    __table_args__ = UniqueConstraint(
-        "cart_id",
-        "sneaker_id",
-        "size_id",
-        name="uq_cart_sneaker_size",
+    __table_args__ = (
+        UniqueConstraint(
+            "cart_id",
+            "sneaker_id",
+            "size_id",
+            name="uq_cart_sneaker_size",
+        ),
     )
     cart: Mapped["Cart"] = relationship(
         "Cart",
