@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from .size import Size
     from .sneaker_size import SneakerSizeAssociation
     from .user_sneaker_subscription import UserSneakerSubscription
+    from .user_sneaker_one_time_subscription import UserSneakerOneTimeSubscription
 
 
 class Sneaker(Base, IntIdPkMixin):
@@ -43,6 +44,11 @@ class Sneaker(Base, IntIdPkMixin):
     user_size_subscriptions: Mapped[list["UserSneakerSubscription"]] = relationship(
         "UserSneakerSubscription",
         back_populates="sneaker",
+    )
+
+    user_size_one_time_subscriptions: Mapped[list["UserSneakerOneTimeSubscription"]] = relationship(
+        "UserSneakerOneTimeSubscription",
+        back_populates="sneaker"
     )
 
     subscribed_users: Mapped[list["User"]] = relationship(

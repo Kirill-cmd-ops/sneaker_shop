@@ -7,6 +7,7 @@ __all__ = (
     "Size",
     "SneakerSizeAssociation",
     "UserSneakerSubscription",
+    "UserSneakerOneTimeSubscription"
 )
 
 from .base import Base
@@ -17,3 +18,4 @@ from .brand import Brand
 from .size import Size
 from .sneaker_size import SneakerSizeAssociation
 from .user_sneaker_subscription import UserSneakerSubscription
+from .user_sneaker_one_time_subscription import UserSneakerOneTimeSubscription

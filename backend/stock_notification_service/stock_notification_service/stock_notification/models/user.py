@@ -8,6 +8,7 @@ from stock_notification_service.stock_notification.models.mixins import IntIdPkM
 
 if TYPE_CHECKING:
     from .user_sneaker_subscription import UserSneakerSubscription
+    from .user_sneaker_one_time_subscription import UserSneakerOneTimeSubscription
     from .sneaker import Sneaker
     from .size import Size
 
@@ -30,6 +31,11 @@ class User(Base, IntIdPkMixin):
     sneaker_size_subscriptions: Mapped[list["UserSneakerSubscription"]] = relationship(
         "UserSneakerSubscription",
         back_populates="user",
+    )
+
+    sneaker_size_one_time_subscriptions: Mapped[list["UserSneakerOneTimeSubscription"]] = relationship(
+        "UserSneakerOneTimeSubscription",
+        back_populates="user"
     )
 
     available_sneakers: Mapped[list["Sneaker"]] = relationship(
