@@ -25,11 +25,13 @@ class FavoriteSneakerAssociation(Base, IntIdPkMixin):
         nullable=False,
     )
 
-    __table_args__ = UniqueConstraint(
-        "favorite_id",
-        "sneaker_id",
-        "size_id",
-        name="uq_favorite_sneaker_size",
+    __table_args__ = (
+        UniqueConstraint(
+            "favorite_id",
+            "sneaker_id",
+            "size_id",
+            name="uq_favorite_sneaker_size",
+        ),
     )
     favorite: Mapped["Favorite"] = relationship(
         "Favorite",
