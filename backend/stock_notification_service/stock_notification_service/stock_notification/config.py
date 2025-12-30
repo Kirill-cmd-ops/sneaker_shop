@@ -15,6 +15,7 @@ class RunConfig(BaseModel):
 
 class ApiV1Prefix(BaseModel):
     prefix: str = "/v1/subscriptions"
+    one_time_prefix: str = "/v1/one_time_subscriptions"
 
 
 class ApiPrefix(BaseModel):
@@ -60,6 +61,7 @@ class KafkaConfig(BaseModel):
     size_work_topic: str
     user_work_topic: str
     sneaker_group_id: str
+    sneaker_active_group_id: str
     sneaker_sizes_group_id: str
     brand_group_id: str
     size_group_id: str
