@@ -17,7 +17,7 @@ async def create_record(
 
 async def delete_record(
         session: AsyncSession,
-        table_name,
+        table_name: Callable,
         record_id,
 ):
     delete_record_request = delete(table_name).where(table_name.id == record_id)
