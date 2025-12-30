@@ -530,6 +530,8 @@ services:
       - ./backend/stock_notification_service:/app/stock_notification_service
       - ./kafka:/app/stock_notification_service/kafka
       - ./redis_client/redis_connection:/app/stock_notification_service/redis_client/redis_connection
+      - ./celery_client:/app/stock_notification_service/celery_client
+      - ./message_sender:/app/stock_notification_service/message_sender
     command: [ "upgrade", "head" ]
 
 
@@ -621,18 +623,18 @@ services:
       - kafka-data:/bitnami/kafka
 
 
-#  frontend:
-#    build:
-#      context: ./frontend
-#      dockerfile: Dockerfile
-#      target: frontend_builder
-#    container_name: nextjs
-#    ports:
-#      - "3000:3000"
-#    volumes:
-#      - ./frontend:/app/frontend
+  frontend:
+    build:
+      context: ./frontend
+    container_name: nextjs
+    platform: linux/arm64
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
 
-# TODO: вместо использования нескольких redisов, лучше использовать просто разные бд в одном redisе
+
   redis:
     image: redis:latest
     container_name: redis
