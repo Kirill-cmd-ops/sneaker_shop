@@ -3,10 +3,14 @@ from stock_notification_service.stock_notification.schemas import (
     UserCreate,
     UserUpdate,
 )
-from stock_notification_service.stock_notification.services.users import (
+from stock_notification_service.stock_notification.services.user.create import (
     create_user,
-    update_user,
+)
+from stock_notification_service.stock_notification.services.user.delete import (
     delete_user,
+)
+from stock_notification_service.stock_notification.services.user.update import (
+    update_user,
 )
 
 
