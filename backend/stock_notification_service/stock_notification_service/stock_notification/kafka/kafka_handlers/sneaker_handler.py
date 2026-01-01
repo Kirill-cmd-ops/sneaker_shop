@@ -3,11 +3,9 @@ from stock_notification_service.stock_notification.schemas import (
     SneakerCreate,
     SneakerUpdate,
 )
-from stock_notification_service.stock_notification.services.sneakers import (
-    create_sneaker,
-    update_sneaker,
-    delete_sneaker,
-)
+from stock_notification_service.stock_notification.services.sneaker.create import create_sneaker
+from stock_notification_service.stock_notification.services.sneaker.delete import delete_sneaker
+from stock_notification_service.stock_notification.services.sneaker.update import update_sneaker
 
 
 async def handle_sneaker(key: str | None, value: dict):

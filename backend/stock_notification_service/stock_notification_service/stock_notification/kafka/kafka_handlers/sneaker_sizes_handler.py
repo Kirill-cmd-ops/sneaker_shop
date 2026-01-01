@@ -7,11 +7,9 @@ from stock_notification_service.stock_notification.schemas import (
     SneakerSizeUpdate,
     SneakerAssocsDelete,
 )
-from stock_notification_service.stock_notification.services.sneaker_sizes import (
-    create_sneaker_sizes,
-    update_sneaker_sizes,
-    delete_sneaker_association,
-)
+from stock_notification_service.stock_notification.services.sneaker_size.create import create_sneaker_sizes
+from stock_notification_service.stock_notification.services.sneaker_size.delete import delete_sneaker_association
+from stock_notification_service.stock_notification.services.sneaker_size.update import update_sneaker_sizes
 
 
 async def handle_sneaker_sizes(key: str | None, value: dict):
