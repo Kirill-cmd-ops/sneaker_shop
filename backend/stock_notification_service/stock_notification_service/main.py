@@ -7,13 +7,20 @@ from fastapi import FastAPI
 
 from kafka.consumer import start_consumer, close_consumer
 from stock_notification_service.stock_notification.config import settings
-from stock_notification_service.stock_notification.kafka.kafka_handlers.brand_handler import handle_brand
-from stock_notification_service.stock_notification.kafka.kafka_handlers.size_handler import handle_size
+from stock_notification_service.stock_notification.kafka.kafka_handlers.brand_handler import (
+    handle_brand,
+)
+from stock_notification_service.stock_notification.kafka.kafka_handlers.size_handler import (
+    handle_size,
+)
+from stock_notification_service.stock_notification.kafka.kafka_handlers.sneaker_active_handler import \
+    handle_sneaker_active
 from stock_notification_service.stock_notification.kafka.kafka_handlers.sneaker_handler import (
     handle_sneaker,
 )
-from stock_notification_service.stock_notification.kafka.kafka_handlers.sneaker_sizes_handler import \
-    handle_sneaker_sizes
+from stock_notification_service.stock_notification.kafka.kafka_handlers.sneaker_sizes_handler import (
+    handle_sneaker_sizes,
+)
 from stock_notification_service.stock_notification.kafka.kafka_handlers.user_handler import (
     handle_user,
 )
@@ -31,6 +38,13 @@ async def lifespan(app: FastAPI):
         settings.kafka_config.kafka_bootstrap_servers,
         settings.kafka_config.sneaker_group_id,
         handle_sneaker,
+    )
+
+    sneaker_active_consumer, task_sneaker_active = await start_consumer(
+        settings.kafka_config.sneaker_work_topic,
+        settings.kafka_config.kafka_bootstrap_servers,
+        settings.kafka_config.sneaker_active_group_id,
+        handle_sneaker_active,
     )
 
     brand_consumer, task_brand = await start_consumer(
@@ -62,12 +76,13 @@ async def lifespan(app: FastAPI):
     )
     yield
     task1 = create_task(close_consumer(sneaker_consumer, task_sneaker))
-    task2 = create_task(close_consumer(brand_consumer, task_brand))
-    task3 = create_task(close_consumer(size_consumer, task_size))
-    task4 = create_task(close_consumer(sneaker_sizes_consumer, task_sneaker_sizes))
-    task5 = create_task(close_consumer(user_consumer, task_user))
+    task2 = create_task(close_consumer(sneaker_active_consumer, task_sneaker_active))
+    task3 = create_task(close_consumer(brand_consumer, task_brand))
+    task4 = create_task(close_consumer(size_consumer, task_size))
+    task5 = create_task(close_consumer(sneaker_sizes_consumer, task_sneaker_sizes))
+    task6 = create_task(close_consumer(user_consumer, task_user))
 
-    await asyncio.gather(task1, task2, task3, task4, task5)
+    await asyncio.gather(task1, task2, task3, task4, task5, task6)
 
     await db_helper.dispose()
 
