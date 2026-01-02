@@ -19,3 +19,22 @@ async def get_user_active_subscriptions(
     all_subscription_user = result.scalars().all()
 
     return {"records": all_subscription_user}
+
+
+async def get_sneaker_active_subscriptions(
+    session: AsyncSession,
+    sneaker_id: int,
+    size_id: int,
+):
+    stmt = (
+        select(UserSneakerSubscription)
+        .where(
+            UserSneakerSubscription.sneaker_id == sneaker_id,
+            UserSneakerSubscription.size_id == size_id,
+            UserSneakerSubscription.status == SubscriptionStatus.ACTIVE,
+        )
+        .options(selectinload(UserSneakerSubscription.user))
+    )
+
+    result = await session.execute(stmt)
+    return result.scalars().all()
