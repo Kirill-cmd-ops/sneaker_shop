@@ -1,13 +1,11 @@
 from typing import Type
 
 from fastapi import HTTPException
-from sqlalchemy import delete, select
+from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cart_service.cart.models import Base
-from cart_service.cart.schemas import (
-    SneakerAssocsDelete,
-)
+from cart_service.cart.schemas import SneakerAssocsDelete
 
 
 async def delete_sneaker_association(
@@ -34,19 +32,3 @@ async def delete_sneaker_association(
         )
 
     await session.commit()
-
-
-async def read_sneaker_association(
-    session: AsyncSession,
-    sneaker_association_model: Type[Base],
-    sneaker_id: int,
-):
-    """
-    Функция для чтения записи в ассоциативных таблицах
-    """
-    stmt = select(sneaker_association_model).where(
-        sneaker_association_model.sneaker_id == sneaker_id
-    )
-    result = await session.execute(stmt)
-    sneaker_associations = result.scalars().all()
-    return sneaker_associations
