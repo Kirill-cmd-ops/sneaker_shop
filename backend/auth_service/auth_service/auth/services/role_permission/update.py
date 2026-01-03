@@ -2,11 +2,10 @@ from fastapi import HTTPException
 from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth_service.auth.models import Role, RolePermissionAssociation, Permission
-from auth_service.auth.schemas.permissions import UpdatePermissions
+from auth_service.auth.models import Role, RolePermissionAssociation
 
 
-async def update_role_permissions(
+async def update_role_permissions_db(
     user_role: str,
     list_permission: list[int],
     session: AsyncSession,
@@ -36,13 +35,10 @@ async def update_role_permissions(
     )
 
 
+async def update_role_permissions_redis(redis_client, user_role: str, list_role_permissions: list[str]):
 
-async def get_role_permissions(
-    session: AsyncSession,
-    update_permissions: UpdatePermissions,
-):
-    stmt = select(Permission.name).where(
-        Permission.id.in_(update_permissions.list_permission)
-    )
-    result = await session.execute(stmt)
-    return result
+    async with redis_client.pipeline() as pipe:
+        await pipe.delete(f"role:{user_role}")
+        if list_role_permissions:
+            await pipe.sadd(f"role:{user_role}", *list_role_permissions)
+            await pipe.execute()
