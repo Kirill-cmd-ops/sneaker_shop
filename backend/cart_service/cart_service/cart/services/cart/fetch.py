@@ -1,15 +1,9 @@
 from fastapi import HTTPException
-from sqlalchemy import select, delete
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
+
 from cart_service.cart.models import Cart
-
-
-async def create_cart(session: AsyncSession, user_id: int):
-    new_cart = Cart(user_id=user_id)
-    session.add(new_cart)
-    await session.commit()
-    await session.refresh(new_cart)
 
 
 async def read_cart(session: AsyncSession, user_id: int):
@@ -29,9 +23,3 @@ async def read_cart(session: AsyncSession, user_id: int):
         )
 
     return cart
-
-
-async def delete_cart(session: AsyncSession, user_id: int):
-    stmt = delete(Cart).where(Cart.user_id == user_id)
-    await session.execute(stmt)
-    return {"Корзина пользователя было удалено успешно"}
