@@ -1,0 +1,22 @@
+from typing import Type
+
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from favorite_service.favorite.models import Base
+
+
+async def read_sneaker_association(
+    session: AsyncSession,
+    sneaker_association_model: Type[Base],
+    sneaker_id: int,
+):
+    """
+    Функция для чтения записи в ассоциативных таблицах
+    """
+    stmt = select(sneaker_association_model).where(
+        sneaker_association_model.sneaker_id == sneaker_id
+    )
+    result = await session.execute(stmt)
+    sneaker_associations = result.scalars().all()
+    return sneaker_associations
