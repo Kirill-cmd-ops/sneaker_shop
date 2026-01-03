@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy import select
 
-from auth_service.auth.models import db_helper, UserRoleAssociation, Role
+from auth_service.auth.models import db_helper, Role, UserRoleAssociation
 
 
 async def get_user_role(user_id: int):
