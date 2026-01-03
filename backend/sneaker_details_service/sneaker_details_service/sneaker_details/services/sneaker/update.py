@@ -1,0 +1,15 @@
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from sneaker_details_service.sneaker_details.models import Sneaker
+from sneaker_details_service.sneaker_details.schemas import SneakerUpdate
+
+
+async def update_sneaker(
+    session: AsyncSession, sneaker_id: int, sneaker_update: SneakerUpdate
+):
+    sneaker = await session.get(Sneaker, sneaker_id)
+    update_data = sneaker_update.dict(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(sneaker, field, value)
+
+    session.add(sneaker)
