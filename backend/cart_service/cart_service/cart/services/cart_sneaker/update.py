@@ -1,27 +1,13 @@
-from fastapi import HTTPException
-from sqlalchemy import select, delete
+from fastapi import HTTPException, Depends
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cart_service.cart.models import (
-    Cart,
     CartSneakerAssociation,
+    Cart,
     SneakerSizeAssociation,
+    db_helper,
 )
-
-
-async def create_sneaker_to_cart(
-    session: AsyncSession,
-    cart_id: int,
-    sneaker_id: int,
-    size_id: int,
-):
-    new_sneaker = CartSneakerAssociation(
-        cart_id=cart_id,
-        sneaker_id=sneaker_id,
-        size_id=size_id,
-    )
-    session.add(new_sneaker)
-    return new_sneaker
 
 
 async def update_sneaker_to_cart(
@@ -55,17 +41,42 @@ async def update_sneaker_to_cart(
     return current_sneaker
 
 
-async def delete_sneaker_to_cart(
-    session: AsyncSession,
+async def increase_sneaker_quantity(
     cart_sneaker_id: int,
-    user_id: int,
-) -> None:
-    stmt = delete(CartSneakerAssociation).where(
+    cart_id: int,
+    session: AsyncSession = Depends(db_helper.session_getter),
+):
+    stmt = select(CartSneakerAssociation).where(
         CartSneakerAssociation.id == cart_sneaker_id,
-        CartSneakerAssociation.cart_id.in_(
-            select(Cart.id).where(Cart.user_id == user_id)
-        ),
+        CartSneakerAssociation.cart_id == cart_id,
     )
+
     result = await session.execute(stmt)
-    if result.rowcount == 0:
-        raise HTTPException(status_code=404, detail="Объект корзины не найден")
+    sneaker_record = result.scalar_one_or_none()
+
+    if sneaker_record:
+        sneaker_record.quantity += 1
+
+        return {"status": "quantity += 1"}
+    return {"status": "there is no such record"}
+
+
+async def decrease_sneaker_quantity(
+    cart_sneaker_id: int,
+    cart_id: int,
+    session: AsyncSession = Depends(db_helper.session_getter),
+):
+    stmt = select(CartSneakerAssociation).where(
+        CartSneakerAssociation.id == cart_sneaker_id,
+        CartSneakerAssociation.cart_id == cart_id,
+        CartSneakerAssociation.quantity > 1,
+    )
+
+    result = await session.execute(stmt)
+    sneaker_record = result.scalar_one_or_none()
+
+    if sneaker_record:
+        sneaker_record.quantity -= 1
+
+        return {"status": "quantity -= 1"}
+    return {"status": "quantity = 1"}
