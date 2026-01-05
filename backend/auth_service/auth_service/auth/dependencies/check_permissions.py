@@ -30,7 +30,7 @@ def check_role_permissions(
         if not user_role:
             raise HTTPException(status_code=401, detail="Не указан X-User-Role")
 
-        key = f"role:{user_role}"
+        key = f"user_role:{user_role}"
         has_permission = await redis_client.sismember(key, permission)
 
         if not has_permission:

@@ -22,12 +22,12 @@ class Role(Base, IntIdPkMixin):
 
     permission_association: Mapped[list["RolePermissionAssociation"]] = relationship(
         "RolePermissionAssociation",
-        back_populates="role",
+        back_populates="user_role",
     )
 
     user_association: Mapped[list["UserRoleAssociation"]] = relationship(
         "UserRoleAssociation",
-        back_populates="role",
+        back_populates="user_role",
     )
 
     permissions: Mapped[list["Permission"]] = relationship(

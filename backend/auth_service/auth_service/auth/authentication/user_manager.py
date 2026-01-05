@@ -27,7 +27,7 @@ from auth_service.auth.refresh.utils.encode_token import encode_refresh_token
 from auth_service.auth.refresh.utils.generate_token import generate_refresh_token
 from auth_service.auth.refresh.utils.set_cookie import set_value_in_cookie
 from auth_service.auth.schemas import UserCreate
-from auth_service.auth.services.add_role_in_db import add_role_db
+from auth_service.auth.services.user_role.create import add_role_db
 from auth_service.auth.types.user_id import UserIdType
 
 from auth_service.auth.celery_tasks.auth_tasks import (

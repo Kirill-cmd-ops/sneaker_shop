@@ -7,11 +7,13 @@ from auth_service.auth.config import settings
 from auth_service.auth.models import db_helper
 from auth_service.auth.schemas.permissions import UpdatePermissions
 from auth_service.auth.dependencies.check_permissions import check_role_permissions
-from auth_service.auth.services.role_permissions_db import (
-    update_role_permissions as update_role_permissions_db,
-    get_role_permissions as get_role_permissions_db,
+from auth_service.auth.services.role_permission.update import update_role_permissions_db
+from auth_service.auth.services.role_permission.fetch import get_role_permissions_db
+
+
+from auth_service.auth.services.role_permission.update import (
+    update_role_permissions_redis,
 )
-from auth_service.auth.services.role_permissions_redis import update_role_permissions as update_role_permissions_redis
 
 router = APIRouter(
     prefix=settings.api.build_path(
@@ -43,10 +45,17 @@ async def call_update_role_permissions(
                 session=session,
             )
 
-            role_permissions = await get_role_permissions_db(session, update_permissions)
+            role_permissions = await get_role_permissions_db(
+                session,
+                update_permissions,
+            )
 
-    list_role_permissions = [permission[0] for permission in role_permissions.all()]
+    list_role_permissions = [permission[0] for permission in role_permissions]
     if list_role_permissions is not None:
-        await update_role_permissions_redis(redis_client, user_role, list_role_permissions)
+        await update_role_permissions_redis(
+            redis_client,
+            user_role,
+            list_role_permissions,
+        )
 
     return {"status": "ok"}
