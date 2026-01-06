@@ -1,7 +1,7 @@
 from cart_service.cart.models import db_helper, Size
 from cart_service.cart.schemas import SizeCreate
-from cart_service.cart.services.record import create_record, delete_record
-
+from cart_service.cart.services.record.create import create_record
+from cart_service.cart.services.record.delete import delete_record
 
 
 async def handle_size(key: str | None, value: dict):

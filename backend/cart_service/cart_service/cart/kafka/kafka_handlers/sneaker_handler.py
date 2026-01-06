@@ -1,10 +1,8 @@
 from cart_service.cart.models import db_helper
 from cart_service.cart.schemas import SneakerCreate, SneakerUpdate
-from cart_service.cart.services.sneakers import (
-    create_sneaker,
-    update_sneaker,
-    delete_sneaker,
-)
+from cart_service.cart.services.sneaker.create import create_sneaker
+from cart_service.cart.services.sneaker.delete import delete_sneaker
+from cart_service.cart.services.sneaker.update import update_sneaker
 
 
 async def handle_sneaker(key: str | None, value: dict):

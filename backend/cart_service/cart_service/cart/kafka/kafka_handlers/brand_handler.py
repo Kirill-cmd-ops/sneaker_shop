@@ -1,7 +1,7 @@
 from cart_service.cart.models import db_helper, Brand
 from cart_service.cart.schemas import BrandCreate
-from cart_service.cart.services.record import create_record, delete_record
-
+from cart_service.cart.services.record.create import create_record
+from cart_service.cart.services.record.delete import delete_record
 
 
 async def handle_brand(key: str | None, value: dict):

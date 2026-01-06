@@ -1,5 +1,5 @@
 from cart_service.cart.models import db_helper
-from cart_service.cart.services.cart import create_cart
+from cart_service.cart.services.cart.create import create_cart
 
 
 async def handle_cart(key, value):

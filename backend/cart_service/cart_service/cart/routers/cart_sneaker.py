@@ -3,22 +3,23 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from cart_service.cart.models import db_helper
 from cart_service.cart.schemas import CartSneakerCreate, CartSneakerUpdate
-from cart_service.cart.services.cart_sneaker import (
-    create_sneaker_to_cart,
-    delete_sneaker_to_cart,
-    update_sneaker_to_cart,
-)
+
 from cart_service.cart.dependencies.get_current_user import get_user_by_header
 from cart_service.cart.config import settings
-from cart_service.cart.services.check_cart import check_cart_exists
-from cart_service.cart.services.check_permissions import check_role_permissions
-from cart_service.cart.services.check_sneaker import check_sneaker_exists
-from cart_service.cart.services.check_sneaker_in_cart import (
+from cart_service.cart.services.cart.checkers import check_cart_exists
+from cart_service.cart.services.cart_sneaker.checkers import (
     check_sneaker_in_cart_exists,
 )
-from cart_service.cart.services.check_sneaker_size import check_sneaker_size_exists
-from cart_service.cart.services.decrease_quantity import decrease_sneaker_quantity
-from cart_service.cart.services.increase_quantity import increase_sneaker_quantity
+from cart_service.cart.services.cart_sneaker.create import create_sneaker_to_cart
+from cart_service.cart.services.cart_sneaker.delete import delete_sneaker_to_cart
+from cart_service.cart.services.cart_sneaker.update import (
+    increase_sneaker_quantity,
+    decrease_sneaker_quantity,
+    update_sneaker_to_cart,
+)
+from cart_service.cart.dependencies.check_permissions import check_role_permissions
+from cart_service.cart.services.sneaker_size.checkers import check_sneaker_size_exists
+from cart_service.cart.services.sneaker.checkers import check_sneaker_exists
 
 router = APIRouter(
     prefix=settings.api.build_path(
@@ -43,7 +44,9 @@ async def call_create_sneaker_to_cart(
         await check_sneaker_exists(session, item_create)
         await check_sneaker_size_exists(session, item_create)
         sneaker_record = await check_sneaker_in_cart_exists(
-            session, cart_id, item_create
+            session,
+            cart_id,
+            item_create,
         )
 
         if sneaker_record is None:

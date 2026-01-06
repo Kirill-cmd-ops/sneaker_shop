@@ -4,13 +4,10 @@ from cart_service.cart.schemas import (
     SneakerSizeUpdate,
     SneakerAssocsDelete,
 )
-from cart_service.cart.services.sneaker_association import (
-    delete_sneaker_association,
-)
-from cart_service.cart.services.sneaker_sizes import (
-    create_sneaker_sizes,
-    update_sneaker_sizes,
-)
+from cart_service.cart.services.sneaker_association.delete import delete_sneaker_association
+
+from cart_service.cart.services.sneaker_size.create import create_sneaker_sizes
+from cart_service.cart.services.sneaker_size.update import update_sneaker_sizes
 
 
 async def handle_sneaker_sizes(key: str | None, value: dict):

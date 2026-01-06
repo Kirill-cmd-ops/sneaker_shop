@@ -4,9 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from cart_service.cart.config import settings
 from cart_service.cart.models import db_helper
 from cart_service.cart.dependencies.get_current_user import get_user_by_header
-from cart_service.cart.services.cart import read_cart, delete_cart
-from cart_service.cart.services.check_permissions import check_role_permissions
-from cart_service.cart.services.total_price import calculate_total_price
+from cart_service.cart.services.cart.delete import delete_cart
+from cart_service.cart.services.cart.fetch import read_cart
+from cart_service.cart.dependencies.check_permissions import check_role_permissions
+from cart_service.cart.services.cart.price_calculations import calculate_total_price
 
 
 router = APIRouter(
@@ -17,7 +18,6 @@ router = APIRouter(
 
 @router.get(
     "/",
-    dependencies=(Depends(check_role_permissions("cart.view")),),
 )
 async def call_get_cart(
     user_id: int = Depends(get_user_by_header),
