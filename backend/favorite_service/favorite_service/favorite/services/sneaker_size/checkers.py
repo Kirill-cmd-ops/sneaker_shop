@@ -10,7 +10,7 @@ async def check_sneaker_size_exists(
     session: AsyncSession,
     item_create: FavoriteSneakerCreate,
 ):
-    check_sizes_stmt = (
+    sneaker_size = await session.scalar(
         select(Sneaker)
         .join(SneakerSizeAssociation)
         .where(
@@ -18,8 +18,6 @@ async def check_sneaker_size_exists(
             SneakerSizeAssociation.size_id == item_create.size_id,
         )
     )
-    result = await session.execute(check_sizes_stmt)
-    sneaker_size = result.scalar_one_or_none()
 
     if not sneaker_size:
         raise HTTPException(status_code=404, detail="Размер данной модели не найден")
