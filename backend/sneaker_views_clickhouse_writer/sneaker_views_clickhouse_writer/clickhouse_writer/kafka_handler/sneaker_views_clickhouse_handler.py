@@ -1,13 +1,7 @@
 import asyncio
 
-from sqlalchemy.orm import Session
-
-from sneaker_views_clickhouse_writer.clickhouse_writer.services.add_sneaker_view import (
-    clickhouse_insert,
-)
-from sneaker_views_clickhouse_writer.clickhouse_writer.services.get_sneaker_view import (
-    clickhouse_select,
-)
+from sneaker_views_clickhouse_writer.clickhouse_writer.services.sneaker_view.create import clickhouse_insert
+from sneaker_views_clickhouse_writer.clickhouse_writer.services.sneaker_view.fetch import clickhouse_select
 
 
 async def handle_sneaker_view_to_clickhouse(
