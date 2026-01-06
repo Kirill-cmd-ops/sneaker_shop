@@ -16,20 +16,21 @@ async def update_sneaker_to_cart(
     size_id: int,
     user_id: int,
 ) -> CartSneakerAssociation:
-    request_get_sneaker = select(CartSneakerAssociation).where(
-        CartSneakerAssociation.id == cart_sneaker_id,
-        CartSneakerAssociation.cart_id.in_(
-            select(Cart.id).where(Cart.user_id == user_id),
-        ),
+    current_sneaker = await session.scalar(
+        select(CartSneakerAssociation).where(
+            CartSneakerAssociation.id == cart_sneaker_id,
+            CartSneakerAssociation.cart_id.in_(
+                select(Cart.id).where(Cart.user_id == user_id),
+            ),
+        )
     )
-    result = await session.execute(request_get_sneaker)
-    current_sneaker = result.scalar()
 
-    request_get_sneaker_sizes = select(SneakerSizeAssociation.size_id).where(
-        SneakerSizeAssociation.sneaker_id == current_sneaker.sneaker_id
+    result_sneaker_sizes = await session.scalars(
+        select(SneakerSizeAssociation.size_id).where(
+            SneakerSizeAssociation.sneaker_id == current_sneaker.sneaker_id
+        )
     )
-    result_sneaker_sizes = await session.execute(request_get_sneaker_sizes)
-    allowed_sneaker_sizes = result_sneaker_sizes.scalars().all()
+    allowed_sneaker_sizes = result_sneaker_sizes.all()
 
     if size_id in allowed_sneaker_sizes:
         current_sneaker.size_id = size_id
@@ -46,13 +47,12 @@ async def increase_sneaker_quantity(
     cart_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    stmt = select(CartSneakerAssociation).where(
-        CartSneakerAssociation.id == cart_sneaker_id,
-        CartSneakerAssociation.cart_id == cart_id,
+    sneaker_record = await session.scalar(
+        select(CartSneakerAssociation).where(
+            CartSneakerAssociation.id == cart_sneaker_id,
+            CartSneakerAssociation.cart_id == cart_id,
+        )
     )
-
-    result = await session.execute(stmt)
-    sneaker_record = result.scalar_one_or_none()
 
     if sneaker_record:
         sneaker_record.quantity += 1
@@ -66,14 +66,13 @@ async def decrease_sneaker_quantity(
     cart_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    stmt = select(CartSneakerAssociation).where(
-        CartSneakerAssociation.id == cart_sneaker_id,
-        CartSneakerAssociation.cart_id == cart_id,
-        CartSneakerAssociation.quantity > 1,
+    sneaker_record = await session.scalar(
+        select(CartSneakerAssociation).where(
+            CartSneakerAssociation.id == cart_sneaker_id,
+            CartSneakerAssociation.cart_id == cart_id,
+            CartSneakerAssociation.quantity > 1,
+        )
     )
-
-    result = await session.execute(stmt)
-    sneaker_record = result.scalar_one_or_none()
 
     if sneaker_record:
         sneaker_record.quantity -= 1

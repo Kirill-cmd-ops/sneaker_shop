@@ -10,11 +10,10 @@ async def check_sneaker_in_cart_exists(
     cart_id: int,
     item_create: CartSneakerCreate,
 ):
-    stmt = select(CartSneakerAssociation).where(
-        CartSneakerAssociation.cart_id == cart_id,
-        CartSneakerAssociation.sneaker_id == item_create.sneaker_id,
-        CartSneakerAssociation.size_id == item_create.size_id,
+    return await session.scalar(
+        select(CartSneakerAssociation).where(
+            CartSneakerAssociation.cart_id == cart_id,
+            CartSneakerAssociation.sneaker_id == item_create.sneaker_id,
+            CartSneakerAssociation.size_id == item_create.size_id,
+        )
     )
-    result = await session.execute(stmt)
-    sneaker_record = result.scalar_one_or_none()
-    return sneaker_record
