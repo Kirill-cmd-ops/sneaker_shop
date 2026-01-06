@@ -7,7 +7,7 @@ from cart_service.cart.models import Cart
 
 
 async def read_cart(session: AsyncSession, user_id: int):
-    stmt = (
+    cart = await session.scalar(
         select(Cart)
         .where(Cart.user_id == user_id)
         .options(
@@ -15,8 +15,6 @@ async def read_cart(session: AsyncSession, user_id: int):
             selectinload(Cart.sneakers),
         )
     )
-    result = await session.execute(stmt)
-    cart = result.scalar_one_or_none()
     if cart is None:
         raise HTTPException(
             status_code=404, detail="У данного пользователя нету корзины"

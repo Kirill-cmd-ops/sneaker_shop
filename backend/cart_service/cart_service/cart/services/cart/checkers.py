@@ -9,9 +9,7 @@ async def check_cart_exists(
     session: AsyncSession,
     user_id: int,
 ):
-    stmt = select(Cart.id).filter(Cart.user_id == user_id)
-    result = await session.execute(stmt)
-    cart_id = result.scalar_one_or_none()
+    cart_id = await session.scalar(select(Cart.id).filter(Cart.user_id == user_id))
     if not cart_id:
         raise HTTPException(status_code=404, detail="Корзина пользователя не найдена")
     return cart_id
