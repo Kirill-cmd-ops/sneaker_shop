@@ -1,10 +1,8 @@
 from favorite_service.favorite.models import db_helper
 from favorite_service.favorite.schemas import SneakerCreate, SneakerUpdate
-from favorite_service.favorite.services.sneakers import (
-    create_sneaker,
-    update_sneaker,
-    delete_sneaker,
-)
+from favorite_service.favorite.services.sneaker.create import create_sneaker
+from favorite_service.favorite.services.sneaker.delete import delete_sneaker
+from favorite_service.favorite.services.sneaker.update import update_sneaker
 
 
 async def handle_sneaker(key: str | None, value: dict):

@@ -1,7 +1,7 @@
 from favorite_service.favorite.models import db_helper, Brand
 from favorite_service.favorite.schemas import BrandCreate
-from favorite_service.favorite.services.record import create_record, delete_record
-
+from favorite_service.favorite.services.record.create import create_record
+from favorite_service.favorite.services.record.delete import delete_record
 
 
 async def handle_brand(key: str | None, value: dict):

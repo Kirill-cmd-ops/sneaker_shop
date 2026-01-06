@@ -4,13 +4,10 @@ from favorite_service.favorite.schemas import (
     SneakerSizeUpdate,
     SneakerAssocsDelete,
 )
-from favorite_service.favorite.services.sneaker_association import (
-    delete_sneaker_association,
-)
-from favorite_service.favorite.services.sneaker_sizes import (
-    create_sneaker_sizes,
-    update_sneaker_sizes,
-)
+from favorite_service.favorite.services.sneaker_association.delete import delete_sneaker_association
+
+from favorite_service.favorite.services.sneaker_size.create import create_sneaker_sizes
+from favorite_service.favorite.services.sneaker_size.update import update_sneaker_sizes
 
 
 async def handle_sneaker_sizes(key: str | None, value: dict):

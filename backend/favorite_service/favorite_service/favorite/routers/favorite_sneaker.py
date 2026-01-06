@@ -6,22 +6,18 @@ from favorite_service.favorite.models import (
 )
 from favorite_service.favorite.schemas import FavoriteSneakerCreate
 from favorite_service.favorite.schemas.favorite_sneaker import FavoriteSneakerUpdate
-from favorite_service.favorite.services.check_favorite import check_favorite_exists
-from favorite_service.favorite.services.check_permissions import check_role_permissions
-from favorite_service.favorite.services.check_sneaker import check_sneaker_exists
-from favorite_service.favorite.services.check_sneaker_in_favorite import (
-    check_sneaker_in_favorite_exists,
-)
-from favorite_service.favorite.services.check_sneaker_size import (
-    check_sneaker_size_exists,
-)
-from favorite_service.favorite.services.favorite_sneaker import (
-    create_sneaker_to_favorite,
-    delete_sneaker_to_favorite,
-    update_sneaker_to_favorite,
-)
+from favorite_service.favorite.dependencies.check_permissions import check_role_permissions
+
+
 from favorite_service.favorite.dependencies.get_current_user import get_user_by_header
 from favorite_service.favorite.config import settings
+from favorite_service.favorite.services.favorite.checkers import check_favorite_exists
+from favorite_service.favorite.services.favorite_sneaker.checkers import check_sneaker_in_favorite_exists
+from favorite_service.favorite.services.favorite_sneaker.create import create_sneaker_to_favorite
+from favorite_service.favorite.services.favorite_sneaker.delete import delete_sneaker_to_favorite
+from favorite_service.favorite.services.favorite_sneaker.update import update_sneaker_to_favorite
+from favorite_service.favorite.services.sneaker.checkers import check_sneaker_exists
+from favorite_service.favorite.services.sneaker_size.checkers import check_sneaker_size_exists
 
 router = APIRouter(
     prefix=settings.api.build_path(

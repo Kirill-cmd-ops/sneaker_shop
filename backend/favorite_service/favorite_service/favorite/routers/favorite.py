@@ -5,8 +5,9 @@ from favorite_service.favorite.config import settings
 
 from favorite_service.favorite.models import db_helper
 from favorite_service.favorite.dependencies.get_current_user import get_user_by_header
-from favorite_service.favorite.services.check_permissions import check_role_permissions
-from favorite_service.favorite.services.favorite import read_favorite, delete_favorite
+from favorite_service.favorite.dependencies.check_permissions import check_role_permissions
+from favorite_service.favorite.services.favorite.delete import delete_favorite
+from favorite_service.favorite.services.favorite.fetch import read_favorite
 
 router = APIRouter(
     prefix=settings.api.build_path(settings.api.root, settings.api.v1.prefix),

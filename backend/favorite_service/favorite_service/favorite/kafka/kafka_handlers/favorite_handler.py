@@ -1,5 +1,5 @@
 from favorite_service.favorite.models import db_helper
-from favorite_service.favorite.services.favorite import create_favorite
+from favorite_service.favorite.services.favorite.create import create_favorite
 
 
 async def handle_favorite(key, value):
