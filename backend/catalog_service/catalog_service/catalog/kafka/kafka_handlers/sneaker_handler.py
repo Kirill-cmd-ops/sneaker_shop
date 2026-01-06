@@ -1,10 +1,8 @@
 from catalog_service.catalog.models import db_helper
 from catalog_service.catalog.schemas import SneakerCreate, SneakerUpdate
-from catalog_service.catalog.services.sneakers import (
-    create_sneaker,
-    update_sneaker,
-    delete_sneaker,
-)
+from catalog_service.catalog.services.sneaker.create import create_sneaker
+from catalog_service.catalog.services.sneaker.delete import delete_sneaker
+from catalog_service.catalog.services.sneaker.update import update_sneaker
 
 
 async def handle_sneaker(key: str | None, value: dict):

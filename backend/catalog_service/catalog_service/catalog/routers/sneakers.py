@@ -5,11 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from catalog_service.catalog.config import settings
 from catalog_service.catalog.models import db_helper
-
-
-from catalog_service.catalog.services.sneakers import (
-    get_sneakers_details,
-)
+from catalog_service.catalog.services.sneaker.fetch import get_sneakers_details
 
 router = APIRouter(
     prefix=settings.api.build_path(

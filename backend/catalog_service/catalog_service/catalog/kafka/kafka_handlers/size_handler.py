@@ -1,7 +1,7 @@
 from catalog_service.catalog.models import db_helper, Size
 from catalog_service.catalog.schemas import SizeCreate
-from catalog_service.catalog.services.record import create_record, delete_record
-
+from catalog_service.catalog.services.record.create import create_record
+from catalog_service.catalog.services.record.delete import delete_record
 
 
 async def handle_size(key: str | None, value: dict):
