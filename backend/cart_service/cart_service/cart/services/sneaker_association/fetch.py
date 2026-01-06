@@ -14,9 +14,9 @@ async def read_sneaker_association(
     """
     Функция для чтения записи в ассоциативных таблицах
     """
-    stmt = select(sneaker_association_model).where(
-        sneaker_association_model.sneaker_id == sneaker_id
+    result = await session.scalars(
+        select(sneaker_association_model).where(
+            sneaker_association_model.sneaker_id == sneaker_id
+        )
     )
-    result = await session.execute(stmt)
-    sneaker_associations = result.scalars().all()
-    return sneaker_associations
+    return result.all()
