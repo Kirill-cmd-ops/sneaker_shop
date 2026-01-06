@@ -10,9 +10,7 @@ async def add_role_db(user_id: int, role_name: str):
         if not user_object:
             raise HTTPException(status_code=404, detail="Данного пользователя нету в бд")
 
-        stmt = select(Role.id).where(Role.name == role_name)
-        result = await session.execute(stmt)
-        role_id = result.scalar_one_or_none()
+        role_id = await session.scalar(select(Role.id).where(Role.name == role_name))
         if not role_id:
             raise HTTPException(status_code=404, detail="Данная роль отсутствует в бд")
 
