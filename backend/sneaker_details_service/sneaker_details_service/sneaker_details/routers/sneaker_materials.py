@@ -11,14 +11,12 @@ from sneaker_details_service.sneaker_details.schemas import (
     SneakerAssocsCreate,
     SneakerAssocsDelete,
 )
-from sneaker_details_service.sneaker_details.services.check_permissions import (
+from sneaker_details_service.sneaker_details.dependencies.check_permissions import (
     check_role_permissions,
 )
-from sneaker_details_service.sneaker_details.services.sneaker_association import (
-    create_sneaker_association,
-    delete_sneaker_association,
-    read_sneaker_association,
-)
+from sneaker_details_service.sneaker_details.services.sneaker_association.create import create_sneaker_association
+from sneaker_details_service.sneaker_details.services.sneaker_association.delete import delete_sneaker_association
+from sneaker_details_service.sneaker_details.services.sneaker_association.fetch import read_sneaker_association
 
 router = APIRouter(
     prefix=settings.api.build_path(

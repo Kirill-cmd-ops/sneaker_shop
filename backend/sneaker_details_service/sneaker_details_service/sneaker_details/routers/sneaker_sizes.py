@@ -22,23 +22,20 @@ from sneaker_details_service.sneaker_details.schemas import (
     SneakerSizeUpdate,
     SneakerAssocsDelete,
 )
-from sneaker_details_service.sneaker_details.services.check_permissions import (
+from sneaker_details_service.sneaker_details.dependencies.check_permissions import (
     check_role_permissions,
 )
 
-from sneaker_details_service.sneaker_details.services.sneaker_sizes import (
-    create_sneaker_sizes,
-    update_sneaker_sizes,
-)
+
 
 from sneaker_details_service.sneaker_details.models import (
     SneakerSizeAssociation,
     db_helper,
 )
-from sneaker_details_service.sneaker_details.services.sneaker_association import (
-    delete_sneaker_association,
-    read_sneaker_association,
-)
+from sneaker_details_service.sneaker_details.services.sneaker_association.delete import delete_sneaker_association
+from sneaker_details_service.sneaker_details.services.sneaker_association.fetch import read_sneaker_association
+from sneaker_details_service.sneaker_details.services.sneaker_size.create import create_sneaker_sizes
+from sneaker_details_service.sneaker_details.services.sneaker_size.update import update_sneaker_sizes
 
 router = APIRouter(
     prefix=settings.api.build_path(

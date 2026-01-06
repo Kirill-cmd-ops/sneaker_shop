@@ -4,10 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sneaker_details_service.sneaker_details.config import settings
 from sneaker_details_service.sneaker_details.models import db_helper, Material
 from sneaker_details_service.sneaker_details.schemas.material import MaterialCreate
-from sneaker_details_service.sneaker_details.services.record import (
-    create_record,
-    delete_record,
-)
+from sneaker_details_service.sneaker_details.services.record.create import create_record
+from sneaker_details_service.sneaker_details.services.record.delete import delete_record
 
 router = APIRouter(
     prefix=settings.api.build_path(

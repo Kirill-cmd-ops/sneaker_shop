@@ -14,10 +14,8 @@ from sneaker_details_service.sneaker_details.kafka.producer_event.delete_size_da
 )
 from sneaker_details_service.sneaker_details.models import db_helper, Size
 from sneaker_details_service.sneaker_details.schemas.size import SizeCreate
-from sneaker_details_service.sneaker_details.services.record import (
-    create_record,
-    delete_record,
-)
+from sneaker_details_service.sneaker_details.services.record.create import create_record
+from sneaker_details_service.sneaker_details.services.record.delete import delete_record
 
 router = APIRouter(
     prefix=settings.api.build_path(

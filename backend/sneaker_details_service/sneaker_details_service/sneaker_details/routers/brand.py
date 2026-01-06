@@ -15,10 +15,8 @@ from sneaker_details_service.sneaker_details.kafka.producer_event.delete_brand_d
 )
 from sneaker_details_service.sneaker_details.models import db_helper, Brand
 from sneaker_details_service.sneaker_details.schemas.brand import BrandCreate
-from sneaker_details_service.sneaker_details.services.record import (
-    create_record,
-    delete_record,
-)
+from sneaker_details_service.sneaker_details.services.record.create import create_record
+from sneaker_details_service.sneaker_details.services.record.delete import delete_record
 
 router = APIRouter(
     prefix=settings.api.build_path(

@@ -8,7 +8,7 @@ from sneaker_details_service.sneaker_details.dependencies.get_current_user impor
 from sneaker_details_service.sneaker_details.kafka.producer_event.recently_viewed_sneakers import (
     send_viewed_sneaker,
 )
-from sneaker_details_service.sneaker_details.services.check_permissions import (
+from sneaker_details_service.sneaker_details.dependencies.check_permissions import (
     check_role_permissions,
 )
 from sneaker_details_service.sneaker_details.config import settings
@@ -25,17 +25,15 @@ from sneaker_details_service.sneaker_details.kafka.producer_event.update_sneaker
     send_update_sneaker_data,
 )
 from sneaker_details_service.sneaker_details.models import db_helper
-from sneaker_details_service.sneaker_details.services.sneaker import get_sneaker_details
 
 from sneaker_details_service.sneaker_details.schemas import (
     SneakerCreate,
     SneakerUpdate,
 )
-from sneaker_details_service.sneaker_details.services.sneaker import (
-    create_sneaker,
-    delete_sneaker,
-    update_sneaker,
-)
+from sneaker_details_service.sneaker_details.services.sneaker.create import create_sneaker
+from sneaker_details_service.sneaker_details.services.sneaker.delete import delete_sneaker
+from sneaker_details_service.sneaker_details.services.sneaker.fetch import get_sneaker_details
+from sneaker_details_service.sneaker_details.services.sneaker.update import update_sneaker
 
 router = APIRouter(
     prefix=settings.api.build_path(
