@@ -9,8 +9,9 @@ async def get_role_permissions_db(
     session: AsyncSession,
     update_permissions: UpdatePermissions,
 ):
-    stmt = select(Permission.name).where(
-        Permission.id.in_(update_permissions.list_permission)
+    result = await session.scalars(
+        select(Permission.name).where(
+            Permission.id.in_(update_permissions.list_permission)
+        ),
     )
-    result = await session.execute(stmt)
-    return result
+    return result.all()
