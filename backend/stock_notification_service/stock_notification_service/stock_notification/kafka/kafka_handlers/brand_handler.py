@@ -1,7 +1,7 @@
 from stock_notification_service.stock_notification.models import db_helper, Brand
 from stock_notification_service.stock_notification.schemas import BrandCreate
-from stock_notification_service.stock_notification.services.record import create_record, delete_record
-
+from stock_notification_service.stock_notification.services.record.create import create_record
+from stock_notification_service.stock_notification.services.record.delete import delete_record
 
 
 async def handle_brand(key: str | None, value: dict):

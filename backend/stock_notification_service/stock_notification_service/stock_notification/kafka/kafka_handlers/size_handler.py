@@ -1,7 +1,7 @@
 from stock_notification_service.stock_notification.models import db_helper, Size
 from stock_notification_service.stock_notification.schemas import SizeCreate
-from stock_notification_service.stock_notification.services.record import create_record, delete_record
-
+from stock_notification_service.stock_notification.services.record.create import create_record
+from stock_notification_service.stock_notification.services.record.delete import delete_record
 
 
 async def handle_size(key: str | None, value: dict):
