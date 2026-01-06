@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cart_service.cart.schemas import SneakerUpdate
+from stock_notification_service.stock_notification.schemas import SneakerUpdate
 from stock_notification_service.stock_notification.models import Sneaker
 
 
