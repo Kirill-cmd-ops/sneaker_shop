@@ -7,9 +7,12 @@ from favorite_service.favorite.models import Favorite
 
 
 async def read_favorite(session: AsyncSession, user_id: int):
-    stmt = select(Favorite).where(Favorite.user_id == user_id).options(selectinload(Favorite.sneaker_associations))
-    result = await session.execute(stmt)
-    favorite = result.scalar_one_or_none()
+    favorite = await session.scalar(
+        select(Favorite)
+        .where(Favorite.user_id == user_id)
+        .options(selectinload(Favorite.sneaker_associations))
+    )
+
     if favorite is None:
         raise HTTPException(
             status_code=404, detail="У данного пользователя нету избранного"

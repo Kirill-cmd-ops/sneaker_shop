@@ -9,9 +9,9 @@ async def check_favorite_exists(
     session: AsyncSession,
     user_id: int,
 ):
-    stmt = select(Favorite.id).filter(Favorite.user_id == user_id)
-    result = await session.execute(stmt)
-    favorite_id = result.scalar_one_or_none()
+    favorite_id = await session.scalar(
+        select(Favorite.id).filter(Favorite.user_id == user_id)
+    )
     if not favorite_id:
         raise HTTPException(status_code=404, detail="Избранное пользователя не найдена")
     return favorite_id
