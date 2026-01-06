@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cart_service.cart.models import Base
+from favorite_service.favorite.models import Base
 from favorite_service.favorite.schemas import SneakerAssocsDelete
 
 
