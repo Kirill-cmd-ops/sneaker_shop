@@ -1,3 +1,4 @@
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cart_service.cart.models import SneakerSizeAssociation
@@ -7,11 +8,15 @@ from cart_service.cart.schemas import SneakerSizesCreate
 async def create_sneaker_sizes(
     session: AsyncSession, sneaker_id: int, sneaker_sizes_create: SneakerSizesCreate
 ):
-    for size_data in sneaker_sizes_create.sizes:
-        sneaker_size = SneakerSizeAssociation(
-            sneaker_id=sneaker_id,
-            size_id=size_data.size_id,
-            quantity=size_data.quantity,
-        )
-        session.add(sneaker_size)
+    sneaker_sizes = [
+        {
+            "sneaker_id": sneaker_id,
+            "size_id": size_data.size_id,
+            "quantity": size_data.quantity,
+        }
+        for size_data in sneaker_sizes_create.sizes
+    ]
+
+    await session.execute(insert(SneakerSizeAssociation).values(sneaker_sizes))
+
     await session.commit()
