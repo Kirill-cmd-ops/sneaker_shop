@@ -46,16 +46,16 @@ async def call_update_role_permissions(
             )
 
             role_permissions = await get_role_permissions_db(
-                session,
-                update_permissions,
+                session=session,
+                update_permissions=update_permissions,
             )
 
     list_role_permissions = [permission[0] for permission in role_permissions]
     if list_role_permissions is not None:
         await update_role_permissions_redis(
-            redis_client,
-            user_role,
-            list_role_permissions,
+            redis_client=redis_client,
+            user_role=user_role,
+            list_role_permissions=list_role_permissions,
         )
 
     return {"status": "ok"}
