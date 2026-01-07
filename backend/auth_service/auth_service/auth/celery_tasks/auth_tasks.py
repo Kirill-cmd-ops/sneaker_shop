@@ -1,7 +1,10 @@
 from celery_client.celery_connection.celery_getter import get_celery
 from message_sender.send_message import send_message
 
-celery_client = get_celery("service", broker="redis://:Meteor906587@redis_queue:6379/0")
+celery_client = get_celery(
+    name_service="service",
+    broker="redis://:Meteor906587@redis_queue:6379/0",
+)
 
 
 @celery_client.task(name="request.verify")
