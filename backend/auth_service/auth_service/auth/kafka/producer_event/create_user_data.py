@@ -17,7 +17,7 @@ async def send_create_user_data(
     }
 
     await producer.send_and_wait(
-        settings.kafka_config.user_work_topic,
+        topic=settings.kafka_config.user_work_topic,
         key=str(user_id),
         value=jsonable_encoder(user_create_payload),
     )
