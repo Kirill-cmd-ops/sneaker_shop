@@ -64,7 +64,9 @@ def get_register_router_custom(
             user_create_without_confirm = UserCreateWithoutConfirm(**user_create_dict)
 
             created_user = await user_manager.create(
-                user_create_without_confirm, safe=True, request=request
+                user_create=user_create_without_confirm,
+                safe=True,
+                request=request,
             )
 
             await send_create_user_data(
@@ -87,6 +89,6 @@ def get_register_router_custom(
                 },
             )
 
-        return schemas.model_validate(user_schema, created_user)
+        return schemas.model_validate(schema=user_schema, obj=created_user)
 
     return router

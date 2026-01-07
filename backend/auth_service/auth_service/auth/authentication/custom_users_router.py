@@ -26,10 +26,13 @@ def get_users_router_custom(
     router = APIRouter()
 
     get_current_active_user = authenticator.current_user(
-        active=True, verified=requires_verification
+        active=True,
+        verified=requires_verification,
     )
     get_current_superuser = authenticator.current_user(
-        active=True, verified=requires_verification, superuser=True
+        active=True,
+        verified=requires_verification,
+        superuser=True,
     )
 
     async def get_user_or_404(
@@ -55,7 +58,7 @@ def get_users_router_custom(
     async def me(
         user: models.UP = Depends(get_current_active_user),
     ):
-        return schemas.model_validate(user_schema, user)
+        return schemas.model_validate(schema=user_schema, obj=user)
 
     @router.patch(
         "/me",
@@ -102,7 +105,10 @@ def get_users_router_custom(
     ):
         try:
             user = await user_manager.update(
-                user_update, user, safe=True, request=request
+                user_update=user_update,
+                user=user,
+                safe=True,
+                request=request,
             )
             await send_update_user_data(
                 producer=producer,
@@ -110,7 +116,7 @@ def get_users_router_custom(
                 user_update=user_update,
             )
 
-            return schemas.model_validate(user_schema, user)
+            return schemas.model_validate(schema=user_schema, obj=user)
 
         except exceptions.InvalidPasswordException as e:
             raise HTTPException(
@@ -144,7 +150,7 @@ def get_users_router_custom(
         },
     )
     async def get_user(user=Depends(get_user_or_404)):
-        return schemas.model_validate(user_schema, user)
+        return schemas.model_validate(schema=user_schema, obj=user)
 
     @router.patch(
         "/{id}",
@@ -197,7 +203,10 @@ def get_users_router_custom(
     ):
         try:
             user = await user_manager.update(
-                user_update, user, safe=False, request=request
+                user_update=user_update,
+                user=user,
+                safe=False,
+                request=request,
             )
 
             await send_update_user_data(
@@ -206,7 +215,7 @@ def get_users_router_custom(
                 user_update=user_update,
             )
 
-            return schemas.model_validate(user_schema, user)
+            return schemas.model_validate(schema=user_schema, obj=user)
         except exceptions.InvalidPasswordException as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -245,7 +254,10 @@ def get_users_router_custom(
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
     ):
-        await user_manager.delete(user, request=request)
+        await user_manager.delete(
+            user=user,
+            request=request,
+        )
 
         await send_delete_user_data(
             producer=producer,

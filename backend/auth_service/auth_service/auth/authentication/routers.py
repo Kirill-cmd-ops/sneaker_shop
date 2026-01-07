@@ -20,25 +20,25 @@ router = APIRouter(
 )
 
 router.include_router(
-    fastapi_users_custom.get_auth_router(auth_backend),
+    fastapi_users_custom.get_auth_router(backend=auth_backend),
 )
 
 router.include_router(
     fastapi_users_custom.get_register_router(
-        UserRead,
-        UserCreate,
+        user_schema=UserRead,
+        user_create_schema=UserCreate,
     ),
 )
 
 router.include_router(
     fastapi_users_custom.get_users_router(
-        UserRead,
-        UserUpdate,
+        user_schema=UserRead,
+        user_update_schema=UserUpdate,
     )
 )
 
 router.include_router(
-    fastapi_users_custom.get_verify_router(UserRead),
+    fastapi_users_custom.get_verify_router(user_schema=UserRead),
 )
 
 
@@ -48,17 +48,17 @@ router.include_router(
 
 router.include_router(
     fastapi_users_custom.get_oauth_router(
-        google_oauth_client,
-        auth_backend,
-        settings.auth_config.state_secret,
+        oauth_client=google_oauth_client,
+        backend=auth_backend,
+        state_secret=settings.auth_config.state_secret,
         associate_by_email=True,
     ),
 )
 
 router.include_router(
     fastapi_users_custom.get_oauth_associate_router(
-        google_oauth_client,
-        UserRead,
-        settings.auth_config.state_secret,
+        oauth_client=google_oauth_client,
+        user_schema=UserRead,
+        state_secret=settings.auth_config.state_secret,
     ),
 )

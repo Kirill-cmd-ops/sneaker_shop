@@ -54,7 +54,10 @@ def get_reset_password_router_custom(
             return None
 
         try:
-            await user_manager.forgot_password(user, request)
+            await user_manager.forgot_password(
+                user=user,
+                request=request,
+            )
         except exceptions.UserInactive:
             pass
 
@@ -72,7 +75,11 @@ def get_reset_password_router_custom(
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
-            await user_manager.reset_password(token, password, request)
+            await user_manager.reset_password(
+                token=token,
+                password=password,
+                request=request,
+            )
         except (
             exceptions.InvalidResetPasswordToken,
             exceptions.UserNotExists,

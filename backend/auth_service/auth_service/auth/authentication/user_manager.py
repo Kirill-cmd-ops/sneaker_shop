@@ -77,8 +77,14 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         producer: AIOKafkaProducer = request.app.state.kafka_producer
-        await send_user_registered(producer, str(user.id))
-        await add_role_db(user.id, "user")
+        await send_user_registered(
+            producer=producer,
+            user_id=str(user.id),
+        )
+        await add_role_db(
+            user_id=user.id,
+            role_name="user",
+        )
 
         handle_after_register.delay(
             hostname=settings.smtp_config.smtp_hostname,
@@ -179,23 +185,32 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
             if refresh_token is None:
                 user_id = None
             else:
-                user_id = await check_refresh_token_rotation(session, refresh_token)
+                user_id = await check_refresh_token_rotation(
+                    session=session,
+                    refresh_token=refresh_token,
+                )
                 print("Ротация результат: ", user_id)
 
             if user_id is None:
                 if refresh_token:
-                    hash_refresh_token = encode_refresh_token(refresh_token)
+                    hash_refresh_token = encode_refresh_token(
+                        refresh_token=refresh_token
+                    )
                     print("Хеш токена: ", hash_refresh_token)
                     id_refresh_token = await get_refresh_token_id(
-                        hash_refresh_token, session
+                        hash_refresh_token=hash_refresh_token,
+                        session=session,
                     )
-                    await add_to_blacklist(session, id_refresh_token)
+                    await add_to_blacklist(
+                        session=session,
+                        refresh_token_id=id_refresh_token,
+                    )
                 user_id = getattr(user, "id", user)
 
                 raw = secrets.token_bytes(32)
                 refresh_token = generate_refresh_token(raw)
                 set_value_in_cookie(
-                    response,
+                    response=response,
                     value=refresh_token,
                     key=settings.cookie.refresh_cookie_name,
                     max_age=settings.cookie.refresh_cookie_max_age,
@@ -204,8 +219,12 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
                     httponly=settings.cookie.cookie_httponly,
                     samesite=settings.cookie.cookie_samesite,
                 )
-                hash_refresh_token = encode_refresh_token(refresh_token)
-                await hash_refresh_token_add_db(session, hash_refresh_token, user_id)
+                hash_refresh_token = encode_refresh_token(refresh_token=refresh_token)
+                await hash_refresh_token_add_db(
+                    session=session,
+                    refresh_token=hash_refresh_token,
+                    user_id=user_id,
+                )
                 print("Новый refresh токен: ", refresh_token)
             else:
                 print("Используется старый refresh токен")

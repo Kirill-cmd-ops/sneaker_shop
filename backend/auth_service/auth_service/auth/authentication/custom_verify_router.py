@@ -24,7 +24,10 @@ def get_verify_router_custom(
     ):
         try:
             user = await user_manager.get_by_email(email)
-            await user_manager.request_verify(user, request)
+            await user_manager.request_verify(
+                user=user,
+                request=request,
+            )
         except (
             exceptions.UserNotExists,
             exceptions.UserInactive,
@@ -67,8 +70,8 @@ def get_verify_router_custom(
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
-            user = await user_manager.verify(token, request)
-            return schemas.model_validate(user_schema, user)
+            user = await user_manager.verify(token=token, request=request)
+            return schemas.model_validate(schema=user_schema, obj=user)
         except (exceptions.InvalidVerifyToken, exceptions.UserNotExists):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
