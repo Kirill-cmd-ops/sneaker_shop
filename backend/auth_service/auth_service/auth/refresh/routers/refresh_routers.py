@@ -36,35 +36,48 @@ async def all_logic_refresh_token(
 ):
     async with session.begin():
         # 1) Проверка refresh токена
-        user_id = await check_refresh_token_valid(session, refresh_token)
+        user_id = await check_refresh_token_valid(
+            session=session,
+            refresh_token=refresh_token,
+        )
 
     # 2) Создание нового access токена и прокид в cookie
-    await set_jwt_token(user_id, token_aud, response)
+    await set_jwt_token(
+        user_id=user_id,
+        token_aud=token_aud,
+        response=response,
+    )
 
     # 3) Создание нового refresh токена
     raw = secrets.token_bytes(32)
     new_refresh_token = generate_refresh_token(raw)
 
     # 4) Хэшируем старый refresh токен, перед созданием нового
-    hash_old_token = encode_refresh_token(refresh_token)
+    hash_old_token = encode_refresh_token(refresh_token=refresh_token)
 
     # 5) Хеширование нового refresh токена
-    hash_new_token = encode_refresh_token(new_refresh_token)
+    hash_new_token = encode_refresh_token(refresh_token=new_refresh_token)
 
     async with session.begin():
         # 6) Получаем jti старого refresh токена, для добавления в blacklist
-        refresh_token_id = await get_refresh_token_id(hash_old_token, session)
+        refresh_token_id = await get_refresh_token_id(
+            hash_refresh_token=hash_old_token,
+            session=session,
+        )
 
         # 7) Добавление в blacklist старого refresh токена
-        await add_to_blacklist(session, refresh_token_id)
+        await add_to_blacklist(session=session, refresh_token_id=refresh_token_id)
 
         # 8) Добавление нового refresh токена в бд
-        await hash_refresh_token_add_db(session, hash_new_token, user_id)
-
+        await hash_refresh_token_add_db(
+            session=session,
+            refresh_token=hash_new_token,
+            user_id=user_id,
+        )
 
     # 9) Записываем refresh токен в cookie
     set_value_in_cookie(
-        response,
+        response=response,
         value=new_refresh_token,
         key=settings.cookie.refresh_cookie_name,
         max_age=settings.cookie.refresh_cookie_max_age,
