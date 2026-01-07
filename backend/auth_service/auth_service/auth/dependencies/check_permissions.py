@@ -7,7 +7,6 @@ from auth_service.auth.dependencies.get_current_user_role import get_user_role_b
 from redis_client.redis_connection.factory import get_redis_factory
 
 
-
 def check_role_permissions(
     permission: str,
 ):
@@ -16,10 +15,10 @@ def check_role_permissions(
         request: Request,
         redis_client: aioredis.Redis = Depends(
             get_redis_factory(
-                settings.redis_config.redis_password,
-                settings.redis_config.redis_host,
-                settings.redis_config.redis_port,
-                settings.redis_config.redis_db,
+                password=settings.redis_config.redis_password,
+                host=settings.redis_config.redis_host,
+                port=settings.redis_config.redis_port,
+                db=settings.redis_config.redis_db,
             )
         ),
         user_role: str = Depends(get_user_role_by_header),
@@ -35,4 +34,5 @@ def check_role_permissions(
 
         if not has_permission:
             raise HTTPException(status_code=403, detail="У пользователя нет доступа")
+
     return checker

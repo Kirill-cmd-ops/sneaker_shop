@@ -5,4 +5,8 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 
 
 async def get_user_db(session: AsyncSession = Depends(db_helper.session_getter)):
-    yield SQLAlchemyUserDatabase(session, User, OAuthAccount)
+    yield SQLAlchemyUserDatabase(
+        session=session,
+        user_table=User,
+        oauth_account_table=OAuthAccount,
+    )
