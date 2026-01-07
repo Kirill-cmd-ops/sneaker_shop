@@ -10,8 +10,8 @@ async def run_seeds():
     session: AsyncSession = await anext(session_gen)
 
     try:
-        await seed_roles(session)
-        await seed_permission(session)
+        await seed_roles(session=session)
+        await seed_permission(session=session)
         await session.commit()
         print("All seeds completed successfully!")
     except Exception as e:
