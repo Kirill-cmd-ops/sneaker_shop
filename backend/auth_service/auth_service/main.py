@@ -14,18 +14,20 @@ from kafka.producer import start_producer, close_producer
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
-    producer = await start_producer(settings.kafka_config.kafka_bootstrap_servers)
+    producer = await start_producer(
+        bootstrap_servers=settings.kafka_config.kafka_bootstrap_servers
+    )
     app.state.kafka_producer = producer
     yield
     # shutdown
-    await close_producer(producer)
+    await close_producer(producer=producer)
     await db_helper.dispose()
 
 
 app = FastAPI(lifespan=lifespan)
 
 
-add_middleware(app)
+add_middleware(app=app)
 
 app.include_router(
     auth_router,
@@ -34,7 +36,7 @@ app.include_router(
 # TODO: удалить, он лишний, мы все равно запускаем через docker compose
 if __name__ == "__main__":
     uvicorn.run(
-        "auth_service.main:app",
+        app="auth_service.main:app",
         host=settings.run.host,
         port=settings.run.port,
         reload=True,
