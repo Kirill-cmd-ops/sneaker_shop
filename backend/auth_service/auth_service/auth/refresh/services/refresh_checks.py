@@ -33,8 +33,11 @@ async def check_refresh_token_valid_rotation(
 
 
 async def check_refresh_token_valid(session: AsyncSession, refresh_token: str):
-    token_hash = encode_refresh_token(refresh_token)
-    user_id = await check_refresh_token_valid_rotation(session, token_hash)
+    token_hash = encode_refresh_token(refresh_token=refresh_token)
+    user_id = await check_refresh_token_valid_rotation(
+        session=session,
+        token_hash=token_hash,
+    )
     if user_id is None:
         print("У данного пользователя нету рабочего refresh tokenа")
         return None
@@ -42,8 +45,13 @@ async def check_refresh_token_valid(session: AsyncSession, refresh_token: str):
 
 
 async def check_refresh_token_rotation(session: AsyncSession, refresh_token: str):
-    token_hash = encode_refresh_token(refresh_token)
-    user_id = await check_refresh_token_valid_rotation(session, token_hash, True, 5)
+    token_hash = encode_refresh_token(refresh_token=refresh_token)
+    user_id = await check_refresh_token_valid_rotation(
+        session=session,
+        token_hash=token_hash,
+        rotate=True,
+        extra_days=5,
+    )
     if user_id is None:
         print("У данного пользователя почти истек токен")
         return None

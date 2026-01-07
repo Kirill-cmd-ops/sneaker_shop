@@ -20,10 +20,10 @@ async def set_jwt_token(
         token_audience=token_aud,
         allowed_audience=settings.auth_config.allowed_audience,
     )
-    access_token = await strategy.write_token(user_id)
+    access_token = await strategy.write_token(user=user_id)
 
     set_value_in_cookie(
-        response,
+        response=response,
         value=access_token,
         key=settings.cookie.jwt_cookie_name,
         max_age=settings.cookie.jwt_cookie_max_age,
