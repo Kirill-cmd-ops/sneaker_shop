@@ -24,9 +24,12 @@ async def call_get_cart(
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     async with session.begin():
-        items = await read_cart(session, user_id=user_id)
+        items = await read_cart(
+            session=session,
+            user_id=user_id,
+        )
 
-        total_price = calculate_total_price(items)
+        total_price = calculate_total_price(items=items)
 
         return {"Цена корзины: ": total_price, "Кроссовки": items}
 
@@ -39,4 +42,7 @@ async def call_delete_cart(
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     async with session.begin():
-        return await delete_cart(session, user_id)
+        return await delete_cart(
+            session=session,
+            user_id=user_id,
+        )

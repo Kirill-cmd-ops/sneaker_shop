@@ -40,18 +40,27 @@ async def call_create_sneaker_to_cart(
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     async with session.begin():
-        cart_id = await check_cart_exists(session, user_id)
-        await check_sneaker_exists(session, item_create)
-        await check_sneaker_size_exists(session, item_create)
+        cart_id = await check_cart_exists(
+            session=session,
+            user_id=user_id,
+        )
+        await check_sneaker_exists(
+            session=session,
+            item_create=item_create,
+        )
+        await check_sneaker_size_exists(
+            session=session,
+            item_create=item_create,
+        )
         sneaker_record = await check_sneaker_in_cart_exists(
-            session,
-            cart_id,
-            item_create,
+            session=session,
+            cart_id=cart_id,
+            item_create=item_create,
         )
 
         if sneaker_record is None:
             await create_sneaker_to_cart(
-                session,
+                session=session,
                 cart_id=cart_id,
                 sneaker_id=item_create.sneaker_id,
                 size_id=item_create.size_id,
@@ -74,7 +83,7 @@ async def call_update_sneaker_to_cart(
 ):
     async with session.begin():
         updated_item = await update_sneaker_to_cart(
-            session,
+            session=session,
             cart_sneaker_id=cart_sneaker_id,
             size_id=item_data.size_id,
             user_id=user_id,
@@ -94,7 +103,7 @@ async def call_delete_sneaker_to_cart(
 ):
     async with session.begin():
         await delete_sneaker_to_cart(
-            session,
+            session=session,
             cart_sneaker_id=cart_sneaker_id,
             user_id=user_id,
         )
@@ -113,10 +122,21 @@ async def cart_sneaker_quantity(
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     async with session.begin():
-        cart_id = await check_cart_exists(session, user_id)
+        cart_id = await check_cart_exists(
+            session=session,
+            user_id=user_id,
+        )
 
         if action == 1:
-            result = await increase_sneaker_quantity(cart_sneaker_id, cart_id, session)
+            result = await increase_sneaker_quantity(
+                cart_sneaker_id=cart_sneaker_id,
+                cart_id=cart_id,
+                session=session,
+            )
         else:
-            result = await decrease_sneaker_quantity(cart_sneaker_id, cart_id, session)
+            result = await decrease_sneaker_quantity(
+                cart_sneaker_id=cart_sneaker_id,
+                cart_id=cart_id,
+                session=session,
+            )
         return result
