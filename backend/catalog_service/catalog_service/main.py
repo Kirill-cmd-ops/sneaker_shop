@@ -21,38 +21,58 @@ from kafka.consumer import start_consumer, close_consumer
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     sneaker_consumer, task_sneaker = await start_consumer(
-        settings.kafka_config.sneaker_work_topic,
-        settings.kafka_config.kafka_bootstrap_servers,
-        settings.kafka_config.sneaker_group_id,
-        handle_sneaker,
+        topic=settings.kafka_config.sneaker_work_topic,
+        bootstrap_servers=settings.kafka_config.kafka_bootstrap_servers,
+        group_id=settings.kafka_config.sneaker_group_id,
+        handler=handle_sneaker,
     )
 
     brand_consumer, task_brand = await start_consumer(
-        settings.kafka_config.brand_work_topic,
-        settings.kafka_config.kafka_bootstrap_servers,
-        settings.kafka_config.brand_group_id,
-        handle_brand,
+        topic=settings.kafka_config.brand_work_topic,
+        bootstrap_servers=settings.kafka_config.kafka_bootstrap_servers,
+        group_id=settings.kafka_config.brand_group_id,
+        handler=handle_brand,
     )
 
     size_consumer, task_size = await start_consumer(
-        settings.kafka_config.size_work_topic,
-        settings.kafka_config.kafka_bootstrap_servers,
-        settings.kafka_config.size_group_id,
-        handle_size,
+        topic=settings.kafka_config.size_work_topic,
+        bootstrap_servers=settings.kafka_config.kafka_bootstrap_servers,
+        group_id=settings.kafka_config.size_group_id,
+        handler=handle_size,
     )
 
     sneaker_sizes_consumer, task_sneaker_sizes = await start_consumer(
-        settings.kafka_config.sneaker_sizes_work_topic,
-        settings.kafka_config.kafka_bootstrap_servers,
-        settings.kafka_config.sneaker_sizes_group_id,
-        handle_sneaker_sizes,
+        topic=settings.kafka_config.sneaker_sizes_work_topic,
+        bootstrap_servers=settings.kafka_config.kafka_bootstrap_servers,
+        group_id=settings.kafka_config.sneaker_sizes_group_id,
+        handler=handle_sneaker_sizes,
     )
 
     yield
-    task1 = create_task(close_consumer(sneaker_consumer, task_sneaker))
-    task2 = create_task(close_consumer(brand_consumer, task_brand))
-    task3 = create_task(close_consumer(size_consumer, task_size))
-    task4 = create_task(close_consumer(sneaker_sizes_consumer, task_sneaker_sizes))
+    task1 = create_task(
+        close_consumer(
+            consumer=sneaker_consumer,
+            task=task_sneaker,
+        )
+    )
+    task2 = create_task(
+        close_consumer(
+            consumer=brand_consumer,
+            task=task_brand,
+        )
+    )
+    task3 = create_task(
+        close_consumer(
+            consumer=size_consumer,
+            task=task_size,
+        )
+    )
+    task4 = create_task(
+        close_consumer(
+            consumer=sneaker_sizes_consumer,
+            task=task_sneaker_sizes,
+        )
+    )
 
     await asyncio.gather(task1, task2, task3, task4)
 
@@ -62,7 +82,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
-add_middleware(app)
+add_middleware(app=app)
 
 app.include_router(
     catalog_router,
@@ -71,7 +91,7 @@ app.include_router(
 
 if __name__ == "__main__":
     uvicorn.run(
-        "main:app",
+        app="main:app",
         host=settings.run.host,
         port=settings.run.port,
         reload=True,
