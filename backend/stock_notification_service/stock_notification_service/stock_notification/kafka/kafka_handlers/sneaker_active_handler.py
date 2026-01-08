@@ -21,14 +21,22 @@ async def handle_sneaker_active(key: str | None, value: dict):
                 sneaker_id = value.get("sneaker_id")
                 data = value.get("data")
                 if data["is_active"] is False:
-                    await deactivate_all_sneaker_subscriptions(session, sneaker_id)
+                    await deactivate_all_sneaker_subscriptions(
+                        session=session,
+                        sneaker_id=sneaker_id,
+                    )
                     await deactivate_all_sneaker_one_time_subscriptions(
-                        session, sneaker_id
+                        session=session,
+                        sneaker_id=sneaker_id,
                     )
                 elif data["is_active"] is True:
-                    await reactivate_all_sneaker_subscriptions(session, sneaker_id)
+                    await reactivate_all_sneaker_subscriptions(
+                        session=session,
+                        sneaker_id=sneaker_id,
+                    )
                     await reactivate_all_sneaker_one_time_subscriptions(
-                        session, sneaker_id
+                        session=session,
+                        sneaker_id=sneaker_id,
                     )
     except Exception as e:
         print("Ошибка:", e)

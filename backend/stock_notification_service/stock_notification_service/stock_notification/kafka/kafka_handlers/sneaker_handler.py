@@ -3,9 +3,15 @@ from stock_notification_service.stock_notification.schemas import (
     SneakerCreate,
     SneakerUpdate,
 )
-from stock_notification_service.stock_notification.services.sneaker.create import create_sneaker
-from stock_notification_service.stock_notification.services.sneaker.delete import delete_sneaker
-from stock_notification_service.stock_notification.services.sneaker.update import update_sneaker
+from stock_notification_service.stock_notification.services.sneaker.create import (
+    create_sneaker,
+)
+from stock_notification_service.stock_notification.services.sneaker.delete import (
+    delete_sneaker,
+)
+from stock_notification_service.stock_notification.services.sneaker.update import (
+    update_sneaker,
+)
 
 
 async def handle_sneaker(key: str | None, value: dict):
@@ -14,17 +20,27 @@ async def handle_sneaker(key: str | None, value: dict):
         async with db_helper.session_context() as session:
             if event_type == "sneaker_created":
                 data = value.get("data")
-                sneaker_create = SneakerCreate.model_validate(data, strict=False)
-                await create_sneaker(session, sneaker_create)
+                sneaker_create = SneakerCreate.model_validate(obj=data, strict=False)
+                await create_sneaker(
+                    session=session,
+                    sneaker_create=sneaker_create,
+                )
 
             elif event_type == "sneaker_updated":
                 data = value.get("data")
                 sneaker_id = value.get("sneaker_id")
-                sneaker_update = SneakerUpdate.model_validate(data, strict=False)
-                await update_sneaker(session, sneaker_id, sneaker_update)
+                sneaker_update = SneakerUpdate.model_validate(obj=data, strict=False)
+                await update_sneaker(
+                    session=session,
+                    sneaker_id=sneaker_id,
+                    sneaker_update=sneaker_update,
+                )
 
             elif event_type == "sneaker_deleted":
                 sneaker_id = value.get("sneaker_id")
-                await delete_sneaker(session, sneaker_id)
+                await delete_sneaker(
+                    session=session,
+                    sneaker_id=sneaker_id,
+                )
     except Exception as e:
         print("Ошибка:", e)

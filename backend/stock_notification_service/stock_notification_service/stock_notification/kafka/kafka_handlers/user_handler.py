@@ -20,17 +20,27 @@ async def handle_user(key: str | None, value: dict):
         async with db_helper.session_context() as session:
             if event_type == "user_created":
                 data = value.get("data")
-                user_create = UserCreate.model_validate(data, strict=False)
-                await create_user(session, user_create)
+                user_create = UserCreate.model_validate(obj=data, strict=False)
+                await create_user(
+                    session=session,
+                    user_create=user_create,
+                )
 
             elif event_type == "user_updated":
                 data = value.get("data")
                 user_id = value.get("user_id")
-                user_update = UserUpdate.model_validate(data, strict=False)
-                await update_user(session, user_id, user_update)
+                user_update = UserUpdate.model_validate(obj=data, strict=False)
+                await update_user(
+                    session=session,
+                    user_id=user_id,
+                    user_update=user_update,
+                )
 
             elif event_type == "user_deleted":
                 user_id = value.get("user_id")
-                await delete_user(session, user_id)
+                await delete_user(
+                    session=session,
+                    user_id=user_id,
+                )
     except Exception as e:
         print("Ошибка:", e)
