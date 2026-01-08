@@ -15,24 +15,27 @@ from sneaker_views_redis_writer.redis_writer.kafka_handler.sneaker_views_redis_h
 async def lifespan(app: FastAPI):
     # startup
     sneaker_views_consumer, sneaker_views_task = await start_consumer(
-        settings.kafka_config.sneaker_viewed_topic,
-        settings.kafka_config.kafka_bootstrap_servers,
-        settings.kafka_config.sneaker_views_redis_group,
-        handle_sneaker_view_to_redis,
+        topic=settings.kafka_config.sneaker_viewed_topic,
+        bootstrap_servers=settings.kafka_config.kafka_bootstrap_servers,
+        group_id=settings.kafka_config.sneaker_views_redis_group,
+        handler=handle_sneaker_view_to_redis,
     )
     yield
-    await close_consumer(sneaker_views_consumer, sneaker_views_task)
+    await close_consumer(
+        consumer=sneaker_views_consumer,
+        task=sneaker_views_task,
+    )
 
 
 app = FastAPI(lifespan=lifespan)
 
 
-add_middleware(app)
+add_middleware(app=app)
 
 
 if __name__ == "__main__":
     uvicorn.run(
-        "main:app",
+        app="main:app",
         host=settings.run.host,
         port=settings.run.port,
         reload=True,
