@@ -5,4 +5,7 @@ from cart_service.cart.services.cart.create import create_cart
 async def handle_cart(key, value):
     user_id = key or value.get("id")
     async with db_helper.session_context() as session:
-        await create_cart(session, user_id=int(user_id))
+        await create_cart(
+            session=session,
+            user_id=int(user_id),
+        )
