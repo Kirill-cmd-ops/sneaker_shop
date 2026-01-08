@@ -5,7 +5,9 @@ from cart_service.cart.schemas import SneakerUpdate
 
 
 async def update_sneaker(
-    session: AsyncSession, sneaker_id: int, sneaker_update: SneakerUpdate
+    session: AsyncSession,
+    sneaker_id: int,
+    sneaker_update: SneakerUpdate,
 ):
     sneaker = await session.get(Sneaker, sneaker_id)
     update_data = sneaker_update.dict(exclude_unset=True)

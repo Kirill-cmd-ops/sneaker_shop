@@ -6,7 +6,9 @@ from cart_service.cart.schemas import SneakerSizesCreate
 
 
 async def create_sneaker_sizes(
-    session: AsyncSession, sneaker_id: int, sneaker_sizes_create: SneakerSizesCreate
+    session: AsyncSession,
+    sneaker_id: int,
+    sneaker_sizes_create: SneakerSizesCreate,
 ):
     sneaker_sizes = [
         {

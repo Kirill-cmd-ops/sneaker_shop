@@ -36,7 +36,8 @@ async def update_sneaker_to_cart(
         current_sneaker.size_id = size_id
     else:
         raise HTTPException(
-            status_code=404, detail="У данной модели кроссовок этот размер отсутствует"
+            status_code=404,
+            detail="У данной модели кроссовок этот размер отсутствует",
         )
 
     return current_sneaker

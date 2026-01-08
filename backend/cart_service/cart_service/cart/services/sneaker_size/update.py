@@ -6,7 +6,9 @@ from cart_service.cart.schemas import SneakerSizeUpdate
 
 
 async def update_sneaker_sizes(
-    session: AsyncSession, sneaker_id: int, sneaker_size_update: SneakerSizeUpdate
+    session: AsyncSession,
+    sneaker_id: int,
+    sneaker_size_update: SneakerSizeUpdate,
 ):
     sneaker_size = await session.scalar(
         select(SneakerSizeAssociation)
