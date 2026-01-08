@@ -11,8 +11,12 @@ from sneaker_views_history_service.user_history.dependencies.get_current_user im
     get_user_by_header,
 )
 from sneaker_views_history_service.user_history.models.db_helper import db_helper
-from sneaker_views_history_service.user_history.services.sneaker_view.create import redis_insert
-from sneaker_views_history_service.user_history.services.sneaker_view.fetch import clickhouse_select
+from sneaker_views_history_service.user_history.services.sneaker_view.create import (
+    redis_insert,
+)
+from sneaker_views_history_service.user_history.services.sneaker_view.fetch import (
+    clickhouse_select,
+)
 
 router = APIRouter(
     prefix=settings.api.build_path(
@@ -32,22 +36,26 @@ async def get_sneaker_views(
     session: Session = Depends(db_helper.session_getter),
     redis_client: aioredis.Redis = Depends(
         get_redis_factory(
-            settings.redis_config.redis_password,
-            settings.redis_config.redis_host,
-            settings.redis_config.redis_port,
-            settings.redis_config.redis_db,
+            password=settings.redis_config.redis_password,
+            host=settings.redis_config.redis_host,
+            port=settings.redis_config.redis_port,
+            db=settings.redis_config.redis_db,
         )
     ),
 ):
     # redis_client = request.state.redis_client
 
-    records = await redis_client.zrange(f"views:{user_id}", 0, -1)
+    records = await redis_client.zrange(
+        name=f"views:{user_id}",
+        start=0,
+        end=-1,
+    )
     if not records:
-        records = await clickhouse_select(session, user_id, 30)
-
-        task = create_task(
-            redis_insert(
-                records=records,
-            )
+        records = await clickhouse_select(
+            session=session,
+            user_id=user_id,
+            limit=30,
         )
+
+        task = create_task(redis_insert(records=records))
     return records
