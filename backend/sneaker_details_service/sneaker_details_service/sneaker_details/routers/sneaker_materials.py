@@ -14,9 +14,15 @@ from sneaker_details_service.sneaker_details.schemas import (
 from sneaker_details_service.sneaker_details.dependencies.check_permissions import (
     check_role_permissions,
 )
-from sneaker_details_service.sneaker_details.services.sneaker_association.create import create_sneaker_association
-from sneaker_details_service.sneaker_details.services.sneaker_association.delete import delete_sneaker_association
-from sneaker_details_service.sneaker_details.services.sneaker_association.fetch import read_sneaker_association
+from sneaker_details_service.sneaker_details.services.sneaker_association.create import (
+    create_sneaker_association,
+)
+from sneaker_details_service.sneaker_details.services.sneaker_association.delete import (
+    delete_sneaker_association,
+)
+from sneaker_details_service.sneaker_details.services.sneaker_association.fetch import (
+    read_sneaker_association,
+)
 
 router = APIRouter(
     prefix=settings.api.build_path(
@@ -39,11 +45,11 @@ async def call_create_sneaker_association(
 ):
     async with session.begin():
         await create_sneaker_association(
-            session,
-            sneaker_id,
-            sneaker_associations_create,
-            SneakerMaterialAssociation,
-            "material_id",
+            session=session,
+            sneaker_id=sneaker_id,
+            sneaker_associations_create=sneaker_associations_create,
+            sneaker_association_model=SneakerMaterialAssociation,
+            field_name="material_id",
         )
         return "Запись нового материала прошла успешно"
 
@@ -59,11 +65,11 @@ async def call_delete_sneaker_association(
 ):
     async with session.begin():
         await delete_sneaker_association(
-            session,
-            sneaker_id,
-            sneaker_assoc_delete,
-            SneakerMaterialAssociation,
-            "material_id",
+            session=session,
+            sneaker_id=sneaker_id,
+            sneaker_assoc_delete=sneaker_assoc_delete,
+            sneaker_association_model=SneakerMaterialAssociation,
+            field_name="material_id",
         )
         return "Материалы товара успешно удалены"
 
@@ -78,6 +84,8 @@ async def call_read_sneaker_association(
 ):
     async with session.begin():
         materials = await read_sneaker_association(
-            session, SneakerMaterialAssociation, sneaker_id
+            session=session,
+            sneaker_association_model=SneakerMaterialAssociation,
+            sneaker_id=sneaker_id,
         )
         return materials

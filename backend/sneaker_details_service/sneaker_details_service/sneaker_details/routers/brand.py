@@ -35,9 +35,17 @@ async def call_create_brand(
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     async with session.begin():
-        new_brand = await create_record(session, Brand, brand_create)
+        new_brand = await create_record(
+            session=session,
+            table_name=Brand,
+            schema_create=brand_create,
+        )
 
-    await send_create_brand_data(producer, new_brand.id, brand_create)
+    await send_create_brand_data(
+        producer=producer,
+        brand_id=new_brand.id,
+        brand_create=brand_create,
+    )
     return new_brand
 
 
@@ -48,7 +56,14 @@ async def call_delete_brand(
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     async with session.begin():
-        result = await delete_record(session, Brand, brand_id)
+        result = await delete_record(
+            session=session,
+            table_name=Brand,
+            record_id=brand_id,
+        )
 
-    await send_delete_brand_data(producer, brand_id)
+    await send_delete_brand_data(
+        producer=producer,
+        brand_id=brand_id,
+    )
     return result

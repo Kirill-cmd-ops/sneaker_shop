@@ -27,15 +27,22 @@ from sneaker_details_service.sneaker_details.dependencies.check_permissions impo
 )
 
 
-
 from sneaker_details_service.sneaker_details.models import (
     SneakerSizeAssociation,
     db_helper,
 )
-from sneaker_details_service.sneaker_details.services.sneaker_association.delete import delete_sneaker_association
-from sneaker_details_service.sneaker_details.services.sneaker_association.fetch import read_sneaker_association
-from sneaker_details_service.sneaker_details.services.sneaker_size.create import create_sneaker_sizes
-from sneaker_details_service.sneaker_details.services.sneaker_size.update import update_sneaker_sizes
+from sneaker_details_service.sneaker_details.services.sneaker_association.delete import (
+    delete_sneaker_association,
+)
+from sneaker_details_service.sneaker_details.services.sneaker_association.fetch import (
+    read_sneaker_association,
+)
+from sneaker_details_service.sneaker_details.services.sneaker_size.create import (
+    create_sneaker_sizes,
+)
+from sneaker_details_service.sneaker_details.services.sneaker_size.update import (
+    update_sneaker_sizes,
+)
 
 router = APIRouter(
     prefix=settings.api.build_path(
@@ -58,9 +65,17 @@ async def call_create_sneaker_sizes(
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     async with session.begin():
-        await create_sneaker_sizes(session, sneaker_id, sneaker_sizes_create)
+        await create_sneaker_sizes(
+            session=session,
+            sneaker_id=sneaker_id,
+            sneaker_sizes_create=sneaker_sizes_create,
+        )
 
-    await send_create_sneaker_sizes_data(producer, sneaker_id, sneaker_sizes_create)
+    await send_create_sneaker_sizes_data(
+        producer=producer,
+        sneaker_id=sneaker_id,
+        sneaker_sizes_create=sneaker_sizes_create,
+    )
     return "Запись нового размера прошла успешно"
 
 
@@ -76,14 +91,18 @@ async def call_delete_sneaker_association(
 ):
     async with session.begin():
         await delete_sneaker_association(
-            session,
-            sneaker_id,
-            sneaker_sizes_delete,
-            SneakerSizeAssociation,
-            "size_id",
+            session=session,
+            sneaker_id=sneaker_id,
+            sneaker_assoc_delete=sneaker_sizes_delete,
+            sneaker_association_model=SneakerSizeAssociation,
+            field_name="size_id",
         )
 
-    await send_delete_sneaker_sizes_data(producer, sneaker_id, sneaker_sizes_delete)
+    await send_delete_sneaker_sizes_data(
+        producer=producer,
+        sneaker_id=sneaker_id,
+        sneaker_sizes_delete=sneaker_sizes_delete,
+    )
     return "Размеры товара успешно удалены"
 
 
@@ -98,9 +117,17 @@ async def call_update_sneaker_sizes(
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     async with session.begin():
-        await update_sneaker_sizes(session, sneaker_id, sneaker_size_update)
+        await update_sneaker_sizes(
+            session=session,
+            sneaker_id=sneaker_id,
+            sneaker_size_update=sneaker_size_update,
+        )
 
-    await send_update_sneaker_sizes_data(producer, sneaker_id, sneaker_size_update)
+    await send_update_sneaker_sizes_data(
+        producer=producer,
+        sneaker_id=sneaker_id,
+        sneaker_size_update=sneaker_size_update,
+    )
     return "Размер был изменен корректно"
 
 
@@ -114,6 +141,8 @@ async def call_read_sneaker_association(
 ):
     async with session.begin():
         sizes = await read_sneaker_association(
-            session, SneakerSizeAssociation, sneaker_id
+            session=session,
+            sneaker_association_model=SneakerSizeAssociation,
+            sneaker_id=sneaker_id,
         )
         return sizes

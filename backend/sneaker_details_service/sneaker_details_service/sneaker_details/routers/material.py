@@ -16,12 +16,18 @@ router = APIRouter(
     tags=["Material"],
 )
 
+
 @router.post("/")
 async def call_create_material(
-    material_create: MaterialCreate, session: AsyncSession = Depends(db_helper.session_getter)
+    material_create: MaterialCreate,
+    session: AsyncSession = Depends(db_helper.session_getter),
 ):
     async with session.begin():
-        new_material = await create_record(session, Material, material_create)
+        new_material = await create_record(
+            session=session,
+            table_name=Material,
+            schema_create=material_create,
+        )
         return new_material
 
 
@@ -31,5 +37,9 @@ async def call_delete_material(
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     async with session.begin():
-        result = await delete_record(session, Material, material_id)
+        result = await delete_record(
+            session=session,
+            table_name=Material,
+            record_id=material_id,
+        )
         return result

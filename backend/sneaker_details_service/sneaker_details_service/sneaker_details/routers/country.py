@@ -16,12 +16,18 @@ router = APIRouter(
     tags=["Country"],
 )
 
+
 @router.post("/")
 async def call_create_country(
-    country_create: CountryCreate, session: AsyncSession = Depends(db_helper.session_getter)
+    country_create: CountryCreate,
+    session: AsyncSession = Depends(db_helper.session_getter),
 ):
     async with session.begin():
-        new_country = await create_record(session, Country, country_create)
+        new_country = await create_record(
+            session=session,
+            table_name=Country,
+            schema_create=country_create,
+        )
         return new_country
 
 
@@ -31,5 +37,9 @@ async def call_delete_country(
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     async with session.begin():
-        result = await delete_record(session, Country, country_id)
+        result = await delete_record(
+            session=session,
+            table_name=Country,
+            record_id=country_id,
+        )
         return result
