@@ -6,7 +6,9 @@ from catalog_service.catalog.schemas import SneakerSizesCreate
 
 
 async def create_sneaker_sizes(
-    session: AsyncSession, sneaker_id: int, sneaker_sizes_create: SneakerSizesCreate
+    session: AsyncSession,
+    sneaker_id: int,
+    sneaker_sizes_create: SneakerSizesCreate,
 ):
     sneaker_sizes = [
         {
@@ -20,4 +22,3 @@ async def create_sneaker_sizes(
     await session.execute(insert(SneakerSizeAssociation).values(sneaker_sizes))
 
     await session.commit()
-
