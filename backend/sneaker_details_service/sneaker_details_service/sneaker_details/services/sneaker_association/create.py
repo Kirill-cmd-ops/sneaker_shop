@@ -1,5 +1,6 @@
 from typing import Type
 
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from sneaker_details_service.sneaker_details.models import Base
@@ -16,11 +17,13 @@ async def create_sneaker_association(
     """
     Функция для создания записи в ассоциативных таблицах
     """
-    for assoc_id in sneaker_associations_create.assoc_ids:
-        assoc_data = {
+    sneaker_associations = [
+        {
             "sneaker_id": sneaker_id,
             field_name: assoc_id,
         }
-
-        sneaker_association = sneaker_association_model(**assoc_data)
-        session.add(sneaker_association)
+        for assoc_id in sneaker_associations_create.assoc_ids
+    ]
+    await session.execute(
+        insert(sneaker_association_model).values(sneaker_associations)
+    )
