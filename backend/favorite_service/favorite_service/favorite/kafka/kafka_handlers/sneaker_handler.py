@@ -12,16 +12,26 @@ async def handle_sneaker(key: str | None, value: dict):
             if event_type == "sneaker_created":
                 data = value.get("data")
                 sneaker_create = SneakerCreate(**data)
-                await create_sneaker(session, sneaker_create)
+                await create_sneaker(
+                    session=session,
+                    sneaker_create=sneaker_create,
+                )
 
             elif event_type == "sneaker_updated":
                 data = value.get("data")
                 sneaker_id = value.get("sneaker_id")
                 sneaker_update = SneakerUpdate(**data)
-                await update_sneaker(session, sneaker_id, sneaker_update)
+                await update_sneaker(
+                    session=session,
+                    sneaker_id=sneaker_id,
+                    sneaker_update=sneaker_update,
+                )
 
             elif event_type == "sneaker_deleted":
                 sneaker_id = value.get("sneaker_id")
-                await delete_sneaker(session, sneaker_id)
+                await delete_sneaker(
+                    session=session,
+                    sneaker_id=sneaker_id,
+                )
     except Exception as e:
         print("Ошибка:", e)
