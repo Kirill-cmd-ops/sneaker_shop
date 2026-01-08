@@ -18,7 +18,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
-add_middleware(app)
+add_middleware(app=app)
 
 app.include_router(
     user_history_router,
@@ -27,7 +27,7 @@ app.include_router(
 
 if __name__ == "__main__":
     uvicorn.run(
-        "main:app",
+        app="main:app",
         host=settings.run.host,
         port=settings.run.port,
         reload=True,
