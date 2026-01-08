@@ -12,7 +12,7 @@ async def send_create_sneaker_sizes_data(
         "data": sneaker_sizes_create.dict(),
     }
     await producer.send_and_wait(
-        settings.kafka_config.sneaker_sizes_work_topic,
+        topic=settings.kafka_config.sneaker_sizes_work_topic,
         key=str(sneaker_id),
         value=sneaker_sizes_create_payload,
     )

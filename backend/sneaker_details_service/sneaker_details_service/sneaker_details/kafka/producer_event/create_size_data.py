@@ -15,7 +15,7 @@ async def send_create_size_data(
     }
 
     await producer.send_and_wait(
-        settings.kafka_config.size_work_topic,
+        topic=settings.kafka_config.size_work_topic,
         key=str(size_id),
         value=jsonable_encoder(size_create_payload),
     )

@@ -15,7 +15,7 @@ async def send_create_brand_data(
     }
 
     await producer.send_and_wait(
-        settings.kafka_config.brand_work_topic,
+        topic=settings.kafka_config.brand_work_topic,
         key=str(brand_id),
         value=jsonable_encoder(brand_create_payload),
     )
