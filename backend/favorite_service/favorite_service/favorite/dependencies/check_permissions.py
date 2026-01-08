@@ -12,10 +12,16 @@ from redis_client.redis_connection.factory import get_redis_factory
 def check_role_permissions(
     permission: str,
 ):
+
     async def checker(
         request: Request,
         redis_client: aioredis.Redis = Depends(
-            get_redis_factory(settings.redis_config.redis_password)
+            get_redis_factory(
+                password=settings.redis_config.redis_password,
+                host=settings.redis_config.redis_host,
+                port=settings.redis_config.redis_port,
+                db=settings.redis_config.redis_db,
+            )
         ),
         user_role: str = Depends(get_user_role_by_header),
     ):
