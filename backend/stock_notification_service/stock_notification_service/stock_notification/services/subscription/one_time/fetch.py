@@ -12,15 +12,26 @@ async def get_user_active_one_time_subscriptions(
     user_id: int,
     session: AsyncSession,
 ):
-    request_view_all_subscription_user = select(UserSneakerOneTimeSubscription).where(
-        UserSneakerOneTimeSubscription.user_id == user_id,
-        UserSneakerOneTimeSubscription.status == SubscriptionStatus.ACTIVE,
+    result = await session.scalars(
+        select(UserSneakerOneTimeSubscription).where(
+            UserSneakerOneTimeSubscription.user_id == user_id,
+            UserSneakerOneTimeSubscription.status == SubscriptionStatus.ACTIVE,
+        )
     )
+    return {"records": result.all()}
 
-    result = await session.execute(request_view_all_subscription_user)
-    all_subscription_user = result.scalars().all()
 
-    return {"records": all_subscription_user}
+async def get_user_inactive_one_time_subscription(
+    session: AsyncSession,
+    user_id: int,
+    subscription_id: int,
+):
+    return await session.scalar(
+        select(UserSneakerOneTimeSubscription).where(
+            UserSneakerOneTimeSubscription.user_id == user_id,
+            UserSneakerOneTimeSubscription.id == subscription_id,
+        )
+    )
 
 
 async def get_sneaker_active_one_time_subscriptions(
@@ -28,7 +39,7 @@ async def get_sneaker_active_one_time_subscriptions(
     sneaker_id: int,
     size_id: int,
 ):
-    stmt = (
+    result = await session.scalars(
         select(UserSneakerOneTimeSubscription)
         .where(
             UserSneakerOneTimeSubscription.sneaker_id == sneaker_id,
@@ -37,5 +48,5 @@ async def get_sneaker_active_one_time_subscriptions(
         )
         .options(selectinload(UserSneakerOneTimeSubscription.user))
     )
-    result = await session.execute(stmt)
-    return result.scalars().all()
+
+    return result.all()

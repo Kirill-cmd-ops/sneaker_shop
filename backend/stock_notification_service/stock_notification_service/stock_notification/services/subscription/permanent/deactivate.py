@@ -10,14 +10,13 @@ async def deactivate_user_subscription(
     user_id: int,
     session: AsyncSession,
 ):
-    stmt = select(UserSneakerSubscription).where(
-        UserSneakerSubscription.user_id == user_id,
-        UserSneakerSubscription.id == subscription_id,
-        UserSneakerSubscription.status == SubscriptionStatus.ACTIVE,
+    subscription = await session.scalar(
+        select(UserSneakerSubscription).where(
+            UserSneakerSubscription.user_id == user_id,
+            UserSneakerSubscription.id == subscription_id,
+            UserSneakerSubscription.status == SubscriptionStatus.ACTIVE,
+        )
     )
-
-    result_request = await session.execute(stmt)
-    subscription = result_request.scalar()
 
     subscription.status = SubscriptionStatus.INACTIVE_BY_USER
 
