@@ -6,31 +6,36 @@ from fastapi import FastAPI
 from kafka.consumer import start_consumer, close_consumer
 from sneaker_views_clickhouse_writer.clickhouse_writer.config import settings
 from sneaker_views_clickhouse_writer.add_middleware import add_middleware
-from sneaker_views_clickhouse_writer.clickhouse_writer.kafka_handler.sneaker_views_clickhouse_handler import handle_sneaker_view_to_clickhouse
+from sneaker_views_clickhouse_writer.clickhouse_writer.kafka_handler.sneaker_views_clickhouse_handler import (
+    handle_sneaker_view_to_clickhouse,
+)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
     sneaker_views_consumer, sneaker_views_task = await start_consumer(
-        settings.kafka_config.sneaker_viewed_topic,
-        settings.kafka_config.kafka_bootstrap_servers,
-        settings.kafka_config.sneaker_views_clickhouse_group,
-        handle_sneaker_view_to_clickhouse,
+        topic=settings.kafka_config.sneaker_viewed_topic,
+        bootstrap_servers=settings.kafka_config.kafka_bootstrap_servers,
+        group_id=settings.kafka_config.sneaker_views_clickhouse_group,
+        handler=handle_sneaker_view_to_clickhouse,
     )
     yield
-    await close_consumer(sneaker_views_consumer, sneaker_views_task)
+    await close_consumer(
+        consumer=sneaker_views_consumer,
+        task=sneaker_views_task,
+    )
 
 
 app = FastAPI(lifespan=lifespan)
 
 
-add_middleware(app)
+add_middleware(app=app)
 
 
 if __name__ == "__main__":
     uvicorn.run(
-        "main:app",
+        app="main:app",
         host=settings.run.host,
         port=settings.run.port,
         reload=True,
