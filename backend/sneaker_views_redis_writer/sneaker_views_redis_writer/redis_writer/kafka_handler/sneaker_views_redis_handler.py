@@ -6,10 +6,10 @@ from sneaker_views_redis_writer.redis_writer.config import settings
 
 
 redis_factory = get_redis_factory(
-    settings.redis_config.redis_password,
-    settings.redis_config.redis_host,
-    settings.redis_config.redis_port,
-    settings.redis_config.redis_db,
+    password=settings.redis_config.redis_password,
+    host=settings.redis_config.redis_host,
+    port=settings.redis_config.redis_port,
+    db=settings.redis_config.redis_db,
 )
 
 
