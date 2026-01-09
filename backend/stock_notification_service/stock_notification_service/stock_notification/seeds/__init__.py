@@ -1,14 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from stock_notification_service.stock_notification.models import db_helper
-from stock_notification_service.stock_notification.seeds.seed_brands import seed_brands
-from stock_notification_service.stock_notification.seeds.seed_sizes import seed_sizes
-from stock_notification_service.stock_notification.seeds.seed_sneaker_sizes import (
+from stock_notification_service.stock_notification.seeds.brands import seed_brands
+from stock_notification_service.stock_notification.seeds.sizes import seed_sizes
+from stock_notification_service.stock_notification.seeds.sneaker_sizes import (
     seed_sneaker_sizes,
 )
-from stock_notification_service.stock_notification.seeds.seed_sneakers import (
+from stock_notification_service.stock_notification.seeds.sneakers import (
     seed_sneakers,
 )
-from stock_notification_service.stock_notification.seeds.seed_users import seed_users
+from stock_notification_service.stock_notification.seeds.users import seed_users
 
 
 async def run_seeds():
