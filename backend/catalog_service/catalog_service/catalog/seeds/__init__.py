@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from catalog_service.catalog.models.db_helper import db_helper
-from catalog_service.catalog.seeds.seed_brands import seed_brands
-from catalog_service.catalog.seeds.seed_sizes import seed_sizes
-from catalog_service.catalog.seeds.seed_sneakers import seed_sneakers
-from catalog_service.catalog.seeds.seed_sneaker_sizes import seed_sneaker_sizes
+from catalog_service.catalog.seeds.brands import seed_brands
+from catalog_service.catalog.seeds.sizes import seed_sizes
+from catalog_service.catalog.seeds.sneakers import seed_sneakers
+from catalog_service.catalog.seeds.sneaker_sizes import seed_sneaker_sizes
 
 
 async def run_seeds():
