@@ -6,11 +6,11 @@ import uvicorn
 from fastapi import FastAPI
 
 from cart_service.cart.config import settings
-from cart_service.cart.kafka.kafka_handlers.brand_handler import handle_brand
-from cart_service.cart.kafka.kafka_handlers.size_handler import handle_size
-from cart_service.cart.kafka.kafka_handlers.sneaker_handler import handle_sneaker
-from cart_service.cart.kafka.kafka_handlers.sneaker_sizes_handler import (
-    handle_sneaker_sizes,
+from cart_service.cart.kafka.handlers.brands import handle_brand_event
+from cart_service.cart.kafka.handlers.sizes import handle_size_event
+from cart_service.cart.kafka.handlers.sneakers import handle_sneaker_event
+from cart_service.cart.kafka.handlers.sneaker_sizes import (
+    handle_sneaker_sizes_event,
 )
 from cart_service.cart.models import db_helper
 from cart_service.add_middleware import add_middleware
@@ -18,7 +18,7 @@ from cart_service import router as cart_router
 
 from kafka.consumer import start_consumer, close_consumer
 
-from cart_service.cart.kafka.kafka_handlers.cart_handler import handle_cart
+from cart_service.cart.kafka.handlers.carts import handle_cart_event
 
 
 @asynccontextmanager
@@ -28,35 +28,35 @@ async def lifespan(app: FastAPI):
         topic=settings.kafka_config.sneaker_work_topic,
         bootstrap_servers=settings.kafka_config.kafka_bootstrap_servers,
         group_id=settings.kafka_config.sneaker_group_id,
-        handler=handle_sneaker,
+        handler=handle_sneaker_event,
     )
 
     brand_consumer, task_brand = await start_consumer(
         topic=settings.kafka_config.brand_work_topic,
         bootstrap_servers=settings.kafka_config.kafka_bootstrap_servers,
         group_id=settings.kafka_config.brand_group_id,
-        handler=handle_brand,
+        handler=handle_brand_event,
     )
 
     size_consumer, task_size = await start_consumer(
         topic=settings.kafka_config.size_work_topic,
         bootstrap_servers=settings.kafka_config.kafka_bootstrap_servers,
         group_id=settings.kafka_config.size_group_id,
-        handler=handle_size,
+        handler=handle_size_event,
     )
 
     sneaker_sizes_consumer, task_sneaker_sizes = await start_consumer(
         topic=settings.kafka_config.sneaker_sizes_work_topic,
         bootstrap_servers=settings.kafka_config.kafka_bootstrap_servers,
         group_id=settings.kafka_config.sneaker_sizes_group_id,
-        handler=handle_sneaker_sizes,
+        handler=handle_sneaker_sizes_event,
     )
 
     cart_consumer, task_cart = await start_consumer(
         topic=settings.kafka_config.registered_topic,
         bootstrap_servers=settings.kafka_config.kafka_bootstrap_servers,
         group_id=settings.kafka_config.cart_group_id,
-        handler=handle_cart,
+        handler=handle_cart_event,
     )
     yield
     task1 = create_task(
