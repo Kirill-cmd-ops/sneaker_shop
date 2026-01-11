@@ -6,7 +6,7 @@ from sqlalchemy.orm import selectinload
 from cart_service.cart.models import Cart
 
 
-async def read_cart(session: AsyncSession, user_id: int):
+async def get_cart_service(session: AsyncSession, user_id: int):
     cart = await session.scalar(
         select(Cart)
         .where(Cart.user_id == user_id)
@@ -21,3 +21,13 @@ async def read_cart(session: AsyncSession, user_id: int):
         )
 
     return cart
+
+
+async def get_user_cart_id_service(
+    session: AsyncSession,
+    user_id: int,
+):
+    cart_id = await session.scalar(select(Cart.id).filter(Cart.user_id == user_id))
+    if not cart_id:
+        raise HTTPException(status_code=404, detail="Корзина пользователя не найдена")
+    return cart_id
