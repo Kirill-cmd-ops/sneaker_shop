@@ -4,7 +4,7 @@ from catalog_service.catalog.models import Sneaker, SneakerSizeAssociation
 from catalog_service.catalog.schemas import SneakerCreate
 
 
-async def create_sneaker(
+async def create_sneaker_service(
     session: AsyncSession,
     sneaker_create: SneakerCreate,
 ):

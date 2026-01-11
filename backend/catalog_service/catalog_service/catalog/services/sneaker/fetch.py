@@ -7,7 +7,7 @@ from sqlalchemy.orm import contains_eager
 from catalog_service.catalog.models import Sneaker, Brand, SneakerSizeAssociation, Size
 
 
-async def get_sneakers_details(
+async def get_sneakers_service(
     session: AsyncSession,
     page: Optional[int] = 1,
     limit: Optional[int] = 30,
