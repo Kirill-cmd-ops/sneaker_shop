@@ -4,7 +4,7 @@ from cart_service.cart.models import Sneaker, SneakerSizeAssociation
 from cart_service.cart.schemas import SneakerCreate
 
 
-async def create_sneaker(
+async def create_sneaker_service(
     session: AsyncSession,
     sneaker_create: SneakerCreate,
 ):

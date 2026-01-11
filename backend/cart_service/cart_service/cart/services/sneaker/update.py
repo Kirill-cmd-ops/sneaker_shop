@@ -4,7 +4,7 @@ from cart_service.cart.models import Sneaker
 from cart_service.cart.schemas import SneakerUpdate
 
 
-async def update_sneaker(
+async def update_sneaker_service(
     session: AsyncSession,
     sneaker_id: int,
     sneaker_update: SneakerUpdate,
