@@ -6,7 +6,7 @@ from cart_service.cart.models import Sneaker, SneakerSizeAssociation
 from cart_service.cart.schemas import CartSneakerCreate
 
 
-async def check_sneaker_size_exists(
+async def check_sneaker_has_size_service(
     session: AsyncSession,
     item_create: CartSneakerCreate,
 ):

@@ -5,7 +5,7 @@ from cart_service.cart.models import SneakerSizeAssociation
 from cart_service.cart.schemas import SneakerSizeUpdate
 
 
-async def update_sneaker_sizes(
+async def update_sneaker_size_quantity_service(
     session: AsyncSession,
     sneaker_id: int,
     sneaker_size_update: SneakerSizeUpdate,
