@@ -5,7 +5,7 @@ from catalog_service.catalog.models import SneakerSizeAssociation
 from catalog_service.catalog.schemas import SneakerSizeUpdate
 
 
-async def update_sneaker_sizes(
+async def update_sneaker_size_quantity_service(
     session: AsyncSession,
     sneaker_id: int,
     sneaker_size_update: SneakerSizeUpdate,
