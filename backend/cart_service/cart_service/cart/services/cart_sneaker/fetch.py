@@ -5,7 +5,7 @@ from cart_service.cart.models import CartSneakerAssociation
 from cart_service.cart.schemas import CartSneakerCreate
 
 
-async def check_sneaker_in_cart_exists(
+async def get_sneaker_in_cart_service(
     session: AsyncSession,
     cart_id: int,
     item_create: CartSneakerCreate,

@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from cart_service.cart.models import CartSneakerAssociation, Cart
 
 
-async def delete_sneaker_to_cart(
+async def delete_sneaker_from_cart_service(
     session: AsyncSession,
     cart_sneaker_id: int,
     user_id: int,

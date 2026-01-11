@@ -10,7 +10,7 @@ from cart_service.cart.models import (
 )
 
 
-async def update_sneaker_to_cart(
+async def update_sneaker_in_cart_service(
     session: AsyncSession,
     cart_sneaker_id: int,
     size_id: int,
@@ -43,7 +43,7 @@ async def update_sneaker_to_cart(
     return current_sneaker
 
 
-async def increase_sneaker_quantity(
+async def increment_sneaker_quantity_in_cart_service(
     cart_sneaker_id: int,
     cart_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -62,7 +62,7 @@ async def increase_sneaker_quantity(
     return {"status": "there is no such record"}
 
 
-async def decrease_sneaker_quantity(
+async def decrement_sneaker_quantity_in_cart_service(
     cart_sneaker_id: int,
     cart_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
