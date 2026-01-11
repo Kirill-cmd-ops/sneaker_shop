@@ -1,7 +1,7 @@
 from fastapi import Header, HTTPException
 
 
-async def get_user_role_by_header(user_role: str = Header(..., alias="X-User-Role")):
+async def get_current_user_role(user_role: str = Header(..., alias="X-User-Role")):
     try:
         return user_role
     except ValueError:
