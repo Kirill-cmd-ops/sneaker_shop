@@ -8,7 +8,7 @@ from catalog_service.catalog.models import Base
 from catalog_service.catalog.schemas import SneakerAssocsDelete
 
 
-async def delete_sneaker_association(
+async def delete_sneaker_associations_service(
     session: AsyncSession,
     sneaker_id: int,
     sneaker_assoc_delete: SneakerAssocsDelete,
