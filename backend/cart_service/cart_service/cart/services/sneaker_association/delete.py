@@ -8,7 +8,7 @@ from cart_service.cart.models import Base
 from cart_service.cart.schemas import SneakerAssocsDelete
 
 
-async def delete_sneaker_association(
+async def delete_sneaker_associations_service(
     session: AsyncSession,
     sneaker_id: int,
     sneaker_assoc_delete: SneakerAssocsDelete,
