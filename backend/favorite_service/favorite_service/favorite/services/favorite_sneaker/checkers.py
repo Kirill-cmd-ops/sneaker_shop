@@ -5,7 +5,7 @@ from favorite_service.favorite.models import FavoriteSneakerAssociation
 from favorite_service.favorite.schemas import FavoriteSneakerCreate
 
 
-async def check_sneaker_in_favorite_exists(
+async def get_sneaker_in_favorite_service(
     session: AsyncSession,
     favorite_id: int,
     item_create: FavoriteSneakerCreate,

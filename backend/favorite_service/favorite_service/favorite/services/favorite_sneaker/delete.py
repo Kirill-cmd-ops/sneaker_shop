@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from favorite_service.favorite.models import FavoriteSneakerAssociation, Favorite
 
 
-async def delete_sneaker_to_favorite(
+async def delete_sneaker_from_favorite_service(
     session: AsyncSession,
     user_id: int,
     favorite_sneaker_id: int,

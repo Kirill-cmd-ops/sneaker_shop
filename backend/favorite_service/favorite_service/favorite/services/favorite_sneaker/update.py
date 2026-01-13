@@ -9,7 +9,7 @@ from favorite_service.favorite.models import (
 )
 
 
-async def update_sneaker_to_favorite(
+async def update_sneaker_in_favorite_service(
     session: AsyncSession,
     favorite_sneaker_id: int,
     size_id: int,
