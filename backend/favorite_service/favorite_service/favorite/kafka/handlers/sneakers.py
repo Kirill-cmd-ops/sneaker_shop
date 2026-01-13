@@ -1,18 +1,18 @@
 from favorite_service.favorite.models import db_helper
 from favorite_service.favorite.schemas import SneakerCreate, SneakerUpdate
-from favorite_service.favorite.services.sneaker.create import create_sneaker
-from favorite_service.favorite.services.sneaker.delete import delete_sneaker
-from favorite_service.favorite.services.sneaker.update import update_sneaker
+from favorite_service.favorite.services.sneaker.create import create_sneaker_service
+from favorite_service.favorite.services.sneaker.delete import delete_sneaker_service
+from favorite_service.favorite.services.sneaker.update import update_sneaker_service
 
 
-async def handle_sneaker(key: str | None, value: dict):
+async def handle_sneaker_event(key: str | None, value: dict):
     try:
         event_type = value.get("event_type")
         async with db_helper.session_context() as session:
             if event_type == "sneaker_created":
                 data = value.get("data")
                 sneaker_create = SneakerCreate(**data)
-                await create_sneaker(
+                await create_sneaker_service(
                     session=session,
                     sneaker_create=sneaker_create,
                 )
@@ -21,7 +21,7 @@ async def handle_sneaker(key: str | None, value: dict):
                 data = value.get("data")
                 sneaker_id = value.get("sneaker_id")
                 sneaker_update = SneakerUpdate(**data)
-                await update_sneaker(
+                await update_sneaker_service(
                     session=session,
                     sneaker_id=sneaker_id,
                     sneaker_update=sneaker_update,
@@ -29,7 +29,7 @@ async def handle_sneaker(key: str | None, value: dict):
 
             elif event_type == "sneaker_deleted":
                 sneaker_id = value.get("sneaker_id")
-                await delete_sneaker(
+                await delete_sneaker_service(
                     session=session,
                     sneaker_id=sneaker_id,
                 )
