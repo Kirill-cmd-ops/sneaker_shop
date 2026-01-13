@@ -3,7 +3,7 @@ from typing import Callable
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
-async def create_record(
+async def create_record_service(
     session: AsyncSession,
     table_name: Callable,
     schema_create,

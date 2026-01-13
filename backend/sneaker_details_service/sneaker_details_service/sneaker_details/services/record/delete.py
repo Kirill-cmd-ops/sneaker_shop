@@ -2,7 +2,7 @@ from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
-async def delete_record(
+async def delete_record_service(
     session: AsyncSession,
     table_name,
     record_id,
