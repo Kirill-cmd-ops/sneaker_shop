@@ -5,7 +5,7 @@ from favorite_service.favorite.models import SneakerSizeAssociation
 from favorite_service.favorite.schemas import SneakerSizeUpdate
 
 
-async def update_sneaker_sizes(
+async def update_sneaker_size_quantity_service(
     session: AsyncSession, sneaker_id: int, sneaker_size_update: SneakerSizeUpdate
 ):
     sneaker_size = await session.scalar(

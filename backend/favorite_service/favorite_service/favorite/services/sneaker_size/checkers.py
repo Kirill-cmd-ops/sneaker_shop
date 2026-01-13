@@ -6,7 +6,7 @@ from favorite_service.favorite.models import Sneaker, SneakerSizeAssociation
 from favorite_service.favorite.schemas import FavoriteSneakerCreate
 
 
-async def check_sneaker_size_exists(
+async def check_sneaker_has_size_service(
     session: AsyncSession,
     item_create: FavoriteSneakerCreate,
 ):
