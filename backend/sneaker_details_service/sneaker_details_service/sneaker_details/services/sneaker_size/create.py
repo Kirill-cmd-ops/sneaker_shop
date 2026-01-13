@@ -5,7 +5,7 @@ from sneaker_details_service.sneaker_details.models import SneakerSizeAssociatio
 from sneaker_details_service.sneaker_details.schemas import SneakerSizesCreate
 
 
-async def create_sneaker_sizes(
+async def add_sizes_to_sneaker_service(
     session: AsyncSession,
     sneaker_id: int,
     sneaker_sizes_create: SneakerSizesCreate,
