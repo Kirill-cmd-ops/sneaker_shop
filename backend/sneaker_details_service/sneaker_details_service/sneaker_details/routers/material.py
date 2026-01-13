@@ -4,8 +4,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sneaker_details_service.sneaker_details.config import settings
 from sneaker_details_service.sneaker_details.models import db_helper, Material
 from sneaker_details_service.sneaker_details.schemas.material import MaterialCreate
-from sneaker_details_service.sneaker_details.services.record.create import create_record
-from sneaker_details_service.sneaker_details.services.record.delete import delete_record
+from sneaker_details_service.sneaker_details.services.record.create import (
+    create_record_service,
+)
+from sneaker_details_service.sneaker_details.services.record.delete import (
+    delete_record_service,
+)
 
 router = APIRouter(
     prefix=settings.api.build_path(
@@ -18,12 +22,12 @@ router = APIRouter(
 
 
 @router.post("/")
-async def call_create_material(
+async def create_material(
     material_create: MaterialCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     async with session.begin():
-        new_material = await create_record(
+        new_material = await create_record_service(
             session=session,
             table_name=Material,
             schema_create=material_create,
@@ -32,12 +36,12 @@ async def call_create_material(
 
 
 @router.delete("/{material_id}")
-async def call_delete_material(
+async def delete_material(
     material_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     async with session.begin():
-        result = await delete_record(
+        result = await delete_record_service(
             session=session,
             table_name=Material,
             record_id=material_id,
