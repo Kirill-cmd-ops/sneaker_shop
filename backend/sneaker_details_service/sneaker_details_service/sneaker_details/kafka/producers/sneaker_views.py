@@ -1,7 +1,7 @@
 from sneaker_details_service.sneaker_details.config import settings
 
 
-async def send_viewed_sneaker(
+async def publish_sneaker_viewed(
     producer,
     sneaker_id: int,
     user_id: int,
