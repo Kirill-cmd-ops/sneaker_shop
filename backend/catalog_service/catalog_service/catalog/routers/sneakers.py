@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from catalog_service.catalog.config import settings
 from catalog_service.catalog.models import db_helper
-from catalog_service.catalog.services.sneaker.fetch import get_sneakers_details
+from catalog_service.catalog.services.sneaker.fetch import get_sneakers_service
 
 router = APIRouter(
     prefix=settings.api.build_path(
@@ -17,7 +17,7 @@ router = APIRouter(
 
 
 @router.get("/")
-async def call_get_sneakers_details(
+async def get_sneakers(
     session: AsyncSession = Depends(db_helper.session_getter),
     page: Optional[int] = 1,
     limit: Optional[int] = 30,
@@ -31,7 +31,7 @@ async def call_get_sneakers_details(
     order: Optional[str] = "asc",
 ):
     async with session.begin():
-        sneakers_info = await get_sneakers_details(
+        sneakers_info = await get_sneakers_service(
             session=session,
             page=page,
             limit=limit,
