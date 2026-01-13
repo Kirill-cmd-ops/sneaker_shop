@@ -9,7 +9,7 @@ from sneaker_details_service.sneaker_details.models import (
 )
 
 
-async def delete_sneaker(session: AsyncSession, sneaker_id: int):
+async def delete_sneaker_service(session: AsyncSession, sneaker_id: int):
     assoc_tables = [
         SneakerSizeAssociation,
         SneakerColorAssociation,

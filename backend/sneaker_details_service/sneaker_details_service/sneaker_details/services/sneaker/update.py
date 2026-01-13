@@ -4,7 +4,7 @@ from sneaker_details_service.sneaker_details.models import Sneaker
 from sneaker_details_service.sneaker_details.schemas import SneakerUpdate
 
 
-async def update_sneaker(
+async def update_sneaker_service(
     session: AsyncSession,
     sneaker_id: int,
     sneaker_update: SneakerUpdate,

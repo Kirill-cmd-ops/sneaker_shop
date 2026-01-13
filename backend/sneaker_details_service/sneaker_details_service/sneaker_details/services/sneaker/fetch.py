@@ -5,7 +5,7 @@ from sqlalchemy.orm import joinedload, selectinload
 from sneaker_details_service.sneaker_details.models import Sneaker
 
 
-async def get_sneaker_details(
+async def get_sneaker_service(
     session: AsyncSession,
     sneaker_id: int,
 ):
