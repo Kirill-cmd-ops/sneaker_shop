@@ -4,7 +4,7 @@ from favorite_service.favorite.models import Sneaker
 from favorite_service.favorite.schemas import SneakerUpdate
 
 
-async def update_sneaker(
+async def update_sneaker_service(
     session: AsyncSession, sneaker_id: int, sneaker_update: SneakerUpdate
 ):
     sneaker = await session.get(Sneaker, sneaker_id)

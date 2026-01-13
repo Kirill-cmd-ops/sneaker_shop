@@ -4,7 +4,7 @@ from favorite_service.favorite.models import Sneaker, SneakerSizeAssociation
 from favorite_service.favorite.schemas import SneakerCreate
 
 
-async def create_sneaker(
+async def create_sneaker_service(
     session: AsyncSession,
     sneaker_create: SneakerCreate,
 ):
