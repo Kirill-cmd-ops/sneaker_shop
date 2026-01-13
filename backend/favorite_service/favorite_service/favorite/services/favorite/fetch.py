@@ -6,7 +6,7 @@ from sqlalchemy.orm import selectinload
 from favorite_service.favorite.models import Favorite
 
 
-async def read_favorite(session: AsyncSession, user_id: int):
+async def get_favorite_service(session: AsyncSession, user_id: int):
     favorite = await session.scalar(
         select(Favorite)
         .where(Favorite.user_id == user_id)
@@ -19,3 +19,15 @@ async def read_favorite(session: AsyncSession, user_id: int):
         )
 
     return favorite.sneaker_associations
+
+
+async def get_user_favorite_id_service(
+    session: AsyncSession,
+    user_id: int,
+):
+    favorite_id = await session.scalar(
+        select(Favorite.id).filter(Favorite.user_id == user_id)
+    )
+    if not favorite_id:
+        raise HTTPException(status_code=404, detail="Избранное пользователя не найдена")
+    return favorite_id
