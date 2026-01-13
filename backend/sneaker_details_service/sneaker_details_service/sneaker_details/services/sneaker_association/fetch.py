@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sneaker_details_service.sneaker_details.models import Base
 
 
-async def read_sneaker_association(
+async def get_sneaker_associations_service(
     session: AsyncSession,
     sneaker_association_model: Type[Base],
     sneaker_id: int,

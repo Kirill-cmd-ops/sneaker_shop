@@ -7,7 +7,7 @@ from sneaker_details_service.sneaker_details.models import Base
 from sneaker_details_service.sneaker_details.schemas import SneakerAssocsCreate
 
 
-async def create_sneaker_association(
+async def create_sneaker_associations_service(
     session: AsyncSession,
     sneaker_id: int,
     sneaker_associations_create: SneakerAssocsCreate,
