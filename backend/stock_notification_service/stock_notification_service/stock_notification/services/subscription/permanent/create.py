@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from stock_notification_service.stock_notification.models import UserSneakerSubscription
 
 
-async def add_user_subscription(
+async def create_user_permanent_subscription_service(
     sneaker_id: int,
     size_id: int,
     user_id: int,

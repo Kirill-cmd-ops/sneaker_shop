@@ -5,7 +5,7 @@ from stock_notification_service.stock_notification.enums import SubscriptionStat
 from stock_notification_service.stock_notification.models import UserSneakerSubscription
 
 
-async def deactivate_all_user_subscriptions(
+async def deactivate_all_permanent_subscriptions_for_user_service(
     user_id: int,
     session: AsyncSession,
 ):
@@ -21,7 +21,7 @@ async def deactivate_all_user_subscriptions(
     return {"records was deactivate"}
 
 
-async def deactivate_all_sneaker_subscriptions(
+async def deactivate_all_permanent_subscriptions_for_sneaker_service(
     session: AsyncSession,
     sneaker_id: int,
 ):

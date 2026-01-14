@@ -5,7 +5,7 @@ from stock_notification_service.stock_notification.enums import SubscriptionStat
 from stock_notification_service.stock_notification.models import UserSneakerSubscription
 
 
-async def reactivate_all_sneaker_subscriptions(
+async def reactivate_all_permanent_subscriptions_for_sneaker_service(
     session: AsyncSession,
     sneaker_id: int,
 ):
