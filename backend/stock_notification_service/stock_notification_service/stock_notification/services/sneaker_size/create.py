@@ -5,7 +5,7 @@ from stock_notification_service.stock_notification.models import SneakerSizeAsso
 from stock_notification_service.stock_notification.schemas import SneakerSizesCreate
 
 
-async def create_sneaker_sizes(
+async def add_sizes_to_sneaker_service(
     session: AsyncSession,
     sneaker_id: int,
     sneaker_sizes_create: SneakerSizesCreate,

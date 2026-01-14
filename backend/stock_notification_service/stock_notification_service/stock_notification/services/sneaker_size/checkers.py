@@ -4,8 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from stock_notification_service.stock_notification.models import SneakerSizeAssociation
 
-
-async def is_size_available_for_sneaker(
+async def check_inactive_sneaker_size_service(
     session: AsyncSession,
     sneaker_id: int,
     size_id: int,

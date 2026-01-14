@@ -8,7 +8,7 @@ from stock_notification_service.stock_notification.models import Base
 from stock_notification_service.stock_notification.schemas import SneakerAssocsDelete
 
 
-async def delete_sneaker_association(
+async def delete_sizes_from_sneaker_service(
     session: AsyncSession,
     sneaker_id: int,
     sneaker_assoc_delete: SneakerAssocsDelete,
