@@ -16,6 +16,7 @@ class RunConfig(BaseModel):
 class ApiV1Prefix(BaseModel):
     prefix: str = "/v1/subscriptions"
     one_time_prefix: str = "/v1/one_time_subscriptions"
+    permanent_prefix: str = "/v1/permanent_subscriptions"
 
 
 class ApiPrefix(BaseModel):
