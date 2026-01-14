@@ -4,7 +4,7 @@ from stock_notification_service.stock_notification.models import User
 from stock_notification_service.stock_notification.schemas import UserCreate
 
 
-async def create_user(
+async def create_user_service(
     session: AsyncSession,
     user_create: UserCreate,
 ):
