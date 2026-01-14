@@ -4,7 +4,7 @@ from stock_notification_service.stock_notification.schemas import SneakerCreate
 from stock_notification_service.stock_notification.models import Sneaker
 
 
-async def create_sneaker(
+async def create_sneaker_service(
     session: AsyncSession,
     sneaker_create: SneakerCreate,
 ):
