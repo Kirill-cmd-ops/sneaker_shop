@@ -8,24 +8,24 @@ from stock_notification_service.stock_notification.schemas import (
     SneakerAssocsDelete,
 )
 from stock_notification_service.stock_notification.services.sneaker_size.create import (
-    create_sneaker_sizes,
+    add_sizes_to_sneaker_service,
 )
 from stock_notification_service.stock_notification.services.sneaker_size.delete import (
-    delete_sneaker_association,
+    delete_sizes_from_sneaker_service,
 )
 from stock_notification_service.stock_notification.services.sneaker_size.update import (
-    update_sneaker_sizes,
+    update_sneaker_size_quantity_service,
 )
 
 
-async def handle_sneaker_sizes(key: str | None, value: dict):
+async def handle_sneaker_sizes_event(key: str | None, value: dict):
     try:
         event_type = value.get("event_type")
         async with db_helper.session_context() as session:
             if event_type == "sneaker_sizes_created":
                 data = value.get("data")
                 sneaker_sizes_create = SneakerSizesCreate(**data)
-                await create_sneaker_sizes(
+                await add_sizes_to_sneaker_service(
                     session=session,
                     sneaker_id=int(key),
                     sneaker_sizes_create=sneaker_sizes_create,
@@ -33,7 +33,7 @@ async def handle_sneaker_sizes(key: str | None, value: dict):
             elif event_type == "sneaker_sizes_updated":
                 data = value.get("data")
                 sneaker_sizes_update = SneakerSizeUpdate(**data)
-                await update_sneaker_sizes(
+                await update_sneaker_size_quantity_service(
                     session=session,
                     sneaker_id=int(key),
                     sneaker_size_update=sneaker_sizes_update,
@@ -41,7 +41,7 @@ async def handle_sneaker_sizes(key: str | None, value: dict):
             elif event_type == "sneaker_sizes_deleted":
                 data = value.get("data")
                 sneaker_assoc_delete = SneakerAssocsDelete(**data)
-                await delete_sneaker_association(
+                await delete_sizes_from_sneaker_service(
                     session=session,
                     sneaker_id=int(key),
                     sneaker_assoc_delete=sneaker_assoc_delete,
