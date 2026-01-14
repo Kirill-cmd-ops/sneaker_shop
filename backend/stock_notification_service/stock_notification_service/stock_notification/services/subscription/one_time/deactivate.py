@@ -7,7 +7,7 @@ from stock_notification_service.stock_notification.models import (
 )
 
 
-async def deactivate_user_one_time_subscription(
+async def deactivate_user_one_time_subscription_service(
     subscription_id: int,
     user_id: int,
     session: AsyncSession,

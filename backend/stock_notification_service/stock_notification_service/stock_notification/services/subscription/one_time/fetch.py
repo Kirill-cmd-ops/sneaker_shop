@@ -8,7 +8,7 @@ from stock_notification_service.stock_notification.models import (
 )
 
 
-async def get_user_active_one_time_subscriptions(
+async def get_active_one_time_subscriptions_for_user_service(
     user_id: int,
     session: AsyncSession,
 ):
@@ -21,7 +21,7 @@ async def get_user_active_one_time_subscriptions(
     return {"records": result.all()}
 
 
-async def get_user_inactive_one_time_subscription(
+async def get_inactive_one_time_subscription_for_user_service(
     session: AsyncSession,
     user_id: int,
     subscription_id: int,
@@ -34,7 +34,7 @@ async def get_user_inactive_one_time_subscription(
     )
 
 
-async def get_sneaker_active_one_time_subscriptions(
+async def get_active_one_time_subscriptions_for_sneaker_service(
     session: AsyncSession,
     sneaker_id: int,
     size_id: int,
