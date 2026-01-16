@@ -13,7 +13,7 @@ redis_factory = get_redis_factory(
 )
 
 
-async def handle_sneaker_view_to_redis(
+async def handle_sneaker_viewed_event(
     key: str | None,
     value: dict,
 ):
