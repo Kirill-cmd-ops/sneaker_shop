@@ -3,8 +3,8 @@ from fastapi import HTTPException, Depends
 from starlette.requests import Request
 
 from sneaker_views_history_service.user_history.config import settings
-from sneaker_views_history_service.user_history.dependencies.get_current_user_role import (
-    get_user_role_by_header,
+from sneaker_views_history_service.user_history.dependencies.user_role import (
+    get_current_user_role,
 )
 from redis_client.redis_connection.factory import get_redis_factory
 
@@ -23,7 +23,7 @@ def check_role_permissions(
                 db=settings.redis_config.redis_db,
             )
         ),
-        user_role: str = Depends(get_user_role_by_header),
+        user_role: str = Depends(get_current_user_role),
     ):
         request.state.redis_client = redis_client
         request.state.user_role = user_role
