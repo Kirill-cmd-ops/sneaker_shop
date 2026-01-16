@@ -6,8 +6,8 @@ from fastapi import FastAPI
 from kafka.consumer import start_consumer, close_consumer
 from sneaker_views_clickhouse_writer.clickhouse_writer.config import settings
 from sneaker_views_clickhouse_writer.add_middleware import add_middleware
-from sneaker_views_clickhouse_writer.clickhouse_writer.kafka_handler.sneaker_views_clickhouse_handler import (
-    handle_sneaker_view_to_clickhouse,
+from sneaker_views_clickhouse_writer.clickhouse_writer.kafka.handlers.sneaker_views import (
+    handle_sneaker_viewed_event,
 )
 
 
@@ -18,7 +18,7 @@ async def lifespan(app: FastAPI):
         topic=settings.kafka_config.sneaker_viewed_topic,
         bootstrap_servers=settings.kafka_config.kafka_bootstrap_servers,
         group_id=settings.kafka_config.sneaker_views_clickhouse_group,
-        handler=handle_sneaker_view_to_clickhouse,
+        handler=handle_sneaker_viewed_event,
     )
     yield
     await close_consumer(
