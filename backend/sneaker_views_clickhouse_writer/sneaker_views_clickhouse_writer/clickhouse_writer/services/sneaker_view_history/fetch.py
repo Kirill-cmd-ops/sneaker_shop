@@ -9,7 +9,7 @@ from sneaker_views_clickhouse_writer.clickhouse_writer.models import (
 )
 
 
-async def clickhouse_select(
+async def get_user_sneaker_view_history_service(
     user_id: int,
     sneaker_id: int,
 ):

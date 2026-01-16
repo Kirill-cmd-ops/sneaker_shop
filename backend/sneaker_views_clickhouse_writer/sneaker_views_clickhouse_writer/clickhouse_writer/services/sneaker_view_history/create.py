@@ -6,7 +6,7 @@ from sneaker_views_clickhouse_writer.clickhouse_writer.models import (
 )
 
 
-def clickhouse_insert(
+def create_user_sneaker_view_history_service(
     user_id: int,
     sneaker_id: int,
     sign: int,
