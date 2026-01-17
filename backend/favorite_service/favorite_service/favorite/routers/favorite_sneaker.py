@@ -5,11 +5,6 @@ from favorite_service.favorite.models import (
     db_helper,
 )
 from favorite_service.favorite.schemas import FavoriteSneakerCreate
-from favorite_service.favorite.schemas.favorite_sneaker import FavoriteSneakerUpdate
-from favorite_service.favorite.dependencies.permissions import (
-    check_role_permissions,
-)
-
 
 from favorite_service.favorite.dependencies.user_id import get_current_user_id
 from favorite_service.favorite.config import settings
@@ -46,7 +41,6 @@ router = APIRouter(
 @router.post(
     "/",
     response_model=dict,
-    dependencies=(Depends(check_role_permissions("favorite.sneaker.add")),),
 )
 async def create_sneaker_to_favorite(
     item_create: FavoriteSneakerCreate,
@@ -60,16 +54,17 @@ async def create_sneaker_to_favorite(
         )
         await check_sneaker_exists_service(
             session=session,
-            item_create=item_create,
+            sneaker_id=item_create.sneaker_id,
         )
         await check_sneaker_has_size_service(
             session=session,
-            item_create=item_create,
+            sneaker_id=item_create.sneaker_id,
+            size_id=item_create.size_id,
         )
         sneaker_record = await get_sneaker_in_favorite_service(
             session=session,
             favorite_id=favorite_id,
-            item_create=item_create,
+            sneaker_id=item_create.sneaker_id,
         )
 
         if sneaker_record is None:
@@ -90,7 +85,7 @@ async def create_sneaker_to_favorite(
 )
 async def update_sneaker_in_favorite(
     favorite_sneaker_id: int,
-    item_data: FavoriteSneakerUpdate,
+    size_id: int,
     user_id: int = Depends(get_current_user_id),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
@@ -98,7 +93,7 @@ async def update_sneaker_in_favorite(
         updated_item = await update_sneaker_in_favorite_service(
             session=session,
             favorite_sneaker_id=favorite_sneaker_id,
-            size_id=item_data.size_id,
+            size_id=size_id,
             user_id=user_id,
         )
         return {"status": "Элемент обновлён", "item_id": updated_item.id}
@@ -107,7 +102,6 @@ async def update_sneaker_in_favorite(
 @router.delete(
     "/{favorite_sneaker_id}",
     response_model=dict,
-    dependencies=(Depends(check_role_permissions("favorite.sneaker.delete")),),
 )
 async def delete_sneaker_from_favorite(
     favorite_sneaker_id: int,

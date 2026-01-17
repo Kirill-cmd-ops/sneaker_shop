@@ -8,14 +8,15 @@ from favorite_service.favorite.schemas import FavoriteSneakerCreate
 
 async def check_sneaker_has_size_service(
     session: AsyncSession,
-    item_create: FavoriteSneakerCreate,
+    sneaker_id: int,
+    size_id: int,
 ):
     sneaker_size = await session.scalar(
         select(Sneaker)
         .join(SneakerSizeAssociation)
         .where(
-            Sneaker.id == item_create.sneaker_id,
-            SneakerSizeAssociation.size_id == item_create.size_id,
+            Sneaker.id == sneaker_id,
+            SneakerSizeAssociation.size_id == size_id,
         )
     )
 

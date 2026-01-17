@@ -8,11 +8,11 @@ from favorite_service.favorite.schemas import FavoriteSneakerCreate
 async def get_sneaker_in_favorite_service(
     session: AsyncSession,
     favorite_id: int,
-    item_create: FavoriteSneakerCreate,
+    sneaker_id: int,
 ):
     return await session.scalar(
         select(FavoriteSneakerAssociation).where(
             FavoriteSneakerAssociation.favorite_id == favorite_id,
-            FavoriteSneakerAssociation.sneaker_id == item_create.sneaker_id,
+            FavoriteSneakerAssociation.sneaker_id == sneaker_id,
         )
     )
