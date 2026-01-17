@@ -7,8 +7,8 @@ from cart_service.cart.schemas import CartSneakerCreate
 
 async def check_sneaker_exists_service(
     session: AsyncSession,
-    item_create: CartSneakerCreate,
+    sneaker_id: int,
 ):
-    sneaker = await session.get(Sneaker, item_create.sneaker_id)
+    sneaker = await session.get(Sneaker, sneaker_id)
     if not sneaker:
         raise HTTPException(status_code=404, detail="Товар не найден в каталоге")

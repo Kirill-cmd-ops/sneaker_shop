@@ -46,15 +46,20 @@ async def add_sneaker_to_cart(
             session=session,
             user_id=user_id,
         )
-        await check_sneaker_exists_service(session=session, item_create=item_create)
+        await check_sneaker_exists_service(
+            session=session,
+            sneaker_id=item_create.sneaker_id,
+        )
         await check_sneaker_has_size_service(
             session=session,
-            item_create=item_create,
+            sneaker_id=item_create.sneaker_id,
+            size_id=item_create.size_id,
         )
         sneaker_record = await get_sneaker_in_cart_service(
             session=session,
             cart_id=cart_id,
-            item_create=item_create,
+            sneaker_id=item_create.sneaker_id,
+            size_id=item_create.size_id,
         )
 
         if sneaker_record is None:
@@ -76,7 +81,7 @@ async def add_sneaker_to_cart(
 )
 async def update_sneaker_in_cart(
     cart_sneaker_id: int,
-    item_data: CartSneakerUpdate,
+    size_id: int,
     user_id: int = Depends(get_current_user_id),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
@@ -84,7 +89,7 @@ async def update_sneaker_in_cart(
         updated_item = await update_sneaker_in_cart_service(
             session=session,
             cart_sneaker_id=cart_sneaker_id,
-            size_id=item_data.size_id,
+            size_id=size_id,
             user_id=user_id,
         )
         return {"status": "Элемент обновлён", "item_id": updated_item.id}
