@@ -1,7 +1,7 @@
 from auth_service.auth.config import settings
 
 
-async def send_user_registered(producer, user_id: str):
+async def publish_user_registered(producer, user_id: str):
     payload = {"id": user_id}
     await producer.send_and_wait(
         topic=settings.kafka_config.registered_topic,
