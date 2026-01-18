@@ -7,11 +7,9 @@ from auth_service.auth.schemas.permissions import UpdatePermissions
 
 async def get_role_permissions_db(
     session: AsyncSession,
-    update_permissions: UpdatePermissions,
+    list_permission: list[int],
 ):
     result = await session.scalars(
-        select(Permission.name).where(
-            Permission.id.in_(update_permissions.list_permission)
-        ),
+        select(Permission.name).where(Permission.id.in_(list_permission)),
     )
     return result.all()
