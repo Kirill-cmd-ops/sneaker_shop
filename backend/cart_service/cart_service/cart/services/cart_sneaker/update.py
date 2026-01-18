@@ -16,29 +16,30 @@ async def update_sneaker_in_cart_service(
     size_id: int,
     user_id: int,
 ) -> CartSneakerAssociation:
-    current_sneaker = await session.scalar(
-        select(CartSneakerAssociation).where(
-            CartSneakerAssociation.id == cart_sneaker_id,
-            CartSneakerAssociation.cart_id.in_(
-                select(Cart.id).where(Cart.user_id == user_id),
-            ),
+    async with session.begin():
+        current_sneaker = await session.scalar(
+            select(CartSneakerAssociation).where(
+                CartSneakerAssociation.id == cart_sneaker_id,
+                CartSneakerAssociation.cart_id.in_(
+                    select(Cart.id).where(Cart.user_id == user_id),
+                ),
+            )
         )
-    )
 
-    result_sneaker_sizes = await session.scalars(
-        select(SneakerSizeAssociation.size_id).where(
-            SneakerSizeAssociation.sneaker_id == current_sneaker.sneaker_id
+        result_sneaker_sizes = await session.scalars(
+            select(SneakerSizeAssociation.size_id).where(
+                SneakerSizeAssociation.sneaker_id == current_sneaker.sneaker_id
+            )
         )
-    )
-    allowed_sneaker_sizes = result_sneaker_sizes.all()
+        allowed_sneaker_sizes = result_sneaker_sizes.all()
 
-    if size_id in allowed_sneaker_sizes:
-        current_sneaker.size_id = size_id
-    else:
-        raise HTTPException(
-            status_code=404,
-            detail="У данной модели кроссовок этот размер отсутствует",
-        )
+        if size_id in allowed_sneaker_sizes:
+            current_sneaker.size_id = size_id
+        else:
+            raise HTTPException(
+                status_code=404,
+                detail="У данной модели кроссовок этот размер отсутствует",
+            )
 
     return current_sneaker
 
