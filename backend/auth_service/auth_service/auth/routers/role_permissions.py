@@ -7,12 +7,8 @@ from auth_service.auth.config import settings
 from auth_service.auth.models import db_helper
 from auth_service.auth.schemas.permissions import UpdatePermissions
 from auth_service.auth.dependencies.permissions import check_role_permissions
-from auth_service.auth.services.role_permission.update import update_role_permissions_db
-from auth_service.auth.services.role_permission.fetch import get_role_permissions_db
-
-
-from auth_service.auth.services.role_permission.update import (
-    update_role_permissions_redis,
+from auth_service.auth.services.role_permission.orchestrators.update_permissions import (
+    update_role_permissions_orchestrator,
 )
 
 router = APIRouter(
@@ -29,7 +25,7 @@ router = APIRouter(
     "/",
     dependencies=(Depends(check_role_permissions("favorite.view")),),
 )
-async def call_update_role_permissions(
+async def update_role_permissions(
     request: Request,
     update_permissions: UpdatePermissions,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -39,25 +35,9 @@ async def call_update_role_permissions(
 
     list_permissions = update_permissions.list_permission
 
-    async with session.begin():
-        if list_permissions:
-            await update_role_permissions_db(
-                user_role=user_role,
-                list_permission=list_permissions,
-                session=session,
-            )
-
-            role_permissions = await get_role_permissions_db(
-                session=session,
-                list_permission=list_permissions,
-            )
-
-    list_role_permissions = [permission[0] for permission in role_permissions]
-    if list_role_permissions is not None:
-        await update_role_permissions_redis(
-            redis_client=redis_client,
-            user_role=user_role,
-            list_role_permissions=list_role_permissions,
-        )
-
-    return {"status": "ok"}
+    return await update_role_permissions_orchestrator(
+        session=session,
+        redis_client=redis_client,
+        user_role=user_role,
+        list_permissions=list_permissions,
+    )
