@@ -12,6 +12,7 @@ from cart_service.cart.services.cart_sneaker.delete import (
 )
 from cart_service.cart.services.cart_sneaker.orchestrators import (
     add_sneaker_to_cart_orchestrator,
+    update_sneaker_quantity_in_cart_orchestrator,
 )
 from cart_service.cart.services.cart_sneaker.update import (
     update_sneaker_in_cart_service,
@@ -97,22 +98,9 @@ async def update_sneaker_quantity_in_cart(
     user_id: int = Depends(get_current_user_id),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        cart_id = await get_user_cart_id_service(
-            session=session,
-            user_id=user_id,
-        )
-
-        if action == 1:
-            result = await increment_sneaker_quantity_in_cart_service(
-                cart_sneaker_id=cart_sneaker_id,
-                cart_id=cart_id,
-                session=session,
-            )
-        else:
-            result = await decrement_sneaker_quantity_in_cart_service(
-                cart_sneaker_id=cart_sneaker_id,
-                cart_id=cart_id,
-                session=session,
-            )
-        return result
+    return await update_sneaker_quantity_in_cart_orchestrator(
+        session=session,
+        action=action,
+        user_id=user_id,
+        cart_sneaker_id=cart_sneaker_id,
+    )
