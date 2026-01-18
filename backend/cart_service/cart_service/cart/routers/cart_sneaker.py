@@ -2,26 +2,23 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cart_service.cart.models import db_helper
-from cart_service.cart.schemas import CartSneakerCreate, CartSneakerUpdate
+from cart_service.cart.schemas import CartSneakerCreate
 
 from cart_service.cart.dependencies.user_id import get_current_user_id
 from cart_service.cart.config import settings
 from cart_service.cart.services.cart.fetch import get_user_cart_id_service
-from cart_service.cart.services.cart_sneaker.create import add_sneaker_to_cart_service
 from cart_service.cart.services.cart_sneaker.delete import (
     delete_sneaker_from_cart_service,
 )
-from cart_service.cart.services.cart_sneaker.fetch import get_sneaker_in_cart_service
+from cart_service.cart.services.cart_sneaker.orchestrators import (
+    add_sneaker_to_cart_orchestrator,
+)
 from cart_service.cart.services.cart_sneaker.update import (
     update_sneaker_in_cart_service,
     increment_sneaker_quantity_in_cart_service,
     decrement_sneaker_quantity_in_cart_service,
 )
 from cart_service.cart.dependencies.permissions import check_role_permissions
-from cart_service.cart.services.sneaker.checkers import check_sneaker_exists_service
-from cart_service.cart.services.sneaker_size.checkers import (
-    check_sneaker_has_size_service,
-)
 
 router = APIRouter(
     prefix=settings.api.build_path(
@@ -41,37 +38,15 @@ async def add_sneaker_to_cart(
     user_id: int = Depends(get_current_user_id),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        cart_id = await get_user_cart_id_service(
-            session=session,
-            user_id=user_id,
-        )
-        await check_sneaker_exists_service(
-            session=session,
-            sneaker_id=item_create.sneaker_id,
-        )
-        await check_sneaker_has_size_service(
-            session=session,
-            sneaker_id=item_create.sneaker_id,
-            size_id=item_create.size_id,
-        )
-        sneaker_record = await get_sneaker_in_cart_service(
-            session=session,
-            cart_id=cart_id,
-            sneaker_id=item_create.sneaker_id,
-            size_id=item_create.size_id,
-        )
+    sneaker_id = item_create.sneaker_id
+    size_id = item_create.size_id
 
-        if sneaker_record is None:
-            await add_sneaker_to_cart_service(
-                session=session,
-                cart_id=cart_id,
-                sneaker_id=item_create.sneaker_id,
-                size_id=item_create.size_id,
-            )
-            return {"status": "Элемент добавлен"}
-
-    return {"status": "Товар уже есть в корзине"}
+    return await add_sneaker_to_cart_orchestrator(
+        session=session,
+        user_id=user_id,
+        sneaker_id=sneaker_id,
+        size_id=size_id,
+    )
 
 
 @router.put(
