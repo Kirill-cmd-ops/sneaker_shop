@@ -4,7 +4,7 @@ from fastapi import Depends
 
 from auth_service.auth.authentication.user_manager import UserManager
 
-from auth_service.auth.dependencies.users import get_users_db
+from auth_service.auth.dependencies.users_db import get_users_db
 
 
 async def get_user_manager(
