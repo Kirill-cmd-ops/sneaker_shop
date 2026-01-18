@@ -8,7 +8,7 @@ from auth_service.auth.models import Role, RolePermissionAssociation
 
 async def update_role_permissions_db(
     user_role: str,
-    list_permission: list[int],
+    list_permissions: list[int],
     session: AsyncSession,
 ):
     role_id = await session.scalar(select(Role.id).where(Role.name == user_role))
@@ -23,7 +23,7 @@ async def update_role_permissions_db(
     )
     old_permissions = set(result)
 
-    new_permissions = set(list_permission)
+    new_permissions = set(list_permissions)
     permissions = [
         {"role_id": role_id, "permission_id": perm}
         for perm in (new_permissions - old_permissions)
