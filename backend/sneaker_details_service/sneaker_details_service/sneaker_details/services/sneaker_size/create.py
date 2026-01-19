@@ -19,6 +19,5 @@ async def add_sizes_to_sneaker_service(
         for size_data in sneaker_sizes_create.sizes
     ]
 
-    await session.execute(insert(SneakerSizeAssociation).values(sneaker_sizes))
-
-    await session.commit()
+    async with session.begin():
+        await session.execute(insert(SneakerSizeAssociation).values(sneaker_sizes))
