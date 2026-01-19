@@ -10,13 +10,16 @@ async def delete_sneaker_from_favorite_service(
     user_id: int,
     favorite_sneaker_id: int,
 ):
-    stmt = delete(FavoriteSneakerAssociation).where(
-        FavoriteSneakerAssociation.id == favorite_sneaker_id,
-        FavoriteSneakerAssociation.favorite_id.in_(
-            select(Favorite.id).where(Favorite.user_id == user_id)
-        ),
-    )
-    result = await session.execute(stmt)
+    async with session.begin():
+        stmt = delete(FavoriteSneakerAssociation).where(
+            FavoriteSneakerAssociation.id == favorite_sneaker_id,
+            FavoriteSneakerAssociation.favorite_id.in_(
+                select(Favorite.id).where(Favorite.user_id == user_id)
+            ),
+        )
+        result = await session.execute(stmt)
 
-    if result.rowcount == 0:
-        raise HTTPException(status_code=404, detail="Объект избранного не найден")
+        if result.rowcount == 0:
+            raise HTTPException(status_code=404, detail="Объект избранного не найден")
+
+    return {"status": "Элемент удалён"}

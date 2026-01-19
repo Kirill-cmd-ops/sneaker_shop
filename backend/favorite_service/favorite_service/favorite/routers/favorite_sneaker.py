@@ -56,14 +56,13 @@ async def update_sneaker_in_favorite(
     user_id: int = Depends(get_current_user_id),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        updated_item = await update_sneaker_in_favorite_service(
-            session=session,
-            favorite_sneaker_id=favorite_sneaker_id,
-            size_id=size_id,
-            user_id=user_id,
-        )
-        return {"status": "Элемент обновлён", "item_id": updated_item.id}
+    updated_item = await update_sneaker_in_favorite_service(
+        session=session,
+        favorite_sneaker_id=favorite_sneaker_id,
+        size_id=size_id,
+        user_id=user_id,
+    )
+    return {"status": "Элемент обновлён", "item_id": updated_item.id}
 
 
 @router.delete(
@@ -75,10 +74,8 @@ async def delete_sneaker_from_favorite(
     user_id: int = Depends(get_current_user_id),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        await delete_sneaker_from_favorite_service(
-            session=session,
-            user_id=user_id,
-            favorite_sneaker_id=favorite_sneaker_id,
-        )
-        return {"status": "Элемент удалён"}
+    return await delete_sneaker_from_favorite_service(
+        session=session,
+        user_id=user_id,
+        favorite_sneaker_id=favorite_sneaker_id,
+    )
