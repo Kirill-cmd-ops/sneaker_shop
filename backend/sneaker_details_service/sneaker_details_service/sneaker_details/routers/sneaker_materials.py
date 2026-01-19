@@ -43,15 +43,14 @@ async def add_materials_to_sneaker(
     sneaker_associations_create: SneakerAssocsCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        await create_sneaker_associations_service(
-            session=session,
-            sneaker_id=sneaker_id,
-            sneaker_associations_create=sneaker_associations_create,
-            sneaker_association_model=SneakerMaterialAssociation,
-            field_name="material_id",
-        )
-        return "Запись нового материала прошла успешно"
+    await create_sneaker_associations_service(
+        session=session,
+        sneaker_id=sneaker_id,
+        sneaker_associations_create=sneaker_associations_create,
+        sneaker_association_model=SneakerMaterialAssociation,
+        field_name="material_id",
+    )
+    return "Запись нового материала прошла успешно"
 
 
 @router.delete(
@@ -63,15 +62,14 @@ async def delete_materials_from_sneaker(
     sneaker_assoc_delete: SneakerAssocsDelete,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        await delete_sneaker_associations_service(
-            session=session,
-            sneaker_id=sneaker_id,
-            sneaker_assoc_delete=sneaker_assoc_delete,
-            sneaker_association_model=SneakerMaterialAssociation,
-            field_name="material_id",
-        )
-        return "Материалы товара успешно удалены"
+    await delete_sneaker_associations_service(
+        session=session,
+        sneaker_id=sneaker_id,
+        sneaker_assoc_delete=sneaker_assoc_delete,
+        sneaker_association_model=SneakerMaterialAssociation,
+        field_name="material_id",
+    )
+    return "Материалы товара успешно удалены"
 
 
 @router.get(
@@ -82,10 +80,8 @@ async def get_sneaker_materials(
     sneaker_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        materials = await get_sneaker_associations_service(
-            session=session,
-            sneaker_association_model=SneakerMaterialAssociation,
-            sneaker_id=sneaker_id,
-        )
-        return materials
+    return await get_sneaker_associations_service(
+        session=session,
+        sneaker_association_model=SneakerMaterialAssociation,
+        sneaker_id=sneaker_id,
+    )
