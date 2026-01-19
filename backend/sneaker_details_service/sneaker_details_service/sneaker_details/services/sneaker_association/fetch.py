@@ -14,9 +14,10 @@ async def get_sneaker_associations_service(
     """
     Функция для чтения записи в ассоциативных таблицах
     """
-    result = await session.scalars(
-        select(sneaker_association_model).where(
-            sneaker_association_model.sneaker_id == sneaker_id
+    async with session.begin():
+        result = await session.scalars(
+            select(sneaker_association_model).where(
+                sneaker_association_model.sneaker_id == sneaker_id
+            )
         )
-    )
     return result.all()

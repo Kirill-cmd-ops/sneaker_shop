@@ -24,6 +24,7 @@ async def create_sneaker_associations_service(
         }
         for assoc_id in sneaker_associations_create.assoc_ids
     ]
-    await session.execute(
-        insert(sneaker_association_model).values(sneaker_associations)
-    )
+    async with session.begin():
+        await session.execute(
+            insert(sneaker_association_model).values(sneaker_associations)
+        )
