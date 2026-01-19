@@ -58,13 +58,16 @@ async def create_sneaker(
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
-    async with session.begin():
-        sneaker = await create_sneaker_service(
-            session=session,
-            sneaker_create=sneaker_create,
-        )
+    sneaker = await create_sneaker_service(
+        session=session,
+        sneaker_create=sneaker_create,
+    )
 
-    await publish_sneaker_created(producer=producer, sneaker_id=sneaker.id, sneaker_create=sneaker_create)
+    await publish_sneaker_created(
+        producer=producer,
+        sneaker_id=sneaker.id,
+        sneaker_create=sneaker_create,
+    )
     return sneaker
 
 
@@ -77,11 +80,10 @@ async def delete_sneaker(
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
-    async with session.begin():
-        await delete_sneaker_service(
-            session=session,
-            sneaker_id=sneaker_id,
-        )
+    await delete_sneaker_service(
+        session=session,
+        sneaker_id=sneaker_id,
+    )
 
     await publish_sneaker_deleted(producer=producer, sneaker_id=sneaker_id)
     return "Товар успешно удален"
@@ -97,14 +99,17 @@ async def update_sneaker(
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
-    async with session.begin():
-        await update_sneaker_service(
-            session=session,
-            sneaker_id=sneaker_id,
-            sneaker_update=sneaker_update,
-        )
+    await update_sneaker_service(
+        session=session,
+        sneaker_id=sneaker_id,
+        sneaker_update=sneaker_update,
+    )
 
-    await publish_sneaker_updated(producer=producer, sneaker_id=sneaker_id, sneaker_update=sneaker_update)
+    await publish_sneaker_updated(
+        producer=producer,
+        sneaker_id=sneaker_id,
+        sneaker_update=sneaker_update,
+    )
     return "Товар успешно обновлен"
 
 
@@ -115,15 +120,18 @@ async def get_sneaker(
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
     user_id: int = Depends(get_current_user_id),
 ):
-    async with session.begin():
-        sneaker_info = await get_sneaker_service(
-            session=session,
-            sneaker_id=sneaker_id,
-        )
+    sneaker_info = await get_sneaker_service(
+        session=session,
+        sneaker_id=sneaker_id,
+    )
 
     if not sneaker_info:
         raise HTTPException(status_code=404, detail="Кроссовки не найдены")
 
     if user_id is not None:
-        await publish_sneaker_viewed(producer=producer, sneaker_id=sneaker_id, user_id=user_id)
+        await publish_sneaker_viewed(
+            producer=producer,
+            sneaker_id=sneaker_id,
+            user_id=user_id,
+        )
     return sneaker_info
