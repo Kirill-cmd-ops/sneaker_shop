@@ -36,14 +36,17 @@ async def create_size(
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
-    async with session.begin():
-        new_size = await create_record_service(
-            session=session,
-            table_name=Size,
-            schema_create=size_create,
-        )
+    new_size = await create_record_service(
+        session=session,
+        table_name=Size,
+        schema_create=size_create,
+    )
 
-    await publish_size_created(producer=producer, size_id=new_size.id, size_create=size_create)
+    await publish_size_created(
+        producer=producer,
+        size_id=new_size.id,
+        size_create=size_create,
+    )
     return new_size
 
 
@@ -53,12 +56,11 @@ async def delete_size(
     session: AsyncSession = Depends(db_helper.session_getter),
     producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
-    async with session.begin():
-        result = await delete_record_service(
-            session=session,
-            table_name=Size,
-            record_id=size_id,
-        )
+    result = await delete_record_service(
+        session=session,
+        table_name=Size,
+        record_id=size_id,
+    )
 
     await publish_size_deleted(producer=producer, size_id=size_id)
     return result
