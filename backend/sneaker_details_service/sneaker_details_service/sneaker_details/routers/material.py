@@ -26,13 +26,11 @@ async def create_material(
     material_create: MaterialCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        new_material = await create_record_service(
-            session=session,
-            table_name=Material,
-            schema_create=material_create,
-        )
-        return new_material
+    return await create_record_service(
+        session=session,
+        table_name=Material,
+        schema_create=material_create,
+    )
 
 
 @router.delete("/{material_id}")
@@ -40,10 +38,8 @@ async def delete_material(
     material_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        result = await delete_record_service(
-            session=session,
-            table_name=Material,
-            record_id=material_id,
-        )
-        return result
+    return await delete_record_service(
+        session=session,
+        table_name=Material,
+        record_id=material_id,
+    )
