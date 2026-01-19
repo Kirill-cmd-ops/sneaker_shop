@@ -5,6 +5,8 @@ from favorite_service.favorite.models import Favorite
 
 
 async def delete_favorite_service(session: AsyncSession, user_id: int):
-    stmt = delete(Favorite).where(Favorite.user_id == user_id)
-    await session.execute(stmt)
+    async with session.begin():
+        stmt = delete(Favorite).where(Favorite.user_id == user_id)
+        await session.execute(stmt)
+
     return {"Избранное пользователя было удалено успешно"}

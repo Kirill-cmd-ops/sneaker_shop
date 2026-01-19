@@ -17,30 +17,23 @@ router = APIRouter(
 )
 
 
-@router.get(
-    "/",
-    dependencies=(Depends(check_role_permissions("favorite.view")),),
-)
+@router.get("/")
 async def get_favorite(
     user_id: int = Depends(get_current_user_id),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        return await get_favorite_service(
-            session=session,
-            user_id=user_id,
-        )
+    return await get_favorite_service(
+        session=session,
+        user_id=user_id,
+    )
 
 
-@router.delete(
-    "/",
-)
+@router.delete("/")
 async def delete_favorite(
     user_id: int = Depends(get_current_user_id),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        return await delete_favorite_service(
-            session=session,
-            user_id=user_id,
-        )
+    return await delete_favorite_service(
+        session=session,
+        user_id=user_id,
+    )
