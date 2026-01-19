@@ -8,26 +8,14 @@ from favorite_service.favorite.schemas import FavoriteSneakerCreate
 
 from favorite_service.favorite.dependencies.user_id import get_current_user_id
 from favorite_service.favorite.config import settings
-from favorite_service.favorite.services.favorite.fetch import (
-    get_user_favorite_id_service,
-)
-from favorite_service.favorite.services.favorite_sneaker.checkers import (
-    get_sneaker_in_favorite_service,
-)
-from favorite_service.favorite.services.favorite_sneaker.create import (
-    add_sneaker_to_favorite_service,
-)
 from favorite_service.favorite.services.favorite_sneaker.delete import (
     delete_sneaker_from_favorite_service,
 )
+from favorite_service.favorite.services.favorite_sneaker.orchestrators import (
+    create_sneaker_to_favorite_orchestrator,
+)
 from favorite_service.favorite.services.favorite_sneaker.update import (
     update_sneaker_in_favorite_service,
-)
-from favorite_service.favorite.services.sneaker.checkers import (
-    check_sneaker_exists_service,
-)
-from favorite_service.favorite.services.sneaker_size.checkers import (
-    check_sneaker_has_size_service,
 )
 
 router = APIRouter(
@@ -47,36 +35,15 @@ async def create_sneaker_to_favorite(
     user_id: int = Depends(get_current_user_id),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        favorite_id = await get_user_favorite_id_service(
-            session=session,
-            user_id=user_id,
-        )
-        await check_sneaker_exists_service(
-            session=session,
-            sneaker_id=item_create.sneaker_id,
-        )
-        await check_sneaker_has_size_service(
-            session=session,
-            sneaker_id=item_create.sneaker_id,
-            size_id=item_create.size_id,
-        )
-        sneaker_record = await get_sneaker_in_favorite_service(
-            session=session,
-            favorite_id=favorite_id,
-            sneaker_id=item_create.sneaker_id,
-        )
+    sneaker_id = item_create.sneaker_id
+    size_id = item_create.size_id
 
-        if sneaker_record is None:
-            await add_sneaker_to_favorite_service(
-                session=session,
-                favorite_id=favorite_id,
-                sneaker_id=item_create.sneaker_id,
-                size_id=item_create.size_id,
-            )
-            return {"status": "Элемент добавлен"}
-
-    return {"status": "Такая запись уже есть в избранном"}
+    return await create_sneaker_to_favorite_orchestrator(
+        session=session,
+        user_id=user_id,
+        sneaker_id=sneaker_id,
+        size_id=size_id,
+    )
 
 
 @router.put(
