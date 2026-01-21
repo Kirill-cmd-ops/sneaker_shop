@@ -1,11 +1,10 @@
 from sqlalchemy import delete
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from stock_notification_service.stock_notification.models import Sneaker
+from stock_notification_service.stock_notification.models import Sneaker, db_helper
 
 
-async def delete_sneaker_service(session: AsyncSession, sneaker_id: int):
-    stmt = delete(Sneaker).where(Sneaker.id == sneaker_id)
-    await session.execute(stmt)
-
-    await session.commit()
+async def delete_sneaker_service(sneaker_id: int):
+    async with db_helper.session_context() as session:
+        async with session.begin():
+            stmt = delete(Sneaker).where(Sneaker.id == sneaker_id)
+            await session.execute(stmt)
