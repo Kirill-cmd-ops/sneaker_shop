@@ -7,15 +7,18 @@ import redis.asyncio as aioredis
 
 from redis_client.redis_connection.factory import get_redis_factory
 from sneaker_views_history_service.user_history.config import settings
-from sneaker_views_history_service.user_history.dependencies.get_current_user import (
-    get_user_by_header,
+from sneaker_views_history_service.user_history.dependencies.user_id import (
+    get_current_user_id,
 )
 from sneaker_views_history_service.user_history.models.db_helper import db_helper
-from sneaker_views_history_service.user_history.services.sneaker_view.create import (
-    redis_insert,
+from sneaker_views_history_service.user_history.services.sneaker_view_history.create import (
+    create_sneaker_view_history_service,
 )
-from sneaker_views_history_service.user_history.services.sneaker_view.fetch import (
-    clickhouse_select,
+from sneaker_views_history_service.user_history.services.sneaker_view_history.fetch import (
+    get_user_sneaker_view_history_service,
+)
+from sneaker_views_history_service.user_history.services.sneaker_view_history.orchestrators import (
+    get_user_sneaker_view_recent_history_orchestrator,
 )
 
 router = APIRouter(
@@ -30,9 +33,9 @@ router = APIRouter(
     "/",
     # dependencies=(Depends(check_role_permissions("favorite.view")),),
 )
-async def get_sneaker_views(
+async def get_user_sneaker_view_recent_history(
     # request: Request,
-    user_id: int = Depends(get_user_by_header),
+    user_id: int = Depends(get_current_user_id),
     session: Session = Depends(db_helper.session_getter),
     redis_client: aioredis.Redis = Depends(
         get_redis_factory(
@@ -45,17 +48,8 @@ async def get_sneaker_views(
 ):
     # redis_client = request.state.redis_client
 
-    records = await redis_client.zrange(
-        name=f"views:{user_id}",
-        start=0,
-        end=-1,
+    return await get_user_sneaker_view_recent_history_orchestrator(
+        user_id=user_id,
+        session=session,
+        redis_client=redis_client,
     )
-    if not records:
-        records = await clickhouse_select(
-            session=session,
-            user_id=user_id,
-            limit=30,
-        )
-
-        task = create_task(redis_insert(records=records))
-    return records
