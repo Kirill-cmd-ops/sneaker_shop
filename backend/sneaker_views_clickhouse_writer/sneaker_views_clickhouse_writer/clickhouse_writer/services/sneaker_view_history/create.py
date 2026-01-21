@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from sneaker_views_clickhouse_writer.clickhouse_writer.models import (
     db_helper,
     SneakerViewsHistory,
@@ -7,27 +9,27 @@ from sneaker_views_clickhouse_writer.clickhouse_writer.models import (
 
 
 def create_user_sneaker_view_history_service(
+    session: AsyncSession,
     user_id: int,
     sneaker_id: int,
     sign: int,
     version: int,
     view_timestamp: datetime = None,
 ):
-    with db_helper.session_context() as session:
 
-        if view_timestamp is None:
-            view_timestamp = datetime.utcnow()
+    if view_timestamp is None:
+        view_timestamp = datetime.utcnow()
 
-        try:
-            sneaker_view = SneakerViewsHistory(
-                user_id=user_id,
-                sneaker_id=sneaker_id,
-                view_timestamp=view_timestamp,
-                sign=sign,
-                version=version,
-            )
+    try:
+        sneaker_view = SneakerViewsHistory(
+            user_id=user_id,
+            sneaker_id=sneaker_id,
+            view_timestamp=view_timestamp,
+            sign=sign,
+            version=version,
+        )
 
-            session.add(sneaker_view)
-            session.commit()
-        except Exception as e:
-            print(e)
+        session.add(sneaker_view)
+        session.commit()
+    except Exception as e:
+        print(e)
