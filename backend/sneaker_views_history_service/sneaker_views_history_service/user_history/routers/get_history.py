@@ -3,12 +3,12 @@ from sqlalchemy.orm import Session
 
 
 from sneaker_views_history_service.user_history.config import settings
-from sneaker_views_history_service.user_history.dependencies.get_current_user import (
-    get_user_by_header,
+from sneaker_views_history_service.user_history.dependencies.user_id import (
+    get_current_user_id,
 )
 from sneaker_views_history_service.user_history.models.db_helper import db_helper
-from sneaker_views_history_service.user_history.services.sneaker_view.fetch import (
-    clickhouse_select,
+from sneaker_views_history_service.user_history.services.sneaker_view_history.fetch import (
+    get_user_sneaker_view_history_service,
 )
 
 router = APIRouter(
@@ -18,11 +18,8 @@ router = APIRouter(
 
 
 @router.get("/")
-async def call_get_sneaker_views_clickhouse(
+async def get_user_sneaker_view_history(
     session: Session = Depends(db_helper.session_getter),
-    user_id: int = Depends(get_user_by_header),
+    user_id: int = Depends(get_current_user_id),
 ):
-    return await clickhouse_select(
-        session=session,
-        user_id=user_id,
-    )
+    return await get_user_sneaker_view_history_service(session=session, user_id=user_id)
