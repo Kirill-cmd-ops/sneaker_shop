@@ -30,18 +30,16 @@ async def get_sneakers(
     sort_by: Optional[str] = None,
     order: Optional[str] = "asc",
 ):
-    async with session.begin():
-        sneakers_info = await get_sneakers_service(
-            session=session,
-            page=page,
-            limit=limit,
-            name=name,
-            min_price=min_price,
-            max_price=max_price,
-            gender=gender,
-            brand_name=brand_name,
-            size=size,
-            sort_by=sort_by,
-            order=order,
-        )
-        return sneakers_info
+    return await get_sneakers_service(
+        session=session,
+        page=page,
+        limit=limit,
+        name=name,
+        min_price=min_price,
+        max_price=max_price,
+        gender=gender,
+        brand_name=brand_name,
+        size=size,
+        sort_by=sort_by,
+        order=order,
+    )
