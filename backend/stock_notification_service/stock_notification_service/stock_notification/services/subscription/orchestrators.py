@@ -122,3 +122,39 @@ async def create_user_one_time_subscription_orchestrator(
             )
 
     return result
+
+
+async def reactivate_all_one_time_subscriptions_for_user_orchestrator(
+    session: AsyncSession,
+    user_id: int,
+    subscription_id: int,
+):
+    async with session.begin():
+        inactive_subscription = (
+            await get_inactive_one_time_subscription_for_user_service(
+                session=session,
+                user_id=user_id,
+                subscription_id=subscription_id,
+            )
+        )
+
+        await check_active_one_time_subscription_service(
+            session=session,
+            user_id=user_id,
+            sneaker_id=inactive_subscription.sneaker_id,
+            size_id=inactive_subscription.size_id,
+        )
+        await check_active_permanent_subscription_service(
+            session=session,
+            user_id=user_id,
+            sneaker_id=inactive_subscription.sneaker_id,
+            size_id=inactive_subscription.size_id,
+        )
+
+        result = await reactivate_one_time_subscription_by_id_service(
+            subscription_id=subscription_id,
+            user_id=user_id,
+            session=session,
+        )
+
+    return result
