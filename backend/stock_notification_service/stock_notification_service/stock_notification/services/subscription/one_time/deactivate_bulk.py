@@ -11,15 +11,16 @@ async def deactivate_all_one_time_subscriptions_for_user_service(
     user_id: int,
     session: AsyncSession,
 ):
-    await session.execute(
-        update(UserSneakerOneTimeSubscription)
-        .where(
-            UserSneakerOneTimeSubscription.user_id == user_id,
-            UserSneakerOneTimeSubscription.status == SubscriptionStatus.ACTIVE,
-            UserSneakerOneTimeSubscription.is_sent == False,
+    async with session.begin():
+        await session.execute(
+            update(UserSneakerOneTimeSubscription)
+            .where(
+                UserSneakerOneTimeSubscription.user_id == user_id,
+                UserSneakerOneTimeSubscription.status == SubscriptionStatus.ACTIVE,
+                UserSneakerOneTimeSubscription.is_sent == False,
+            )
+            .values(status=SubscriptionStatus.INACTIVE_BY_USER)
         )
-        .values(status=SubscriptionStatus.INACTIVE_BY_USER)
-    )
 
     return {"records was deactivate"}
 

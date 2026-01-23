@@ -1,4 +1,6 @@
+from fastapi import HTTPException
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from stock_notification_service.stock_notification.enums import SubscriptionStatus
@@ -12,15 +14,16 @@ async def deactivate_user_one_time_subscription_service(
     user_id: int,
     session: AsyncSession,
 ):
-    subscription = await session.scalar(
-        select(UserSneakerOneTimeSubscription).where(
-            UserSneakerOneTimeSubscription.user_id == user_id,
-            UserSneakerOneTimeSubscription.id == subscription_id,
-            UserSneakerOneTimeSubscription.status == SubscriptionStatus.ACTIVE,
-            UserSneakerOneTimeSubscription.is_sent == False,
+    async with session.begin():
+        subscription = await session.scalar(
+            select(UserSneakerOneTimeSubscription).where(
+                UserSneakerOneTimeSubscription.user_id == user_id,
+                UserSneakerOneTimeSubscription.id == subscription_id,
+                UserSneakerOneTimeSubscription.status == SubscriptionStatus.ACTIVE,
+                UserSneakerOneTimeSubscription.is_sent == False,
+            )
         )
-    )
 
-    subscription.status = SubscriptionStatus.INACTIVE_BY_USER
+        subscription.status = SubscriptionStatus.INACTIVE_BY_USER
 
     return {"record was deactivate"}
