@@ -38,6 +38,10 @@ from stock_notification_service.stock_notification.services.subscription.one_tim
     reactivate_one_time_subscription_by_sneaker_size_service,
     reactivate_one_time_subscription_by_id_service,
 )
+from stock_notification_service.stock_notification.services.subscription.orchestrators import (
+    create_user_one_time_subscription_orchestrator,
+    reactivate_all_one_time_subscriptions_for_user_orchestrator,
+)
 from stock_notification_service.stock_notification.services.subscription.permanent.checkers import (
     check_active_permanent_subscription_service,
 )
@@ -57,63 +61,17 @@ async def create_user_one_time_subscription(
     user_id: int = Depends(get_current_user_id),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        try:
-            # проверка активности sneaker
-            await check_sneaker_active_service(
-                session=session,
-                sneaker_id=subscription_create.sneaker_id,
-            )
-
-            # проверка доступности размера для sneaker и проверка неактивности размера
-            await check_inactive_sneaker_size_service(
-                session=session,
-                sneaker_id=subscription_create.sneaker_id,
-                size_id=subscription_create.size_id,
-            )
-
-            # проверка активной одноразовой подписки
-            await check_active_one_time_subscription_service(
-                session=session,
-                user_id=user_id,
-                sneaker_id=subscription_create.sneaker_id,
-                size_id=subscription_create.size_id,
-            )
-
-            # проверка активной перманентной подписки
-            await check_active_permanent_subscription_service(
-                session=session,
-                user_id=user_id,
-                sneaker_id=subscription_create.sneaker_id,
-                size_id=subscription_create.size_id,
-            )
-
-            # реактивация деактивированной разовой подписки
-            update_subscription = (
-                await reactivate_one_time_subscription_by_sneaker_size_service(
-                    session=session,
-                    user_id=user_id,
-                    sneaker_id=subscription_create.sneaker_id,
-                    size_id=subscription_create.size_id,
-                )
-            )
-            if update_subscription:
-                return update_subscription
-
-            # создание разовой подписки
-            result = await create_user_one_time_subscription_service(
-                sneaker_id=subscription_create.sneaker_id,
-                size_id=subscription_create.size_id,
-                user_id=user_id,
-                session=session,
-            )
-            return result
-
-        except IntegrityError as e:
-            raise HTTPException(
-                status_code=404,
-                detail="Не удалось найти требуемую модель кроссовок",
-            )
+    try:
+        return await create_user_one_time_subscription_orchestrator(
+            session=session,
+            user_id=user_id,
+            subscription_create=subscription_create,
+        )
+    except IntegrityError as e:
+        raise HTTPException(
+            status_code=404,
+            detail="Не удалось найти требуемую модель кроссовок",
+        )
 
 
 @router.patch("/{subscription_id}/deactivate")
