@@ -58,19 +58,18 @@ async def deactivate_user_permanent_subscription(
     user_id: int = Depends(get_current_user_id),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        try:
-            return await deactivate_user_permanent_subscription_service(
-                subscription_id=subscription_id,
-                user_id=user_id,
-                session=session,
-            )
+    try:
+        return await deactivate_user_permanent_subscription_service(
+            subscription_id=subscription_id,
+            user_id=user_id,
+            session=session,
+        )
 
-        except IntegrityError as e:
-            raise HTTPException(
-                status_code=404,
-                detail="Не удалось найти требуемую модель кроссовок",
-            )
+    except IntegrityError as e:
+        raise HTTPException(
+            status_code=404,
+            detail="Не удалось найти требуемую модель кроссовок",
+        )
 
 
 @router.patch("/deactivate")
@@ -78,18 +77,17 @@ async def deactivate_all_permanent_subscriptions_for_user(
     user_id: int = Depends(get_current_user_id),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        try:
-            return deactivate_all_permanent_subscriptions_for_user_service(
-                user_id=user_id,
-                session=session,
-            )
+    try:
+        return deactivate_all_permanent_subscriptions_for_user_service(
+            user_id=user_id,
+            session=session,
+        )
 
-        except IntegrityError as e:
-            raise HTTPException(
-                status_code=404,
-                detail="Не удалось найти требуемуемые модели кроссовок",
-            )
+    except IntegrityError as e:
+        raise HTTPException(
+            status_code=404,
+            detail="Не удалось найти требуемуемые модели кроссовок",
+        )
 
 
 @router.patch("/{subscription_id}/reactivate")
@@ -117,14 +115,14 @@ async def get_active_permanent_subscriptions_for_user(
     user_id: int = Depends(get_current_user_id),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        try:
-            return await get_active_permanent_subscriptions_for_user_service(
-                user_id=user_id,
-                session=session,
-            )
-        except IntegrityError as e:
-            raise HTTPException(
-                status_code=404,
-                detail="Не удалось найти требуемуемые модели кроссовок",
-            )
+    try:
+        return await get_active_permanent_subscriptions_for_user_service(
+            user_id=user_id,
+            session=session,
+        )
+    except IntegrityError as e:
+        raise HTTPException(
+            status_code=404,
+            detail="Не удалось найти требуемуемые модели кроссовок",
+        )
+

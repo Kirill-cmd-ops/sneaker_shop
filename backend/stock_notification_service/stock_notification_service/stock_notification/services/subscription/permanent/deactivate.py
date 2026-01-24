@@ -10,14 +10,15 @@ async def deactivate_user_permanent_subscription_service(
     user_id: int,
     session: AsyncSession,
 ):
-    subscription = await session.scalar(
-        select(UserSneakerSubscription).where(
-            UserSneakerSubscription.user_id == user_id,
-            UserSneakerSubscription.id == subscription_id,
-            UserSneakerSubscription.status == SubscriptionStatus.ACTIVE,
+    async with session.begin():
+        subscription = await session.scalar(
+            select(UserSneakerSubscription).where(
+                UserSneakerSubscription.user_id == user_id,
+                UserSneakerSubscription.id == subscription_id,
+                UserSneakerSubscription.status == SubscriptionStatus.ACTIVE,
+            )
         )
-    )
 
-    subscription.status = SubscriptionStatus.INACTIVE_BY_USER
+        subscription.status = SubscriptionStatus.INACTIVE_BY_USER
 
     return {"record was deactivate"}

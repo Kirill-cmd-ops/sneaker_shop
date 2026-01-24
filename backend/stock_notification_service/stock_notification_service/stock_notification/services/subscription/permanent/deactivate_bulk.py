@@ -9,14 +9,15 @@ async def deactivate_all_permanent_subscriptions_for_user_service(
     user_id: int,
     session: AsyncSession,
 ):
-    await session.execute(
-        update(UserSneakerSubscription)
-        .where(
-            UserSneakerSubscription.user_id == user_id,
-            UserSneakerSubscription.status == SubscriptionStatus.ACTIVE,
+    async with session.begin():
+        await session.execute(
+            update(UserSneakerSubscription)
+            .where(
+                UserSneakerSubscription.user_id == user_id,
+                UserSneakerSubscription.status == SubscriptionStatus.ACTIVE,
+            )
+            .values(status=SubscriptionStatus.INACTIVE_BY_USER)
         )
-        .values(status=SubscriptionStatus.INACTIVE_BY_USER)
-    )
 
     return {"records was deactivate"}
 
