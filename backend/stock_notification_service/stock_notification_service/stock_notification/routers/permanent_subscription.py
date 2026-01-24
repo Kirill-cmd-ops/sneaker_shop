@@ -98,41 +98,18 @@ async def reactivate_all_permanent_subscriptions_for_user(
     user_id: int = Depends(get_current_user_id),
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    async with session.begin():
-        inactive_subscription = (
-            await get_inactive_permanent_subscription_for_user_service(
-                session=session,
-                user_id=user_id,
-                subscription_id=subscription_id,
-            )
-        )
 
-        await check_active_permanent_subscription_service(
+    try:
+        return await reactivate_all_permanent_subscriptions_for_user_orchestrator(
             session=session,
             user_id=user_id,
-            sneaker_id=inactive_subscription.sneaker_id,
-            size_id=inactive_subscription.size_id,
+            subscription_id=subscription_id,
         )
-
-        await check_active_one_time_subscription_service(
-            session=session,
-            user_id=user_id,
-            sneaker_id=inactive_subscription.sneaker_id,
-            size_id=inactive_subscription.size_id,
+    except IntegrityError as e:
+        raise HTTPException(
+            status_code=404,
+            detail="Не удалось найти требуемую модель кроссовок",
         )
-
-        try:
-            return await reactivate_permanent_subscription_by_id_service(
-                subscription_id=subscription_id,
-                user_id=user_id,
-                session=session,
-            )
-
-        except IntegrityError as e:
-            raise HTTPException(
-                status_code=404,
-                detail="Не удалось найти требуемую модель кроссовок",
-            )
 
 
 @router.get("/")
