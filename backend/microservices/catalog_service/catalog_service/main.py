@@ -1,9 +1,11 @@
 import asyncio
 from asyncio import create_task
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from catalog_service.catalog.config import settings
 from catalog_service.catalog.kafka.handlers.brands import handle_brand_event
@@ -87,6 +89,26 @@ add_middleware(app=app)
 app.include_router(
     catalog_router,
 )
+
+# Раздача статических файлов (картинки кроссовок и брендов)
+# Путь к статике в контейнере: /app/static
+static_path = Path("/app/static")
+if not static_path.exists():
+    # Fallback для локальной разработки
+    static_path = Path(__file__).parent.parent.parent.parent / "static"
+
+if static_path.exists():
+    uploads_path = static_path / "uploads"
+    if uploads_path.exists():
+        try:
+            app.mount("/uploads", StaticFiles(directory=str(uploads_path)), name="static")
+            print(f"✅ Статические файлы подключены из: {uploads_path}")
+        except Exception as e:
+            print(f"❌ Ошибка подключения статических файлов: {e}")
+    else:
+        print(f"⚠️  Папка uploads не найдена: {uploads_path}")
+else:
+    print(f"⚠️  Папка static не найдена: {static_path}")
 
 
 if __name__ == "__main__":
