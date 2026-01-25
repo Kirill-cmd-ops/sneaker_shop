@@ -231,7 +231,7 @@ services:
         condition: service_healthy
     volumes:
       - ./backend/microservices/auth_service:/app/auth_service
-      - ./backend/secrets:/app/secrets
+      - ./backend/shared/secrets:/app/secrets
       - ./kafka:/app/auth_service/kafka
       - ./redis_client/redis_connection:/app/auth_service/redis_client/redis_connection
       - ./celery_client:/app/auth_service/celery_client
@@ -257,7 +257,7 @@ services:
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
       - ./backend/microservices/auth_service:/app/auth_service
-      - ./backend/secrets:/app/secrets
+      - ./backend/shared/secrets:/app/secrets
       - ./kafka:/app/auth_service/kafka
       - ./redis_client/redis_connection:/app/auth_service/redis_client/redis_connection
       - ./celery_client:/app/auth_service/celery_client
@@ -358,7 +358,7 @@ services:
     volumes:
       - ./backend/microservices/catalog_service:/app/catalog_service
       - ./kafka:/app/catalog_service/kafka
-      - ./backend/static:/app/static
+      - ./backend/shared/static:/app/static
     ports:
       - "8005:8005"
     command: [ "python", "-m", "uvicorn", "catalog_service.main:app", "--host", "0.0.0.0", "--port", "8005", "--reload" ]
