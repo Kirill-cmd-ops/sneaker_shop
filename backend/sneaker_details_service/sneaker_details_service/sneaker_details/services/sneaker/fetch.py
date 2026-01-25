@@ -9,18 +9,19 @@ async def get_sneaker_service(
     session: AsyncSession,
     sneaker_id: int,
 ):
-    stmt = (
-        select(Sneaker)
-        .where(Sneaker.id == sneaker_id)
-        .where(Sneaker.is_active == True)
-        .options(
-            joinedload(Sneaker.brand),
-            joinedload(Sneaker.country),
-            selectinload(Sneaker.sizes),
-            selectinload(Sneaker.colors),
-            selectinload(Sneaker.materials),
+    async with session.begin():
+        stmt = (
+            select(Sneaker)
+            .where(Sneaker.id == sneaker_id)
+            .where(Sneaker.is_active == True)
+            .options(
+                joinedload(Sneaker.brand),
+                joinedload(Sneaker.country),
+                selectinload(Sneaker.sizes),
+                selectinload(Sneaker.colors),
+                selectinload(Sneaker.materials),
+            )
         )
-    )
-    result = await session.execute(stmt)
-    sneaker = result.unique().scalar_one_or_none()
+        result = await session.execute(stmt)
+        sneaker = result.unique().scalar_one_or_none()
     return sneaker

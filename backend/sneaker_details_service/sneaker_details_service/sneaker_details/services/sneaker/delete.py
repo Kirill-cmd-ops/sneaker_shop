@@ -15,9 +15,11 @@ async def delete_sneaker_service(session: AsyncSession, sneaker_id: int):
         SneakerColorAssociation,
         SneakerMaterialAssociation,
     ]
-    for assoc_table in assoc_tables:
-        stmt = delete(assoc_table).where(assoc_table.sneaker_id == sneaker_id)
-        await session.execute(stmt)
 
-    stmt = delete(Sneaker).where(Sneaker.id == sneaker_id)
-    await session.execute(stmt)
+    async with session.begin():
+        for assoc_table in assoc_tables:
+            stmt = delete(assoc_table).where(assoc_table.sneaker_id == sneaker_id)
+            await session.execute(stmt)
+
+        stmt = delete(Sneaker).where(Sneaker.id == sneaker_id)
+        await session.execute(stmt)
