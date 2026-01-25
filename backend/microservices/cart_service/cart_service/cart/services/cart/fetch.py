@@ -7,19 +7,18 @@ from cart_service.cart.models import Cart
 
 
 async def get_cart_service(session: AsyncSession, user_id: int):
-    async with session.begin():
-        cart = await session.scalar(
-            select(Cart)
-            .where(Cart.user_id == user_id)
-            .options(
-                selectinload(Cart.sneaker_associations),
-                selectinload(Cart.sneakers),
-            )
+    cart = await session.scalar(
+        select(Cart)
+        .where(Cart.user_id == user_id)
+        .options(
+            selectinload(Cart.sneaker_associations),
+            selectinload(Cart.sneakers),
         )
-        if cart is None:
-            raise HTTPException(
-                status_code=404, detail="У данного пользователя нету корзины"
-            )
+    )
+    if cart is None:
+        raise HTTPException(
+            status_code=404, detail="У данного пользователя нету корзины"
+        )
 
     return cart
 

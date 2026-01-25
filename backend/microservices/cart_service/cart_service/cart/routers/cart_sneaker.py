@@ -32,7 +32,6 @@ router = APIRouter(
 @router.post(
     "/",
     response_model=dict,
-    dependencies=(Depends(check_role_permissions("cart.sneaker.add")),),
 )
 async def add_sneaker_to_cart(
     item_create: CartSneakerCreate,
@@ -53,7 +52,6 @@ async def add_sneaker_to_cart(
 @router.put(
     "/{cart_sneaker_id}",
     response_model=dict,
-    dependencies=(Depends(check_role_permissions("cart.sneaker.update")),),
 )
 async def update_sneaker_in_cart(
     cart_sneaker_id: int,
@@ -73,7 +71,6 @@ async def update_sneaker_in_cart(
 @router.delete(
     "/{cart_sneaker_id}",
     response_model=dict,
-    dependencies=(Depends(check_role_permissions("cart.sneaker.delete")),),
 )
 async def delete_sneaker_from_cart(
     cart_sneaker_id: int,
@@ -90,7 +87,6 @@ async def delete_sneaker_from_cart(
 @router.patch(
     "/{cart_sneaker_id}",
     response_model=dict,
-    dependencies=(Depends(check_role_permissions("cart.sneaker.delete")),),
 )
 async def update_sneaker_quantity_in_cart(
     cart_sneaker_id: int,
