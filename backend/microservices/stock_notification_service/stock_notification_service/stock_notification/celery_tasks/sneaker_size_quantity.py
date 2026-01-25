@@ -8,7 +8,7 @@ celery_client = get_celery(
 
 
 @celery_client.task(name="update.quantity")
-def handle_update_quantity(
+def process_sneaker_size_quantity_update(
     hostname: str,
     port: int,
     start_tls: bool,
