@@ -217,7 +217,7 @@ services:
 
   auth_service:
     build:
-      context: ./backend/auth_service
+      context: ./backend/microservices/auth_service
       dockerfile: Dockerfile
     container_name: auth_service
     depends_on:
@@ -230,7 +230,7 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./backend/auth_service:/app/auth_service
+      - ./backend/microservices/auth_service:/app/auth_service
       - ./backend/secrets:/app/secrets
       - ./kafka:/app/auth_service/kafka
       - ./redis_client/redis_connection:/app/auth_service/redis_client/redis_connection
@@ -245,7 +245,7 @@ services:
 
   auth_alembic:
     build:
-      context: ./backend/auth_service
+      context: ./backend/microservices/auth_service
       dockerfile: Dockerfile
     container_name: auth_alembic_migrations
     depends_on:
@@ -256,7 +256,7 @@ services:
     working_dir: /app/auth_service
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
-      - ./backend/auth_service:/app/auth_service
+      - ./backend/microservices/auth_service:/app/auth_service
       - ./backend/secrets:/app/secrets
       - ./kafka:/app/auth_service/kafka
       - ./redis_client/redis_connection:/app/auth_service/redis_client/redis_connection
@@ -267,7 +267,7 @@ services:
 
   favorite_service:
     build:
-      context: ./backend/favorite_service
+      context: ./backend/microservices/favorite_service
       dockerfile: Dockerfile
     container_name: favorite_service
     depends_on:
@@ -278,7 +278,7 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./backend/favorite_service:/app/favorite_service
+      - ./backend/microservices/favorite_service:/app/favorite_service
       - ./kafka:/app/favorite_service/kafka
       - ./redis_client/redis_connection:/app/favorite_service/redis_client/redis_connection
     ports:
@@ -290,7 +290,7 @@ services:
 
   favorite_alembic:
     build:
-      context: ./backend/favorite_service
+      context: ./backend/microservices/favorite_service
       dockerfile: Dockerfile
     container_name: favorite_alembic_migrations
     depends_on:
@@ -299,7 +299,7 @@ services:
     working_dir: /app/favorite_service
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
-      - ./backend/favorite_service:/app/favorite_service
+      - ./backend/microservices/favorite_service:/app/favorite_service
       - ./kafka:/app/favorite_service/kafka
       - ./redis_client/redis_connection:/app/favorite_service/redis_client/redis_connection
     command: [ "upgrade", "head" ]
@@ -307,7 +307,7 @@ services:
 
   cart_service:
     build:
-      context: ./backend/cart_service
+      context: ./backend/microservices/cart_service
       dockerfile: Dockerfile
     container_name: cart_service
     depends_on:
@@ -318,7 +318,7 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./backend/cart_service:/app/cart_service
+      - ./backend/microservices/cart_service:/app/cart_service
       - ./kafka:/app/cart_service/kafka
       - ./redis_client/redis_connection:/app/cart_service/redis_client/redis_connection
     ports:
@@ -330,7 +330,7 @@ services:
 
   cart_alembic:
     build:
-      context: ./backend/cart_service
+      context: ./backend/microservices/cart_service
       dockerfile: Dockerfile
     container_name: cart_alembic_migrations
     depends_on:
@@ -339,7 +339,7 @@ services:
     working_dir: /app/cart_service
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
-      - ./backend/cart_service:/app/cart_service
+      - ./backend/microservices/cart_service:/app/cart_service
       - ./kafka:/app/cart_service/kafka
       - ./redis_client/redis_connection:/app/cart_service/redis_client/redis_connection
     command: [ "upgrade", "head" ]
@@ -347,7 +347,7 @@ services:
 
   catalog_service:
     build:
-      context: ./backend/catalog_service
+      context: ./backend/microservices/catalog_service
       dockerfile: Dockerfile
     container_name: catalog_service
     depends_on:
@@ -356,7 +356,7 @@ services:
       kafka:
         condition: service_healthy
     volumes:
-      - ./backend/catalog_service:/app/catalog_service
+      - ./backend/microservices/catalog_service:/app/catalog_service
       - ./kafka:/app/catalog_service/kafka
       - ./backend/static:/app/static
     ports:
@@ -367,7 +367,7 @@ services:
 
   catalog_alembic:
     build:
-      context: ./backend/catalog_service
+      context: ./backend/microservices/catalog_service
       dockerfile: Dockerfile
     container_name: catalog_alembic_migrations
     depends_on:
@@ -376,13 +376,13 @@ services:
     working_dir: /app/catalog_service
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
-      - ./backend/catalog_service:/app/catalog_service
+      - ./backend/microservices/catalog_service:/app/catalog_service
     command: [ "upgrade", "head" ]
 
 
   sneaker_details_service:
     build:
-      context: ./backend/sneaker_details_service
+      context: ./backend/microservices/sneaker_details_service
       dockerfile: Dockerfile
     container_name: sneaker_details_service
     depends_on:
@@ -393,7 +393,7 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./backend/sneaker_details_service:/app/sneaker_details_service
+      - ./backend/microservices/sneaker_details_service:/app/sneaker_details_service
       - ./kafka:/app/sneaker_details_service/kafka
       - ./redis_client/redis_connection:/app/sneaker_details_service/redis_client/redis_connection
     ports:
@@ -404,7 +404,7 @@ services:
 
   sneaker_details_alembic:
     build:
-      context: ./backend/sneaker_details_service
+      context: ./backend/microservices/sneaker_details_service
       dockerfile: Dockerfile
     container_name: sneaker_details_alembic_migrations
     depends_on:
@@ -413,21 +413,21 @@ services:
     working_dir: /app/sneaker_details_service
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
-      - ./backend/sneaker_details_service:/app/sneaker_details_service
+      - ./backend/microservices/sneaker_details_service:/app/sneaker_details_service
       - ./redis_client/redis_connection:/app/sneaker_details_service/redis_client/redis_connection
     command: [ "upgrade", "head" ]
 
 
   sneaker_views_redis_writer:
     build:
-      context: ./backend/sneaker_views_redis_writer
+      context: ./backend/microservices/sneaker_views_redis_writer
       dockerfile: Dockerfile
     container_name: sneaker_views_redis_writer
     depends_on:
       kafka:
         condition: service_healthy
     volumes:
-      - ./backend/sneaker_views_redis_writer:/app/sneaker_views_redis_writer
+      - ./backend/microservices/sneaker_views_redis_writer:/app/sneaker_views_redis_writer
       - ./kafka:/app/sneaker_views_redis_writer/kafka
       - ./redis_client/redis_connection:/app/sneaker_views_redis_writer/redis_client/redis_connection
     ports:
@@ -439,14 +439,14 @@ services:
 
   sneaker_views_clickhouse_writer:
     build:
-      context: ./backend/sneaker_views_clickhouse_writer
+      context: ./backend/microservices/sneaker_views_clickhouse_writer
       dockerfile: Dockerfile
     container_name: sneaker_views_clickhouse_writer
     depends_on:
       kafka:
         condition: service_healthy
     volumes:
-      - ./backend/sneaker_views_clickhouse_writer:/app/sneaker_views_clickhouse_writer
+      - ./backend/microservices/sneaker_views_clickhouse_writer:/app/sneaker_views_clickhouse_writer
       - ./kafka:/app/sneaker_views_clickhouse_writer/kafka
     ports:
       - "8008:8008"
@@ -457,7 +457,7 @@ services:
 
   sneaker_views_clickhouse_alembic:
     build:
-      context: ./backend/sneaker_views_clickhouse_writer
+      context: ./backend/microservices/sneaker_views_clickhouse_writer
       dockerfile: Dockerfile
     container_name: sneaker_views_alembic_migrations
     depends_on:
@@ -466,7 +466,7 @@ services:
     working_dir: /app/sneaker_views_clickhouse_writer
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
-      - ./backend/sneaker_views_clickhouse_writer:/app/sneaker_views_clickhouse_writer
+      - ./backend/microservices/sneaker_views_clickhouse_writer:/app/sneaker_views_clickhouse_writer
       - ./kafka:/app/sneaker_views_clickhouse_writer/kafka
       - ./clickhouse/clickhouse_connection:/app/sneaker_views_clickhouse_writer/clickhouse/clickhouse_connection
     command: [ "upgrade", "head" ]
@@ -474,7 +474,7 @@ services:
 
   sneaker_views_history_service:
     build:
-      context: ./backend/sneaker_views_history_service
+      context: ./backend/microservices/sneaker_views_history_service
       dockerfile: Dockerfile
     container_name: sneaker_views_history_service
     depends_on:
@@ -483,7 +483,7 @@ services:
       clickhouse:
         condition: service_healthy
     volumes:
-      - ./backend/sneaker_views_history_service:/app/sneaker_views_history_service
+      - ./backend/microservices/sneaker_views_history_service:/app/sneaker_views_history_service
       - ./redis_client/redis_connection:/app/sneaker_views_history_service/redis_client/redis_connection
     ports:
       - "8009:8009"
@@ -494,7 +494,7 @@ services:
 
   stock_notification_service:
     build:
-      context: ./backend/stock_notification_service
+      context: ./backend/microservices/stock_notification_service
       dockerfile: Dockerfile
     container_name: stock_notification_service
     depends_on:
@@ -505,7 +505,7 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./backend/stock_notification_service:/app/stock_notification_service
+      - ./backend/microservices/stock_notification_service:/app/stock_notification_service
       - ./kafka:/app/stock_notification_service/kafka
       - ./redis_client/redis_connection:/app/stock_notification_service/redis_client/redis_connection
       - ./celery_client:/app/stock_notification_service/celery_client
@@ -519,7 +519,7 @@ services:
 
   stock_notification_alembic:
     build:
-      context: ./backend/stock_notification_service
+      context: ./backend/microservices/stock_notification_service
       dockerfile: Dockerfile
     container_name: stock_notification_alembic_migrations
     depends_on:
@@ -528,7 +528,7 @@ services:
     working_dir: /app/stock_notification_service
     entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
     volumes:
-      - ./backend/stock_notification_service:/app/stock_notification_service
+      - ./backend/microservices/stock_notification_service:/app/stock_notification_service
       - ./kafka:/app/stock_notification_service/kafka
       - ./redis_client/redis_connection:/app/stock_notification_service/redis_client/redis_connection
       - ./celery_client:/app/stock_notification_service/celery_client
@@ -694,7 +694,7 @@ services:
       celery -A celery_tasks.auth_tasks:celery_client worker --loglevel=info
       "
     volumes:
-      - ./backend/auth_service/auth_service/auth/celery_tasks:/app/celery_tasks
+      - ./backend/microservices/auth_service/auth_service/auth/celery_tasks:/app/celery_tasks
       - ./celery_client:/app/celery_client
       - ./message_sender:/app/message_sender
     working_dir: /app
@@ -711,7 +711,7 @@ services:
       celery -A celery_tasks.sneaker_size_quantity:celery_client worker --loglevel=info
       "
     volumes:
-      - ./backend/stock_notification_service/stock_notification_service/stock_notification/celery_tasks:/app/celery_tasks
+      - ./backend/microservices/stock_notification_service/stock_notification_service/stock_notification/celery_tasks:/app/celery_tasks
       - ./celery_client:/app/celery_client
       - ./message_sender:/app/message_sender
     working_dir: /app
