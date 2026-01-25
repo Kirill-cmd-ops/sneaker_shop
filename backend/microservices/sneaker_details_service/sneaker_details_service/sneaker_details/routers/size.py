@@ -1,5 +1,6 @@
 from aiokafka import AIOKafkaProducer
 from fastapi import APIRouter, Depends
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from sneaker_details_service.sneaker_details.config import settings
@@ -64,3 +65,10 @@ async def delete_size(
 
     await publish_size_deleted(producer=producer, size_id=size_id)
     return result
+
+@router.get("/{size_id}")
+async def get_brand(
+    size_id: int,
+    session: AsyncSession = Depends(db_helper.session_getter),
+):
+    return await session.scalar(select(Size.eu_size).where(Size.id == size_id))
