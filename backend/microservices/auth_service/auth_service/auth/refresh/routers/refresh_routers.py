@@ -1,5 +1,3 @@
-import secrets
-
 from fastapi import APIRouter
 from fastapi.params import Depends, Cookie
 from sqlalchemy.ext.asyncio import AsyncSession

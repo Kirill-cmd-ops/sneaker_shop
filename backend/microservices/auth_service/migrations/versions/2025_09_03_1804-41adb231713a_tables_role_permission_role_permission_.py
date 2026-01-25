@@ -1,4 +1,4 @@
-"""Tables role, permission, role_permission, user_role have been created
+"""Tables user_role, permission, role_permission, user_role have been created
 
 Revision ID: 41adb231713a
 Revises: 12bf59e6749e

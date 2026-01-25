@@ -14,7 +14,7 @@ from fastapi_users import (
 from starlette.responses import Response
 
 from auth_service.auth.config import settings
-from auth_service.auth.kafka.producer_event.user_registered import send_user_registered
+from auth_service.auth.kafka.producers.registration import publish_user_registered
 
 from auth_service.auth.models import User, db_helper
 from auth_service.auth.refresh.dependencies.get_token_id import get_refresh_token_id
@@ -77,10 +77,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         producer: AIOKafkaProducer = request.app.state.kafka_producer
-        await send_user_registered(
-            producer=producer,
-            user_id=str(user.id),
-        )
+        await publish_user_registered(producer=producer, user_id=str(user.id))
         await add_role_db(
             user_id=user.id,
             role_name="user",

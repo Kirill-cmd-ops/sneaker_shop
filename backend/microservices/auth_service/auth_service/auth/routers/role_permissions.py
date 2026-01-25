@@ -7,7 +7,7 @@ from auth_service.auth.config import settings
 from auth_service.auth.models import db_helper
 from auth_service.auth.schemas.permissions import UpdatePermissions
 from auth_service.auth.dependencies.permissions import check_role_permissions
-from auth_service.auth.services.role_permission.orchestrators.update_permissions import (
+from auth_service.auth.services.role_permission.orchestrators import (
     update_role_permissions_orchestrator,
 )
 

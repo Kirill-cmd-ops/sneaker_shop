@@ -5,9 +5,9 @@ from fastapi_users import exceptions, models, schemas
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.router.common import ErrorCode, ErrorModel
 
-from auth_service.auth.dependencies.get_kafka_producer import get_kafka_producer
-from auth_service.auth.kafka.producer_event.create_user_data import (
-    send_create_user_data,
+from auth_service.auth.dependencies.kafka_producer import get_kafka_producer
+from auth_service.auth.kafka.producers.users import (
+    publish_user_created,
 )
 from auth_service.auth.schemas.user import UserCreateWithoutConfirm
 
@@ -69,11 +69,7 @@ def get_register_router_custom(
                 request=request,
             )
 
-            await send_create_user_data(
-                producer=producer,
-                user_id=created_user.id,
-                user_create=user_create,
-            )
+            await publish_user_created(producer=producer, user_id=created_user.id, user_create=user_create)
 
         except exceptions.UserAlreadyExists:
             raise HTTPException(

@@ -6,12 +6,11 @@ from fastapi_users.authentication import Authenticator
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.router.common import ErrorCode, ErrorModel
 
-from auth_service.auth.dependencies.get_kafka_producer import get_kafka_producer
-from auth_service.auth.kafka.producer_event.delete_user_data import (
-    send_delete_user_data,
-)
-from auth_service.auth.kafka.producer_event.update_user_data import (
-    send_update_user_data,
+from auth_service.auth.dependencies.kafka_producer import get_kafka_producer
+
+from auth_service.auth.kafka.producers.users import (
+    publish_user_deleted,
+    publish_user_updated,
 )
 
 
@@ -110,7 +109,7 @@ def get_users_router_custom(
                 safe=True,
                 request=request,
             )
-            await send_update_user_data(
+            await publish_user_updated(
                 producer=producer,
                 user_id=user.id,
                 user_update=user_update,
@@ -209,7 +208,7 @@ def get_users_router_custom(
                 request=request,
             )
 
-            await send_update_user_data(
+            await publish_user_updated(
                 producer=producer,
                 user_id=user.id,
                 user_update=user_update,
@@ -259,10 +258,7 @@ def get_users_router_custom(
             request=request,
         )
 
-        await send_delete_user_data(
-            producer=producer,
-            user_id=user.id,
-        )
+        await publish_user_deleted(producer=producer, user_id=user.id)
         return None
 
     return router
