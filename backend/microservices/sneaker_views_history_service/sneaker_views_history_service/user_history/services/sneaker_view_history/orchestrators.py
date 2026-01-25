@@ -4,11 +4,11 @@ import redis.asyncio as aioredis
 
 from sqlalchemy.orm import Session
 
-from sneaker_views_clickhouse_writer.clickhouse_writer.services.sneaker_view_history.fetch import (
-    get_user_sneaker_view_history_service,
-)
 from sneaker_views_history_service.user_history.services.sneaker_view_history.create import (
     create_sneaker_view_history_service,
+)
+from sneaker_views_history_service.user_history.services.sneaker_view_history.fetch import (
+    get_user_sneaker_view_history_service,
 )
 
 
