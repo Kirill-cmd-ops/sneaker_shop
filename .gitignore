@@ -164,3 +164,40 @@ cython_debug/
 # For secrets key
 /secrets/
 *.pem
+
+# В корневом .gitignore добавьте:
+redis_data/
+redis_queue_data/
+*.rdb
+*.aof
+dump.rdb
+appendonlydir/
+
+
+# ClickHouse data directories
+clickhouse_data/
+clickhouse_log/
+clickhouse/
+data/clickhouse/
+/var/lib/clickhouse/
+ch_data/
+
+# ClickHouse data files
+*.bin
+*.mrk
+*.idx
+*.mrk2
+*.idx2
+*.cid
+partitions.txt
+
+# Logs and temp files
+*.err
+*.pid
+*.tmp
+*.scratch
+preprocessed_configs/
+
+# Configs (если не шаблоны)
+config.xml
+users.xml
