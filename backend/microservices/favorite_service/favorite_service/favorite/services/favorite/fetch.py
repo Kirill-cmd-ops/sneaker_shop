@@ -7,17 +7,16 @@ from favorite_service.favorite.models import Favorite
 
 
 async def get_favorite_service(session: AsyncSession, user_id: int):
-    async with session.begin():
-        favorite = await session.scalar(
-            select(Favorite)
-            .where(Favorite.user_id == user_id)
-            .options(selectinload(Favorite.sneaker_associations))
-        )
+    favorite = await session.scalar(
+        select(Favorite)
+        .where(Favorite.user_id == user_id)
+        .options(selectinload(Favorite.sneaker_associations))
+    )
 
-        if favorite is None:
-            raise HTTPException(
-                status_code=404, detail="У данного пользователя нету избранного"
-            )
+    if favorite is None:
+        raise HTTPException(
+            status_code=404, detail="У данного пользователя нету избранного"
+        )
 
     return favorite.sneaker_associations
 
