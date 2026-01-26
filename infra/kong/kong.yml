@@ -127,10 +127,8 @@ services:
     tags: ~
     updated_at: 1760002409
 routes:
-  - hosts:
-      - 127.0.0.1:8000
-      - 127.0.0.1:4455
-    name: ~
+  - hosts: ~
+    name: catalog_service_route
     created_at: 1750288382
     updated_at: 1760002409
     id: 3354dd1c-e82f-4108-b5fb-9503a5ed43bd
@@ -150,7 +148,31 @@ routes:
     tags: ~
     headers: ~
     paths:
-      - /api/v1/catalog/sneakers/view
+      - /api/v1/catalog
+    snis: ~
+    sources: ~
+  - hosts: ~
+    name: static_files_route
+    created_at: 1760002500
+    updated_at: 1760002500
+    id: static-files-route-001
+    destinations: ~
+    protocols:
+      - http
+      - https
+    regex_priority: 1
+    methods: ~
+    preserve_host: false
+    https_redirect_status_code: 426
+    strip_path: false
+    path_handling: v0
+    request_buffering: true
+    service: 3606c6d6-6d3d-4bb8-862b-411df930f0a1
+    response_buffering: true
+    tags: ~
+    headers: ~
+    paths:
+      - /uploads
     snis: ~
     sources: ~
   - hosts:
