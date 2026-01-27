@@ -168,6 +168,7 @@ cython_debug/
 # В корневом .gitignore добавьте:
 redis_data/
 redis_queue_data/
+redis_cache_data/
 *.rdb
 *.aof
 dump.rdb
