@@ -202,3 +202,6 @@ preprocessed_configs/
 # Configs (если не шаблоны)
 config.xml
 users.xml
+.DS_Store
+**/.DS_Store
+*.DS_Store
