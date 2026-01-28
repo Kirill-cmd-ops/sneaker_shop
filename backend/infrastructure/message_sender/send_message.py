@@ -1,6 +1,6 @@
 import smtplib
 
-from message_sender.create_message import get_message
+from infrastructure.message_sender.create_message import get_message
 
 
 def send_message(
