@@ -1,7 +1,6 @@
 FROM python:3.12-bookworm
 
-WORKDIR /app/user_history_service
-# ENV PYTHONPATH=/app/user_history_service/
+WORKDIR /app/backend
 
 RUN pip install --upgrade pip
 
