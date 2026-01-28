@@ -4,13 +4,14 @@ from clickhouse_sqlalchemy import select
 from sqlalchemy import desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_views_clickhouse_writer.clickhouse_writer.models import SneakerViewsHistory
+from microservices.sneaker_views_clickhouse_writer.sneaker_views_clickhouse_writer.clickhouse_writer.models import \
+    SneakerViewsHistory
 
 
 async def get_user_sneaker_view_history_service(
-    session: AsyncSession,
-    user_id: int,
-    sneaker_id: int,
+        session: AsyncSession,
+        user_id: int,
+        sneaker_id: int,
 ):
     stmt = (
         select(SneakerViewsHistory)

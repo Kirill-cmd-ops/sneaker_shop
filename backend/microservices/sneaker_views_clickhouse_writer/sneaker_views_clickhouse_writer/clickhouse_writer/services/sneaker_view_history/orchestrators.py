@@ -1,17 +1,18 @@
 import asyncio
 
-from sneaker_views_clickhouse_writer.clickhouse_writer.models import db_helper
-from sneaker_views_clickhouse_writer.clickhouse_writer.services.sneaker_view_history.create import (
+from microservices.sneaker_views_clickhouse_writer.sneaker_views_clickhouse_writer.clickhouse_writer.models import \
+    db_helper
+from microservices.sneaker_views_clickhouse_writer.sneaker_views_clickhouse_writer.clickhouse_writer.services.sneaker_view_history.create import (
     create_user_sneaker_view_history_service,
 )
-from sneaker_views_clickhouse_writer.clickhouse_writer.services.sneaker_view_history.fetch import (
+from microservices.sneaker_views_clickhouse_writer.sneaker_views_clickhouse_writer.clickhouse_writer.services.sneaker_view_history.fetch import (
     get_user_sneaker_view_history_service,
 )
 
 
 async def create_user_sneaker_view_history_orchestrator(
-    user_id: int,
-    sneaker_id: int,
+        user_id: int,
+        sneaker_id: int,
 ):
     with db_helper.session_context() as session:
 

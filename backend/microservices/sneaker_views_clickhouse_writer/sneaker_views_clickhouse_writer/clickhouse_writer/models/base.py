@@ -1,8 +1,10 @@
 from sqlalchemy import MetaData
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import declared_attr
-from sneaker_views_clickhouse_writer.clickhouse_writer.config import settings
-from sneaker_views_clickhouse_writer.clickhouse_writer.utils import camel_case_to_snake_case
+from microservices.sneaker_views_clickhouse_writer.sneaker_views_clickhouse_writer.clickhouse_writer.config import \
+    settings
+from microservices.sneaker_views_clickhouse_writer.sneaker_views_clickhouse_writer.clickhouse_writer.utils import \
+    camel_case_to_snake_case
 
 
 class Base(DeclarativeBase):

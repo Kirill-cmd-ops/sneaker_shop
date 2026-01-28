@@ -1,12 +1,12 @@
 from contextlib import asynccontextmanager
 
-import uvicorn
 from fastapi import FastAPI
 
-from kafka.consumer import start_consumer, close_consumer
-from sneaker_views_clickhouse_writer.clickhouse_writer.config import settings
-from sneaker_views_clickhouse_writer.add_middleware import add_middleware
-from sneaker_views_clickhouse_writer.clickhouse_writer.kafka.handlers.sneaker_views import (
+from infrastructure.kafka.consumer import start_consumer, close_consumer
+from microservices.sneaker_views_clickhouse_writer.sneaker_views_clickhouse_writer.clickhouse_writer.config import \
+    settings
+from microservices.sneaker_views_clickhouse_writer.sneaker_views_clickhouse_writer.add_middleware import add_middleware
+from microservices.sneaker_views_clickhouse_writer.sneaker_views_clickhouse_writer.clickhouse_writer.kafka.handlers.sneaker_views import (
     handle_sneaker_viewed_event,
 )
 
@@ -29,14 +29,4 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-
 add_middleware(app=app)
-
-
-if __name__ == "__main__":
-    uvicorn.run(
-        app="main:app",
-        host=settings.run.host,
-        port=settings.run.port,
-        reload=True,
-    )
