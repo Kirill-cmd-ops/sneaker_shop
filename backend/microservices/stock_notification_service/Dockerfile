@@ -1,7 +1,6 @@
 FROM python:3.12-slim
 
-WORKDIR /app/stock_notification_service
-# ENV PYTHONPATH=/app/stock_notification_service/
+WORKDIR /app/backend
 
 RUN pip install --upgrade pip
 
