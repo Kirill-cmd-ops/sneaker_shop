@@ -230,16 +230,11 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./backend/microservices/auth_service:/app/auth_service
-      - ./backend/shared/secrets:/app/secrets
-      - ./kafka:/app/auth_service/kafka
-      - ./redis_client/redis_connection:/app/auth_service/redis_client/redis_connection
-      - ./celery_client:/app/auth_service/celery_client
-      - ./message_sender:/app/auth_service/message_sender
+      - ./backend:/app/backend
     ports:
       - "8002:8002"
-    working_dir: /app/auth_service
-    command: [ "python", "-m", "uvicorn", "auth_service.main:app", "--host", "0.0.0.0", "--port", "8002" , "--reload" ]
+    working_dir: /app/backend
+    command: [ "python", "-m", "uvicorn", "microservices.auth_service.auth_service.main:app", "--host", "0.0.0.0", "--port", "8002" , "--reload" ]
     restart: unless-stopped
 
 
@@ -253,15 +248,10 @@ services:
         condition: service_healthy
       auth_test_db:
         condition: service_healthy
-    working_dir: /app/auth_service
-    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
+    working_dir: /app/backend
+    entrypoint: [ "alembic", "-c", "microservices/auth_service/alembic.ini" ]
     volumes:
-      - ./backend/microservices/auth_service:/app/auth_service
-      - ./backend/shared/secrets:/app/secrets
-      - ./kafka:/app/auth_service/kafka
-      - ./redis_client/redis_connection:/app/auth_service/redis_client/redis_connection
-      - ./celery_client:/app/auth_service/celery_client
-      - ./message_sender:/app/auth_service/message_sender
+      - ./backend:/app/backend
     command: [ "upgrade", "head" ]
 
 
@@ -278,13 +268,11 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./backend/microservices/favorite_service:/app/favorite_service
-      - ./kafka:/app/favorite_service/kafka
-      - ./redis_client/redis_connection:/app/favorite_service/redis_client/redis_connection
+      - ./backend:/app/backend
     ports:
       - "8003:8003"
-    working_dir: /app/favorite_service
-    command: [ "python", "-m", "uvicorn", "favorite_service.main:app", "--host", "0.0.0.0", "--port", "8003", "--reload" ]
+    working_dir: /app/backend
+    command: [ "python", "-m", "uvicorn", "microservices.favorite_service.favorite_service.main:app", "--host", "0.0.0.0", "--port", "8003", "--reload" ]
     restart: unless-stopped
 
 
@@ -296,12 +284,10 @@ services:
     depends_on:
       favorite_db:
         condition: service_healthy
-    working_dir: /app/favorite_service
-    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
+    working_dir: /app/backend
+    entrypoint: [ "alembic", "-c", "microservices/favorite_service/alembic.ini" ]
     volumes:
-      - ./backend/microservices/favorite_service:/app/favorite_service
-      - ./kafka:/app/favorite_service/kafka
-      - ./redis_client/redis_connection:/app/favorite_service/redis_client/redis_connection
+      - ./backend:/app/backend
     command: [ "upgrade", "head" ]
 
 
@@ -318,13 +304,11 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./backend/microservices/cart_service:/app/cart_service
-      - ./kafka:/app/cart_service/kafka
-      - ./redis_client/redis_connection:/app/cart_service/redis_client/redis_connection
+      - ./backend:/app/backend
     ports:
       - "8004:8004"
-    working_dir: /app/cart_service
-    command: [ "python", "-m", "uvicorn", "cart_service.main:app", "--host", "0.0.0.0", "--port", "8004", "--reload" ]
+    working_dir: /app/backend
+    command: [ "python", "-m", "uvicorn", "microservices.cart_service.cart_service.main:app", "--host", "0.0.0.0", "--port", "8004", "--reload" ]
     restart: unless-stopped
 
 
@@ -336,12 +320,10 @@ services:
     depends_on:
       cart_db:
         condition: service_healthy
-    working_dir: /app/cart_service
-    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
+    working_dir: /app/backend
+    entrypoint: [ "alembic", "-c", "microservices/cart_service/alembic.ini" ]
     volumes:
-      - ./backend/microservices/cart_service:/app/cart_service
-      - ./kafka:/app/cart_service/kafka
-      - ./redis_client/redis_connection:/app/cart_service/redis_client/redis_connection
+      - ./backend:/app/backend
     command: [ "upgrade", "head" ]
 
 
@@ -356,12 +338,11 @@ services:
       kafka:
         condition: service_healthy
     volumes:
-      - ./backend/microservices/catalog_service:/app/catalog_service
-      - ./kafka:/app/catalog_service/kafka
-      - ./backend/shared/static:/app/static
+      - ./backend:/app/backend
     ports:
       - "8005:8005"
-    command: [ "python", "-m", "uvicorn", "catalog_service.main:app", "--host", "0.0.0.0", "--port", "8005", "--reload" ]
+    working_dir: /app/backend
+    command: [ "python", "-m", "uvicorn", "microservices.catalog_service.catalog_service.main:app", "--host", "0.0.0.0", "--port", "8005", "--reload" ]
     restart: unless-stopped
 
 
@@ -373,10 +354,10 @@ services:
     depends_on:
       catalog_db:
         condition: service_healthy
-    working_dir: /app/catalog_service
-    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
+    working_dir: /app/backend
+    entrypoint: [ "alembic", "-c", "microservices/catalog_service/alembic.ini" ]
     volumes:
-      - ./backend/microservices/catalog_service:/app/catalog_service
+      - ./backend:/app/backend
     command: [ "upgrade", "head" ]
 
 
@@ -393,12 +374,11 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./backend/microservices/sneaker_details_service:/app/sneaker_details_service
-      - ./kafka:/app/sneaker_details_service/kafka
-      - ./redis_client/redis_connection:/app/sneaker_details_service/redis_client/redis_connection
+      - ./backend:/app/backend
     ports:
       - "8006:8006"
-    command: [ "python", "-m", "uvicorn", "sneaker_details_service.main:app", "--host", "0.0.0.0", "--port", "8006", "--reload" ]
+    working_dir: /app/backend
+    command: [ "python", "-m", "uvicorn", "microservices.sneaker_details_service.sneaker_details_service.main:app", "--host", "0.0.0.0", "--port", "8006", "--reload" ]
     restart: unless-stopped
 
 
@@ -410,11 +390,10 @@ services:
     depends_on:
       sneaker_details_db:
         condition: service_healthy
-    working_dir: /app/sneaker_details_service
-    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
+    working_dir: /app/backend
+    entrypoint: [ "alembic", "-c", "microservices/sneaker_details_service/alembic.ini" ]
     volumes:
-      - ./backend/microservices/sneaker_details_service:/app/sneaker_details_service
-      - ./redis_client/redis_connection:/app/sneaker_details_service/redis_client/redis_connection
+      - ./backend:/app/backend
     command: [ "upgrade", "head" ]
 
 
@@ -427,13 +406,11 @@ services:
       kafka:
         condition: service_healthy
     volumes:
-      - ./backend/microservices/sneaker_views_redis_writer:/app/sneaker_views_redis_writer
-      - ./kafka:/app/sneaker_views_redis_writer/kafka
-      - ./redis_client/redis_connection:/app/sneaker_views_redis_writer/redis_client/redis_connection
+      - ./backend:/app/backend
     ports:
       - "8007:8007"
-    working_dir: /app/sneaker_views_redis_writer
-    command: [ "python", "-m", "uvicorn", "sneaker_views_redis_writer.main:app", "--host", "0.0.0.0", "--port", "8007", "--reload" ]
+    working_dir: /app/backend
+    command: [ "python", "-m", "uvicorn", "microservices.sneaker_views_redis_writer.sneaker_views_redis_writer.main:app", "--host", "0.0.0.0", "--port", "8007", "--reload" ]
     restart: unless-stopped
 
 
@@ -446,12 +423,11 @@ services:
       kafka:
         condition: service_healthy
     volumes:
-      - ./backend/microservices/sneaker_views_clickhouse_writer:/app/sneaker_views_clickhouse_writer
-      - ./kafka:/app/sneaker_views_clickhouse_writer/kafka
+      - ./backend:/app/backend
     ports:
       - "8008:8008"
-    working_dir: /app/sneaker_views_clickhouse_writer
-    command: [ "python", "-m", "uvicorn", "sneaker_views_clickhouse_writer.main:app", "--host", "0.0.0.0", "--port", "8008", "--reload" ]
+    working_dir: /app/backend
+    command: [ "python", "-m", "uvicorn", "microservices.sneaker_views_clickhouse_writer.sneaker_views_clickhouse_writer.main:app", "--host", "0.0.0.0", "--port", "8008", "--reload" ]
     restart: unless-stopped
 
 
@@ -463,12 +439,10 @@ services:
     depends_on:
       clickhouse:
         condition: service_healthy
-    working_dir: /app/sneaker_views_clickhouse_writer
-    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
+    working_dir: /app/backend
+    entrypoint: [ "alembic", "-c", "microservices/sneaker_views_clickhouse_writer/alembic.ini" ]
     volumes:
-      - ./backend/microservices/sneaker_views_clickhouse_writer:/app/sneaker_views_clickhouse_writer
-      - ./kafka:/app/sneaker_views_clickhouse_writer/kafka
-      - ./clickhouse/clickhouse_connection:/app/sneaker_views_clickhouse_writer/clickhouse/clickhouse_connection
+      - ./backend:/app/backend
     command: [ "upgrade", "head" ]
 
 
@@ -483,12 +457,11 @@ services:
       clickhouse:
         condition: service_healthy
     volumes:
-      - ./backend/microservices/sneaker_views_history_service:/app/sneaker_views_history_service
-      - ./redis_client/redis_connection:/app/sneaker_views_history_service/redis_client/redis_connection
+      - ./backend:/app/backend
     ports:
       - "8009:8009"
-    working_dir: /app/sneaker_views_history_service
-    command: [ "python", "-m", "uvicorn", "sneaker_views_history_service.main:app", "--host", "0.0.0.0", "--port", "8009", "--reload" ]
+    working_dir: /app/backend
+    command: [ "python", "-m", "uvicorn", "microservices.sneaker_views_history_service.sneaker_views_history_service.main:app", "--host", "0.0.0.0", "--port", "8009", "--reload" ]
     restart: unless-stopped
 
 
@@ -505,15 +478,11 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./backend/microservices/stock_notification_service:/app/stock_notification_service
-      - ./kafka:/app/stock_notification_service/kafka
-      - ./redis_client/redis_connection:/app/stock_notification_service/redis_client/redis_connection
-      - ./celery_client:/app/stock_notification_service/celery_client
-      - ./message_sender:/app/stock_notification_service/message_sender
+      - ./backend:/app/backend
     ports:
       - "8010:8010"
-    working_dir: /app/stock_notification_service
-    command: [ "python", "-m", "uvicorn", "stock_notification_service.main:app", "--host", "0.0.0.0", "--port", "8010", "--reload" ]
+    working_dir: /app/backend
+    command: [ "python", "-m", "uvicorn", "microservices.stock_notification_service.stock_notification_service.main:app", "--host", "0.0.0.0", "--port", "8010", "--reload" ]
     restart: unless-stopped
 
 
@@ -525,14 +494,10 @@ services:
     depends_on:
       stock_notification_db:
         condition: service_healthy
-    working_dir: /app/stock_notification_service
-    entrypoint: [ "poetry", "run", "alembic", "-c", "alembic.ini" ]
+    working_dir: /app/backend
+    entrypoint: [ "alembic", "-c", "microservices/stock_notification_service/alembic.ini" ]
     volumes:
-      - ./backend/microservices/stock_notification_service:/app/stock_notification_service
-      - ./kafka:/app/stock_notification_service/kafka
-      - ./redis_client/redis_connection:/app/stock_notification_service/redis_client/redis_connection
-      - ./celery_client:/app/stock_notification_service/celery_client
-      - ./message_sender:/app/stock_notification_service/message_sender
+      - ./backend:/app/backend
     command: [ "upgrade", "head" ]
 
 
@@ -577,7 +542,7 @@ services:
              kong config db_import /etc/kong/kong.yml && 
              kong start"
     volumes:
-      - ./kong/kong.yml:/etc/kong/kong.yml
+      - ./infra/kong/kong.yml:/etc/kong/kong.yml
 
 
   nginx:
@@ -586,7 +551,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./infra/nginx/conf.d:/etc/nginx/conf.d
 
   kafka:
     image: bitnamilegacy/kafka:4.0.0
@@ -644,8 +609,8 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./redis_client/redis_data:/data
-      - ./redis_client/redis_config/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./backend/infrastructure/redis_client/redis_data:/data
+      - ./backend/infrastructure/redis_client/redis_config/redis.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
@@ -660,8 +625,8 @@ services:
     ports:
       - "6380:6379"
     volumes:
-      - ./redis_client/redis_cache_data:/data
-      - ./redis_client/redis_config/redis_cache.conf:/usr/local/etc/redis/redis.conf
+      - ./backend/infrastructure/redis_client/redis_cache_data:/data
+      - ./backend/infrastructure/redis_client/redis_config/redis_cache.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
@@ -676,8 +641,8 @@ services:
     ports:
       - "6381:6379"
     volumes:
-      - ./redis_client/redis_queue_data:/data
-      - ./redis_client/redis_config/redis_queue.conf:/usr/local/etc/redis/redis.conf
+      - ./backend/infrastructure/redis_client/redis_queue_data:/data
+      - ./backend/infrastructure/redis_client/redis_config/redis_queue.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
@@ -686,35 +651,27 @@ services:
 
 
   celery_worker_auth:
-    image: python:3.12-slim
+    build:
+      context: ./backend/microservices/auth_service
+      dockerfile: Dockerfile
     container_name: celery_worker_auth
-    command: >
-      sh -c "
-      pip install celery redis &&
-      celery -A celery_tasks.auth_tasks:celery_client worker --loglevel=info
-      "
+    command: celery -A microservices.auth_service.auth_service.auth.celery_tasks.auth_tasks:celery_client worker --loglevel=info
     volumes:
-      - ./backend/microservices/auth_service/auth_service/auth/celery_tasks:/app/celery_tasks
-      - ./celery_client:/app/celery_client
-      - ./message_sender:/app/message_sender
-    working_dir: /app
+      - ./backend:/app/backend
+    working_dir: /app/backend
     depends_on:
       - redis_queue
 
 
   celery_worker_stock_notification:
-    image: python:3.12-slim
+    build:
+      context: ./backend/microservices/stock_notification_service
+      dockerfile: Dockerfile
     container_name: celery_worker_stock_notification
-    command: >
-      sh -c "
-      pip install celery redis &&
-      celery -A celery_tasks.sneaker_size_quantity:celery_client worker --loglevel=info
-      "
+    command: celery -A microservices.stock_notification_service.stock_notification_service.stock_notification.celery_tasks.sneaker_size_quantity:celery_client worker --loglevel=info
     volumes:
-      - ./backend/microservices/stock_notification_service/stock_notification_service/stock_notification/celery_tasks:/app/celery_tasks
-      - ./celery_client:/app/celery_client
-      - ./message_sender:/app/message_sender
-    working_dir: /app
+      - ./backend:/app/backend
+    working_dir: /app/backend
     depends_on:
       - redis_queue
 
@@ -725,8 +682,8 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - ./clickhouse/clickhouse_data:/var/lib/clickhouse
-      - ./clickhouse/clickhouse_log:/var/log/clickhouse-server
+      - ./backend/infrastructure/clickhouse/clickhouse_data:/var/lib/clickhouse
+      - ./backend/infrastructure/clickhouse/clickhouse_log:/var/log/clickhouse-server
     environment:
       CLICKHOUSE_USER: "kirill"
       CLICKHOUSE_PASSWORD: "Meteor906587"
