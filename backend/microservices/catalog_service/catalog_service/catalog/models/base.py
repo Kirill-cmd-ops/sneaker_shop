@@ -1,8 +1,8 @@
 from sqlalchemy import MetaData
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import declared_attr
-from catalog_service.catalog.config import settings
-from catalog_service.utils import camel_case_to_snake_case
+from microservices.catalog_service.catalog_service.catalog.config import settings
+from microservices.catalog_service.catalog_service.utils import camel_case_to_snake_case
 
 
 class Base(DeclarativeBase):

@@ -3,21 +3,20 @@ from asyncio import create_task
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from catalog_service.catalog.config import settings
-from catalog_service.catalog.kafka.handlers.brands import handle_brand_event
-from catalog_service.catalog.kafka.handlers.sizes import handle_size_event
-from catalog_service.catalog.kafka.handlers.sneakers import handle_sneaker_event
-from catalog_service.catalog.kafka.handlers.sneaker_sizes import (
+from microservices.catalog_service.catalog_service.catalog.config import settings
+from microservices.catalog_service.catalog_service.catalog.kafka.handlers.brands import handle_brand_event
+from microservices.catalog_service.catalog_service.catalog.kafka.handlers.sizes import handle_size_event
+from microservices.catalog_service.catalog_service.catalog.kafka.handlers.sneakers import handle_sneaker_event
+from microservices.catalog_service.catalog_service.catalog.kafka.handlers.sneaker_sizes import (
     handle_sneaker_sizes_event,
 )
-from catalog_service.catalog.models import db_helper
-from catalog_service.add_middleware import add_middleware
-from catalog_service import router as catalog_router
-from kafka.consumer import start_consumer, close_consumer
+from microservices.catalog_service.catalog_service.catalog.models import db_helper
+from microservices.catalog_service.catalog_service.add_middleware import add_middleware
+from microservices.catalog_service.catalog_service import router as catalog_router
+from infrastructure.kafka.consumer import start_consumer, close_consumer
 
 
 @asynccontextmanager
@@ -83,7 +82,6 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-
 add_middleware(app=app)
 
 app.include_router(
@@ -109,12 +107,3 @@ if static_path.exists():
         print(f"⚠️  Папка uploads не найдена: {uploads_path}")
 else:
     print(f"⚠️  Папка static не найдена: {static_path}")
-
-
-if __name__ == "__main__":
-    uvicorn.run(
-        app="main:app",
-        host=settings.run.host,
-        port=settings.run.port,
-        reload=True,
-    )

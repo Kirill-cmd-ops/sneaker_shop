@@ -1,7 +1,7 @@
-from catalog_service.catalog.schemas import SneakerCreate, SneakerUpdate
-from catalog_service.catalog.services.sneaker.create import create_sneaker_service
-from catalog_service.catalog.services.sneaker.delete import delete_sneaker_service
-from catalog_service.catalog.services.sneaker.update import update_sneaker_service
+from microservices.catalog_service.catalog_service.catalog.schemas import SneakerCreate, SneakerUpdate
+from microservices.catalog_service.catalog_service.catalog.services.sneaker.create import create_sneaker_service
+from microservices.catalog_service.catalog_service.catalog.services.sneaker.delete import delete_sneaker_service
+from microservices.catalog_service.catalog_service.catalog.services.sneaker.update import update_sneaker_service
 
 
 async def handle_sneaker_event(key: str | None, value: dict):

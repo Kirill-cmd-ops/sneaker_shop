@@ -1,16 +1,16 @@
-from catalog_service.catalog.models import db_helper, SneakerSizeAssociation
-from catalog_service.catalog.schemas import (
+from microservices.catalog_service.catalog_service.catalog.models import db_helper, SneakerSizeAssociation
+from microservices.catalog_service.catalog_service.catalog.schemas import (
     SneakerSizesCreate,
     SneakerSizeUpdate,
     SneakerAssocsDelete,
 )
-from catalog_service.catalog.services.sneaker_association.delete import (
+from microservices.catalog_service.catalog_service.catalog.services.sneaker_association.delete import (
     delete_sneaker_associations_service,
 )
-from catalog_service.catalog.services.sneaker_size.create import (
+from microservices.catalog_service.catalog_service.catalog.services.sneaker_size.create import (
     add_sizes_to_sneaker_service,
 )
-from catalog_service.catalog.services.sneaker_size.update import (
+from microservices.catalog_service.catalog_service.catalog.services.sneaker_size.update import (
     update_sneaker_size_quantity_service,
 )
 

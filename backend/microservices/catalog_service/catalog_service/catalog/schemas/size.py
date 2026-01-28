@@ -1,6 +1,4 @@
-from pydantic import BaseModel
-
-from pydantic import condecimal
+from pydantic import BaseModel, condecimal
 
 
 class SizeCreate(BaseModel):

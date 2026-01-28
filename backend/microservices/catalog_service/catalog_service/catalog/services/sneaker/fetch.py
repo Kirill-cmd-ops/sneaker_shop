@@ -1,29 +1,24 @@
-from typing import Optional
-
-from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import contains_eager
 
-from catalog_service.catalog.models import Sneaker, Brand, SneakerSizeAssociation, Size
-
+from microservices.catalog_service.catalog_service.catalog.models import Sneaker, Brand, SneakerSizeAssociation, Size
 
 from sqlalchemy import func, select
-from sqlalchemy.orm import contains_eager, selectinload
+from sqlalchemy.orm import selectinload
 from typing import Optional, Dict, Any
 
 
 async def get_sneakers_service(
-    session: AsyncSession,
-    page: Optional[int] = 1,
-    limit: Optional[int] = 30,
-    name: Optional[str] = None,
-    min_price: Optional[float] = None,
-    max_price: Optional[float] = None,
-    gender: Optional[str] = None,
-    brand_name: Optional[str] = None,
-    size: Optional[float] = None,
-    sort_by: Optional[str] = None,
-    order: Optional[str] = "asc",
+        session: AsyncSession,
+        page: Optional[int] = 1,
+        limit: Optional[int] = 30,
+        name: Optional[str] = None,
+        min_price: Optional[float] = None,
+        max_price: Optional[float] = None,
+        gender: Optional[str] = None,
+        brand_name: Optional[str] = None,
+        size: Optional[float] = None,
+        sort_by: Optional[str] = None,
+        order: Optional[str] = "asc",
 ) -> Dict[str, Any]:
     """
     Получение списка кроссовок с фильтрацией и пагинацией.

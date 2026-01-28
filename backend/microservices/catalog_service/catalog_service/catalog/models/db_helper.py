@@ -8,16 +8,17 @@ from sqlalchemy.ext.asyncio import (
     AsyncSession,
 )
 
-from catalog_service.catalog.config import settings
+from microservices.catalog_service.catalog_service.catalog.config import settings
+
 
 class DatabaseHelper:
     def __init__(
-        self,
-        url: str,
-        echo: bool = False,
-        echo_pool: bool = False,
-        pool_size: int = 5,
-        max_overflow: int = 10,
+            self,
+            url: str,
+            echo: bool = False,
+            echo_pool: bool = False,
+            pool_size: int = 5,
+            max_overflow: int = 10,
     ) -> None:
         self.engine: AsyncEngine = create_async_engine(
             url=url,

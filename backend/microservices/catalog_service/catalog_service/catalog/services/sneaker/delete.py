@@ -1,10 +1,10 @@
 from sqlalchemy import delete
 
-from catalog_service.catalog.models import SneakerSizeAssociation, Sneaker, db_helper
+from microservices.catalog_service.catalog_service.catalog.models import SneakerSizeAssociation, Sneaker, db_helper
 
 
 async def delete_sneaker_service(
-    sneaker_id: int,
+        sneaker_id: int,
 ):
     async with db_helper.session_context() as session:
         async with session.begin():

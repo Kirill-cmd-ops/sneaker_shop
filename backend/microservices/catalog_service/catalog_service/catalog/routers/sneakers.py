@@ -3,9 +3,9 @@ from typing import Optional
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from catalog_service.catalog.config import settings
-from catalog_service.catalog.models import db_helper
-from catalog_service.catalog.services.sneaker.fetch import get_sneakers_service
+from microservices.catalog_service.catalog_service.catalog.config import settings
+from microservices.catalog_service.catalog_service.catalog.models import db_helper
+from microservices.catalog_service.catalog_service.catalog.services.sneaker.fetch import get_sneakers_service
 
 router = APIRouter(
     prefix=settings.api.build_path(
@@ -18,17 +18,17 @@ router = APIRouter(
 
 @router.get("/")
 async def get_sneakers(
-    session: AsyncSession = Depends(db_helper.session_getter),
-    page: Optional[int] = 1,
-    limit: Optional[int] = 30,
-    name: Optional[str] = None,
-    min_price: Optional[float] = None,
-    max_price: Optional[float] = None,
-    gender: Optional[str] = None,
-    brand_name: Optional[str] = None,
-    size: Optional[float] = None,
-    sort_by: Optional[str] = None,
-    order: Optional[str] = "asc",
+        session: AsyncSession = Depends(db_helper.session_getter),
+        page: Optional[int] = 1,
+        limit: Optional[int] = 30,
+        name: Optional[str] = None,
+        min_price: Optional[float] = None,
+        max_price: Optional[float] = None,
+        gender: Optional[str] = None,
+        brand_name: Optional[str] = None,
+        size: Optional[float] = None,
+        sort_by: Optional[str] = None,
+        order: Optional[str] = "asc",
 ):
     return await get_sneakers_service(
         session=session,

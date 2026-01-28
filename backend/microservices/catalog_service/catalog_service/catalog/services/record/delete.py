@@ -1,11 +1,11 @@
 from sqlalchemy import delete
 
-from catalog_service.catalog.models import db_helper
+from microservices.catalog_service.catalog_service.catalog.models import db_helper
 
 
 async def delete_record_service(
-    table_name,
-    record_id,
+        table_name,
+        record_id,
 ):
     async with db_helper.session_context() as session:
         async with session.begin():

@@ -1,10 +1,10 @@
-from catalog_service.catalog.models import Sneaker, db_helper
-from catalog_service.catalog.schemas import SneakerUpdate
+from microservices.catalog_service.catalog_service.catalog.models import Sneaker, db_helper
+from microservices.catalog_service.catalog_service.catalog.schemas import SneakerUpdate
 
 
 async def update_sneaker_service(
-    sneaker_id: int,
-    sneaker_update: SneakerUpdate,
+        sneaker_id: int,
+        sneaker_update: SneakerUpdate,
 ):
     async with db_helper.session_context() as session:
         async with session.begin():

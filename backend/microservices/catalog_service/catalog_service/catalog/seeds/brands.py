@@ -1,6 +1,7 @@
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
-from catalog_service.catalog.models import Brand
+from microservices.catalog_service.catalog_service.catalog.models import Brand
+
 
 async def seed_brands(session: AsyncSession):
     brands = [

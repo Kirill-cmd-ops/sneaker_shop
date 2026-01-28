@@ -1,7 +1,7 @@
-from catalog_service.catalog.models import db_helper, Size
-from catalog_service.catalog.schemas import SizeCreate
-from catalog_service.catalog.services.record.create import create_record_service
-from catalog_service.catalog.services.record.delete import delete_record_service
+from microservices.catalog_service.catalog_service.catalog.models import db_helper, Size
+from microservices.catalog_service.catalog_service.catalog.schemas import SizeCreate
+from microservices.catalog_service.catalog_service.catalog.services.record.create import create_record_service
+from microservices.catalog_service.catalog_service.catalog.services.record.delete import delete_record_service
 
 
 async def handle_size_event(key: str | None, value: dict):

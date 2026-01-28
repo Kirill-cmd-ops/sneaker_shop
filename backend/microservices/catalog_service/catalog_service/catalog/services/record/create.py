@@ -1,11 +1,11 @@
 from typing import Callable
 
-from catalog_service.catalog.models import db_helper
+from microservices.catalog_service.catalog_service.catalog.models import db_helper
 
 
 async def create_record_service(
-    table_name: Callable,
-    schema_create,
+        table_name: Callable,
+        schema_create,
 ):
     async with db_helper.session_context() as session:
         async with session.begin():
