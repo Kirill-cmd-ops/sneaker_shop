@@ -1,13 +1,13 @@
 from fastapi.encoders import jsonable_encoder
 
-from sneaker_details_service.sneaker_details.config import settings
-from sneaker_details_service.sneaker_details.schemas import BrandCreate
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import BrandCreate
 
 
 async def publish_brand_created(
-    producer,
-    brand_id: int,
-    brand_create: BrandCreate,
+        producer,
+        brand_id: int,
+        brand_create: BrandCreate,
 ):
     brand_create_payload = {
         "event_type": "brand_created",

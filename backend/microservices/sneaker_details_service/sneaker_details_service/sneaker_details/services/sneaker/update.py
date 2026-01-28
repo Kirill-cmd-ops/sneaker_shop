@@ -1,13 +1,13 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.models import Sneaker
-from sneaker_details_service.sneaker_details.schemas import SneakerUpdate
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import Sneaker
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import SneakerUpdate
 
 
 async def update_sneaker_service(
-    session: AsyncSession,
-    sneaker_id: int,
-    sneaker_update: SneakerUpdate,
+        session: AsyncSession,
+        sneaker_id: int,
+        sneaker_update: SneakerUpdate,
 ):
     async with session.begin():
         sneaker = await session.get(Sneaker, sneaker_id)

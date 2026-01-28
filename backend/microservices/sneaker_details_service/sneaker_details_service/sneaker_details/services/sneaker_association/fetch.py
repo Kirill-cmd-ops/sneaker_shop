@@ -3,13 +3,13 @@ from typing import Type
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.models import Base
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import Base
 
 
 async def get_sneaker_associations_service(
-    session: AsyncSession,
-    sneaker_association_model: Type[Base],
-    sneaker_id: int,
+        session: AsyncSession,
+        sneaker_association_model: Type[Base],
+        sneaker_id: int,
 ):
     """
     Функция для чтения записи в ассоциативных таблицах

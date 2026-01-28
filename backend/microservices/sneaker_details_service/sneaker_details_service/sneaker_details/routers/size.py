@@ -3,21 +3,21 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.config import settings
-from sneaker_details_service.sneaker_details.dependencies.kafka_producer import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.dependencies.kafka_producer import (
     get_kafka_producer,
 )
-from sneaker_details_service.sneaker_details.kafka.producers.sizes import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.kafka.producers.sizes import (
     publish_size_created,
     publish_size_deleted,
 )
 
-from sneaker_details_service.sneaker_details.models import db_helper, Size
-from sneaker_details_service.sneaker_details.schemas.size import SizeCreate
-from sneaker_details_service.sneaker_details.services.record.create import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import db_helper, Size
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas.size import SizeCreate
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.record.create import (
     create_record_service,
 )
-from sneaker_details_service.sneaker_details.services.record.delete import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.record.delete import (
     delete_record_service,
 )
 
@@ -33,9 +33,9 @@ router = APIRouter(
 
 @router.post("/")
 async def create_size(
-    size_create: SizeCreate,
-    session: AsyncSession = Depends(db_helper.session_getter),
-    producer: AIOKafkaProducer = Depends(get_kafka_producer),
+        size_create: SizeCreate,
+        session: AsyncSession = Depends(db_helper.session_getter),
+        producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     new_size = await create_record_service(
         session=session,
@@ -53,9 +53,9 @@ async def create_size(
 
 @router.delete("/{size_id}")
 async def delete_size(
-    size_id: int,
-    session: AsyncSession = Depends(db_helper.session_getter),
-    producer: AIOKafkaProducer = Depends(get_kafka_producer),
+        size_id: int,
+        session: AsyncSession = Depends(db_helper.session_getter),
+        producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     result = await delete_record_service(
         session=session,
@@ -66,9 +66,10 @@ async def delete_size(
     await publish_size_deleted(producer=producer, size_id=size_id)
     return result
 
+
 @router.get("/{size_id}")
 async def get_brand(
-    size_id: int,
-    session: AsyncSession = Depends(db_helper.session_getter),
+        size_id: int,
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await session.scalar(select(Size.eu_size).where(Size.id == size_id))

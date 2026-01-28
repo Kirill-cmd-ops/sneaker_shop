@@ -1,10 +1,10 @@
-from sneaker_details_service.sneaker_details.config import settings
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 
 
 async def publish_sneaker_viewed(
-    producer,
-    sneaker_id: int,
-    user_id: int,
+        producer,
+        sneaker_id: int,
+        user_id: int,
 ):
     payload = {"user_id": user_id, "sneaker_id": sneaker_id}
 

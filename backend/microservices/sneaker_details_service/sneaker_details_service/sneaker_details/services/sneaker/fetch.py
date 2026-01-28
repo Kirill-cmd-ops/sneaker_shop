@@ -2,12 +2,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
 
-from sneaker_details_service.sneaker_details.models import Sneaker
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import Sneaker
 
 
 async def get_sneaker_service(
-    session: AsyncSession,
-    sneaker_id: int,
+        session: AsyncSession,
+        sneaker_id: int,
 ):
     async with session.begin():
         stmt = (

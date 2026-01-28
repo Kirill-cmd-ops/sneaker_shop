@@ -1,14 +1,14 @@
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.models import SneakerSizeAssociation
-from sneaker_details_service.sneaker_details.schemas import SneakerSizesCreate
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import SneakerSizeAssociation
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import SneakerSizesCreate
 
 
 async def add_sizes_to_sneaker_service(
-    session: AsyncSession,
-    sneaker_id: int,
-    sneaker_sizes_create: SneakerSizesCreate,
+        session: AsyncSession,
+        sneaker_id: int,
+        sneaker_sizes_create: SneakerSizesCreate,
 ):
     sneaker_sizes = [
         {

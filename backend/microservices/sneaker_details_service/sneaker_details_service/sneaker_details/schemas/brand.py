@@ -1,6 +1,7 @@
 from pydantic import Field
 
-from sneaker_details_service.sneaker_details.schemas.mixins.record import RecordCreateMixin
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas.mixins.record import \
+    RecordCreateMixin
 
 
 class BrandGeneral(RecordCreateMixin):

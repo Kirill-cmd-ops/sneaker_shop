@@ -3,9 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def delete_record_service(
-    session: AsyncSession,
-    table_name,
-    record_id,
+        session: AsyncSession,
+        table_name,
+        record_id,
 ):
     async with session.begin():
         delete_record_request = delete(table_name).where(table_name.id == record_id)

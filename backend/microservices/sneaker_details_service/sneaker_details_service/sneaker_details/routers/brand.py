@@ -4,21 +4,21 @@ from fastapi.params import Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.config import settings
-from sneaker_details_service.sneaker_details.dependencies.kafka_producer import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.dependencies.kafka_producer import (
     get_kafka_producer,
 )
-from sneaker_details_service.sneaker_details.kafka.producers.brands import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.kafka.producers.brands import (
     publish_brand_created,
     publish_brand_deleted,
 )
 
-from sneaker_details_service.sneaker_details.models import db_helper, Brand
-from sneaker_details_service.sneaker_details.schemas.brand import BrandCreate
-from sneaker_details_service.sneaker_details.services.record.create import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import db_helper, Brand
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas.brand import BrandCreate
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.record.create import (
     create_record_service,
 )
-from sneaker_details_service.sneaker_details.services.record.delete import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.record.delete import (
     delete_record_service,
 )
 
@@ -34,9 +34,9 @@ router = APIRouter(
 
 @router.post("/")
 async def create_brand(
-    brand_create: BrandCreate,
-    session: AsyncSession = Depends(db_helper.session_getter),
-    producer: AIOKafkaProducer = Depends(get_kafka_producer),
+        brand_create: BrandCreate,
+        session: AsyncSession = Depends(db_helper.session_getter),
+        producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     new_brand = await create_record_service(
         session=session,
@@ -54,9 +54,9 @@ async def create_brand(
 
 @router.delete("/{brand_id}")
 async def delete_brand(
-    brand_id: int,
-    session: AsyncSession = Depends(db_helper.session_getter),
-    producer: AIOKafkaProducer = Depends(get_kafka_producer),
+        brand_id: int,
+        session: AsyncSession = Depends(db_helper.session_getter),
+        producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     result = await delete_record_service(
         session=session,
@@ -70,7 +70,7 @@ async def delete_brand(
 
 @router.get("/{brand_id}")
 async def get_brand(
-    brand_id: int,
-    session: AsyncSession = Depends(db_helper.session_getter),
+        brand_id: int,
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await session.scalar(select(Brand.name).where(Brand.id == brand_id))

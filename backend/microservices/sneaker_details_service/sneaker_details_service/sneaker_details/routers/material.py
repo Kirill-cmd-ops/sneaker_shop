@@ -1,13 +1,14 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.config import settings
-from sneaker_details_service.sneaker_details.models import db_helper, Material
-from sneaker_details_service.sneaker_details.schemas.material import MaterialCreate
-from sneaker_details_service.sneaker_details.services.record.create import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import db_helper, Material
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas.material import \
+    MaterialCreate
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.record.create import (
     create_record_service,
 )
-from sneaker_details_service.sneaker_details.services.record.delete import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.record.delete import (
     delete_record_service,
 )
 
@@ -23,8 +24,8 @@ router = APIRouter(
 
 @router.post("/")
 async def create_material(
-    material_create: MaterialCreate,
-    session: AsyncSession = Depends(db_helper.session_getter),
+        material_create: MaterialCreate,
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await create_record_service(
         session=session,
@@ -35,8 +36,8 @@ async def create_material(
 
 @router.delete("/{material_id}")
 async def delete_material(
-    material_id: int,
-    session: AsyncSession = Depends(db_helper.session_getter),
+        material_id: int,
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await delete_record_service(
         session=session,

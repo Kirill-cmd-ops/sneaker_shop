@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.config import settings
-from sneaker_details_service.sneaker_details.models import db_helper, Color
-from sneaker_details_service.sneaker_details.schemas.color import ColorCreate
-from sneaker_details_service.sneaker_details.services.record.create import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import db_helper, Color
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas.color import ColorCreate
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.record.create import (
     create_record_service,
 )
-from sneaker_details_service.sneaker_details.services.record.delete import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.record.delete import (
     delete_record_service,
 )
 
@@ -23,8 +23,8 @@ router = APIRouter(
 
 @router.post("/")
 async def create_color(
-    color_create: ColorCreate,
-    session: AsyncSession = Depends(db_helper.session_getter),
+        color_create: ColorCreate,
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await create_record_service(
         session=session,
@@ -35,8 +35,8 @@ async def create_color(
 
 @router.delete("/{color_id}")
 async def delete_color(
-    color_id: int,
-    session: AsyncSession = Depends(db_helper.session_getter),
+        color_id: int,
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await delete_record_service(
         session=session,

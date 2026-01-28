@@ -4,16 +4,16 @@ from fastapi import HTTPException
 from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.models import Base
-from sneaker_details_service.sneaker_details.schemas import SneakerAssocsDelete
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import Base
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import SneakerAssocsDelete
 
 
 async def delete_sneaker_associations_service(
-    session: AsyncSession,
-    sneaker_id: int,
-    sneaker_assoc_delete: SneakerAssocsDelete,
-    sneaker_association_model: Type[Base],
-    field_name: str,
+        session: AsyncSession,
+        sneaker_id: int,
+        sneaker_assoc_delete: SneakerAssocsDelete,
+        sneaker_association_model: Type[Base],
+        field_name: str,
 ):
     """
     Функция для одаления записи в ассоциативной таблице

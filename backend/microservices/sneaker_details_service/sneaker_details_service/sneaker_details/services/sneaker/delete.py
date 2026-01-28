@@ -1,7 +1,7 @@
 from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.models import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import (
     SneakerSizeAssociation,
     SneakerColorAssociation,
     SneakerMaterialAssociation,

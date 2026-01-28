@@ -1,6 +1,6 @@
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
-from sneaker_details_service.sneaker_details.models import Material
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import Material
 
 
 async def seed_materials(session: AsyncSession):

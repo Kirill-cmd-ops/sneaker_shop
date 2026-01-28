@@ -1,26 +1,26 @@
 from fastapi import Depends, APIRouter
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.config import settings
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 
-from sneaker_details_service.sneaker_details.models import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import (
     SneakerMaterialAssociation,
     db_helper,
 )
-from sneaker_details_service.sneaker_details.schemas import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import (
     SneakerAssocsCreate,
     SneakerAssocsDelete,
 )
-from sneaker_details_service.sneaker_details.dependencies.permissions import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.dependencies.permissions import (
     check_role_permissions,
 )
-from sneaker_details_service.sneaker_details.services.sneaker_association.create import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.sneaker_association.create import (
     create_sneaker_associations_service,
 )
-from sneaker_details_service.sneaker_details.services.sneaker_association.delete import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.sneaker_association.delete import (
     delete_sneaker_associations_service,
 )
-from sneaker_details_service.sneaker_details.services.sneaker_association.fetch import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.sneaker_association.fetch import (
     get_sneaker_associations_service,
 )
 
@@ -39,9 +39,9 @@ router = APIRouter(
     dependencies=(Depends(check_role_permissions("details.sneaker.material.create")),),
 )
 async def add_materials_to_sneaker(
-    sneaker_id: int,
-    sneaker_associations_create: SneakerAssocsCreate,
-    session: AsyncSession = Depends(db_helper.session_getter),
+        sneaker_id: int,
+        sneaker_associations_create: SneakerAssocsCreate,
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     await create_sneaker_associations_service(
         session=session,
@@ -58,9 +58,9 @@ async def add_materials_to_sneaker(
     dependencies=(Depends(check_role_permissions("details.sneaker.material.delete")),),
 )
 async def delete_materials_from_sneaker(
-    sneaker_id: int,
-    sneaker_assoc_delete: SneakerAssocsDelete,
-    session: AsyncSession = Depends(db_helper.session_getter),
+        sneaker_id: int,
+        sneaker_assoc_delete: SneakerAssocsDelete,
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     await delete_sneaker_associations_service(
         session=session,
@@ -77,8 +77,8 @@ async def delete_materials_from_sneaker(
     dependencies=(Depends(check_role_permissions("details.sneaker.material.view")),),
 )
 async def get_sneaker_materials(
-    sneaker_id: int,
-    session: AsyncSession = Depends(db_helper.session_getter),
+        sneaker_id: int,
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await get_sneaker_associations_service(
         session=session,

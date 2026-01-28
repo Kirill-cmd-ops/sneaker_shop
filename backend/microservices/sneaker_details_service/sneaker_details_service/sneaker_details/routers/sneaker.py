@@ -2,40 +2,40 @@ from aiokafka import AIOKafkaProducer
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sneaker_details_service.sneaker_details.dependencies.user_id import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.dependencies.user_id import (
     get_current_user_id,
 )
-from sneaker_details_service.sneaker_details.kafka.producers.sneaker_views import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.kafka.producers.sneaker_views import (
     publish_sneaker_viewed,
 )
-from sneaker_details_service.sneaker_details.dependencies.permissions import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.dependencies.permissions import (
     check_role_permissions,
 )
-from sneaker_details_service.sneaker_details.config import settings
-from sneaker_details_service.sneaker_details.dependencies.kafka_producer import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.dependencies.kafka_producer import (
     get_kafka_producer,
 )
-from sneaker_details_service.sneaker_details.kafka.producers.sneakers import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.kafka.producers.sneakers import (
     publish_sneaker_created,
     publish_sneaker_updated,
     publish_sneaker_deleted,
 )
-from sneaker_details_service.sneaker_details.models import db_helper
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import db_helper
 
-from sneaker_details_service.sneaker_details.schemas import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import (
     SneakerCreate,
     SneakerUpdate,
 )
-from sneaker_details_service.sneaker_details.services.sneaker.create import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.sneaker.create import (
     create_sneaker_service,
 )
-from sneaker_details_service.sneaker_details.services.sneaker.delete import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.sneaker.delete import (
     delete_sneaker_service,
 )
-from sneaker_details_service.sneaker_details.services.sneaker.fetch import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.sneaker.fetch import (
     get_sneaker_service,
 )
-from sneaker_details_service.sneaker_details.services.sneaker.update import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.sneaker.update import (
     update_sneaker_service,
 )
 
@@ -54,9 +54,9 @@ router = APIRouter(
     dependencies=(Depends(check_role_permissions("details.sneaker.create")),),
 )
 async def create_sneaker(
-    sneaker_create: SneakerCreate,
-    session: AsyncSession = Depends(db_helper.session_getter),
-    producer: AIOKafkaProducer = Depends(get_kafka_producer),
+        sneaker_create: SneakerCreate,
+        session: AsyncSession = Depends(db_helper.session_getter),
+        producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     sneaker = await create_sneaker_service(
         session=session,
@@ -76,9 +76,9 @@ async def create_sneaker(
     dependencies=(Depends(check_role_permissions("details.sneaker.delete")),),
 )
 async def delete_sneaker(
-    sneaker_id: int,
-    session: AsyncSession = Depends(db_helper.session_getter),
-    producer: AIOKafkaProducer = Depends(get_kafka_producer),
+        sneaker_id: int,
+        session: AsyncSession = Depends(db_helper.session_getter),
+        producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     await delete_sneaker_service(
         session=session,
@@ -94,10 +94,10 @@ async def delete_sneaker(
     dependencies=(Depends(check_role_permissions("details.sneaker.update")),),
 )
 async def update_sneaker(
-    sneaker_id: int,
-    sneaker_update: SneakerUpdate,
-    session: AsyncSession = Depends(db_helper.session_getter),
-    producer: AIOKafkaProducer = Depends(get_kafka_producer),
+        sneaker_id: int,
+        sneaker_update: SneakerUpdate,
+        session: AsyncSession = Depends(db_helper.session_getter),
+        producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
     await update_sneaker_service(
         session=session,
@@ -115,10 +115,10 @@ async def update_sneaker(
 
 @router.get("/{sneaker_id}")
 async def get_sneaker(
-    sneaker_id: int,
-    session: AsyncSession = Depends(db_helper.session_getter),
-    producer: AIOKafkaProducer = Depends(get_kafka_producer),
-    user_id: int = Depends(get_current_user_id),
+        sneaker_id: int,
+        session: AsyncSession = Depends(db_helper.session_getter),
+        producer: AIOKafkaProducer = Depends(get_kafka_producer),
+        user_id: int = Depends(get_current_user_id),
 ):
     sneaker_info = await get_sneaker_service(
         session=session,

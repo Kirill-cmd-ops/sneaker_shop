@@ -3,9 +3,11 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, condecimal
 
+
 class SneakerSizeQuantity(BaseModel):
     size_id: int
     quantity: int = 0
+
 
 class SneakerUpdate(BaseModel):
     name: Optional[str] = Field(None, max_length=100)

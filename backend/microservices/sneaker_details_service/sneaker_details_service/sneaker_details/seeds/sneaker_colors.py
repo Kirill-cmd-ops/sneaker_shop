@@ -1,16 +1,11 @@
 from sqlalchemy.dialects.postgresql import insert
-from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sneaker_details_service.sneaker_details.models import (
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import (
     SneakerColorAssociation,
-    Sneaker,
-    Color,
 )
-import random
 
 
 async def seed_sneaker_colors(session: AsyncSession):
-
     sneaker_colors = [
         {"sneaker_id": 1, "color_id": 4},
         {"sneaker_id": 2, "color_id": 5},

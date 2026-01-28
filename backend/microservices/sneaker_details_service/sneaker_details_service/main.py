@@ -1,13 +1,12 @@
 from contextlib import asynccontextmanager
 
-import uvicorn
 from fastapi import FastAPI
 
-from kafka.producer import start_producer, close_producer
-from sneaker_details_service.sneaker_details.config import settings
-from sneaker_details_service.sneaker_details.models import db_helper
-from sneaker_details_service.add_middleware import add_middleware
-from sneaker_details_service import router as sneaker_details_router
+from infrastructure.kafka.producer import start_producer, close_producer
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import db_helper
+from microservices.sneaker_details_service.sneaker_details_service.add_middleware import add_middleware
+from microservices.sneaker_details_service.sneaker_details_service import router as sneaker_details_router
 
 
 @asynccontextmanager
@@ -25,18 +24,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-
 add_middleware(app=app)
 
 app.include_router(
     sneaker_details_router,
 )
-
-
-if __name__ == "__main__":
-    uvicorn.run(
-        app="main:app",
-        host=settings.run.host,
-        port=settings.run.port,
-        reload=True,
-    )
