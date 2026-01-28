@@ -1,7 +1,6 @@
 FROM python:3.12-slim
 
-WORKDIR /app/cart_service
-# ENV PYTHONPATH=/app/cart_service/
+WORKDIR /app/backend
 
 RUN pip install --upgrade pip
 
