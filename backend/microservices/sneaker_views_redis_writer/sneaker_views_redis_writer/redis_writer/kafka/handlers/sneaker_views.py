@@ -1,9 +1,8 @@
 import time
 
-from redis_client.redis_connection.factory import get_redis_factory
+from infrastructure.redis_client.redis_connection.factory import get_redis_factory
 
-from sneaker_views_redis_writer.redis_writer.config import settings
-
+from microservices.sneaker_views_redis_writer.sneaker_views_redis_writer.redis_writer.config import settings
 
 redis_factory = get_redis_factory(
     password=settings.redis_config.redis_password,
@@ -14,12 +13,10 @@ redis_factory = get_redis_factory(
 
 
 async def handle_sneaker_viewed_event(
-    key: str | None,
-    value: dict,
+        key: str | None,
+        value: dict,
 ):
-
     async for redis_client in redis_factory():
-
         user_id = value.get("user_id")
         sneaker_id = value.get("sneaker_id")
 
