@@ -1,7 +1,7 @@
 from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from favorite_service.favorite.models import Favorite
+from microservices.favorite_service.favorite_service.favorite.models import Favorite
 
 
 async def delete_favorite_service(session: AsyncSession, user_id: int):

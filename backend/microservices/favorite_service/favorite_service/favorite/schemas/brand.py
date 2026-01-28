@@ -1,6 +1,6 @@
 from pydantic import Field
 
-from favorite_service.favorite.schemas.mixins.record import RecordCreateMixin
+from microservices.favorite_service.favorite_service.favorite.schemas.mixins.record import RecordCreateMixin
 
 
 class BrandGeneral(RecordCreateMixin):
@@ -8,6 +8,3 @@ class BrandGeneral(RecordCreateMixin):
 
 
 class BrandCreate(BrandGeneral): ...
-
-
-

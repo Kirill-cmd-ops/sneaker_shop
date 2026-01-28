@@ -1,27 +1,27 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from favorite_service.favorite.services.favorite.fetch import (
+from microservices.favorite_service.favorite_service.favorite.services.favorite.fetch import (
     get_user_favorite_id_service,
 )
-from favorite_service.favorite.services.favorite_sneaker.checkers import (
+from microservices.favorite_service.favorite_service.favorite.services.favorite_sneaker.checkers import (
     get_sneaker_in_favorite_service,
 )
-from favorite_service.favorite.services.favorite_sneaker.create import (
+from microservices.favorite_service.favorite_service.favorite.services.favorite_sneaker.create import (
     add_sneaker_to_favorite_service,
 )
-from favorite_service.favorite.services.sneaker.checkers import (
+from microservices.favorite_service.favorite_service.favorite.services.sneaker.checkers import (
     check_sneaker_exists_service,
 )
-from favorite_service.favorite.services.sneaker_size.checkers import (
+from microservices.favorite_service.favorite_service.favorite.services.sneaker_size.checkers import (
     check_sneaker_has_size_service,
 )
 
 
 async def create_sneaker_to_favorite_orchestrator(
-    session: AsyncSession,
-    user_id: int,
-    sneaker_id: int,
-    size_id: int,
+        session: AsyncSession,
+        user_id: int,
+        sneaker_id: int,
+        size_id: int,
 ):
     async with session.begin():
         favorite_id = await get_user_favorite_id_service(

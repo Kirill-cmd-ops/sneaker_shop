@@ -1,12 +1,9 @@
-import random
-from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
-from favorite_service.favorite.models import SneakerSizeAssociation, Sneaker, Size
+from microservices.favorite_service.favorite_service.favorite.models import SneakerSizeAssociation, Sneaker, Size
 
 
 async def seed_sneaker_sizes(session: AsyncSession):
-
     sneaker_sizes = [
         # sneaker 1
         {"sneaker_id": 1, "size_id": 6, "quantity": 10},

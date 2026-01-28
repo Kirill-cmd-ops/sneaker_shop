@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from favorite_service.favorite.models import Favorite
+from microservices.favorite_service.favorite_service.favorite.models import Favorite
 
 
 async def get_favorite_service(session: AsyncSession, user_id: int):
@@ -22,8 +22,8 @@ async def get_favorite_service(session: AsyncSession, user_id: int):
 
 
 async def get_user_favorite_id_service(
-    session: AsyncSession,
-    user_id: int,
+        session: AsyncSession,
+        user_id: int,
 ):
     favorite_id = await session.scalar(
         select(Favorite.id).filter(Favorite.user_id == user_id)

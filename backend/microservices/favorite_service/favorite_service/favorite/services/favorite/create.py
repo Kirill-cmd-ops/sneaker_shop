@@ -1,4 +1,4 @@
-from favorite_service.favorite.models import Favorite, db_helper
+from microservices.favorite_service.favorite_service.favorite.models import Favorite, db_helper
 
 
 async def create_favorite_service(user_id: int):

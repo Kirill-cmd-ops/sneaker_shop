@@ -1,12 +1,11 @@
 from sqlalchemy import delete
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from favorite_service.favorite.models import db_helper
+from microservices.favorite_service.favorite_service.favorite.models import db_helper
 
 
 async def delete_record_service(
-    table_name,
-    record_id,
+        table_name,
+        record_id,
 ):
     async with db_helper.session_context() as session:
         async with session.begin():

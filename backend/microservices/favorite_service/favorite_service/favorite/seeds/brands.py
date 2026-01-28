@@ -1,6 +1,7 @@
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
-from favorite_service.favorite.models import Brand
+from microservices.favorite_service.favorite_service.favorite.models import Brand
+
 
 async def seed_brands(session: AsyncSession):
     brands = [

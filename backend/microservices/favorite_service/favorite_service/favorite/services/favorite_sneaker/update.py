@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from favorite_service.favorite.models import (
+from microservices.favorite_service.favorite_service.favorite.models import (
     FavoriteSneakerAssociation,
     Favorite,
     SneakerSizeAssociation,
@@ -10,10 +10,10 @@ from favorite_service.favorite.models import (
 
 
 async def update_sneaker_in_favorite_service(
-    session: AsyncSession,
-    favorite_sneaker_id: int,
-    size_id: int,
-    user_id: int,
+        session: AsyncSession,
+        favorite_sneaker_id: int,
+        size_id: int,
+        user_id: int,
 ) -> FavoriteSneakerAssociation:
     async with session.begin():
         current_sneaker = await session.scalar(

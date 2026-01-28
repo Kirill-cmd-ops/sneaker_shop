@@ -1,12 +1,12 @@
 from sqlalchemy import select
 
-from favorite_service.favorite.models import SneakerSizeAssociation, db_helper
-from favorite_service.favorite.schemas import SneakerSizeUpdate
+from microservices.favorite_service.favorite_service.favorite.models import SneakerSizeAssociation, db_helper
+from microservices.favorite_service.favorite_service.favorite.schemas import SneakerSizeUpdate
 
 
 async def update_sneaker_size_quantity_service(
-    sneaker_id: int,
-    sneaker_size_update: SneakerSizeUpdate,
+        sneaker_id: int,
+        sneaker_size_update: SneakerSizeUpdate,
 ):
     async with db_helper.session_context() as session:
         async with session.begin():

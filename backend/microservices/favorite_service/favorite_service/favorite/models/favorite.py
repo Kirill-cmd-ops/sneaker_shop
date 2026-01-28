@@ -1,4 +1,4 @@
-from favorite_service.favorite.models import Base
+from microservices.favorite_service.favorite_service.favorite.models import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
 

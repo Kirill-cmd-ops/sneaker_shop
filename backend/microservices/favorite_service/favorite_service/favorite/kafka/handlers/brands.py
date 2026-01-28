@@ -1,7 +1,7 @@
-from favorite_service.favorite.models import Brand
-from favorite_service.favorite.schemas import BrandCreate
-from favorite_service.favorite.services.record.create import create_record_service
-from favorite_service.favorite.services.record.delete import delete_record_service
+from microservices.favorite_service.favorite_service.favorite.models import Brand
+from microservices.favorite_service.favorite_service.favorite.schemas import BrandCreate
+from microservices.favorite_service.favorite_service.favorite.services.record.create import create_record_service
+from microservices.favorite_service.favorite_service.favorite.services.record.delete import delete_record_service
 
 
 async def handle_brand_event(key: str | None, value: dict):

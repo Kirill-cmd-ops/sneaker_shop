@@ -1,7 +1,7 @@
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from favorite_service.favorite.models import Sneaker
+from microservices.favorite_service.favorite_service.favorite.models import Sneaker
 
 
 async def seed_sneakers(session: AsyncSession):

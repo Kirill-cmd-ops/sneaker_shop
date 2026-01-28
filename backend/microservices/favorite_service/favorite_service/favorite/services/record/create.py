@@ -1,11 +1,11 @@
 from typing import Callable
 
-from favorite_service.favorite.models import db_helper
+from microservices.favorite_service.favorite_service.favorite.models import db_helper
 
 
 async def create_record_service(
-    table_name: Callable,
-    schema_create,
+        table_name: Callable,
+        schema_create,
 ):
     async with db_helper.session_context() as session:
         async with session.begin():

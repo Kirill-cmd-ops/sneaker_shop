@@ -1,20 +1,20 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from favorite_service.favorite.models import (
+from microservices.favorite_service.favorite_service.favorite.models import (
     db_helper,
 )
-from favorite_service.favorite.schemas import FavoriteSneakerCreate
+from microservices.favorite_service.favorite_service.favorite.schemas import FavoriteSneakerCreate
 
-from favorite_service.favorite.dependencies.user_id import get_current_user_id
-from favorite_service.favorite.config import settings
-from favorite_service.favorite.services.favorite_sneaker.delete import (
+from microservices.favorite_service.favorite_service.favorite.dependencies.user_id import get_current_user_id
+from microservices.favorite_service.favorite_service.favorite.config import settings
+from microservices.favorite_service.favorite_service.favorite.services.favorite_sneaker.delete import (
     delete_sneaker_from_favorite_service,
 )
-from favorite_service.favorite.services.favorite_sneaker.orchestrators import (
+from microservices.favorite_service.favorite_service.favorite.services.favorite_sneaker.orchestrators import (
     create_sneaker_to_favorite_orchestrator,
 )
-from favorite_service.favorite.services.favorite_sneaker.update import (
+from microservices.favorite_service.favorite_service.favorite.services.favorite_sneaker.update import (
     update_sneaker_in_favorite_service,
 )
 
@@ -31,9 +31,9 @@ router = APIRouter(
     response_model=dict,
 )
 async def create_sneaker_to_favorite(
-    item_create: FavoriteSneakerCreate,
-    user_id: int = Depends(get_current_user_id),
-    session: AsyncSession = Depends(db_helper.session_getter),
+        item_create: FavoriteSneakerCreate,
+        user_id: int = Depends(get_current_user_id),
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     sneaker_id = item_create.sneaker_id
     size_id = item_create.size_id
@@ -51,10 +51,10 @@ async def create_sneaker_to_favorite(
     response_model=dict,
 )
 async def update_sneaker_in_favorite(
-    favorite_sneaker_id: int,
-    size_id: int,
-    user_id: int = Depends(get_current_user_id),
-    session: AsyncSession = Depends(db_helper.session_getter),
+        favorite_sneaker_id: int,
+        size_id: int,
+        user_id: int = Depends(get_current_user_id),
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     updated_item = await update_sneaker_in_favorite_service(
         session=session,
@@ -70,9 +70,9 @@ async def update_sneaker_in_favorite(
     response_model=dict,
 )
 async def delete_sneaker_from_favorite(
-    favorite_sneaker_id: int,
-    user_id: int = Depends(get_current_user_id),
-    session: AsyncSession = Depends(db_helper.session_getter),
+        favorite_sneaker_id: int,
+        user_id: int = Depends(get_current_user_id),
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await delete_sneaker_from_favorite_service(
         session=session,

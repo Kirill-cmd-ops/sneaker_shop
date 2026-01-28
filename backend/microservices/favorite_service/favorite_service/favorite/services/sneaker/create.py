@@ -1,11 +1,9 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from favorite_service.favorite.models import Sneaker, SneakerSizeAssociation, db_helper
-from favorite_service.favorite.schemas import SneakerCreate
+from microservices.favorite_service.favorite_service.favorite.models import Sneaker, SneakerSizeAssociation, db_helper
+from microservices.favorite_service.favorite_service.favorite.schemas import SneakerCreate
 
 
 async def create_sneaker_service(
-    sneaker_create: SneakerCreate,
+        sneaker_create: SneakerCreate,
 ):
     async with db_helper.session_context() as session:
         async with session.begin():

@@ -1,26 +1,25 @@
 import asyncio
 from contextlib import asynccontextmanager
 
-import uvicorn
 from fastapi import FastAPI
 
-from favorite_service.favorite.config import settings
-from favorite_service.favorite.kafka.handlers.brands import handle_brand_event
-from favorite_service.favorite.kafka.handlers.favorites import (
+from microservices.favorite_service.favorite_service.favorite.config import settings
+from microservices.favorite_service.favorite_service.favorite.kafka.handlers.brands import handle_brand_event
+from microservices.favorite_service.favorite_service.favorite.kafka.handlers.favorites import (
     handle_favorite_event,
 )
-from favorite_service.favorite.kafka.handlers.sizes import handle_size_event
-from favorite_service.favorite.kafka.handlers.sneakers import (
+from microservices.favorite_service.favorite_service.favorite.kafka.handlers.sizes import handle_size_event
+from microservices.favorite_service.favorite_service.favorite.kafka.handlers.sneakers import (
     handle_sneaker_event,
 )
-from favorite_service.favorite.kafka.handlers.sneaker_sizes import (
+from microservices.favorite_service.favorite_service.favorite.kafka.handlers.sneaker_sizes import (
     handle_sneaker_sizes_event,
 )
-from favorite_service.favorite.models import db_helper
-from favorite_service.add_middleware import add_middleware
-from favorite_service import router as favorite_router
+from microservices.favorite_service.favorite_service.favorite.models import db_helper
+from microservices.favorite_service.favorite_service.add_middleware import add_middleware
+from microservices.favorite_service.favorite_service import router as favorite_router
 
-from kafka.consumer import start_consumer, close_consumer
+from infrastructure.kafka.consumer import start_consumer, close_consumer
 
 
 @asynccontextmanager
@@ -99,18 +98,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-
 add_middleware(app=app)
 
 app.include_router(
     favorite_router,
 )
-
-
-if __name__ == "__main__":
-    uvicorn.run(
-        app="main:app",
-        host=settings.run.host,
-        port=settings.run.port,
-        reload=True,
-    )

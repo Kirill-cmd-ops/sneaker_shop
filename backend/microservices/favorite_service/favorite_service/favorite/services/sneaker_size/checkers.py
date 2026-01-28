@@ -2,14 +2,13 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from favorite_service.favorite.models import Sneaker, SneakerSizeAssociation
-from favorite_service.favorite.schemas import FavoriteSneakerCreate
+from microservices.favorite_service.favorite_service.favorite.models import Sneaker, SneakerSizeAssociation
 
 
 async def check_sneaker_has_size_service(
-    session: AsyncSession,
-    sneaker_id: int,
-    size_id: int,
+        session: AsyncSession,
+        sneaker_id: int,
+        size_id: int,
 ):
     sneaker_size = await session.scalar(
         select(Sneaker)

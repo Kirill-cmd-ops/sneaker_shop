@@ -1,8 +1,7 @@
-from favorite_service.favorite.models import db_helper
-from favorite_service.favorite.schemas import SneakerCreate, SneakerUpdate
-from favorite_service.favorite.services.sneaker.create import create_sneaker_service
-from favorite_service.favorite.services.sneaker.delete import delete_sneaker_service
-from favorite_service.favorite.services.sneaker.update import update_sneaker_service
+from microservices.favorite_service.favorite_service.favorite.schemas import SneakerCreate, SneakerUpdate
+from microservices.favorite_service.favorite_service.favorite.services.sneaker.create import create_sneaker_service
+from microservices.favorite_service.favorite_service.favorite.services.sneaker.delete import delete_sneaker_service
+from microservices.favorite_service.favorite_service.favorite.services.sneaker.update import update_sneaker_service
 
 
 async def handle_sneaker_event(key: str | None, value: dict):

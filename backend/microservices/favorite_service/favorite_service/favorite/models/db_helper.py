@@ -8,17 +8,17 @@ from sqlalchemy.ext.asyncio import (
     AsyncSession,
 )
 
-from favorite_service.favorite.config import settings
+from microservices.favorite_service.favorite_service.favorite.config import settings
 
 
 class DatabaseHelper:
     def __init__(
-        self,
-        url: str,
-        echo: bool = False,
-        echo_pool: bool = False,
-        pool_size: int = 5,
-        max_overflow: int = 10,
+            self,
+            url: str,
+            echo: bool = False,
+            echo_pool: bool = False,
+            pool_size: int = 5,
+            max_overflow: int = 10,
     ) -> None:
         self.engine: AsyncEngine = create_async_engine(
             url=url,

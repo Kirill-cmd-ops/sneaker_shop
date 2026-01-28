@@ -1,7 +1,7 @@
-from favorite_service.favorite.models import db_helper, Size
-from favorite_service.favorite.schemas import SizeCreate
-from favorite_service.favorite.services.record.create import create_record_service
-from favorite_service.favorite.services.record.delete import delete_record_service
+from microservices.favorite_service.favorite_service.favorite.models import Size
+from microservices.favorite_service.favorite_service.favorite.schemas import SizeCreate
+from microservices.favorite_service.favorite_service.favorite.services.record.create import create_record_service
+from microservices.favorite_service.favorite_service.favorite.services.record.delete import delete_record_service
 
 
 async def handle_size_event(key: str | None, value: dict):

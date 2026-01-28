@@ -1,6 +1,6 @@
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
-from favorite_service.favorite.models import Size
+from microservices.favorite_service.favorite_service.favorite.models import Size
 
 
 async def seed_sizes(session: AsyncSession):

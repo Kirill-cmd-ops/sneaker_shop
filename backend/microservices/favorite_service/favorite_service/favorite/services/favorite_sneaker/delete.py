@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from favorite_service.favorite.models import FavoriteSneakerAssociation, Favorite
+from microservices.favorite_service.favorite_service.favorite.models import FavoriteSneakerAssociation, Favorite
 
 
 async def delete_sneaker_from_favorite_service(

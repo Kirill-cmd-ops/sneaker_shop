@@ -1,12 +1,12 @@
 from sqlalchemy.dialects.postgresql import insert
 
-from favorite_service.favorite.models import SneakerSizeAssociation, db_helper
-from favorite_service.favorite.schemas import SneakerSizesCreate
+from microservices.favorite_service.favorite_service.favorite.models import SneakerSizeAssociation, db_helper
+from microservices.favorite_service.favorite_service.favorite.schemas import SneakerSizesCreate
 
 
 async def add_sizes_to_sneaker_service(
-    sneaker_id: int,
-    sneaker_sizes_create: SneakerSizesCreate,
+        sneaker_id: int,
+        sneaker_sizes_create: SneakerSizesCreate,
 ):
     async with db_helper.session_context() as session:
         async with session.begin():

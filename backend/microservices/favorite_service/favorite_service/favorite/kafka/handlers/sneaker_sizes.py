@@ -1,16 +1,16 @@
-from favorite_service.favorite.models import SneakerSizeAssociation
-from favorite_service.favorite.schemas import (
+from microservices.favorite_service.favorite_service.favorite.models import SneakerSizeAssociation
+from microservices.favorite_service.favorite_service.favorite.schemas import (
     SneakerSizesCreate,
     SneakerSizeUpdate,
     SneakerAssocsDelete,
 )
-from favorite_service.favorite.services.sneaker_association.delete import (
+from microservices.favorite_service.favorite_service.favorite.services.sneaker_association.delete import (
     delete_sneaker_associations_service,
 )
-from favorite_service.favorite.services.sneaker_size.create import (
+from microservices.favorite_service.favorite_service.favorite.services.sneaker_size.create import (
     add_sizes_to_sneaker_service,
 )
-from favorite_service.favorite.services.sneaker_size.update import (
+from microservices.favorite_service.favorite_service.favorite.services.sneaker_size.update import (
     update_sneaker_size_quantity_service,
 )
 

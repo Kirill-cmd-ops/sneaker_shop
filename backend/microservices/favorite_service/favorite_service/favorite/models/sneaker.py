@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from sqlalchemy import String, CheckConstraint, Numeric, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from favorite_service.favorite.models.base import Base
+from microservices.favorite_service.favorite_service.favorite.models.base import Base
 from .mixins import IntIdPkMixin
 
 if TYPE_CHECKING:
