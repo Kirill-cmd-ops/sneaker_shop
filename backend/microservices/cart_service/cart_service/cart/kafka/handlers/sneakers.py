@@ -1,8 +1,7 @@
-from cart_service.cart.models import db_helper
-from cart_service.cart.schemas import SneakerCreate, SneakerUpdate
-from cart_service.cart.services.sneaker.create import create_sneaker_service
-from cart_service.cart.services.sneaker.delete import delete_sneaker_service
-from cart_service.cart.services.sneaker.update import update_sneaker_service
+from microservices.cart_service.cart_service.cart.schemas import SneakerCreate, SneakerUpdate
+from microservices.cart_service.cart_service.cart.services.sneaker.create import create_sneaker_service
+from microservices.cart_service.cart_service.cart.services.sneaker.delete import delete_sneaker_service
+from microservices.cart_service.cart_service.cart.services.sneaker.update import update_sneaker_service
 
 
 async def handle_sneaker_event(key: str | None, value: dict):

@@ -1,7 +1,7 @@
-from cart_service.cart.models import db_helper, Size
-from cart_service.cart.schemas import SizeCreate
-from cart_service.cart.services.record.create import create_record_service
-from cart_service.cart.services.record.delete import delete_record_service
+from microservices.cart_service.cart_service.cart.models import Size
+from microservices.cart_service.cart_service.cart.schemas import SizeCreate
+from microservices.cart_service.cart_service.cart.services.record.create import create_record_service
+from microservices.cart_service.cart_service.cart.services.record.delete import delete_record_service
 
 
 async def handle_size_event(key: str | None, value: dict):

@@ -1,7 +1,7 @@
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cart_service.cart.models import Sneaker
+from microservices.cart_service.cart_service.cart.models import Sneaker
 
 
 async def seed_sneakers(session: AsyncSession):

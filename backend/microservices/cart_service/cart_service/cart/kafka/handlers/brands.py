@@ -1,7 +1,7 @@
-from cart_service.cart.models import db_helper, Brand
-from cart_service.cart.schemas import BrandCreate
-from cart_service.cart.services.record.create import create_record_service
-from cart_service.cart.services.record.delete import delete_record_service
+from microservices.cart_service.cart_service.cart.models import Brand
+from microservices.cart_service.cart_service.cart.schemas import BrandCreate
+from microservices.cart_service.cart_service.cart.services.record.create import create_record_service
+from microservices.cart_service.cart_service.cart.services.record.delete import delete_record_service
 
 
 async def handle_brand_event(key: str | None, value: dict):

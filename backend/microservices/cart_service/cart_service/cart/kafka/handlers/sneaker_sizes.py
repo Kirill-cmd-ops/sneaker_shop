@@ -1,14 +1,14 @@
-from cart_service.cart.models import db_helper, SneakerSizeAssociation
-from cart_service.cart.schemas import (
+from microservices.cart_service.cart_service.cart.models import SneakerSizeAssociation
+from microservices.cart_service.cart_service.cart.schemas import (
     SneakerSizesCreate,
     SneakerSizeUpdate,
     SneakerAssocsDelete,
 )
-from cart_service.cart.services.sneaker_association.delete import (
+from microservices.cart_service.cart_service.cart.services.sneaker_association.delete import (
     delete_sneaker_associations_service,
 )
-from cart_service.cart.services.sneaker_size.create import add_sizes_to_sneaker_service
-from cart_service.cart.services.sneaker_size.update import (
+from microservices.cart_service.cart_service.cart.services.sneaker_size.create import add_sizes_to_sneaker_service
+from microservices.cart_service.cart_service.cart.services.sneaker_size.update import (
     update_sneaker_size_quantity_service,
 )
 

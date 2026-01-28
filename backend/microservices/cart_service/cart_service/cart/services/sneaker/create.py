@@ -1,9 +1,9 @@
-from cart_service.cart.models import Sneaker, SneakerSizeAssociation, db_helper
-from cart_service.cart.schemas import SneakerCreate
+from microservices.cart_service.cart_service.cart.models import Sneaker, SneakerSizeAssociation, db_helper
+from microservices.cart_service.cart_service.cart.schemas import SneakerCreate
 
 
 async def create_sneaker_service(
-    sneaker_create: SneakerCreate,
+        sneaker_create: SneakerCreate,
 ):
     async with db_helper.session_context() as session:
         async with session.begin():

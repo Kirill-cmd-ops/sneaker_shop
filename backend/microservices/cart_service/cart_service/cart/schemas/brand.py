@@ -1,6 +1,6 @@
 from pydantic import Field
 
-from cart_service.cart.schemas.mixins.record import RecordCreateMixin
+from microservices.cart_service.cart_service.cart.schemas.mixins.record import RecordCreateMixin
 
 
 class BrandGeneral(RecordCreateMixin):

@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from cart_service.cart.models import Cart
+from microservices.cart_service.cart_service.cart.models import Cart
 
 
 async def get_cart_service(session: AsyncSession, user_id: int):
@@ -24,8 +24,8 @@ async def get_cart_service(session: AsyncSession, user_id: int):
 
 
 async def get_user_cart_id_service(
-    session: AsyncSession,
-    user_id: int,
+        session: AsyncSession,
+        user_id: int,
 ):
     cart_id = await session.scalar(select(Cart.id).filter(Cart.user_id == user_id))
     if not cart_id:

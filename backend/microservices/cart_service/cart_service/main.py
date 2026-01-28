@@ -2,23 +2,22 @@ import asyncio
 from asyncio import create_task
 from contextlib import asynccontextmanager
 
-import uvicorn
 from fastapi import FastAPI
 
-from cart_service.cart.config import settings
-from cart_service.cart.kafka.handlers.brands import handle_brand_event
-from cart_service.cart.kafka.handlers.sizes import handle_size_event
-from cart_service.cart.kafka.handlers.sneakers import handle_sneaker_event
-from cart_service.cart.kafka.handlers.sneaker_sizes import (
+from microservices.cart_service.cart_service.cart.config import settings
+from microservices.cart_service.cart_service.cart.kafka.handlers.brands import handle_brand_event
+from microservices.cart_service.cart_service.cart.kafka.handlers.sizes import handle_size_event
+from microservices.cart_service.cart_service.cart.kafka.handlers.sneakers import handle_sneaker_event
+from microservices.cart_service.cart_service.cart.kafka.handlers.sneaker_sizes import (
     handle_sneaker_sizes_event,
 )
-from cart_service.cart.models import db_helper
-from cart_service.add_middleware import add_middleware
-from cart_service import router as cart_router
+from microservices.cart_service.cart_service.cart.models import db_helper
+from microservices.cart_service.cart_service.add_middleware import add_middleware
+from microservices.cart_service.cart_service import router as cart_router
 
-from kafka.consumer import start_consumer, close_consumer
+from infrastructure.kafka.consumer import start_consumer, close_consumer
 
-from cart_service.cart.kafka.handlers.carts import handle_cart_event
+from microservices.cart_service.cart_service.cart.kafka.handlers.carts import handle_cart_event
 
 
 @asynccontextmanager
@@ -97,18 +96,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-
 add_middleware(app=app)
 
 app.include_router(
     cart_router,
 )
-
-
-if __name__ == "__main__":
-    uvicorn.run(
-        app="main:app",
-        host=settings.run.host,
-        port=settings.run.port,
-        reload=True,
-    )

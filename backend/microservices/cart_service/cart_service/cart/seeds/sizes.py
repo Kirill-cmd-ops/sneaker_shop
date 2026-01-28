@@ -1,6 +1,7 @@
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
-from cart_service.cart.models import Size
+from microservices.cart_service.cart_service.cart.models import Size
+
 
 async def seed_sizes(session: AsyncSession):
     sizes = [{"eu_size": size} for size in range(35, 47)]

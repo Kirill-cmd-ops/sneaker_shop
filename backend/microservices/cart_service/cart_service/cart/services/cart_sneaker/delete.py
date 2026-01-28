@@ -2,13 +2,13 @@ from fastapi import HTTPException
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cart_service.cart.models import CartSneakerAssociation, Cart
+from microservices.cart_service.cart_service.cart.models import CartSneakerAssociation, Cart
 
 
 async def delete_sneaker_from_cart_service(
-    session: AsyncSession,
-    cart_sneaker_id: int,
-    user_id: int,
+        session: AsyncSession,
+        cart_sneaker_id: int,
+        user_id: int,
 ):
     async with session.begin():
         stmt = delete(CartSneakerAssociation).where(

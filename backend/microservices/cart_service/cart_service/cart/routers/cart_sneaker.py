@@ -1,25 +1,19 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cart_service.cart.models import db_helper
-from cart_service.cart.schemas import CartSneakerCreate
+from microservices.cart_service.cart_service.cart.models import db_helper
+from microservices.cart_service.cart_service.cart.schemas import CartSneakerCreate
 
-from cart_service.cart.dependencies.user_id import get_current_user_id
-from cart_service.cart.config import settings
-from cart_service.cart.services.cart.fetch import get_user_cart_id_service
-from cart_service.cart.services.cart_sneaker.delete import (
+from microservices.cart_service.cart_service.cart.dependencies.user_id import get_current_user_id
+from microservices.cart_service.cart_service.cart.config import settings
+from microservices.cart_service.cart_service.cart.services.cart_sneaker.delete import (
     delete_sneaker_from_cart_service,
 )
-from cart_service.cart.services.cart_sneaker.orchestrators import (
+from microservices.cart_service.cart_service.cart.services.cart_sneaker.orchestrators import (
     add_sneaker_to_cart_orchestrator,
     update_sneaker_quantity_in_cart_orchestrator,
 )
-from cart_service.cart.services.cart_sneaker.update import (
-    update_sneaker_in_cart_service,
-    increment_sneaker_quantity_in_cart_service,
-    decrement_sneaker_quantity_in_cart_service,
-)
-from cart_service.cart.dependencies.permissions import check_role_permissions
+from microservices.cart_service.cart_service.cart.services.cart_sneaker.update import update_sneaker_in_cart_service
 
 router = APIRouter(
     prefix=settings.api.build_path(
@@ -34,9 +28,9 @@ router = APIRouter(
     response_model=dict,
 )
 async def add_sneaker_to_cart(
-    item_create: CartSneakerCreate,
-    user_id: int = Depends(get_current_user_id),
-    session: AsyncSession = Depends(db_helper.session_getter),
+        item_create: CartSneakerCreate,
+        user_id: int = Depends(get_current_user_id),
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     sneaker_id = item_create.sneaker_id
     size_id = item_create.size_id
@@ -54,10 +48,10 @@ async def add_sneaker_to_cart(
     response_model=dict,
 )
 async def update_sneaker_in_cart(
-    cart_sneaker_id: int,
-    size_id: int,
-    user_id: int = Depends(get_current_user_id),
-    session: AsyncSession = Depends(db_helper.session_getter),
+        cart_sneaker_id: int,
+        size_id: int,
+        user_id: int = Depends(get_current_user_id),
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     updated_item = await update_sneaker_in_cart_service(
         session=session,
@@ -73,9 +67,9 @@ async def update_sneaker_in_cart(
     response_model=dict,
 )
 async def delete_sneaker_from_cart(
-    cart_sneaker_id: int,
-    user_id: int = Depends(get_current_user_id),
-    session: AsyncSession = Depends(db_helper.session_getter),
+        cart_sneaker_id: int,
+        user_id: int = Depends(get_current_user_id),
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await delete_sneaker_from_cart_service(
         session=session,
@@ -89,10 +83,10 @@ async def delete_sneaker_from_cart(
     response_model=dict,
 )
 async def update_sneaker_quantity_in_cart(
-    cart_sneaker_id: int,
-    action: int = Query(..., ge=0, le=1),
-    user_id: int = Depends(get_current_user_id),
-    session: AsyncSession = Depends(db_helper.session_getter),
+        cart_sneaker_id: int,
+        action: int = Query(..., ge=0, le=1),
+        user_id: int = Depends(get_current_user_id),
+        session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await update_sneaker_quantity_in_cart_orchestrator(
         session=session,

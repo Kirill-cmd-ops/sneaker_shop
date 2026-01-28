@@ -2,17 +2,16 @@ from typing import Type
 
 from fastapi import HTTPException
 from sqlalchemy import delete
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from cart_service.cart.models import Base, db_helper
-from cart_service.cart.schemas import SneakerAssocsDelete
+from microservices.cart_service.cart_service.cart.models import Base, db_helper
+from microservices.cart_service.cart_service.cart.schemas import SneakerAssocsDelete
 
 
 async def delete_sneaker_associations_service(
-    sneaker_id: int,
-    sneaker_assoc_delete: SneakerAssocsDelete,
-    sneaker_association_model: Type[Base],
-    field_name: str,
+        sneaker_id: int,
+        sneaker_assoc_delete: SneakerAssocsDelete,
+        sneaker_association_model: Type[Base],
+        field_name: str,
 ):
     """
     Функция для одаления записи в ассоциативной таблице

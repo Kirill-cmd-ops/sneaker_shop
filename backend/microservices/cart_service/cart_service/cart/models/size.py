@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import CheckConstraint, Numeric
+from sqlalchemy import Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from cart_service.cart.models.base import Base
+from microservices.cart_service.cart_service.cart.models.base import Base
 from .mixins import IntIdPkMixin
 
 if TYPE_CHECKING:

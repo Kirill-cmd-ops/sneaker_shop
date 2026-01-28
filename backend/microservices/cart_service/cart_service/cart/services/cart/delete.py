@@ -1,7 +1,7 @@
 from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cart_service.cart.models import Cart
+from microservices.cart_service.cart_service.cart.models import Cart
 
 
 async def delete_cart_service(session: AsyncSession, user_id: int):

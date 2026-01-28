@@ -1,23 +1,23 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cart_service.cart.services.cart.fetch import get_user_cart_id_service
-from cart_service.cart.services.cart_sneaker.create import add_sneaker_to_cart_service
-from cart_service.cart.services.cart_sneaker.fetch import get_sneaker_in_cart_service
-from cart_service.cart.services.cart_sneaker.update import (
+from microservices.cart_service.cart_service.cart.services.cart.fetch import get_user_cart_id_service
+from microservices.cart_service.cart_service.cart.services.cart_sneaker.create import add_sneaker_to_cart_service
+from microservices.cart_service.cart_service.cart.services.cart_sneaker.fetch import get_sneaker_in_cart_service
+from microservices.cart_service.cart_service.cart.services.cart_sneaker.update import (
     increment_sneaker_quantity_in_cart_service,
     decrement_sneaker_quantity_in_cart_service,
 )
-from cart_service.cart.services.sneaker.checkers import check_sneaker_exists_service
-from cart_service.cart.services.sneaker_size.checkers import (
+from microservices.cart_service.cart_service.cart.services.sneaker.checkers import check_sneaker_exists_service
+from microservices.cart_service.cart_service.cart.services.sneaker_size.checkers import (
     check_sneaker_has_size_service,
 )
 
 
 async def add_sneaker_to_cart_orchestrator(
-    session: AsyncSession,
-    user_id: int,
-    sneaker_id: int,
-    size_id: int,
+        session: AsyncSession,
+        user_id: int,
+        sneaker_id: int,
+        size_id: int,
 ):
     async with session.begin():
         cart_id = await get_user_cart_id_service(
@@ -53,10 +53,10 @@ async def add_sneaker_to_cart_orchestrator(
 
 
 async def update_sneaker_quantity_in_cart_orchestrator(
-    session: AsyncSession,
-    action: int,
-    user_id: int,
-    cart_sneaker_id: int,
+        session: AsyncSession,
+        action: int,
+        user_id: int,
+        cart_sneaker_id: int,
 ):
     async with session.begin():
         cart_id = await get_user_cart_id_service(

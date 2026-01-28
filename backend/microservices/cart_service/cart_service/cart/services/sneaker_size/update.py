@@ -1,13 +1,12 @@
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from cart_service.cart.models import SneakerSizeAssociation, db_helper
-from cart_service.cart.schemas import SneakerSizeUpdate
+from microservices.cart_service.cart_service.cart.models import SneakerSizeAssociation, db_helper
+from microservices.cart_service.cart_service.cart.schemas import SneakerSizeUpdate
 
 
 async def update_sneaker_size_quantity_service(
-    sneaker_id: int,
-    sneaker_size_update: SneakerSizeUpdate,
+        sneaker_id: int,
+        sneaker_size_update: SneakerSizeUpdate,
 ):
     async with db_helper.session_context() as session:
         async with session.begin():

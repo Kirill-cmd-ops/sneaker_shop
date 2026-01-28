@@ -1,4 +1,4 @@
-from cart_service.cart.models import Cart, db_helper
+from microservices.cart_service.cart_service.cart.models import Cart, db_helper
 
 
 async def create_cart_service(user_id: int):
