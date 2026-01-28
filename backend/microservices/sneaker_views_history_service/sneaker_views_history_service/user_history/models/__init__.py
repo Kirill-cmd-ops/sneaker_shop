@@ -4,6 +4,6 @@ __all__ = [
     "SneakerViewsHistory"
 ]
 
-from sneaker_views_history_service.user_history.models.base import Base
-from sneaker_views_history_service.user_history.models.db_helper import db_helper
-from sneaker_views_history_service.user_history.models.sneaker_views_history import SneakerViewsHistory
+from .base import Base
+from .db_helper import db_helper
+from .sneaker_views_history import SneakerViewsHistory

@@ -4,18 +4,18 @@ import redis.asyncio as aioredis
 
 from sqlalchemy.orm import Session
 
-from sneaker_views_history_service.user_history.services.sneaker_view_history.create import (
+from microservices.sneaker_views_history_service.sneaker_views_history_service.user_history.services.sneaker_view_history.create import (
     create_sneaker_view_history_service,
 )
-from sneaker_views_history_service.user_history.services.sneaker_view_history.fetch import (
+from microservices.sneaker_views_history_service.sneaker_views_history_service.user_history.services.sneaker_view_history.fetch import (
     get_user_sneaker_view_history_service,
 )
 
 
 async def get_user_sneaker_view_recent_history_orchestrator(
-    user_id: int,
-    session: Session,
-    redis_client: aioredis.Redis,
+        user_id: int,
+        session: Session,
+        redis_client: aioredis.Redis,
 ):
     records = await redis_client.zrange(
         name=f"views:{user_id}",

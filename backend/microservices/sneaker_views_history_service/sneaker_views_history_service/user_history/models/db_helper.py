@@ -1,4 +1,4 @@
-from sneaker_views_history_service.user_history.config import settings
+from microservices.sneaker_views_history_service.sneaker_views_history_service.user_history.config import settings
 
 from contextlib import contextmanager
 from typing import Generator
@@ -9,12 +9,12 @@ from sqlalchemy.orm import sessionmaker, Session
 
 class DatabaseHelper:
     def __init__(
-        self,
-        url: str,
-        echo: bool = False,
-        echo_pool: bool = False,
-        pool_size: int = 5,
-        max_overflow: int = 10,
+            self,
+            url: str,
+            echo: bool = False,
+            echo_pool: bool = False,
+            pool_size: int = 5,
+            max_overflow: int = 10,
     ) -> None:
         self.engine: Engine = create_engine(
             url=url,

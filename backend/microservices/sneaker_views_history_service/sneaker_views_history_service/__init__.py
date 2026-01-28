@@ -1,6 +1,8 @@
 from fastapi import APIRouter
-from sneaker_views_history_service.user_history.routers.get_history_recent import router as recent_history_sneakers_views_router
-from sneaker_views_history_service.user_history.routers.get_history import router as history_sneakers_views_router
+from microservices.sneaker_views_history_service.sneaker_views_history_service.user_history.routers.get_history_recent import \
+    router as recent_history_sneakers_views_router
+from microservices.sneaker_views_history_service.sneaker_views_history_service.user_history.routers.get_history import \
+    router as history_sneakers_views_router
 
 router = APIRouter()
 

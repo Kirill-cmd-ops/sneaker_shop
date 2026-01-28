@@ -1,8 +1,9 @@
 from sqlalchemy import MetaData
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import declared_attr
-from sneaker_views_history_service.user_history.config import settings
-from sneaker_views_history_service.user_history.utils import camel_case_to_snake_case
+from microservices.sneaker_views_history_service.sneaker_views_history_service.user_history.config import settings
+from microservices.sneaker_views_history_service.sneaker_views_history_service.user_history.utils import \
+    camel_case_to_snake_case
 
 
 class Base(DeclarativeBase):
