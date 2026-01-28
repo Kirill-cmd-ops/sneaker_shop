@@ -2,10 +2,10 @@ import redis.asyncio as aioredis
 
 
 def get_redis_factory(
-    password: str,
-    host: str = "redis",
-    port: int = 6379,
-    db: int = 0,
+        password: str,
+        host: str = "redis",
+        port: int = 6379,
+        db: int = 0,
 ):
     async def get_redis():
         redis_client = aioredis.Redis(

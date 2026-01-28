@@ -6,6 +6,6 @@ def get_celery(
         broker: str = "redis://:Meteor906587@redis_queue:6379/0",
 ):
     return Celery(
-            main=name_service,
-            broker=broker,
-        )
+        main=name_service,
+        broker=broker,
+    )
