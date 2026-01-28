@@ -2,12 +2,12 @@ from datetime import datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth_service.auth.models import Blacklist
+from microservices.auth_service.auth_service.auth.models import Blacklist
 
 
 async def add_to_blacklist(
-    session: AsyncSession,
-    refresh_token_id,
+        session: AsyncSession,
+        refresh_token_id,
 ):
     blacklist = Blacklist(
         refresh_token_id=refresh_token_id,

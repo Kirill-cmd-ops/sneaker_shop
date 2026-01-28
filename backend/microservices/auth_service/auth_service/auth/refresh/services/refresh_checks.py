@@ -3,15 +3,15 @@ from datetime import datetime, timedelta
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth_service.auth.models import RefreshToken
-from auth_service.auth.refresh.utils.encode_token import encode_refresh_token
+from microservices.auth_service.auth_service.auth.models import RefreshToken
+from microservices.auth_service.auth_service.auth.refresh.utils.encode_token import encode_refresh_token
 
 
 async def check_refresh_token_valid_rotation(
-    session: AsyncSession,
-    token_hash,
-    rotate: bool = False,
-    extra_days: int = 0,
+        session: AsyncSession,
+        token_hash,
+        rotate: bool = False,
+        extra_days: int = 0,
 ):
     if rotate and extra_days > 0:
         return await session.scalar(

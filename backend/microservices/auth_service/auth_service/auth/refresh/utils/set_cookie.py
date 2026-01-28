@@ -1,12 +1,12 @@
 def set_value_in_cookie(
-    response,
-    value,
-    key,
-    max_age,
-    path,
-    secure,
-    httponly,
-    samesite,
+        response,
+        value,
+        key,
+        max_age,
+        path,
+        secure,
+        httponly,
+        samesite,
 ):
     response.set_cookie(
         key=key,

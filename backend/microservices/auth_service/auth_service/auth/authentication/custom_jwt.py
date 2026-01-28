@@ -4,19 +4,19 @@ from fastapi_users import models
 from fastapi_users.authentication import JWTStrategy
 from fastapi_users.jwt import generate_jwt, SecretType
 
-from auth_service.auth.services.user_role.fetch import get_user_role
+from microservices.auth_service.auth_service.auth.services.user_role.fetch import get_user_role
 
 
 class MyJWTStrategy(JWTStrategy):
     def __init__(
-        self,
-        secret: SecretType,
-        issuer: str,
-        lifetime_seconds: Optional[int],
-        token_audience: list[str],
-        allowed_audience: list[str],
-        algorithm: str = "RS256",
-        public_key: Optional[SecretType] = None,
+            self,
+            secret: SecretType,
+            issuer: str,
+            lifetime_seconds: Optional[int],
+            token_audience: list[str],
+            allowed_audience: list[str],
+            algorithm: str = "RS256",
+            public_key: Optional[SecretType] = None,
     ):
         super().__init__(
             secret=secret,

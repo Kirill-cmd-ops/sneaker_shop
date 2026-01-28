@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth_service.auth.models import db_helper
-from auth_service.auth.seeds.roles import seed_roles
-from auth_service.auth.seeds.permissions import seed_permission
+from microservices.auth_service.auth_service.auth.models import db_helper
+from microservices.auth_service.auth_service.auth.seeds.roles import seed_roles
+from microservices.auth_service.auth_service.auth.seeds.permissions import seed_permission
 
 
 async def run_seeds():

@@ -1,8 +1,8 @@
 from sqlalchemy import Integer, ForeignKey
 from sqlalchemy.orm import Mapped, declared_attr, mapped_column
 
-from auth_service.auth.models.base import Base
-from auth_service.auth.models.mixins import IntIdPkMixin
+from microservices.auth_service.auth_service.auth.models.base import Base
+from microservices.auth_service.auth_service.auth.models.mixins import IntIdPkMixin
 
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseOAuthAccountTable
 

@@ -1,13 +1,13 @@
 from fastapi.encoders import jsonable_encoder
 
-from auth_service.auth.config import settings
-from auth_service.auth.schemas import UserCreate, UserUpdate
+from microservices.auth_service.auth_service.auth.config import settings
+from microservices.auth_service.auth_service.auth.schemas import UserCreate, UserUpdate
 
 
 async def publish_user_created(
-    producer,
-    user_id: int,
-    user_create: UserCreate,
+        producer,
+        user_id: int,
+        user_create: UserCreate,
 ):
     user_create_payload = {
         "event_type": "user_created",
@@ -24,9 +24,9 @@ async def publish_user_created(
 
 
 async def publish_user_updated(
-    producer,
-    user_id: int,
-    user_update: UserUpdate,
+        producer,
+        user_id: int,
+        user_update: UserUpdate,
 ):
     user_update_payload = {
         "event_type": "user_updated",

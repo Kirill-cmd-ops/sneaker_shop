@@ -1,15 +1,15 @@
 from fastapi.openapi.models import Response
 from fastapi_users import models
 
-from auth_service.auth.authentication.custom_jwt import MyJWTStrategy
-from auth_service.auth.config import settings
-from auth_service.auth.refresh.utils.set_cookie import set_value_in_cookie
+from microservices.auth_service.auth_service.auth.authentication.custom_jwt import MyJWTStrategy
+from microservices.auth_service.auth_service.auth.config import settings
+from microservices.auth_service.auth_service.auth.refresh.utils.set_cookie import set_value_in_cookie
 
 
 async def set_jwt_token(
-    user_id: int | models.UP,
-    token_aud: list[str],
-    response: Response,
+        user_id: int | models.UP,
+        token_aud: list[str],
+        response: Response,
 ):
     strategy = MyJWTStrategy(
         secret=settings.auth_config.jwt_private_key,

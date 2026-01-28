@@ -4,11 +4,11 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable, SQLAlchemyUserD
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from auth_service.auth.types.user_id import UserIdType
+from microservices.auth_service.auth_service.auth.types.user_id import UserIdType
 
-from auth_service.auth.models.oauth_account import OAuthAccount
-from auth_service.auth.models.base import Base
-from auth_service.auth.models.mixins import IntIdPkMixin
+from microservices.auth_service.auth_service.auth.models.oauth_account import OAuthAccount
+from microservices.auth_service.auth_service.auth.models.base import Base
+from microservices.auth_service.auth_service.auth.models.mixins import IntIdPkMixin
 
 if TYPE_CHECKING:
     from .user_role import UserRoleAssociation

@@ -3,8 +3,8 @@ from datetime import datetime
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
-from auth_service.auth.models.base import Base
-from auth_service.auth.models.mixins import IntIdPkMixin
+from microservices.auth_service.auth_service.auth.models.base import Base
+from microservices.auth_service.auth_service.auth.models.mixins import IntIdPkMixin
 
 
 class RefreshToken(Base, IntIdPkMixin):

@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from fastapi_users import schemas
 from pydantic import field_validator
 
-from auth_service.auth.types.user_id import UserIdType
+from microservices.auth_service.auth_service.auth.types.user_id import UserIdType
 
 
 class UserRead(schemas.BaseUser[UserIdType]):

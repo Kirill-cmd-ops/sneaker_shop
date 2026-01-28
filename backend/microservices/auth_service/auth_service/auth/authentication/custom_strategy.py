@@ -1,5 +1,5 @@
-from auth_service.auth.authentication.custom_jwt import MyJWTStrategy
-from auth_service.auth.config import settings
+from microservices.auth_service.auth_service.auth.authentication.custom_jwt import MyJWTStrategy
+from microservices.auth_service.auth_service.auth.config import settings
 
 
 def get_jwt_strategy() -> MyJWTStrategy:

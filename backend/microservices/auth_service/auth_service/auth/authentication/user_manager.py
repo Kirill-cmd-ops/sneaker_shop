@@ -2,7 +2,6 @@ import re
 import secrets
 from typing import Optional, Union, Any
 
-
 from aiokafka import AIOKafkaProducer
 from fastapi import Request
 from fastapi_users import (
@@ -13,24 +12,24 @@ from fastapi_users import (
 )
 from starlette.responses import Response
 
-from auth_service.auth.config import settings
-from auth_service.auth.kafka.producers.registration import publish_user_registered
+from microservices.auth_service.auth_service.auth.config import settings
+from microservices.auth_service.auth_service.auth.kafka.producers.registration import publish_user_registered
 
-from auth_service.auth.models import User, db_helper
-from auth_service.auth.refresh.dependencies.get_token_id import get_refresh_token_id
-from auth_service.auth.refresh.services.add_token_in_blacklist import add_to_blacklist
-from auth_service.auth.refresh.services.add_token_in_db import hash_refresh_token_add_db
-from auth_service.auth.refresh.services.refresh_checks import (
+from microservices.auth_service.auth_service.auth.models import User, db_helper
+from microservices.auth_service.auth_service.auth.refresh.dependencies.get_token_id import get_refresh_token_id
+from microservices.auth_service.auth_service.auth.refresh.services.add_token_in_blacklist import add_to_blacklist
+from microservices.auth_service.auth_service.auth.refresh.services.add_token_in_db import hash_refresh_token_add_db
+from microservices.auth_service.auth_service.auth.refresh.services.refresh_checks import (
     check_refresh_token_rotation,
 )
-from auth_service.auth.refresh.utils.encode_token import encode_refresh_token
-from auth_service.auth.refresh.utils.generate_token import generate_refresh_token
-from auth_service.auth.refresh.utils.set_cookie import set_value_in_cookie
-from auth_service.auth.schemas import UserCreate
-from auth_service.auth.services.user_role.create import add_role_db
-from auth_service.auth.types.user_id import UserIdType
+from microservices.auth_service.auth_service.auth.refresh.utils.encode_token import encode_refresh_token
+from microservices.auth_service.auth_service.auth.refresh.utils.generate_token import generate_refresh_token
+from microservices.auth_service.auth_service.auth.refresh.utils.set_cookie import set_value_in_cookie
+from microservices.auth_service.auth_service.auth.schemas import UserCreate
+from microservices.auth_service.auth_service.auth.services.user_role.create import add_role_db
+from microservices.auth_service.auth_service.auth.types.user_id import UserIdType
 
-from auth_service.auth.celery_tasks.auth_tasks import (
+from microservices.auth_service.auth_service.auth.celery_tasks.auth_tasks import (
     handle_request_verify,
     handle_request_reset,
     handle_after_register,
@@ -44,9 +43,9 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
     verification_token_secret = settings.access_token.verification_token_secret
 
     async def validate_password(
-        self,
-        password: str,
-        user: Union[UserCreate, User],
+            self,
+            password: str,
+            user: Union[UserCreate, User],
     ) -> None:
         if len(password) < 8:
             raise InvalidPasswordException(
@@ -54,7 +53,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
             )
 
         if not (
-            any(c.islower() for c in password) and any(c.isupper() for c in password)
+                any(c.islower() for c in password) and any(c.isupper() for c in password)
         ):
             raise InvalidPasswordException(
                 reason="The password must contain at least one uppercase and one lowercase letter."
@@ -96,16 +95,16 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         )
 
     async def on_after_update(
-        self,
-        user: models.UP,
-        update_dict: dict[str, Any],
-        request: Optional[Request] = None,
+            self,
+            user: models.UP,
+            update_dict: dict[str, Any],
+            request: Optional[Request] = None,
     ) -> None:
         # После обновления отправялем сообщение на email для пользователя, чтобы уведомить его об изменениях профиля
         ...
 
     async def on_after_request_verify(
-        self, user: User, token: str, request: Optional[Request] = None
+            self, user: User, token: str, request: Optional[Request] = None
     ):
         handle_request_verify.delay(
             hostname=settings.smtp_config.smtp_hostname,
@@ -120,7 +119,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         )
 
     async def on_after_verify(
-        self, user: models.UP, request: Optional[Request] = None
+            self, user: models.UP, request: Optional[Request] = None
     ) -> None:
         handle_after_verify.delay(
             hostname=settings.smtp_config.smtp_hostname,
@@ -135,7 +134,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         )
 
     async def on_after_forgot_password(
-        self, user: User, token: str, request: Optional[Request] = None
+            self, user: User, token: str, request: Optional[Request] = None
     ):
         handle_request_reset.delay(
             hostname=settings.smtp_config.smtp_hostname,
@@ -150,7 +149,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         )
 
     async def on_after_reset_password(
-        self, user: models.UP, request: Optional[Request] = None
+            self, user: models.UP, request: Optional[Request] = None
     ) -> None:
         handle_after_reset.delay(
             hostname=settings.smtp_config.smtp_hostname,
@@ -165,16 +164,16 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         )
 
     async def on_before_delete(
-        self, user: models.UP, request: Optional[Request] = None
+            self, user: models.UP, request: Optional[Request] = None
     ) -> None:
         # отправка подтверждающего письма на почту пользователя
         ...
 
     async def on_after_login(
-        self,
-        user: models.UP,
-        request: Optional[Request] = None,
-        response: Optional[Response] = None,
+            self,
+            user: models.UP,
+            request: Optional[Request] = None,
+            response: Optional[Response] = None,
     ) -> None:
         refresh_token = request.cookies.get(settings.cookie.refresh_cookie_name)
         print("Отладка токен:", refresh_token)

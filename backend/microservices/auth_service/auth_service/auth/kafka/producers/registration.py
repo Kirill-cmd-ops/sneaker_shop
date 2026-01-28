@@ -1,4 +1,4 @@
-from auth_service.auth.config import settings
+from microservices.auth_service.auth_service.auth.config import settings
 
 
 async def publish_user_registered(producer, user_id: str):

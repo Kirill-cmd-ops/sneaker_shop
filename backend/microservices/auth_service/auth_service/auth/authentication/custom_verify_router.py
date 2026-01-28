@@ -7,8 +7,8 @@ from fastapi_users.router.common import ErrorCode, ErrorModel
 
 
 def get_verify_router_custom(
-    get_user_manager: UserManagerDependency[models.UP, models.ID],
-    user_schema: type[schemas.U],
+        get_user_manager: UserManagerDependency[models.UP, models.ID],
+        user_schema: type[schemas.U],
 ):
     router = APIRouter()
 
@@ -18,9 +18,9 @@ def get_verify_router_custom(
         name="verify:request-token",
     )
     async def request_verify_token(
-        request: Request,
-        email: EmailStr = Body(..., embed=True),
-        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+            request: Request,
+            email: EmailStr = Body(..., embed=True),
+            user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
             user = await user_manager.get_by_email(email)
@@ -29,9 +29,9 @@ def get_verify_router_custom(
                 request=request,
             )
         except (
-            exceptions.UserNotExists,
-            exceptions.UserInactive,
-            exceptions.UserAlreadyVerified,
+                exceptions.UserNotExists,
+                exceptions.UserInactive,
+                exceptions.UserAlreadyVerified,
         ):
             pass
 
@@ -49,7 +49,7 @@ def get_verify_router_custom(
                         "examples": {
                             ErrorCode.VERIFY_USER_BAD_TOKEN: {
                                 "summary": "Bad token, not existing user or"
-                                "not the e-mail currently set for the user.",
+                                           "not the e-mail currently set for the user.",
                                 "value": {"detail": ErrorCode.VERIFY_USER_BAD_TOKEN},
                             },
                             ErrorCode.VERIFY_USER_ALREADY_VERIFIED: {
@@ -65,9 +65,9 @@ def get_verify_router_custom(
         },
     )
     async def verify(
-        request: Request,
-        token: str,
-        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+            request: Request,
+            token: str,
+            user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
             user = await user_manager.verify(token=token, request=request)

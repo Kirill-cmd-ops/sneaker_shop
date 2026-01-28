@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 
-from auth_service.auth.models import Base
-from auth_service.auth.models.mixins import IntIdPkMixin
+from microservices.auth_service.auth_service.auth.models import Base
+from microservices.auth_service.auth_service.auth.models.mixins import IntIdPkMixin
 
 if TYPE_CHECKING:
     from .role_permission import RolePermissionAssociation

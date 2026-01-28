@@ -1,7 +1,7 @@
 from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth_service.auth.models import Permission
+from microservices.auth_service.auth_service.auth.models import Permission
 
 
 async def seed_permission(session: AsyncSession):

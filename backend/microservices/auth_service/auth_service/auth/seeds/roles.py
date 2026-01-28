@@ -1,6 +1,7 @@
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
-from auth_service.auth.models import Role
+
+from microservices.auth_service.auth_service.auth.models import Role
 
 
 async def seed_roles(session: AsyncSession):

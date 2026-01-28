@@ -6,20 +6,20 @@ from fastapi_users.authentication import Authenticator
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.router.common import ErrorCode, ErrorModel
 
-from auth_service.auth.dependencies.kafka_producer import get_kafka_producer
+from microservices.auth_service.auth_service.auth.dependencies.kafka_producer import get_kafka_producer
 
-from auth_service.auth.kafka.producers.users import (
+from microservices.auth_service.auth_service.auth.kafka.producers.users import (
     publish_user_deleted,
     publish_user_updated,
 )
 
 
 def get_users_router_custom(
-    get_user_manager: UserManagerDependency[models.UP, models.ID],
-    user_schema: type[schemas.U],
-    user_update_schema: type[schemas.UU],
-    authenticator: Authenticator[models.UP, models.ID],
-    requires_verification: bool = False,
+        get_user_manager: UserManagerDependency[models.UP, models.ID],
+        user_schema: type[schemas.U],
+        user_update_schema: type[schemas.UU],
+        authenticator: Authenticator[models.UP, models.ID],
+        requires_verification: bool = False,
 ) -> APIRouter:
     """Generate a router with the authentication routes."""
     router = APIRouter()
@@ -35,8 +35,8 @@ def get_users_router_custom(
     )
 
     async def get_user_or_404(
-        id: str,
-        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+            id: str,
+            user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ) -> models.UP:
         try:
             parsed_id = user_manager.parse_id(id)
@@ -55,7 +55,7 @@ def get_users_router_custom(
         },
     )
     async def me(
-        user: models.UP = Depends(get_current_active_user),
+            user: models.UP = Depends(get_current_active_user),
     ):
         return schemas.model_validate(schema=user_schema, obj=user)
 
@@ -85,7 +85,7 @@ def get_users_router_custom(
                                     "detail": {
                                         "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
                                         "reason": "Password should be"
-                                        "at least 3 characters",
+                                                  "at least 3 characters",
                                     }
                                 },
                             },
@@ -96,11 +96,11 @@ def get_users_router_custom(
         },
     )
     async def update_me(
-        request: Request,
-        user_update: user_update_schema,  # type: ignore
-        user: models.UP = Depends(get_current_active_user),
-        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
-        producer: AIOKafkaProducer = Depends(get_kafka_producer),
+            request: Request,
+            user_update: user_update_schema,  # type: ignore
+            user: models.UP = Depends(get_current_active_user),
+            user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+            producer: AIOKafkaProducer = Depends(get_kafka_producer),
     ):
         try:
             user = await user_manager.update(
@@ -183,7 +183,7 @@ def get_users_router_custom(
                                     "detail": {
                                         "code": ErrorCode.UPDATE_USER_INVALID_PASSWORD,
                                         "reason": "Password should be"
-                                        "at least 3 characters",
+                                                  "at least 3 characters",
                                     }
                                 },
                             },
@@ -194,11 +194,11 @@ def get_users_router_custom(
         },
     )
     async def update_user(
-        user_update: user_update_schema,  # type: ignore
-        request: Request,
-        user=Depends(get_user_or_404),
-        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
-        producer: AIOKafkaProducer = Depends(get_kafka_producer),
+            user_update: user_update_schema,  # type: ignore
+            request: Request,
+            user=Depends(get_user_or_404),
+            user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+            producer: AIOKafkaProducer = Depends(get_kafka_producer),
     ):
         try:
             user = await user_manager.update(
@@ -248,10 +248,10 @@ def get_users_router_custom(
         },
     )
     async def delete_user(
-        request: Request,
-        user=Depends(get_user_or_404),
-        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
-        producer: AIOKafkaProducer = Depends(get_kafka_producer),
+            request: Request,
+            user=Depends(get_user_or_404),
+            user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+            producer: AIOKafkaProducer = Depends(get_kafka_producer),
     ):
         await user_manager.delete(
             user=user,

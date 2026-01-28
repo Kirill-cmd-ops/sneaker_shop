@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy import select
 
-from auth_service.auth.models import db_helper, User, Role, UserRoleAssociation
+from microservices.auth_service.auth_service.auth.models import db_helper, User, Role, UserRoleAssociation
 
 
 async def add_role_db(user_id: int, role_name: str):

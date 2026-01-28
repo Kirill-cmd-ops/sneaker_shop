@@ -3,13 +3,13 @@ from sqlalchemy import select, delete
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth_service.auth.models import Role, RolePermissionAssociation
+from microservices.auth_service.auth_service.auth.models import Role, RolePermissionAssociation
 
 
 async def update_role_permissions_db(
-    user_role: str,
-    list_permissions: list[int],
-    session: AsyncSession,
+        user_role: str,
+        list_permissions: list[int],
+        session: AsyncSession,
 ):
     role_id = await session.scalar(select(Role.id).where(Role.name == user_role))
 
@@ -40,11 +40,10 @@ async def update_role_permissions_db(
 
 
 async def update_role_permissions_redis(
-    redis_client,
-    user_role: str,
-    list_role_permissions: list[str],
+        redis_client,
+        user_role: str,
+        list_role_permissions: list[str],
 ):
-
     async with redis_client.pipeline() as pipe:
         await pipe.delete(f"role:{user_role}")
         if list_role_permissions:

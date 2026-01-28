@@ -1,17 +1,17 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth_service.auth.services.role_permission.fetch import get_role_permissions_db
-from auth_service.auth.services.role_permission.update import update_role_permissions_db, \
+from microservices.auth_service.auth_service.auth.services.role_permission.fetch import get_role_permissions_db
+from microservices.auth_service.auth_service.auth.services.role_permission.update import update_role_permissions_db, \
     update_role_permissions_redis
 
 import redis.asyncio as aioredis
 
 
 async def update_role_permissions_orchestrator(
-    session: AsyncSession,
-    redis_client: aioredis.Redis,
-    user_role: str,
-    list_permissions: list[int],
+        session: AsyncSession,
+        redis_client: aioredis.Redis,
+        user_role: str,
+        list_permissions: list[int],
 ):
     async with session.begin():
         if list_permissions:
@@ -35,4 +35,3 @@ async def update_role_permissions_orchestrator(
         )
 
     return {"status": "ok"}
-

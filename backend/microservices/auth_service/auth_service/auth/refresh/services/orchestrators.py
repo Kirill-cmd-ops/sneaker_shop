@@ -3,22 +3,22 @@ import secrets
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import Response
 
-from auth_service.auth.config import settings
-from auth_service.auth.refresh.dependencies.get_token_id import get_refresh_token_id
-from auth_service.auth.refresh.services.add_token_in_blacklist import add_to_blacklist
-from auth_service.auth.refresh.services.add_token_in_db import hash_refresh_token_add_db
-from auth_service.auth.refresh.services.refresh_checks import check_refresh_token_valid
-from auth_service.auth.refresh.services.set_jwt_token_cookie import set_jwt_token
-from auth_service.auth.refresh.utils.encode_token import encode_refresh_token
-from auth_service.auth.refresh.utils.generate_token import generate_refresh_token
-from auth_service.auth.refresh.utils.set_cookie import set_value_in_cookie
+from microservices.auth_service.auth_service.auth.config import settings
+from microservices.auth_service.auth_service.auth.refresh.dependencies.get_token_id import get_refresh_token_id
+from microservices.auth_service.auth_service.auth.refresh.services.add_token_in_blacklist import add_to_blacklist
+from microservices.auth_service.auth_service.auth.refresh.services.add_token_in_db import hash_refresh_token_add_db
+from microservices.auth_service.auth_service.auth.refresh.services.refresh_checks import check_refresh_token_valid
+from microservices.auth_service.auth_service.auth.refresh.services.set_jwt_token_cookie import set_jwt_token
+from microservices.auth_service.auth_service.auth.refresh.utils.encode_token import encode_refresh_token
+from microservices.auth_service.auth_service.auth.refresh.utils.generate_token import generate_refresh_token
+from microservices.auth_service.auth_service.auth.refresh.utils.set_cookie import set_value_in_cookie
 
 
 async def update_refresh_token_orchestrator(
-    session: AsyncSession,
-    response: Response,
-    token_aud: list[str],
-    refresh_token: str,
+        session: AsyncSession,
+        response: Response,
+        token_aud: list[str],
+        refresh_token: str,
 ):
     # 1) Проверка refresh токена
     user_id = await check_refresh_token_valid(

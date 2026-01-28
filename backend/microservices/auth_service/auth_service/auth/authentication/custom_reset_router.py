@@ -33,7 +33,7 @@ RESET_PASSWORD_RESPONSES: OpenAPIResponseType = {
 
 
 def get_reset_password_router_custom(
-    get_user_manager: UserManagerDependency[models.UP, models.ID],
+        get_user_manager: UserManagerDependency[models.UP, models.ID],
 ) -> APIRouter:
     """Generate a router with the reset password routes."""
     router = APIRouter()
@@ -44,9 +44,9 @@ def get_reset_password_router_custom(
         name="reset:forgot_password",
     )
     async def forgot_password(
-        request: Request,
-        email: EmailStr = Body(..., embed=True),
-        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+            request: Request,
+            email: EmailStr = Body(..., embed=True),
+            user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
             user = await user_manager.get_by_email(email)
@@ -69,10 +69,10 @@ def get_reset_password_router_custom(
         responses=RESET_PASSWORD_RESPONSES,
     )
     async def reset_password(
-        request: Request,
-        token: str,
-        password: str,
-        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+            request: Request,
+            token: str,
+            password: str,
+            user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
             await user_manager.reset_password(
@@ -81,9 +81,9 @@ def get_reset_password_router_custom(
                 request=request,
             )
         except (
-            exceptions.InvalidResetPasswordToken,
-            exceptions.UserNotExists,
-            exceptions.UserInactive,
+                exceptions.InvalidResetPasswordToken,
+                exceptions.UserNotExists,
+                exceptions.UserInactive,
         ):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

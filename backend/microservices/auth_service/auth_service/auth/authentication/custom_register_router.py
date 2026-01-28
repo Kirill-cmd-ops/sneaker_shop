@@ -5,17 +5,17 @@ from fastapi_users import exceptions, models, schemas
 from fastapi_users.manager import BaseUserManager, UserManagerDependency
 from fastapi_users.router.common import ErrorCode, ErrorModel
 
-from auth_service.auth.dependencies.kafka_producer import get_kafka_producer
-from auth_service.auth.kafka.producers.users import (
+from microservices.auth_service.auth_service.auth.dependencies.kafka_producer import get_kafka_producer
+from microservices.auth_service.auth_service.auth.kafka.producers.users import (
     publish_user_created,
 )
-from auth_service.auth.schemas.user import UserCreateWithoutConfirm
+from microservices.auth_service.auth_service.auth.schemas.user import UserCreateWithoutConfirm
 
 
 def get_register_router_custom(
-    get_user_manager: UserManagerDependency[models.UP, models.ID],
-    user_schema: type[schemas.U],
-    user_create_schema: type[schemas.UC],
+        get_user_manager: UserManagerDependency[models.UP, models.ID],
+        user_schema: type[schemas.U],
+        user_create_schema: type[schemas.UC],
 ) -> APIRouter:
     """Generate a router with the register route."""
     router = APIRouter()
@@ -43,7 +43,7 @@ def get_register_router_custom(
                                     "detail": {
                                         "code": ErrorCode.REGISTER_INVALID_PASSWORD,
                                         "reason": "Password should be"
-                                        "at least 3 characters",
+                                                  "at least 3 characters",
                                     }
                                 },
                             },
@@ -54,10 +54,10 @@ def get_register_router_custom(
         },
     )
     async def register(
-        request: Request,
-        user_create: user_create_schema,  # type: ignore
-        user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
-        producer: AIOKafkaProducer = Depends(get_kafka_producer),
+            request: Request,
+            user_create: user_create_schema,  # type: ignore
+            user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
+            producer: AIOKafkaProducer = Depends(get_kafka_producer),
     ):
         try:
             user_create_dict = user_create.model_dump(exclude={"confirm_password"})
