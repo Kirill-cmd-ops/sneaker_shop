@@ -1,18 +1,17 @@
-from fastapi import HTTPException
 from sqlalchemy import select
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from stock_notification_service.stock_notification.enums import SubscriptionStatus
-from stock_notification_service.stock_notification.models import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.enums import \
+    SubscriptionStatus
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import (
     UserSneakerOneTimeSubscription,
 )
 
 
 async def deactivate_user_one_time_subscription_service(
-    subscription_id: int,
-    user_id: int,
-    session: AsyncSession,
+        subscription_id: int,
+        user_id: int,
+        session: AsyncSession,
 ):
     async with session.begin():
         subscription = await session.scalar(

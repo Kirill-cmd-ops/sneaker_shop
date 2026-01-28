@@ -1,6 +1,6 @@
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
-from stock_notification_service.stock_notification.models import User
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import User
 
 
 async def seed_users(session: AsyncSession):

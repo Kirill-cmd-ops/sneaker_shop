@@ -1,6 +1,7 @@
 from sqlalchemy import delete
 
-from stock_notification_service.stock_notification.models import Sneaker, db_helper
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import Sneaker, \
+    db_helper
 
 
 async def delete_sneaker_service(sneaker_id: int):

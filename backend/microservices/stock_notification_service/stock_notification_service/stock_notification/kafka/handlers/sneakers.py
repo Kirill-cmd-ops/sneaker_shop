@@ -1,14 +1,14 @@
-from stock_notification_service.stock_notification.schemas import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas import (
     SneakerCreate,
     SneakerUpdate,
 )
-from stock_notification_service.stock_notification.services.sneaker.create import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.sneaker.create import (
     create_sneaker_service,
 )
-from stock_notification_service.stock_notification.services.sneaker.delete import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.sneaker.delete import (
     delete_sneaker_service,
 )
-from stock_notification_service.stock_notification.services.sneaker.update import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.sneaker.update import (
     update_sneaker_service,
 )
 

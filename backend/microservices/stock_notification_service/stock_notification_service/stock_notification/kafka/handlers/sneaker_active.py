@@ -1,4 +1,4 @@
-from stock_notification_service.stock_notification.services.subscription.orchestrators import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.orchestrators import (
     deactivate_all_subscriptions_for_sneaker_orchestrator,
     reactivate_all_subscriptions_for_sneaker_orchestrator,
 )

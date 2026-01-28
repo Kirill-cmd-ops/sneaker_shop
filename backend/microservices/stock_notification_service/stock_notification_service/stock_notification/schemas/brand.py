@@ -1,6 +1,7 @@
 from pydantic import Field
 
-from stock_notification_service.stock_notification.schemas.mixins.record import RecordCreateMixin
+from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas.mixins.record import \
+    RecordCreateMixin
 
 
 class BrandGeneral(RecordCreateMixin):

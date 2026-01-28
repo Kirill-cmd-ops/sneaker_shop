@@ -1,6 +1,7 @@
 from sqlalchemy import delete
 
-from stock_notification_service.stock_notification.models import User, db_helper
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import User, \
+    db_helper
 
 
 async def delete_user_service(user_id: int):

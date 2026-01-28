@@ -1,14 +1,14 @@
-from stock_notification_service.stock_notification.schemas import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas import (
     UserCreate,
     UserUpdate,
 )
-from stock_notification_service.stock_notification.services.user.create import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.user.create import (
     create_user_service,
 )
-from stock_notification_service.stock_notification.services.user.delete import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.user.delete import (
     delete_user_service,
 )
-from stock_notification_service.stock_notification.services.user.update import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.user.update import (
     update_user_service,
 )
 

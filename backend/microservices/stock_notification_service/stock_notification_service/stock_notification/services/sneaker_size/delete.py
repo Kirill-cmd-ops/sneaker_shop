@@ -3,15 +3,17 @@ from typing import Type
 from fastapi import HTTPException
 from sqlalchemy import delete
 
-from stock_notification_service.stock_notification.models import Base, db_helper
-from stock_notification_service.stock_notification.schemas import SneakerAssocsDelete
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import Base, \
+    db_helper
+from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas import \
+    SneakerAssocsDelete
 
 
 async def delete_sizes_from_sneaker_service(
-    sneaker_id: int,
-    sneaker_assoc_delete: SneakerAssocsDelete,
-    sneaker_association_model: Type[Base],
-    field_name: str,
+        sneaker_id: int,
+        sneaker_assoc_delete: SneakerAssocsDelete,
+        sneaker_association_model: Type[Base],
+        field_name: str,
 ):
     """
     Функция для одаления записи в ассоциативной таблице

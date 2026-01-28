@@ -3,8 +3,9 @@ from typing import TYPE_CHECKING
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from stock_notification_service.stock_notification.models.base import Base
-from stock_notification_service.stock_notification.models.mixins import IntIdPkMixin
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models.base import Base
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models.mixins import \
+    IntIdPkMixin
 
 if TYPE_CHECKING:
     from .user_sneaker_subscription import UserSneakerSubscription

@@ -1,9 +1,10 @@
-from stock_notification_service.stock_notification.models import db_helper, Size
-from stock_notification_service.stock_notification.schemas import SizeCreate
-from stock_notification_service.stock_notification.services.record.create import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import db_helper, \
+    Size
+from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas import SizeCreate
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.record.create import (
     create_record_service,
 )
-from stock_notification_service.stock_notification.services.record.delete import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.record.delete import (
     delete_record_service,
 )
 

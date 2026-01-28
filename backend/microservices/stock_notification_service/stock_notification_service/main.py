@@ -2,33 +2,32 @@ import asyncio
 from asyncio import create_task
 from contextlib import asynccontextmanager
 
-import uvicorn
 from fastapi import FastAPI
 
-from kafka.consumer import start_consumer, close_consumer
-from stock_notification_service.stock_notification.config import settings
-from stock_notification_service.stock_notification.kafka.handlers.brands import (
+from infrastructure.kafka.consumer import start_consumer, close_consumer
+from microservices.stock_notification_service.stock_notification_service.stock_notification.config import settings
+from microservices.stock_notification_service.stock_notification_service.stock_notification.kafka.handlers.brands import (
     handle_brand_event,
 )
-from stock_notification_service.stock_notification.kafka.handlers.sizes import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.kafka.handlers.sizes import (
     handle_size_event,
 )
-from stock_notification_service.stock_notification.kafka.handlers.sneaker_active import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.kafka.handlers.sneaker_active import (
     handle_sneaker_active_event,
 )
-from stock_notification_service.stock_notification.kafka.handlers.sneakers import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.kafka.handlers.sneakers import (
     handle_sneaker_event,
 )
-from stock_notification_service.stock_notification.kafka.handlers.sneaker_sizes import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.kafka.handlers.sneaker_sizes import (
     handle_sneaker_sizes_event,
 )
-from stock_notification_service.stock_notification.kafka.handlers.users import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.kafka.handlers.users import (
     handle_user_event,
 )
-from stock_notification_service.stock_notification.models import db_helper
-from stock_notification_service.add_middleware import add_middleware
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import db_helper
+from microservices.stock_notification_service.stock_notification_service.add_middleware import add_middleware
 
-from stock_notification_service import router as stock_notification_router
+from microservices.stock_notification_service.stock_notification_service import router as stock_notification_router
 
 
 @asynccontextmanager
@@ -120,16 +119,6 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-
 add_middleware(app=app)
 
 app.include_router(stock_notification_router)
-
-# TODO: удалить, он лишний, мы все равно запускаем через docker compose
-if __name__ == "__main__":
-    uvicorn.run(
-        app="stock_notification_service.main:app",
-        host=settings.run.host,
-        port=settings.run.port,
-        reload=True,
-    )

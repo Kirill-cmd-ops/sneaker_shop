@@ -1,15 +1,16 @@
 from sqlalchemy.dialects.postgresql import insert
 
-from stock_notification_service.stock_notification.models import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import (
     SneakerSizeAssociation,
     db_helper,
 )
-from stock_notification_service.stock_notification.schemas import SneakerSizesCreate
+from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas import \
+    SneakerSizesCreate
 
 
 async def add_sizes_to_sneaker_service(
-    sneaker_id: int,
-    sneaker_sizes_create: SneakerSizesCreate,
+        sneaker_id: int,
+        sneaker_sizes_create: SneakerSizesCreate,
 ):
     async with db_helper.session_context() as session:
         async with session.begin():

@@ -1,28 +1,29 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from stock_notification_service.stock_notification.config import settings
-from stock_notification_service.stock_notification.models import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.config import settings
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import (
     SneakerSizeAssociation,
     db_helper,
 )
-from stock_notification_service.stock_notification.schemas import SneakerSizeUpdate
+from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas import \
+    SneakerSizeUpdate
 
-from stock_notification_service.stock_notification.celery_tasks.sneaker_size_quantity import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.celery_tasks.sneaker_size_quantity import (
     process_sneaker_size_quantity_update,
 )
-from stock_notification_service.stock_notification.services.subscription.one_time.fetch import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.one_time.fetch import (
     get_active_one_time_subscriptions_for_sneaker_service,
 )
-from stock_notification_service.stock_notification.services.subscription.permanent.fetch import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.permanent.fetch import (
     get_active_permanent_subscriptions_for_sneaker_service,
 )
 
 
 async def update_sneaker_size_quantity_service(
-    session: AsyncSession,
-    sneaker_id: int,
-    sneaker_size_update: SneakerSizeUpdate,
+        session: AsyncSession,
+        sneaker_id: int,
+        sneaker_size_update: SneakerSizeUpdate,
 ):
     sneaker_size = await session.scalar(
         select(SneakerSizeAssociation)
@@ -42,9 +43,9 @@ async def update_sneaker_size_quantity_service(
 
 # TODO: переместить
 async def get_subscribed_emails(
-    session: AsyncSession,
-    sneaker_id: int,
-    sneaker_size_update: SneakerSizeUpdate,
+        session: AsyncSession,
+        sneaker_id: int,
+        sneaker_size_update: SneakerSizeUpdate,
 ):
     subscribed_users = await get_active_permanent_subscriptions_for_sneaker_service(
         session=session,

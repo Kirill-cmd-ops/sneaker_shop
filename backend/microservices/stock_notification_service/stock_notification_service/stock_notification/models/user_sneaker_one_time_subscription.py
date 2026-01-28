@@ -3,9 +3,10 @@ from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey, UniqueConstraint, Enum as PgEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from stock_notification_service.stock_notification.models import Base
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import Base
 from .mixins import IntIdPkMixin
-from stock_notification_service.stock_notification.enums import SubscriptionStatus
+from microservices.stock_notification_service.stock_notification_service.stock_notification.enums import \
+    SubscriptionStatus
 
 if TYPE_CHECKING:
     from .sneaker import Sneaker
@@ -59,4 +60,3 @@ class UserSneakerOneTimeSubscription(Base, IntIdPkMixin):
         "Size",
         back_populates="user_sneaker_one_time_notifications",
     )
-

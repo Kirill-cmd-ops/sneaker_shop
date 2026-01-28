@@ -1,9 +1,10 @@
-from stock_notification_service.stock_notification.models import db_helper, Brand
-from stock_notification_service.stock_notification.schemas import BrandCreate
-from stock_notification_service.stock_notification.services.record.create import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import db_helper, \
+    Brand
+from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas import BrandCreate
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.record.create import (
     create_record_service,
 )
-from stock_notification_service.stock_notification.services.record.delete import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.record.delete import (
     delete_record_service,
 )
 

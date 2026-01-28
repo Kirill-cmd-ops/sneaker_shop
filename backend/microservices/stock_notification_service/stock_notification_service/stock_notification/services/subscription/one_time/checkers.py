@@ -2,17 +2,18 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from stock_notification_service.stock_notification.enums import SubscriptionStatus
-from stock_notification_service.stock_notification.models import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.enums import \
+    SubscriptionStatus
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import (
     UserSneakerOneTimeSubscription,
 )
 
 
 async def check_active_one_time_subscription_service(
-    session: AsyncSession,
-    user_id: int,
-    sneaker_id: int,
-    size_id: int,
+        session: AsyncSession,
+        user_id: int,
+        sneaker_id: int,
+        size_id: int,
 ):
     user_active_subscription = await session.scalar(
         select(UserSneakerOneTimeSubscription).where(

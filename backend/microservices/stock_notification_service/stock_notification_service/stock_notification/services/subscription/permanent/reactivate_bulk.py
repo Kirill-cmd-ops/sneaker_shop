@@ -1,13 +1,15 @@
 from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from stock_notification_service.stock_notification.enums import SubscriptionStatus
-from stock_notification_service.stock_notification.models import UserSneakerSubscription
+from microservices.stock_notification_service.stock_notification_service.stock_notification.enums import \
+    SubscriptionStatus
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import \
+    UserSneakerSubscription
 
 
 async def reactivate_all_permanent_subscriptions_for_sneaker_service(
-    session: AsyncSession,
-    sneaker_id: int,
+        session: AsyncSession,
+        sneaker_id: int,
 ):
     await session.execute(
         update(UserSneakerSubscription)

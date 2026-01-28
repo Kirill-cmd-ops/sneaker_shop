@@ -1,51 +1,51 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from stock_notification_service.stock_notification.models import db_helper
-from stock_notification_service.stock_notification.schemas.subscription import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import db_helper
+from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas.subscription import (
     SubscriptionCreate,
 )
-from stock_notification_service.stock_notification.services.sneaker.checkers import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.sneaker.checkers import (
     check_sneaker_active_service,
 )
-from stock_notification_service.stock_notification.services.sneaker_size.checkers import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.sneaker_size.checkers import (
     check_inactive_sneaker_size_service,
 )
-from stock_notification_service.stock_notification.services.subscription.one_time.checkers import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.one_time.checkers import (
     check_active_one_time_subscription_service,
 )
-from stock_notification_service.stock_notification.services.subscription.one_time.create import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.one_time.create import (
     create_user_one_time_subscription_service,
 )
-from stock_notification_service.stock_notification.services.subscription.one_time.deactivate_bulk import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.one_time.deactivate_bulk import (
     deactivate_all_one_time_subscriptions_for_sneaker_service,
 )
-from stock_notification_service.stock_notification.services.subscription.one_time.fetch import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.one_time.fetch import (
     get_inactive_one_time_subscription_for_user_service,
 )
-from stock_notification_service.stock_notification.services.subscription.one_time.reactivate import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.one_time.reactivate import (
     reactivate_one_time_subscription_by_sneaker_size_service,
     reactivate_one_time_subscription_by_id_service,
 )
-from stock_notification_service.stock_notification.services.subscription.one_time.reactivate_bulk import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.one_time.reactivate_bulk import (
     reactivate_all_one_time_subscriptions_for_sneaker_service,
 )
-from stock_notification_service.stock_notification.services.subscription.permanent.checkers import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.permanent.checkers import (
     check_active_permanent_subscription_service,
 )
-from stock_notification_service.stock_notification.services.subscription.permanent.create import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.permanent.create import (
     create_user_permanent_subscription_service,
 )
-from stock_notification_service.stock_notification.services.subscription.permanent.deactivate_bulk import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.permanent.deactivate_bulk import (
     deactivate_all_permanent_subscriptions_for_sneaker_service,
 )
-from stock_notification_service.stock_notification.services.subscription.permanent.fetch import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.permanent.fetch import (
     get_inactive_permanent_subscription_for_user_service,
 )
-from stock_notification_service.stock_notification.services.subscription.permanent.reactivate import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.permanent.reactivate import (
     reactivate_permanent_subscription_by_sneaker_size_service,
     reactivate_permanent_subscription_by_id_service,
 )
-from stock_notification_service.stock_notification.services.subscription.permanent.reactivate_bulk import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.permanent.reactivate_bulk import (
     reactivate_all_permanent_subscriptions_for_sneaker_service,
 )
 
@@ -77,9 +77,9 @@ async def reactivate_all_subscriptions_for_sneaker_orchestrator(sneaker_id):
 
 
 async def create_user_one_time_subscription_orchestrator(
-    session: AsyncSession,
-    user_id: int,
-    subscription_create: SubscriptionCreate,
+        session: AsyncSession,
+        user_id: int,
+        subscription_create: SubscriptionCreate,
 ):
     async with session.begin():
         # проверка активности sneaker
@@ -135,9 +135,9 @@ async def create_user_one_time_subscription_orchestrator(
 
 
 async def reactivate_all_one_time_subscriptions_for_user_orchestrator(
-    session: AsyncSession,
-    user_id: int,
-    subscription_id: int,
+        session: AsyncSession,
+        user_id: int,
+        subscription_id: int,
 ):
     async with session.begin():
         inactive_subscription = (
@@ -171,9 +171,9 @@ async def reactivate_all_one_time_subscriptions_for_user_orchestrator(
 
 
 async def create_user_permanent_subscription_orchestrator(
-    session: AsyncSession,
-    user_id: int,
-    subscription_create: SubscriptionCreate,
+        session: AsyncSession,
+        user_id: int,
+        subscription_create: SubscriptionCreate,
 ):
     async with session.begin():
         # проверка активности sneaker
@@ -228,9 +228,9 @@ async def create_user_permanent_subscription_orchestrator(
 
 
 async def reactivate_all_permanent_subscriptions_for_user_orchestrator(
-    session: AsyncSession,
-    user_id: int,
-    subscription_id: int,
+        session: AsyncSession,
+        user_id: int,
+        subscription_id: int,
 ):
     async with session.begin():
         inactive_subscription = (

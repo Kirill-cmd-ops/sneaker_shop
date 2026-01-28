@@ -1,14 +1,16 @@
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from stock_notification_service.stock_notification.enums import SubscriptionStatus
-from stock_notification_service.stock_notification.models import UserSneakerSubscription
+from microservices.stock_notification_service.stock_notification_service.stock_notification.enums import \
+    SubscriptionStatus
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import \
+    UserSneakerSubscription
 
 
 async def reactivate_permanent_subscription_by_id_service(
-    subscription_id: int,
-    user_id: int,
-    session: AsyncSession,
+        subscription_id: int,
+        user_id: int,
+        session: AsyncSession,
 ):
     subscription = await session.scalar(
         select(UserSneakerSubscription).where(
@@ -24,10 +26,10 @@ async def reactivate_permanent_subscription_by_id_service(
 
 
 async def reactivate_permanent_subscription_by_sneaker_size_service(
-    session: AsyncSession,
-    user_id: int,
-    sneaker_id: int,
-    size_id: int,
+        session: AsyncSession,
+        user_id: int,
+        sneaker_id: int,
+        size_id: int,
 ):
     stmt = (
         update(UserSneakerSubscription)

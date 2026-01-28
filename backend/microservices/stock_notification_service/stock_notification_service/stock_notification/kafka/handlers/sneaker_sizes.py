@@ -1,16 +1,17 @@
-from stock_notification_service.stock_notification.models import SneakerSizeAssociation
-from stock_notification_service.stock_notification.schemas import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import \
+    SneakerSizeAssociation
+from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas import (
     SneakerSizesCreate,
     SneakerSizeUpdate,
     SneakerAssocsDelete,
 )
-from stock_notification_service.stock_notification.services.sneaker_size.create import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.sneaker_size.create import (
     add_sizes_to_sneaker_service,
 )
-from stock_notification_service.stock_notification.services.sneaker_size.delete import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.sneaker_size.delete import (
     delete_sizes_from_sneaker_service,
 )
-from stock_notification_service.stock_notification.services.sneaker_size.orchestrators import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.services.sneaker_size.orchestrators import (
     update_sneaker_size_quantity_with_notifications_orchestrator,
 )
 

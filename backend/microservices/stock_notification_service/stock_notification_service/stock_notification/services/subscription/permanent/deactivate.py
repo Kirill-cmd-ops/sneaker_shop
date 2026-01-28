@@ -1,14 +1,16 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from stock_notification_service.stock_notification.enums import SubscriptionStatus
-from stock_notification_service.stock_notification.models import UserSneakerSubscription
+from microservices.stock_notification_service.stock_notification_service.stock_notification.enums import \
+    SubscriptionStatus
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import \
+    UserSneakerSubscription
 
 
 async def deactivate_user_permanent_subscription_service(
-    subscription_id: int,
-    user_id: int,
-    session: AsyncSession,
+        subscription_id: int,
+        user_id: int,
+        session: AsyncSession,
 ):
     async with session.begin():
         subscription = await session.scalar(

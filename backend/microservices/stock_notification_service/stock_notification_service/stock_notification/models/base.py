@@ -1,8 +1,8 @@
 from sqlalchemy import MetaData
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import declared_attr
-from stock_notification_service.stock_notification.config import settings
-from stock_notification_service.utils import camel_case_to_snake_case
+from microservices.stock_notification_service.stock_notification_service.stock_notification.config import settings
+from microservices.stock_notification_service.stock_notification_service.utils import camel_case_to_snake_case
 
 
 class Base(DeclarativeBase):

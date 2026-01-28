@@ -3,13 +3,15 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from stock_notification_service.stock_notification.enums import SubscriptionStatus
-from stock_notification_service.stock_notification.models import UserSneakerSubscription
+from microservices.stock_notification_service.stock_notification_service.stock_notification.enums import \
+    SubscriptionStatus
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import \
+    UserSneakerSubscription
 
 
 async def get_active_permanent_subscriptions_for_user_service(
-    user_id: int,
-    session: AsyncSession,
+        user_id: int,
+        session: AsyncSession,
 ):
     result = await session.scalars(
         select(UserSneakerSubscription).where(
@@ -24,9 +26,9 @@ async def get_active_permanent_subscriptions_for_user_service(
 
 
 async def get_active_permanent_subscriptions_for_sneaker_service(
-    session: AsyncSession,
-    sneaker_id: int,
-    size_id: int,
+        session: AsyncSession,
+        sneaker_id: int,
+        size_id: int,
 ):
     result = await session.scalars(
         select(UserSneakerSubscription)
@@ -42,9 +44,9 @@ async def get_active_permanent_subscriptions_for_sneaker_service(
 
 
 async def get_inactive_permanent_subscription_for_user_service(
-    session: AsyncSession,
-    user_id: int,
-    subscription_id: int,
+        session: AsyncSession,
+        user_id: int,
+        subscription_id: int,
 ):
     subscription = await session.scalar(
         select(UserSneakerSubscription).where(
