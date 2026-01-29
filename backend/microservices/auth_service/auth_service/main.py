@@ -3,12 +3,12 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 
-from auth_service.auth.config import settings
-from auth_service.auth.models import db_helper
-from auth_service.add_middleware import add_middleware
-from auth_service import router as auth_router
+from microservices.auth_service.auth_service.auth.config import settings
+from microservices.auth_service.auth_service.auth.models import db_helper
+from microservices.auth_service.auth_service.add_middleware import add_middleware
+from microservices.auth_service.auth_service import router as auth_router
 
-from kafka.producer import start_producer, close_producer
+from infrastructure.kafka.producer import start_producer, close_producer
 
 
 @asynccontextmanager

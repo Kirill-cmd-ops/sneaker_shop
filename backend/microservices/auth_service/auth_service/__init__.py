@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from auth_service.auth.authentication.routers import router as auth_router
-from auth_service.auth.refresh.routers.refresh_routers import refresh_router
-from auth_service.auth.routers.role_permissions import router as role_permissions_router
+from microservices.auth_service.auth_service.auth.authentication.routers import router as auth_router
+from microservices.auth_service.auth_service.auth.refresh.routers.refresh_routers import refresh_router
+from microservices.auth_service.auth_service.auth.routers.role_permissions import router as role_permissions_router
 
 
 router = APIRouter()
