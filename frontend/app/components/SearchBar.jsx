@@ -55,7 +55,7 @@ export default function SearchBar({ isOpen, toggleSearch }) {
       )}
 
       {isOpen && (
-        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 w-[500px] bg-white shadow-lg rounded-md p-3 flex items-center">
+        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 w-[500px] bg-white shadow-lg rounded-md p-3 flex items-center z-[70]">
           <div className="relative w-full">
             <input
               type="text"
