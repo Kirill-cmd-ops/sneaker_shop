@@ -15,10 +15,11 @@ function CatalogContent() {
   const router = useRouter();
 
   const currentPage = Number(searchParams.get("page")) || 1;
+  const sortBy = searchParams.get("sort_by") || "";
+  const order = searchParams.get("order") || "";
+
   const [sneakersData, setSneakersData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState(searchParams.get("sort_by") || "");
-  const [order, setOrder] = useState(searchParams.get("order") || "");
   const [totalPages, setTotalPages] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const controlsRef = useRef(null);
@@ -49,8 +50,19 @@ function CatalogContent() {
       const params = new URLSearchParams(searchParams.toString());
       params.set("limit", "30");
 
-      const res = await fetch(`http://localhost:8000/api/v1/sneakers/?${params.toString()}`);
+      // ДЕБАГ: добавим логирование запроса
+      console.log("Запрос к API с параметрами:", params.toString());
+
+      const res = await fetch(`http://127.0.0.1:8005/api/v1/catalog/?${params.toString()}`);
       const data = await res.json();
+
+      // ДЕБАГ: посмотрим что пришло от сервера
+      console.log("Ответ от сервера:", {
+        total_count: data.total_count,
+        items_count: data.items?.length,
+        first_item: data.items?.[0],
+        sort_applied: `sort_by=${sortBy}, order=${order}`
+      });
 
       setSneakersData(data || { total_count: 0, items: [] });
       setTotalPages(Math.ceil((data.total_count || 1) / 30));
@@ -63,22 +75,50 @@ function CatalogContent() {
 
   useEffect(() => {
     fetchSneakers();
-  }, [searchParams, currentPage]);
+  }, [searchParams]); // Убрали currentPage из зависимостей, он уже в searchParams
 
   const handleOpenSidebar = () => setIsSidebarOpen(true);
   const handleCloseSidebar = () => setIsSidebarOpen(false);
 
-  const applyFilters = (filters) => {
-    const newParams = new URLSearchParams();
-    if (filters.sneakerName) newParams.set("name", filters.sneakerName);
-    if (filters.minPrice) newParams.set("min_price", filters.minPrice);
-    if (filters.maxPrice) newParams.set("max_price", filters.maxPrice);
-    if (filters.selectedSizes?.length) newParams.set("size", filters.selectedSizes.join(","));
-    if (filters.selectedBrands?.length) newParams.set("brand_name", filters.selectedBrands.join(","));
-    if (filters.selectedGenders?.length) newParams.set("gender", filters.selectedGenders.join(","));
+  // Функция для обновления сортировки
+  const updateSorting = (newSortBy, newOrder = "desc") => {
+    const params = new URLSearchParams(searchParams.toString());
 
-    newParams.set("page", "1");
-    router.push(`/catalog${newParams.toString() ? "?" + newParams.toString() : ""}`);
+    if (newSortBy) {
+      params.set("sort_by", newSortBy);
+      params.set("order", newOrder);
+    } else {
+      params.delete("sort_by");
+      params.delete("order");
+    }
+
+    params.set("page", "1"); // Сбрасываем на первую страницу при изменении сортировки
+
+    // Сохраняем позицию скролла перед переходом
+    sessionStorage.setItem("scrollPosition", window.scrollY);
+    router.push(`/catalog?${params.toString()}`);
+  };
+
+  const applyFilters = (filters) => {
+    const params = new URLSearchParams();
+
+    if (filters.sneakerName) params.set("name", filters.sneakerName);
+    if (filters.minPrice) params.set("min_price", filters.minPrice);
+    if (filters.maxPrice) params.set("max_price", filters.maxPrice);
+    if (filters.selectedSizes?.length) params.set("size", filters.selectedSizes.join(","));
+    if (filters.selectedBrands?.length) params.set("brand_name", filters.selectedBrands.join(","));
+    if (filters.selectedGenders?.length) params.set("gender", filters.selectedGenders.join(","));
+
+    // Сохраняем текущую сортировку
+    if (sortBy) {
+      params.set("sort_by", sortBy);
+      params.set("order", order);
+    }
+
+    params.set("page", "1");
+
+    sessionStorage.setItem("scrollPosition", window.scrollY);
+    router.push(`/catalog${params.toString() ? "?" + params.toString() : ""}`);
     setIsSidebarOpen(false);
   };
 
@@ -93,15 +133,32 @@ function CatalogContent() {
         >
           Фильтры
         </button>
-        <SortDropdown setSortBy={setSortBy} />
+
+        {/* Передаем текущие значения и функцию обновления */}
+        <SortDropdown
+          currentSortBy={sortBy}
+          currentOrder={order}
+          onSortChange={updateSorting}
+        />
       </div>
 
-      <FilterSidebar isSidebarOpen={isSidebarOpen} handleCloseSidebar={handleCloseSidebar} applyFilters={applyFilters} />
+      <FilterSidebar
+        isSidebarOpen={isSidebarOpen}
+        handleCloseSidebar={handleCloseSidebar}
+        applyFilters={applyFilters}
+      />
 
       {loading ? (
         <p className="text-lg text-gray-500 mt-6">Загрузка...</p>
       ) : (
         <>
+          {/* ДЕБАГ: добавим информацию о сортировке */}
+          {sortBy && (
+            <div className="mt-4 text-sm text-gray-500">
+              Сортировка по: <strong>{sortBy}</strong> ({order})
+            </div>
+          )}
+
           {sneakersData?.items?.length > 0 ? (
             <SneakerGrid data={sneakersData} cols="grid-cols-5" />
           ) : (
@@ -110,26 +167,34 @@ function CatalogContent() {
         </>
       )}
 
-      <div className="flex gap-3 mt-8">
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-          <button
-            key={page}
-            onClick={() => {
-              sessionStorage.setItem("scrollPosition", window.scrollY);
-              const currentParams = new URLSearchParams(searchParams.toString());
-              currentParams.set("page", page);
-              router.push(`/catalog?${currentParams.toString()}`);
-            }}
-            className={`px-4 py-2 rounded-md transition-all ${
-              currentPage === page ? "bg-yellow-500 text-black font-bold" : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-            }`}
-          >
-            {page}
-          </button>
-        ))}
-      </div>
+      {totalPages > 1 && (
+        <div className="flex gap-3 mt-8">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => {
+                sessionStorage.setItem("scrollPosition", window.scrollY);
+                const params = new URLSearchParams(searchParams.toString());
+                params.set("page", page.toString());
+                router.push(`/catalog?${params.toString()}`);
+              }}
+              className={`px-4 py-2 rounded-md transition-all ${
+                currentPage === page
+                  ? "bg-yellow-500 text-black font-bold"
+                  : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+      )}
 
-      <p className="mt-4 text-lg font-semibold text-neutral-600">Страница: {currentPage}</p>
+      {sneakersData?.total_count && (
+        <p className="mt-4 text-lg font-semibold text-neutral-600">
+          Найдено: {sneakersData.total_count} товаров • Страница: {currentPage} из {totalPages}
+        </p>
+      )}
     </main>
   );
 }
