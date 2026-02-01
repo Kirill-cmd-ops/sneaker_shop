@@ -10,7 +10,52 @@ function DetailsContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedSizeId, setSelectedSizeId] = useState(null);
   const [toastMessage, setToastMessage] = useState("");
+
+  // Функция для запроса к API корзины с фиксированными заголовками
+  const cartRequest = async (url, options = {}) => {
+    const headers = {
+      'Content-Type': 'application/json',
+      'X-User-Role': 'User',
+      'X-User-Id': '2',
+      ...(options.headers || {}),
+    };
+
+    const fetchOptions = {
+      ...options,
+      headers,
+      credentials: 'include',
+    };
+
+    const fullUrl = url.startsWith('http')
+      ? url
+      : `http://localhost:8004${url.startsWith('/') ? '' : '/'}${url}`;
+
+    return fetch(fullUrl, fetchOptions);
+  };
+
+  // Функция для запроса к API избранного с фиксированными заголовками
+  const favoriteRequest = async (url, options = {}) => {
+    const headers = {
+      'Content-Type': 'application/json',
+      'X-User-Role': 'User',
+      'X-User-Id': '2',
+      ...(options.headers || {}),
+    };
+
+    const fetchOptions = {
+      ...options,
+      headers,
+      credentials: 'include',
+    };
+
+    const fullUrl = url.startsWith('http')
+      ? url
+      : `http://localhost:8003${url.startsWith('/') ? '' : '/'}${url}`;
+
+    return fetch(fullUrl, fetchOptions);
+  };
 
   useEffect(() => {
     if (!sneakerId) return;
@@ -18,7 +63,7 @@ function DetailsContent() {
     const fetchSneakerDetails = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:8000/api/v1/sneaker/${sneakerId}`);
+        const response = await fetch(`http://127.0.0.1:8006/api/v1/sneakers/${sneakerId}`);
         if (!response.ok) {
           throw new Error("Ошибка загрузки данных");
         }
@@ -41,48 +86,103 @@ function DetailsContent() {
     setTimeout(() => setToastMessage(""), 3000);
   };
 
-  // Обновлённый обработчик добавления в корзину:
+  // Исправленный обработчик добавления в корзину
   const handleAddToCart = async () => {
-    if (!selectedSize) {
+    if (!selectedSizeId) {
       showToastMessage("Пожалуйста, выберите размер");
       return;
     }
+
     try {
-      const res = await fetch("http://localhost:8000/api/v1/cart_add/", {
+      // Формируем данные в соответствии с CartSneakerCreate
+      const requestData = {
+        sneaker_id: parseInt(sneakerId),
+        size_id: selectedSizeId
+      };
+
+      console.log("Отправка данных в корзину:", requestData);
+
+      // Используем cartRequest
+      const res = await cartRequest("/api/v1/cart/sneakers/", {
         method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ sneaker_id: sneakerId, sneaker_size: selectedSize }),
+        body: JSON.stringify(requestData),
       });
-      if (!res.ok) {
-        throw new Error("Ошибка при добавлении товара в корзину");
+
+      console.log("Ответ корзины:", res.status, res.statusText);
+
+      if (res.ok || res.status === 201 || res.status === 200 || res.status === 204) {
+        showToastMessage("Товар успешно добавлен в корзину!");
+        return;
       }
-      showToastMessage("Товар успешно добавлен в корзину!");
+
+      // Получаем детали ошибки
+      let errorMessage = "Ошибка при добавлении товара в корзину";
+      try {
+        const errorData = await res.json();
+        console.log("Детали ошибки:", errorData);
+
+        // Форматируем сообщение об ошибке
+        if (errorData.detail) {
+          errorMessage = errorData.detail;
+        } else if (Array.isArray(errorData)) {
+          errorMessage = errorData.map(err => err.msg || err.loc?.join('.')).join(', ');
+        } else if (typeof errorData === 'object') {
+          errorMessage = JSON.stringify(errorData);
+        }
+      } catch (e) {
+        errorMessage = await res.text().catch(() => `Ошибка ${res.status}: ${res.statusText}`);
+      }
+      throw new Error(errorMessage);
+
     } catch (error) {
       console.error("Ошибка при добавлении в корзину:", error);
-      showToastMessage("Ошибка при добавлении товара в корзину");
+      showToastMessage(error.message || "Ошибка при добавлении товара в корзину");
     }
   };
 
   const handleFavoriteClick = async () => {
+    // Проверяем, выбран ли размер
+    if (!selectedSizeId) {
+      showToastMessage("Пожалуйста, выберите размер");
+      return;
+    }
+
     try {
-      const res = await fetch("http://localhost:8000/api/v1/favorite_add/", {
+      // Формируем данные для отправки
+      const requestData = {
+        sneaker_id: parseInt(sneakerId),
+        size_id: selectedSizeId
+      };
+
+      console.log("Отправка данных в избранное:", requestData);
+
+      // Используем функцию favoriteRequest
+      const res = await favoriteRequest("/api/v1/favorite/sneakers/", {
         method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ sneaker_id: sneakerId }),
+        body: JSON.stringify(requestData),
       });
-      if (!res.ok) {
-        throw new Error("Ошибка при добавлении товара в избранное");
+
+      console.log("Ответ сервера:", res.status, res.statusText);
+
+      if (res.ok || res.status === 201 || res.status === 200 || res.status === 204) {
+        showToastMessage("Товар добавлен в избранное!");
+        return;
       }
-      showToastMessage("Товар добавлен в избранное!");
+
+      // Обработка ошибок
+      let errorMessage = "Ошибка при добавлении товара в избранное";
+      try {
+        const errorData = await res.json();
+        console.log("Детали ошибки избранного:", errorData);
+        errorMessage = errorData.detail || errorData.message || JSON.stringify(errorData);
+      } catch (e) {
+        errorMessage = await res.text().catch(() => `Ошибка ${res.status}: ${res.statusText}`);
+      }
+      throw new Error(errorMessage);
+
     } catch (error) {
       console.error("Ошибка при добавлении в избранное:", error);
-      showToastMessage("Ошибка при добавлении товара в избранное");
+      showToastMessage(error.message || "Ошибка при добавлении товара в избранное");
     }
   };
 
@@ -101,7 +201,7 @@ function DetailsContent() {
 
       <div className="w-3/5">
         <img
-          src={`http://localhost:8000${sneaker.image_url}`}
+          src={`http://127.0.0.1:8005${sneaker.image_url}`}
           alt={sneaker.name}
           className="w-full h-[500px] object-cover rounded-md"
         />
@@ -110,7 +210,11 @@ function DetailsContent() {
           {sneaker.sizes?.map((size) => (
             <button
               key={size.id}
-              onClick={() => setSelectedSize(size.eu_size)}
+              onClick={() => {
+                setSelectedSize(size.eu_size);
+                setSelectedSizeId(size.id);
+                console.log("Выбран размер:", size.eu_size, "ID:", size.id);
+              }}
               className={`px-6 py-2 rounded-md text-lg font-medium ${
                 selectedSize === size.eu_size
                   ? "bg-yellow-500 text-black"
