@@ -26,23 +26,23 @@ export default function Home() {
     setLoading(true);
     Promise.all([
       fetchSneakers(
-        "http://localhost:8000/api/v1/sneakers/?page=1&limit=10&sort_by=created_at&order=desc",
+        "http://127.0.0.1:8005/api/v1/catalog/?page=1&limit=10&sort_by=created_at&order=desc",
         setNewSneakers
       ),
       fetchSneakers(
-        "http://localhost:8000/api/v1/sneakers/?page=1&limit=8&brand_name=nike&order=asc",
+        "http://127.0.0.1:8005/api/v1/catalog/?page=1&limit=8&brand_name=nike&order=asc",
         setNikeSneakers
       ),
       fetchSneakers(
-        "http://localhost:8000/api/v1/sneakers/?page=1&limit=8&brand_name=puma&order=asc",
+        "http://127.0.0.1:8005/api/v1/catalog/?page=1&limit=8&brand_name=puma&order=asc",
         setPumaSneakers
       ),
       fetchSneakers(
-        "http://localhost:8000/api/v1/sneakers/?page=1&limit=8&brand_name=vans&order=asc",
+        "http://127.0.0.1:8005/api/v1/catalog/?page=1&limit=8&brand_name=vans&order=asc",
         setVansSneakers
       ),
       fetchSneakers(
-        "http://localhost:8000/api/v1/sneakers/?page=1&limit=8&brand_name=adidas&order=asc",
+        "http://127.0.0.1:8005/api/v1/catalog/?page=1&limit=8&brand_name=adidas&order=asc",
         setAdidasSneakers
       ),
     ]).then(() => setLoading(false));
@@ -80,9 +80,9 @@ export default function Home() {
     { src: "/home_banner_vans.jpg", brand: "Vans", sneakers: vanssneakers },
     { src: "/home_banner_adidas.jpg", brand: "Adidas", sneakers: adidassneakers },
   ].map(({ src, brand, sneakers }) => (
-    <div key={brand} className="flex w-full gap-12 items-start mb-[100px]">
+    <div key={brand} className="flex w-full gap-16 items-start mb-[100px]">
       {/* ✅ Баннер с переходом на каталог */}
-      <a href={`/catalog?brand_name=${brand}`} className="relative w-[600px] h-[900px] group block">
+      <a href={`/catalog?brand_name=${brand}`} className="relative w-[400px] h-[800px] group block flex-shrink-0">
         <img
           src={src}
           alt={`Каталог кроссовок ${brand}`}
@@ -92,9 +92,11 @@ export default function Home() {
       </a>
 
       {/* Товары бренда */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         <h1 className="text-5xl font-bold text-neutral-600 mb-6">{brand}</h1>
-        <SneakerGrid data={sneakers} cols="grid-cols-4" />
+        <div className="w-full">
+          <SneakerGrid data={sneakers} cols="grid-cols-4" cardHeight="388px" imageHeight="200px" fullWidth={true} />
+        </div>
       </div>
     </div>
   ))}
