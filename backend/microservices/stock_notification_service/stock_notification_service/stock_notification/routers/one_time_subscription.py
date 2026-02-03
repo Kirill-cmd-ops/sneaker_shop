@@ -42,10 +42,14 @@ async def create_user_one_time_subscription(
         session: AsyncSession = Depends(db_helper.session_getter),
 ):
     try:
+        sneaker_id = subscription_create.sneaker_id
+        size_id = subscription_create.size_id
+
         return await create_user_one_time_subscription_orchestrator(
             session=session,
             user_id=user_id,
-            subscription_create=subscription_create,
+            sneaker_id=sneaker_id,
+            size_id=size_id,
         )
     except IntegrityError as e:
         raise HTTPException(

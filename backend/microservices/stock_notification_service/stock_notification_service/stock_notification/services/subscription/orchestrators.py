@@ -79,36 +79,37 @@ async def reactivate_all_subscriptions_for_sneaker_orchestrator(sneaker_id):
 async def create_user_one_time_subscription_orchestrator(
         session: AsyncSession,
         user_id: int,
-        subscription_create: SubscriptionCreate,
+        sneaker_id: int,
+        size_id: int,
 ):
     async with session.begin():
         # проверка активности sneaker
         await check_sneaker_active_service(
             session=session,
-            sneaker_id=subscription_create.sneaker_id,
+            sneaker_id=sneaker_id,
         )
 
         # проверка доступности размера для sneaker и проверка неактивности размера
         await check_inactive_sneaker_size_service(
             session=session,
-            sneaker_id=subscription_create.sneaker_id,
-            size_id=subscription_create.size_id,
+            sneaker_id=sneaker_id,
+            size_id=size_id,
         )
 
         # проверка активной одноразовой подписки
         await check_active_one_time_subscription_service(
             session=session,
             user_id=user_id,
-            sneaker_id=subscription_create.sneaker_id,
-            size_id=subscription_create.size_id,
+            sneaker_id=sneaker_id,
+            size_id=size_id,
         )
 
         # проверка активной перманентной подписки
         await check_active_permanent_subscription_service(
             session=session,
             user_id=user_id,
-            sneaker_id=subscription_create.sneaker_id,
-            size_id=subscription_create.size_id,
+            sneaker_id=sneaker_id,
+            size_id=size_id,
         )
 
         # реактивация деактивированной разовой подписки
@@ -116,8 +117,8 @@ async def create_user_one_time_subscription_orchestrator(
             await reactivate_one_time_subscription_by_sneaker_size_service(
                 session=session,
                 user_id=user_id,
-                sneaker_id=subscription_create.sneaker_id,
-                size_id=subscription_create.size_id,
+                sneaker_id=sneaker_id,
+                size_id=size_id,
             )
         )
         if update_subscription:
@@ -125,8 +126,8 @@ async def create_user_one_time_subscription_orchestrator(
         else:
             # создание разовой подписки
             result = await create_user_one_time_subscription_service(
-                sneaker_id=subscription_create.sneaker_id,
-                size_id=subscription_create.size_id,
+                sneaker_id=sneaker_id,
+                size_id=size_id,
                 user_id=user_id,
                 session=session,
             )
@@ -173,36 +174,37 @@ async def reactivate_all_one_time_subscriptions_for_user_orchestrator(
 async def create_user_permanent_subscription_orchestrator(
         session: AsyncSession,
         user_id: int,
-        subscription_create: SubscriptionCreate,
+        sneaker_id: int,
+        size_id: int,
 ):
     async with session.begin():
         # проверка активности sneaker
         await check_sneaker_active_service(
             session=session,
-            sneaker_id=subscription_create.sneaker_id,
+            sneaker_id=sneaker_id,
         )
 
         # проверка доступности размера для sneaker и проверка что размер на данный момент неактивен
         await check_inactive_sneaker_size_service(
             session=session,
-            sneaker_id=subscription_create.sneaker_id,
-            size_id=subscription_create.size_id,
+            sneaker_id=sneaker_id,
+            size_id=size_id,
         )
 
         # проверка активной перманентной подписки
         await check_active_permanent_subscription_service(
             session=session,
             user_id=user_id,
-            sneaker_id=subscription_create.sneaker_id,
-            size_id=subscription_create.size_id,
+            sneaker_id=sneaker_id,
+            size_id=size_id,
         )
 
         # проверка активности одноразовой подписки
         await check_active_one_time_subscription_service(
             session=session,
             user_id=user_id,
-            sneaker_id=subscription_create.sneaker_id,
-            size_id=subscription_create.size_id,
+            sneaker_id=sneaker_id,
+            size_id=size_id,
         )
 
         # реактивация деактивной перманентной подписки
@@ -210,8 +212,8 @@ async def create_user_permanent_subscription_orchestrator(
             await reactivate_permanent_subscription_by_sneaker_size_service(
                 session=session,
                 user_id=user_id,
-                sneaker_id=subscription_create.sneaker_id,
-                size_id=subscription_create.size_id,
+                sneaker_id=sneaker_id,
+                size_id=size_id,
             )
         )
         if update_subscription:
@@ -219,8 +221,8 @@ async def create_user_permanent_subscription_orchestrator(
         else:
             # создание перманентной подписки
             result = await create_user_permanent_subscription_service(
-                sneaker_id=subscription_create.sneaker_id,
-                size_id=subscription_create.size_id,
+                sneaker_id=sneaker_id,
+                size_id=size_id,
                 user_id=user_id,
                 session=session,
             )
