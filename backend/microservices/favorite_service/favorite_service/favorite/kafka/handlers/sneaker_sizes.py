@@ -21,23 +21,32 @@ async def handle_sneaker_sizes_event(key: str | None, value: dict):
         if event_type == "sneaker_sizes_created":
             data = value.get("data")
             sneaker_sizes_create = SneakerSizesCreate(**data)
+            size_list = [size.model_dump() for size in sneaker_sizes_create.sizes]
+
             await add_sizes_to_sneaker_service(
                 sneaker_id=int(key),
-                sneaker_sizes_create=sneaker_sizes_create,
+                size_list=size_list,
             )
         elif event_type == "sneaker_sizes_updated":
             data = value.get("data")
-            sneaker_sizes_update = SneakerSizeUpdate(**data)
+            sneaker_size_update = SneakerSizeUpdate(**data)
+
+            size_id = sneaker_size_update.size.size_id
+            quantity = sneaker_size_update.size.quantity
+
             await update_sneaker_size_quantity_service(
                 sneaker_id=int(key),
-                sneaker_size_update=sneaker_sizes_update,
+                size_id=size_id,
+                quantity=quantity,
             )
         elif event_type == "sneaker_sizes_deleted":
             data = value.get("data")
             sneaker_assoc_delete = SneakerAssocsDelete(**data)
+            size_ids = sneaker_assoc_delete.assoc_ids
+
             await delete_sneaker_associations_service(
                 sneaker_id=int(key),
-                sneaker_assoc_delete=sneaker_assoc_delete,
+                assoc_ids=size_ids,
                 sneaker_association_model=SneakerSizeAssociation,
                 field_name="size_id",
             )
