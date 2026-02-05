@@ -4,12 +4,11 @@ from fastapi import HTTPException
 from sqlalchemy import delete
 
 from microservices.catalog_service.catalog_service.catalog.models import Base, db_helper
-from microservices.catalog_service.catalog_service.catalog.schemas import SneakerAssocsDelete
 
 
 async def delete_sneaker_associations_service(
         sneaker_id: int,
-        sneaker_assoc_delete: SneakerAssocsDelete,
+        assoc_ids: list[int],
         sneaker_association_model: Type[Base],
         field_name: str,
 ):
@@ -22,7 +21,7 @@ async def delete_sneaker_associations_service(
             stmt = (
                 delete(sneaker_association_model)
                 .where(sneaker_association_model.sneaker_id == sneaker_id)
-                .where(field.in_(sneaker_assoc_delete.assoc_ids))
+                .where(field.in_(assoc_ids))
             )
             result = await session.execute(stmt)
 

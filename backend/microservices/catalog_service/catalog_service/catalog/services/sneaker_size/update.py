@@ -1,12 +1,12 @@
 from sqlalchemy import select
 
 from microservices.catalog_service.catalog_service.catalog.models import SneakerSizeAssociation, db_helper
-from microservices.catalog_service.catalog_service.catalog.schemas import SneakerSizeUpdate
 
 
 async def update_sneaker_size_quantity_service(
         sneaker_id: int,
-        sneaker_size_update: SneakerSizeUpdate,
+        size_id: int,
+        quantity: int,
 ):
     async with db_helper.session_context() as session:
         async with session.begin():
@@ -14,10 +14,10 @@ async def update_sneaker_size_quantity_service(
                 select(SneakerSizeAssociation)
                 .where(SneakerSizeAssociation.sneaker_id == sneaker_id)
                 .where(
-                    SneakerSizeAssociation.size_id == sneaker_size_update.size.size_id
+                    SneakerSizeAssociation.size_id == size_id
                 )
             )
 
-            sneaker_size.quantity = sneaker_size_update.size.quantity
+            sneaker_size.quantity = quantity
 
             session.add(sneaker_size)
