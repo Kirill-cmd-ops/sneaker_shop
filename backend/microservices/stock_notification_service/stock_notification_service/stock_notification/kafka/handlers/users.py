@@ -19,15 +19,17 @@ async def handle_user_event(key: str | None, value: dict):
         if event_type == "user_created":
             data = value.get("data")
             user_create = UserCreate(**data)
-            await create_user_service(user_create=user_create)
+            user_create_data = user_create.model_dump()
+            await create_user_service(user_data=user_create_data)
 
         elif event_type == "user_updated":
             data = value.get("data")
             user_id = value.get("user_id")
             user_update = UserUpdate(**data)
+            user_update_data = user_update.model_dump(exclude_unset=True)
             await update_user_service(
                 user_id=user_id,
-                user_update=user_update,
+                user_data=user_update_data,
             )
 
         elif event_type == "user_deleted":
