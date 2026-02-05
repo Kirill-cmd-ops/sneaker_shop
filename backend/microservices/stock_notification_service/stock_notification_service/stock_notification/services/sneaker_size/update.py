@@ -4,10 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from microservices.stock_notification_service.stock_notification_service.stock_notification.config import settings
 from microservices.stock_notification_service.stock_notification_service.stock_notification.models import (
     SneakerSizeAssociation,
-    db_helper,
 )
-from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas import \
-    SneakerSizeUpdate
 
 from microservices.stock_notification_service.stock_notification_service.stock_notification.celery_tasks.sneaker_size_quantity import (
     process_sneaker_size_quantity_update,
@@ -23,18 +20,19 @@ from microservices.stock_notification_service.stock_notification_service.stock_n
 async def update_sneaker_size_quantity_service(
         session: AsyncSession,
         sneaker_id: int,
-        sneaker_size_update: SneakerSizeUpdate,
+        size_id: int,
+        quantity: int,
 ):
     sneaker_size = await session.scalar(
         select(SneakerSizeAssociation)
         .where(SneakerSizeAssociation.sneaker_id == sneaker_id)
-        .where(SneakerSizeAssociation.size_id == sneaker_size_update.size.size_id)
+        .where(SneakerSizeAssociation.size_id == size_id)
     )
 
     sneaker_size_quantity_old = sneaker_size.quantity
-    sneaker_size_quantity_new = sneaker_size_update.size.quantity
+    sneaker_size_quantity_new = quantity
 
-    sneaker_size.quantity = sneaker_size_update.size.quantity
+    sneaker_size.quantity = quantity
 
     session.add(sneaker_size)
 
@@ -45,19 +43,19 @@ async def update_sneaker_size_quantity_service(
 async def get_subscribed_emails(
         session: AsyncSession,
         sneaker_id: int,
-        sneaker_size_update: SneakerSizeUpdate,
+        size_id: int,
 ):
     subscribed_users = await get_active_permanent_subscriptions_for_sneaker_service(
         session=session,
         sneaker_id=sneaker_id,
-        size_id=sneaker_size_update.size.size_id,
+        size_id=size_id,
     )
 
     subscribed_users_one_time = (
         await get_active_one_time_subscriptions_for_sneaker_service(
             session=session,
             sneaker_id=sneaker_id,
-            size_id=sneaker_size_update.size.size_id,
+            size_id=size_id,
         )
     )
     return list(set(list(subscribed_users) + list(subscribed_users_one_time)))
