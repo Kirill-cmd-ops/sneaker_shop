@@ -19,15 +19,17 @@ async def handle_sneaker_event(key: str | None, value: dict):
         if event_type == "sneaker_created":
             data = value.get("data")
             sneaker_create = SneakerCreate(**data)
-            await create_sneaker_service(sneaker_create=sneaker_create)
+            sneaker_create_data = sneaker_create.model_dump()
+            await create_sneaker_service(sneaker_data=sneaker_create_data)
 
         elif event_type == "sneaker_updated":
             data = value.get("data")
             sneaker_id = value.get("sneaker_id")
             sneaker_update = SneakerUpdate(**data)
+            sneaker_update_data = sneaker_update.model_dump(exclude_unset=True)
             await update_sneaker_service(
                 sneaker_id=sneaker_id,
-                sneaker_update=sneaker_update,
+                sneaker_data=sneaker_update_data,
             )
 
         elif event_type == "sneaker_deleted":
