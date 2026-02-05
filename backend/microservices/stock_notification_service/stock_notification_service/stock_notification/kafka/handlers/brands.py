@@ -15,9 +15,10 @@ async def handle_brand_event(key: str | None, value: dict):
         if event_type == "brand_created":
             data = value.get("data")
             brand_create = BrandCreate(**data)
+            brand_create_data = brand_create.model_dump()
             await create_record_service(
                 table_name=Brand,
-                schema_create=brand_create,
+                data=brand_create_data,
             )
 
         elif event_type == "brand_deleted":
