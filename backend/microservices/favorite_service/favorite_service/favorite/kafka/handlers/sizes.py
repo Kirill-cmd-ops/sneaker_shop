@@ -10,9 +10,10 @@ async def handle_size_event(key: str | None, value: dict):
         if event_type == "size_created":
             data = value.get("data")
             size_create = SizeCreate(**data)
+            size_create_data = size_create.model_dump()
             await create_record_service(
                 table_name=Size,
-                schema_create=size_create,
+                data=size_create_data,
             )
 
         elif event_type == "size_deleted":
