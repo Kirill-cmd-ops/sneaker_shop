@@ -58,15 +58,28 @@ async def create_sneaker(
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
+    sneaker_data = sneaker_create.model_dump(exclude={"size_ids", "color_ids", "material_ids"})
+    sneaker_all_data = sneaker_create.model_dump()
+
+    size_ids = [
+        size.model_dump(include={"size_id", "quantity"})
+        for size in sneaker_create.size_ids
+    ]
+    color_ids = sneaker_create.color_ids
+    material_ids = sneaker_create.material_ids
+
     sneaker = await create_sneaker_service(
         session=session,
-        sneaker_create=sneaker_create,
+        sneaker_data=sneaker_data,
+        size_ids=size_ids,
+        color_ids=color_ids,
+        material_ids=material_ids,
     )
 
     await publish_sneaker_created(
         producer=producer,
         sneaker_id=sneaker.id,
-        sneaker_create=sneaker_create,
+        sneaker_data=sneaker_all_data,
     )
     return sneaker
 
@@ -99,16 +112,18 @@ async def update_sneaker(
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
+    sneaker_data = sneaker_update.model_dump(exclude_unset=True)
+
     await update_sneaker_service(
         session=session,
         sneaker_id=sneaker_id,
-        sneaker_update=sneaker_update,
+        sneaker_data=sneaker_data,
     )
 
     await publish_sneaker_updated(
         producer=producer,
         sneaker_id=sneaker_id,
-        sneaker_update=sneaker_update,
+        sneaker_data=sneaker_data,
     )
     return "Товар успешно обновлен"
 

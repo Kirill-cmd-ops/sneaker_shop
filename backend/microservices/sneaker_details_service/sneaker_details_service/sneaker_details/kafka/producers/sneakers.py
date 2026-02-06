@@ -1,18 +1,18 @@
+from typing import Dict, Any
+
 from fastapi.encoders import jsonable_encoder
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
-from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import SneakerCreate, \
-    SneakerUpdate
 
 
 async def publish_sneaker_created(
         producer,
         sneaker_id: int,
-        sneaker_create: SneakerCreate,
+        sneaker_data: Dict[str, Any],
 ):
     sneaker_create_payload = {
         "event_type": "sneaker_created",
-        "data": sneaker_create.dict(),
+        "data": sneaker_data,
     }
 
     await producer.send_and_wait(
@@ -25,12 +25,12 @@ async def publish_sneaker_created(
 async def publish_sneaker_updated(
         producer,
         sneaker_id: int,
-        sneaker_update: SneakerUpdate,
+        sneaker_data: Dict[str, Any],
 ):
     sneaker_update_payload = {
         "event_type": "sneaker_updated",
         "sneaker_id": sneaker_id,
-        "data": sneaker_update.dict(exclude_unset=True),
+        "data": sneaker_data,
     }
 
     await producer.send_and_wait(
