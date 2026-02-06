@@ -26,10 +26,12 @@ async def create_color(
         color_create: ColorCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
 ):
+    color_data = color_create.model_dump()
+
     return await create_record_service(
         session=session,
         table_name=Color,
-        schema_create=color_create,
+        data=color_data,
     )
 
 
