@@ -5,7 +5,6 @@ from microservices.sneaker_details_service.sneaker_details_service.sneaker_detai
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import (
     SneakerAssocsCreate,
-    SneakerAssocsDelete,
 )
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.dependencies.permissions import (
     check_role_permissions,
@@ -44,10 +43,12 @@ async def add_colors_to_sneaker(
         sneaker_associations_create: SneakerAssocsCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
 ):
+    color_ids = sneaker_associations_create.assoc_ids
+
     await create_sneaker_associations_service(
         session=session,
         sneaker_id=sneaker_id,
-        sneaker_associations_create=sneaker_associations_create,
+        assoc_ids=color_ids,
         sneaker_association_model=SneakerColorAssociation,
         field_name="color_id",
     )
@@ -60,13 +61,13 @@ async def add_colors_to_sneaker(
 )
 async def delete_colors_from_sneaker(
         sneaker_id: int,
-        sneaker_assoc_delete: SneakerAssocsDelete,
+        color_ids: list[int],
         session: AsyncSession = Depends(db_helper.session_getter),
 ):
     await delete_sneaker_associations_service(
         session=session,
         sneaker_id=sneaker_id,
-        sneaker_assoc_delete=sneaker_assoc_delete,
+        assoc_ids=color_ids,
         sneaker_association_model=SneakerColorAssociation,
         field_name="color_id",
     )

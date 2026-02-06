@@ -4,13 +4,12 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import Base
-from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import SneakerAssocsCreate
 
 
 async def create_sneaker_associations_service(
         session: AsyncSession,
         sneaker_id: int,
-        sneaker_associations_create: SneakerAssocsCreate,
+        assoc_ids: list[int],
         sneaker_association_model: Type[Base],
         field_name: str,
 ):
@@ -22,7 +21,7 @@ async def create_sneaker_associations_service(
             "sneaker_id": sneaker_id,
             field_name: assoc_id,
         }
-        for assoc_id in sneaker_associations_create.assoc_ids
+        for assoc_id in assoc_ids
     ]
     async with session.begin():
         await session.execute(

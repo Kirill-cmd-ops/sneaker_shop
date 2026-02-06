@@ -5,13 +5,12 @@ from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import Base
-from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import SneakerAssocsDelete
 
 
 async def delete_sneaker_associations_service(
         session: AsyncSession,
         sneaker_id: int,
-        sneaker_assoc_delete: SneakerAssocsDelete,
+        assoc_ids: list[int],
         sneaker_association_model: Type[Base],
         field_name: str,
 ):
@@ -23,7 +22,7 @@ async def delete_sneaker_associations_service(
         stmt = (
             delete(sneaker_association_model)
             .where(sneaker_association_model.sneaker_id == sneaker_id)
-            .where(field.in_(sneaker_assoc_delete.assoc_ids))
+            .where(field.in_(assoc_ids))
         )
         result = await session.execute(stmt)
 

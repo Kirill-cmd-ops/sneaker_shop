@@ -2,7 +2,6 @@ __all__ = [
     "SneakerUpdate",
     "SneakerCreate",
     "SneakerAssocsCreate",
-    "SneakerAssocsDelete",
     "SneakerSizesCreate",
     "SneakerSizeUpdate",
     "SizeCreate",
@@ -13,7 +12,7 @@ __all__ = [
 ]
 
 from .sneaker import SneakerUpdate, SneakerCreate
-from .sneaker_association import SneakerAssocsCreate, SneakerAssocsDelete
+from .sneaker_association import SneakerAssocsCreate
 from .sneaker_sizes import SneakerSizesCreate, SneakerSizeUpdate
 from .size import SizeCreate
 from .brand import BrandCreate

@@ -6,6 +6,3 @@ class SneakerAssocsGeneral(BaseModel):
 
 
 class SneakerAssocsCreate(SneakerAssocsGeneral): ...
-
-
-class SneakerAssocsDelete(SneakerAssocsGeneral): ...
