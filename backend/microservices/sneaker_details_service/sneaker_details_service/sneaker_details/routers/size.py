@@ -37,16 +37,18 @@ async def create_size(
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
 ):
+    size_data = size_create.model_dump()
+
     new_size = await create_record_service(
         session=session,
         table_name=Size,
-        schema_create=size_create,
+        data=size_data,
     )
 
     await publish_size_created(
         producer=producer,
         size_id=new_size.id,
-        size_create=size_create,
+        size_data=size_data,
     )
     return new_size
 
