@@ -26,10 +26,12 @@ async def create_country(
         country_create: CountryCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
 ):
+    country_data = country_create.model_dump()
+
     return await create_record_service(
         session=session,
         table_name=Country,
-        schema_create=country_create,
+        data=country_data,
     )
 
 

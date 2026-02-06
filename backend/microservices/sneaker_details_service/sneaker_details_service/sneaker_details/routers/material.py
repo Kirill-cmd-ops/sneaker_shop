@@ -27,10 +27,12 @@ async def create_material(
         material_create: MaterialCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
 ):
+    material_data = material_create.model_dump()
+
     return await create_record_service(
         session=session,
         table_name=Material,
-        schema_create=material_create,
+        data=material_data,
     )
 
 
