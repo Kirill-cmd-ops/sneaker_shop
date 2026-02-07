@@ -5,22 +5,19 @@ from microservices.cart_service.cart_service.cart.services.record.delete import 
 
 
 async def handle_brand_event(key: str | None, value: dict):
-    try:
-        event_type = value.get("event_type")
-        if event_type == "brand_created":
-            data = value.get("data")
-            brand_create = BrandCreate(**data)
-            brand_create_data = brand_create.model_dump()
-            await create_record_service(
-                table_name=Brand,
-                data=brand_create_data,
-            )
+    event_type = value.get("event_type")
+    if event_type == "brand_created":
+        data = value.get("data")
+        brand_create = BrandCreate(**data)
+        brand_create_data = brand_create.model_dump()
+        await create_record_service(
+            table_name=Brand,
+            data=brand_create_data,
+        )
 
-        elif event_type == "brand_deleted":
-            brand_id = value.get("brand_id")
-            await delete_record_service(
-                table_name=Brand,
-                record_id=brand_id,
-            )
-    except Exception as e:
-        print("Ошибка:", e)
+    elif event_type == "brand_deleted":
+        brand_id = value.get("brand_id")
+        await delete_record_service(
+            table_name=Brand,
+            record_id=brand_id,
+        )
