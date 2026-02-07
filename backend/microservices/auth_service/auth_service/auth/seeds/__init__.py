@@ -1,22 +1,12 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from microservices.auth_service.auth_service.auth.models import db_helper
 from microservices.auth_service.auth_service.auth.seeds.roles import seed_roles
 from microservices.auth_service.auth_service.auth.seeds.permissions import seed_permission
 
 
 async def run_seeds():
-    session_gen = db_helper.session_getter()
-    session: AsyncSession = await anext(session_gen)
+    async with db_helper.session_getter() as session:
+        async with session.begin():
+            await seed_roles(session=session)
+            await seed_permission(session=session)
 
-    try:
-        await seed_roles(session=session)
-        await seed_permission(session=session)
-        await session.commit()
-        print("All seeds completed successfully!")
-    except Exception as e:
-        await session.rollback()
-        print(f"Error during seeding: {e}")
-        raise
-    finally:
-        await session.close()
+    print("All seeds completed successfully!")
