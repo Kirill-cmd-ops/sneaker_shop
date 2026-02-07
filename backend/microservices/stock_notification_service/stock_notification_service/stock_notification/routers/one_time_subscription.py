@@ -41,21 +41,15 @@ async def create_user_one_time_subscription(
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    try:
-        sneaker_id = subscription_create.sneaker_id
-        size_id = subscription_create.size_id
+    sneaker_id = subscription_create.sneaker_id
+    size_id = subscription_create.size_id
 
-        return await create_user_one_time_subscription_orchestrator(
-            session=session,
-            user_id=user_id,
-            sneaker_id=sneaker_id,
-            size_id=size_id,
-        )
-    except IntegrityError as e:
-        raise HTTPException(
-            status_code=404,
-            detail="Не удалось найти требуемую модель кроссовок",
-        )
+    return await create_user_one_time_subscription_orchestrator(
+        session=session,
+        user_id=user_id,
+        sneaker_id=sneaker_id,
+        size_id=size_id,
+    )
 
 
 @router.patch("/{subscription_id}/deactivate")
@@ -64,18 +58,11 @@ async def deactivate_user_one_time_subscription(
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    try:
-        return await deactivate_user_one_time_subscription_service(
-            subscription_id=subscription_id,
-            user_id=user_id,
-            session=session,
-        )
-
-    except IntegrityError as e:
-        raise HTTPException(
-            status_code=404,
-            detail="Не удалось найти требуемую модель кроссовок",
-        )
+    return await deactivate_user_one_time_subscription_service(
+        subscription_id=subscription_id,
+        user_id=user_id,
+        session=session,
+    )
 
 
 @router.patch("/deactivate")
@@ -83,17 +70,10 @@ async def deactivate_all_one_time_subscriptions_for_user(
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    try:
-        return await deactivate_all_one_time_subscriptions_for_user_service(
-            user_id=user_id,
-            session=session,
-        )
-
-    except IntegrityError as e:
-        raise HTTPException(
-            status_code=404,
-            detail="Не удалось найти требуемуемые модели кроссовок",
-        )
+    return await deactivate_all_one_time_subscriptions_for_user_service(
+        user_id=user_id,
+        session=session,
+    )
 
 
 @router.patch("/{subscription_id}/reactivate")
@@ -102,18 +82,11 @@ async def reactivate_all_one_time_subscriptions_for_user(
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    try:
-        return await reactivate_all_one_time_subscriptions_for_user_orchestrator(
-            session=session,
-            user_id=user_id,
-            subscription_id=subscription_id,
-        )
-
-    except IntegrityError as e:
-        raise HTTPException(
-            status_code=404,
-            detail="Не удалось найти требуемую модель кроссовок",
-        )
+    return await reactivate_all_one_time_subscriptions_for_user_orchestrator(
+        session=session,
+        user_id=user_id,
+        subscription_id=subscription_id,
+    )
 
 
 @router.get("/")
@@ -121,13 +94,7 @@ async def get_active_one_time_subscriptions_for_user(
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    try:
-        return await get_active_one_time_subscriptions_for_user_service(
-            user_id=user_id,
-            session=session,
-        )
-    except IntegrityError as e:
-        raise HTTPException(
-            status_code=404,
-            detail="Не удалось найти требуемуемые модели кроссовок",
-        )
+    return await get_active_one_time_subscriptions_for_user_service(
+        user_id=user_id,
+        session=session,
+    )
