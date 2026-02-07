@@ -18,16 +18,13 @@ def create_user_sneaker_view_history_service(
     if view_timestamp is None:
         view_timestamp = datetime.utcnow()
 
-    try:
-        sneaker_view = SneakerViewsHistory(
-            user_id=user_id,
-            sneaker_id=sneaker_id,
-            view_timestamp=view_timestamp,
-            sign=sign,
-            version=version,
-        )
+    sneaker_view = SneakerViewsHistory(
+        user_id=user_id,
+        sneaker_id=sneaker_id,
+        view_timestamp=view_timestamp,
+        sign=sign,
+        version=version,
+    )
 
-        session.add(sneaker_view)
-        session.commit()
-    except Exception as e:
-        print(e)
+    session.add(sneaker_view)
+    session.commit()
