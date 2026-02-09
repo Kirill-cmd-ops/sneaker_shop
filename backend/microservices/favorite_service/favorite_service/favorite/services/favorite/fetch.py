@@ -3,6 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from microservices.favorite_service.favorite_service.favorite.domain.exceptions import FavoriteNotFound
 from microservices.favorite_service.favorite_service.favorite.models import Favorite
 
 
@@ -14,9 +15,7 @@ async def get_favorite_service(session: AsyncSession, user_id: int):
     )
 
     if favorite is None:
-        raise HTTPException(
-            status_code=404, detail="У данного пользователя нету избранного"
-        )
+        raise FavoriteNotFound()
 
     return favorite.sneaker_associations
 
@@ -29,5 +28,6 @@ async def get_user_favorite_id_service(
         select(Favorite.id).filter(Favorite.user_id == user_id)
     )
     if not favorite_id:
-        raise HTTPException(status_code=404, detail="Избранное пользователя не найдена")
+        raise FavoriteNotFound()
+
     return favorite_id

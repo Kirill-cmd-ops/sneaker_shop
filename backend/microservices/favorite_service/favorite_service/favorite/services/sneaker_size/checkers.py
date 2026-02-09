@@ -2,6 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from microservices.favorite_service.favorite_service.favorite.domain.exceptions import SneakerSizeNotAvailable
 from microservices.favorite_service.favorite_service.favorite.models import Sneaker, SneakerSizeAssociation
 
 
@@ -20,4 +21,4 @@ async def check_sneaker_has_size_service(
     )
 
     if not sneaker_size:
-        raise HTTPException(status_code=404, detail="Размер данной модели не найден")
+        raise SneakerSizeNotAvailable()

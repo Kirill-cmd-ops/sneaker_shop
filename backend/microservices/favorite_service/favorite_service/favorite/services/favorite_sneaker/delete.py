@@ -6,9 +6,9 @@ from microservices.favorite_service.favorite_service.favorite.models import Favo
 
 
 async def delete_sneaker_from_favorite_service(
-    session: AsyncSession,
-    user_id: int,
-    favorite_sneaker_id: int,
+        session: AsyncSession,
+        user_id: int,
+        favorite_sneaker_id: int,
 ):
     async with session.begin():
         stmt = delete(FavoriteSneakerAssociation).where(
@@ -17,9 +17,6 @@ async def delete_sneaker_from_favorite_service(
                 select(Favorite.id).where(Favorite.user_id == user_id)
             ),
         )
-        result = await session.execute(stmt)
-
-        if result.rowcount == 0:
-            raise HTTPException(status_code=404, detail="Объект избранного не найден")
+        await session.execute(stmt)
 
     return {"status": "Элемент удалён"}
