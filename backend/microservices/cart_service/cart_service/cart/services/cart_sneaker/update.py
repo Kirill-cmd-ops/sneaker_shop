@@ -2,6 +2,8 @@ from fastapi import HTTPException, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from microservices.cart_service.cart_service.cart.domain.exceptions import SneakerNotFoundInCart, \
+    SneakerSizeNotAvailable
 from microservices.cart_service.cart_service.cart.models import (
     CartSneakerAssociation,
     Cart,
@@ -25,6 +27,8 @@ async def update_sneaker_in_cart_service(
                 ),
             )
         )
+        if not current_sneaker:
+            raise SneakerNotFoundInCart()
 
         result_sneaker_sizes = await session.scalars(
             select(SneakerSizeAssociation.size_id).where(
@@ -36,10 +40,7 @@ async def update_sneaker_in_cart_service(
         if size_id in allowed_sneaker_sizes:
             current_sneaker.size_id = size_id
         else:
-            raise HTTPException(
-                status_code=404,
-                detail="У данной модели кроссовок этот размер отсутствует",
-            )
+            raise SneakerSizeNotAvailable()
 
     return current_sneaker
 
@@ -55,12 +56,11 @@ async def increment_sneaker_quantity_in_cart_service(
             CartSneakerAssociation.cart_id == cart_id,
         )
     )
+    if not sneaker_record:
+        raise SneakerNotFoundInCart()
 
-    if sneaker_record:
-        sneaker_record.quantity += 1
-
-        return {"status": "quantity += 1"}
-    return {"status": "there is no such record"}
+    sneaker_record.quantity += 1
+    return {"status": "quantity += 1"}
 
 
 async def decrement_sneaker_quantity_in_cart_service(
@@ -76,8 +76,8 @@ async def decrement_sneaker_quantity_in_cart_service(
         )
     )
 
-    if sneaker_record:
-        sneaker_record.quantity -= 1
+    if not sneaker_record:
+        raise SneakerNotFoundInCart()
 
-        return {"status": "quantity -= 1"}
-    return {"status": "quantity = 1"}
+    sneaker_record.quantity -= 1
+    return {"status": "quantity -= 1"}

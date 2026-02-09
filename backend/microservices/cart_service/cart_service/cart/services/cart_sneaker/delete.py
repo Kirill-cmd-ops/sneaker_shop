@@ -1,4 +1,3 @@
-from fastapi import HTTPException
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -17,7 +16,5 @@ async def delete_sneaker_from_cart_service(
                 select(Cart.id).where(Cart.user_id == user_id)
             ),
         )
-        result = await session.execute(stmt)
-        if result.rowcount == 0:
-            raise HTTPException(status_code=404, detail="Объект корзины не найден")
+        await session.execute(stmt)
     return {"status": "Элемент удалён"}
