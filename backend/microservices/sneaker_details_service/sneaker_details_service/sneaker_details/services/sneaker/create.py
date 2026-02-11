@@ -10,6 +10,7 @@ from microservices.sneaker_details_service.sneaker_details_service.sneaker_detai
 )
 
 
+# TODO: добавить DomainException
 async def create_sneaker_service(
         session: AsyncSession,
         sneaker_data: Dict[str, Any],

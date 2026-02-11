@@ -24,9 +24,4 @@ async def delete_sneaker_associations_service(
             .where(sneaker_association_model.sneaker_id == sneaker_id)
             .where(field.in_(assoc_ids))
         )
-        result = await session.execute(stmt)
-
-        if result.rowcount == 0:
-            raise HTTPException(
-                status_code=404, detail="Ничего не найдено по вашим параметрам"
-            )
+        await session.execute(stmt)

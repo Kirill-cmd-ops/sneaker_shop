@@ -1,6 +1,10 @@
 from typing import Callable, Dict, Any
 
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.domain.exceptions import \
+    RecordAlreadyExists
 
 
 async def create_record_service(
@@ -8,7 +12,10 @@ async def create_record_service(
         table_name: Callable,
         data: Dict[str, Any],
 ):
-    async with session.begin():
-        new_record = table_name(**data)
-        session.add(new_record)
-    return new_record
+    try:
+        async with session.begin():
+            new_record = table_name(**data)
+            session.add(new_record)
+        return new_record
+    except IntegrityError:
+        raise RecordAlreadyExists()
