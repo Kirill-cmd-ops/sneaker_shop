@@ -1,8 +1,11 @@
 from typing import Type
 
 from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.domain.exceptions import \
+    SneakerAssociationAlreadyExists
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import Base
 
 
@@ -16,14 +19,17 @@ async def create_sneaker_associations_service(
     """
     Функция для создания записи в ассоциативных таблицах
     """
-    sneaker_associations = [
-        {
-            "sneaker_id": sneaker_id,
-            field_name: assoc_id,
-        }
-        for assoc_id in assoc_ids
-    ]
-    async with session.begin():
-        await session.execute(
-            insert(sneaker_association_model).values(sneaker_associations)
-        )
+    try:
+        sneaker_associations = [
+            {
+                "sneaker_id": sneaker_id,
+                field_name: assoc_id,
+            }
+            for assoc_id in assoc_ids
+        ]
+        async with session.begin():
+            await session.execute(
+                insert(sneaker_association_model).values(sneaker_associations)
+            )
+    except IntegrityError:
+        raise SneakerAssociationAlreadyExists()

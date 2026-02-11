@@ -2,6 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
 
+from microservices.favorite_service.favorite_service.favorite.domain.exceptions import SneakerNotFound
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import Sneaker
 
 
@@ -24,4 +25,8 @@ async def get_sneaker_service(
         )
         result = await session.execute(stmt)
         sneaker = result.unique().scalar_one_or_none()
+
+        if sneaker is None:
+            raise SneakerNotFound()
+
     return sneaker
