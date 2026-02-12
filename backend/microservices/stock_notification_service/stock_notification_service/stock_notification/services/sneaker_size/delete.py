@@ -1,6 +1,5 @@
 from typing import Type
 
-from fastapi import HTTPException
 from sqlalchemy import delete
 
 from microservices.stock_notification_service.stock_notification_service.stock_notification.models import Base, \
@@ -24,9 +23,4 @@ async def delete_sizes_from_sneaker_service(
                 .where(sneaker_association_model.sneaker_id == sneaker_id)
                 .where(field.in_(assoc_ids))
             )
-            result = await session.execute(stmt)
-
-            if result.rowcount == 0:
-                raise HTTPException(
-                    status_code=404, detail="Ничего не найдено по вашим параметрам"
-                )
+            await session.execute(stmt)

@@ -1,6 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from microservices.stock_notification_service.stock_notification_service.stock_notification.domain.exceptions import \
+    PermanentSubscriptionNotFound
 from microservices.stock_notification_service.stock_notification_service.stock_notification.enums import \
     SubscriptionStatus
 from microservices.stock_notification_service.stock_notification_service.stock_notification.models import \
@@ -20,6 +22,9 @@ async def deactivate_user_permanent_subscription_service(
                 UserSneakerSubscription.status == SubscriptionStatus.ACTIVE,
             )
         )
+
+        if not subscription:
+            raise PermanentSubscriptionNotFound()
 
         subscription.status = SubscriptionStatus.INACTIVE_BY_USER
 

@@ -2,6 +2,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from microservices.stock_notification_service.stock_notification_service.stock_notification.domain.exceptions import \
+    OneTimeSubscriptionNotFound
 from microservices.stock_notification_service.stock_notification_service.stock_notification.enums import \
     SubscriptionStatus
 from microservices.stock_notification_service.stock_notification_service.stock_notification.models import (
@@ -22,17 +24,20 @@ async def get_active_one_time_subscriptions_for_user_service(
     return {"records": result.all()}
 
 
-async def get_inactive_one_time_subscription_for_user_service(
+async def get_one_time_subscription_for_user_service(
         session: AsyncSession,
         user_id: int,
         subscription_id: int,
 ):
-    return await session.scalar(
+    subscription = await session.scalar(
         select(UserSneakerOneTimeSubscription).where(
             UserSneakerOneTimeSubscription.user_id == user_id,
             UserSneakerOneTimeSubscription.id == subscription_id,
         )
     )
+
+    if not subscription:
+        raise OneTimeSubscriptionNotFound()
 
 
 async def get_active_one_time_subscriptions_for_sneaker_service(
