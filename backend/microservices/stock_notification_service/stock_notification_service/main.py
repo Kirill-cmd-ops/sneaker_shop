@@ -6,6 +6,10 @@ from fastapi import FastAPI
 
 from infrastructure.kafka.consumer import start_consumer, close_consumer
 from microservices.stock_notification_service.stock_notification_service.stock_notification.config import settings
+from microservices.stock_notification_service.stock_notification_service.stock_notification.domain.exceptions import \
+    SneakerNotFound, SneakerAlreadyExists, SneakerIsInactive, OneTimeSubscriptionIsActive, \
+    OneTimeSubscriptionAlreadyExists, OneTimeSubscriptionNotFound, PermanentSubscriptionIsActive, \
+    PermanentSubscriptionAlreadyExists
 from microservices.stock_notification_service.stock_notification_service.stock_notification.kafka.handlers.brands import (
     handle_brand_event,
 )
@@ -28,6 +32,11 @@ from microservices.stock_notification_service.stock_notification_service.stock_n
 from microservices.stock_notification_service.stock_notification_service.add_middleware import add_middleware
 
 from microservices.stock_notification_service.stock_notification_service import router as stock_notification_router
+from microservices.stock_notification_service.stock_notification_service.stock_notification.routers.exception_handlers import \
+    sneaker_not_found_handler, sneaker_already_exists_handler, sneaker_is_inactive_handler, \
+    one_time_subscription_is_active_handler, one_time_subscription_already_exists_handler, \
+    one_time_subscription_not_found_handler, permanent_subscription_is_active_handler, \
+    permanent_subscription_already_exists_handler, permanent_subscription_not_found_handler
 
 
 @asynccontextmanager
@@ -122,3 +131,13 @@ app = FastAPI(lifespan=lifespan)
 add_middleware(app=app)
 
 app.include_router(stock_notification_router)
+
+app.add_exception_handler(SneakerNotFound, sneaker_not_found_handler)
+app.add_exception_handler(SneakerAlreadyExists, sneaker_already_exists_handler)
+app.add_exception_handler(SneakerAlreadyExists, sneaker_is_inactive_handler)
+app.add_exception_handler(SneakerIsInactive, one_time_subscription_is_active_handler)
+app.add_exception_handler(OneTimeSubscriptionIsActive, one_time_subscription_already_exists_handler)
+app.add_exception_handler(OneTimeSubscriptionAlreadyExists, one_time_subscription_not_found_handler)
+app.add_exception_handler(OneTimeSubscriptionNotFound, permanent_subscription_is_active_handler)
+app.add_exception_handler(PermanentSubscriptionIsActive, permanent_subscription_already_exists_handler)
+app.add_exception_handler(PermanentSubscriptionAlreadyExists, permanent_subscription_not_found_handler)
