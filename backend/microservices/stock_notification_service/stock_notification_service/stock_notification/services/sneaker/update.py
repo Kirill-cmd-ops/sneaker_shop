@@ -1,5 +1,9 @@
 from typing import Dict, Any
 
+from sqlalchemy.exc import IntegrityError
+
+from microservices.stock_notification_service.stock_notification_service.stock_notification.domain.exceptions import \
+    SneakerNotFound, SneakerAlreadyExists
 from microservices.stock_notification_service.stock_notification_service.stock_notification.models import Sneaker, \
     db_helper
 
@@ -8,11 +12,14 @@ async def update_sneaker_service(
         sneaker_id: int,
         sneaker_data: Dict[str, Any],
 ):
-    async with db_helper.session_context() as session:
-        async with session.begin():
-            sneaker = await session.get(Sneaker, sneaker_id)
+    try:
+        async with db_helper.session_context() as session:
+            async with session.begin():
+                sneaker = await session.get(Sneaker, sneaker_id)
 
-            for field, value in sneaker_data.items():
-                setattr(sneaker, field, value)
+                for field, value in sneaker_data.items():
+                    setattr(sneaker, field, value)
 
-            session.add(sneaker)
+                session.add(sneaker)
+    except IntegrityError:
+        return

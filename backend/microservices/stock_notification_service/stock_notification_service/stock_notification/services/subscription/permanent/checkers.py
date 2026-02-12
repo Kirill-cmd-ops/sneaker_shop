@@ -1,7 +1,8 @@
-from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from microservices.stock_notification_service.stock_notification_service.stock_notification.domain.exceptions import \
+    PermanentSubscriptionIsActive
 from microservices.stock_notification_service.stock_notification_service.stock_notification.enums import \
     SubscriptionStatus
 from microservices.stock_notification_service.stock_notification_service.stock_notification.models import \
@@ -23,7 +24,4 @@ async def check_active_permanent_subscription_service(
         )
     )
     if user_active_subscription:
-        raise HTTPException(
-            status_code=200,
-            detail="Перманентная подписка на данный товар присутствует у данного пользователя и она активна",
-        )
+        raise PermanentSubscriptionIsActive()

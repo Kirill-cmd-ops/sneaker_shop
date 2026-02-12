@@ -1,7 +1,8 @@
-from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from microservices.stock_notification_service.stock_notification_service.stock_notification.domain.exceptions import \
+    SneakerNotFound
 from microservices.stock_notification_service.stock_notification_service.stock_notification.models import \
     SneakerSizeAssociation
 
@@ -19,7 +20,4 @@ async def check_inactive_sneaker_size_service(
         )
     )
     if not current_sneaker_sizes:
-        raise HTTPException(
-            status_code=404,
-            detail="Данный размер отсутствует у данной модели, либо же он активен",
-        )
+        raise SneakerNotFound()

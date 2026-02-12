@@ -3,6 +3,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from microservices.stock_notification_service.stock_notification_service.stock_notification.domain.exceptions import \
+    PermanentSubscriptionNotFound
 from microservices.stock_notification_service.stock_notification_service.stock_notification.enums import \
     SubscriptionStatus
 from microservices.stock_notification_service.stock_notification_service.stock_notification.models import \
@@ -57,8 +59,6 @@ async def get_inactive_permanent_subscription_for_user_service(
     )
 
     if not subscription:
-        raise HTTPException(
-            status_code=404,
-            detail="Подписка требующая реактивации не найдена",
-        )
+        raise PermanentSubscriptionNotFound()
+
     return subscription

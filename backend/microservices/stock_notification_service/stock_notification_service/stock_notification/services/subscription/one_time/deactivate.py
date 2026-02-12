@@ -1,6 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from microservices.stock_notification_service.stock_notification_service.stock_notification.domain.exceptions import \
+    OneTimeSubscriptionNotFound
 from microservices.stock_notification_service.stock_notification_service.stock_notification.enums import \
     SubscriptionStatus
 from microservices.stock_notification_service.stock_notification_service.stock_notification.models import (
@@ -22,6 +24,9 @@ async def deactivate_user_one_time_subscription_service(
                 UserSneakerOneTimeSubscription.is_sent == False,
             )
         )
+
+        if not subscription:
+            raise OneTimeSubscriptionNotFound()
 
         subscription.status = SubscriptionStatus.INACTIVE_BY_USER
 
