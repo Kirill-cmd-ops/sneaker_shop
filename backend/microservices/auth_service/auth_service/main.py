@@ -1,8 +1,11 @@
 from contextlib import asynccontextmanager
 
-import uvicorn
 from fastapi import FastAPI
 
+from microservices.auth_service.auth_service.auth.domain.exceptions import RoleNotFound, UserNotFound, UserRoleAssociationAlreadyExists, \
+    BlacklistAlreadyExists
+from microservices.auth_service.auth_service.auth.routers.exception_handlers import role_not_found_handler, user_not_found_handler, \
+    user_role_association_already_exists_handler, blacklist_already_exists_handler
 from microservices.auth_service.auth_service.auth.config import settings
 from microservices.auth_service.auth_service.auth.models import db_helper
 from microservices.auth_service.auth_service.add_middleware import add_middleware
@@ -26,18 +29,13 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-
 add_middleware(app=app)
 
 app.include_router(
     auth_router,
 )
 
-# TODO: удалить, он лишний, мы все равно запускаем через docker compose
-if __name__ == "__main__":
-    uvicorn.run(
-        app="auth_service.main:app",
-        host=settings.run.host,
-        port=settings.run.port,
-        reload=True,
-    )
+app.add_exception_handler(RoleNotFound, role_not_found_handler)
+app.add_exception_handler(UserNotFound, user_not_found_handler)
+app.add_exception_handler(UserRoleAssociationAlreadyExists, user_role_association_already_exists_handler)
+app.add_exception_handler(BlacklistAlreadyExists, blacklist_already_exists_handler)
