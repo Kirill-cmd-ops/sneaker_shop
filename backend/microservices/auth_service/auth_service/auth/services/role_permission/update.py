@@ -1,8 +1,8 @@
-from fastapi import HTTPException
 from sqlalchemy import select, delete
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from microservices.auth_service.auth_service.auth.domain.exceptions import RoleNotFound
 from microservices.auth_service.auth_service.auth.models import Role, RolePermissionAssociation
 
 
@@ -14,7 +14,7 @@ async def update_role_permissions_db(
     role_id = await session.scalar(select(Role.id).where(Role.name == user_role))
 
     if not role_id:
-        raise HTTPException(status_code=404, detail="Role id not found")
+        raise RoleNotFound()
 
     result = await session.scalars(
         select(RolePermissionAssociation.permission_id).where(
