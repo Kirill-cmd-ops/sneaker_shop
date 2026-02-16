@@ -9,7 +9,7 @@ async def check_sneaker_has_size_service(
         session: AsyncSession,
         sneaker_id: int,
         size_id: int,
-):
+) -> None:
     sneaker_size = await session.scalar(
         select(Sneaker)
         .join(SneakerSizeAssociation)

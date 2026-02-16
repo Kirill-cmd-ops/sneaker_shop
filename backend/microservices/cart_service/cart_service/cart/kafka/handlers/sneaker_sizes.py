@@ -13,7 +13,7 @@ from microservices.cart_service.cart_service.cart.services.sneaker_size.update i
 )
 
 
-async def handle_sneaker_sizes_event(key: str | None, value: dict):
+async def handle_sneaker_sizes_event(key: str | None, value: dict) -> None:
     event_type = value.get("event_type")
     if event_type == "sneaker_sizes_created":
         data = value.get("data")

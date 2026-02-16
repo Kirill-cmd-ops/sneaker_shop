@@ -3,7 +3,7 @@ from sqlalchemy.exc import IntegrityError
 from microservices.cart_service.cart_service.cart.models import Cart, db_helper
 
 
-async def create_cart_service(user_id: int):
+async def create_cart_service(user_id: int) -> None:
     try:
         async with db_helper.session_context() as session:
             async with session.begin():

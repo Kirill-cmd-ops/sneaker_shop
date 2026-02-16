@@ -8,7 +8,7 @@ async def add_sneaker_to_cart_service(
         cart_id: int,
         sneaker_id: int,
         size_id: int,
-):
+) -> CartSneakerAssociation:
     new_sneaker = CartSneakerAssociation(
         cart_id=cart_id,
         sneaker_id=sneaker_id,

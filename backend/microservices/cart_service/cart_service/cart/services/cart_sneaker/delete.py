@@ -8,7 +8,7 @@ async def delete_sneaker_from_cart_service(
         session: AsyncSession,
         cart_sneaker_id: int,
         user_id: int,
-):
+) -> str:
     async with session.begin():
         stmt = delete(CartSneakerAssociation).where(
             CartSneakerAssociation.id == cart_sneaker_id,
@@ -17,4 +17,4 @@ async def delete_sneaker_from_cart_service(
             ),
         )
         await session.execute(stmt)
-    return {"status": "Элемент удалён"}
+    return "Элемент удалён"

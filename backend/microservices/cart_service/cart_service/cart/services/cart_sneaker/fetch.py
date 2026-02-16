@@ -9,7 +9,7 @@ async def get_sneaker_in_cart_service(
         cart_id: int,
         sneaker_id: int,
         size_id: int,
-):
+) -> CartSneakerAssociation:
     return await session.scalar(
         select(CartSneakerAssociation).where(
             CartSneakerAssociation.cart_id == cart_id,
