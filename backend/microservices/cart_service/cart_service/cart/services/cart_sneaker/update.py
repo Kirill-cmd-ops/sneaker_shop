@@ -49,7 +49,7 @@ async def increment_sneaker_quantity_in_cart_service(
         cart_sneaker_id: int,
         cart_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> str:
     sneaker_record = await session.scalar(
         select(CartSneakerAssociation).where(
             CartSneakerAssociation.id == cart_sneaker_id,
@@ -60,14 +60,14 @@ async def increment_sneaker_quantity_in_cart_service(
         raise SneakerNotFoundInCart()
 
     sneaker_record.quantity += 1
-    return {"status": "quantity += 1"}
+    return "quantity += 1"
 
 
 async def decrement_sneaker_quantity_in_cart_service(
         cart_sneaker_id: int,
         cart_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> str:
     sneaker_record = await session.scalar(
         select(CartSneakerAssociation).where(
             CartSneakerAssociation.id == cart_sneaker_id,
@@ -80,4 +80,4 @@ async def decrement_sneaker_quantity_in_cart_service(
         raise SneakerNotFoundInCart()
 
     sneaker_record.quantity -= 1
-    return {"status": "quantity -= 1"}
+    return "quantity -= 1"

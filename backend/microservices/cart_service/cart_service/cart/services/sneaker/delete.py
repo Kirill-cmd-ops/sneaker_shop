@@ -4,7 +4,7 @@ from microservices.cart_service.cart_service.cart.models import SneakerSizeAssoc
 
 async def delete_sneaker_service(
         sneaker_id: int,
-):
+) -> None:
     async with db_helper.session_context() as session:
         async with session.begin():
             assoc_table = SneakerSizeAssociation

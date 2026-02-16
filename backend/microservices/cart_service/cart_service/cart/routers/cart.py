@@ -1,3 +1,5 @@
+from typing import Any
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -17,7 +19,7 @@ router = APIRouter(
 async def get_cart(
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> dict[str, Any]:
     return await get_cart_orchestrator(
         session=session,
         user_id=user_id,
@@ -28,7 +30,7 @@ async def get_cart(
 async def delete_cart(
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> str:
     return await delete_cart_service(
         session=session,
         user_id=user_id,

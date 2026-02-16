@@ -9,7 +9,7 @@ from microservices.cart_service.cart_service.cart.models import SneakerSizeAssoc
 async def add_sizes_to_sneaker_service(
         sneaker_id: int,
         size_list: list[Dict[str, Any]],
-):
+) -> None:
     try:
         async with db_helper.session_context() as session:
             async with session.begin():

@@ -1,6 +1,6 @@
 from microservices.cart_service.cart_service.cart.services.cart.create import create_cart_service
 
 
-async def handle_cart_event(key, value):
+async def handle_cart_event(key: str | None, value: dict) -> None:
     user_id = key or value.get("id")
     await create_cart_service(user_id=int(user_id))

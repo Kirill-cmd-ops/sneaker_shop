@@ -1,3 +1,5 @@
+from typing import Any
+
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -23,15 +25,12 @@ router = APIRouter(
 )
 
 
-@router.post(
-    "/",
-    response_model=dict,
-)
+@router.post("/")
 async def add_sneaker_to_cart(
         item_create: CartSneakerCreate,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> str:
     sneaker_id = item_create.sneaker_id
     size_id = item_create.size_id
 
@@ -43,16 +42,13 @@ async def add_sneaker_to_cart(
     )
 
 
-@router.put(
-    "/{cart_sneaker_id}",
-    response_model=dict,
-)
+@router.put("/{cart_sneaker_id}")
 async def update_sneaker_in_cart(
         cart_sneaker_id: int,
         size_id: int,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> dict[str, Any]:
     updated_item = await update_sneaker_in_cart_service(
         session=session,
         cart_sneaker_id=cart_sneaker_id,
@@ -62,15 +58,12 @@ async def update_sneaker_in_cart(
     return {"status": "Элемент обновлён", "item_id": updated_item.id}
 
 
-@router.delete(
-    "/{cart_sneaker_id}",
-    response_model=dict,
-)
+@router.delete("/{cart_sneaker_id}")
 async def delete_sneaker_from_cart(
         cart_sneaker_id: int,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> str:
     return await delete_sneaker_from_cart_service(
         session=session,
         cart_sneaker_id=cart_sneaker_id,
@@ -78,16 +71,13 @@ async def delete_sneaker_from_cart(
     )
 
 
-@router.patch(
-    "/{cart_sneaker_id}",
-    response_model=dict,
-)
+@router.patch("/{cart_sneaker_id}")
 async def update_sneaker_quantity_in_cart(
         cart_sneaker_id: int,
         action: int = Query(..., ge=0, le=1),
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> str:
     return await update_sneaker_quantity_in_cart_orchestrator(
         session=session,
         action=action,

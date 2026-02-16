@@ -8,7 +8,7 @@ from microservices.cart_service.cart_service.cart.models import db_helper
 async def create_record_service(
         table_name: Callable,
         data: Dict[str, Any],
-):
+) -> None:
     try:
         async with db_helper.session_context() as session:
             async with session.begin():

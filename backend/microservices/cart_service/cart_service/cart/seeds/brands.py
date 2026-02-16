@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from microservices.cart_service.cart_service.cart.models import Brand
 
 
-async def seed_brands(session: AsyncSession):
+async def seed_brands(session: AsyncSession) -> None:
     brands = [
         {"name": "Nike", "image_url": "/uploads/brands/nike.png"},
         {"name": "Adidas", "image_url": "/uploads/brands/adidas.png"},

@@ -18,7 +18,7 @@ async def add_sneaker_to_cart_orchestrator(
         user_id: int,
         sneaker_id: int,
         size_id: int,
-):
+) -> str:
     async with session.begin():
         cart_id = await get_user_cart_id_service(
             session=session,
@@ -47,9 +47,9 @@ async def add_sneaker_to_cart_orchestrator(
                 sneaker_id=sneaker_id,
                 size_id=size_id,
             )
-            return {"status": "Элемент добавлен"}
+            return "Элемент добавлен"
 
-    return {"status": "Товар уже есть в корзине"}
+    return "Товар уже есть в корзине"
 
 
 async def update_sneaker_quantity_in_cart_orchestrator(
@@ -57,7 +57,7 @@ async def update_sneaker_quantity_in_cart_orchestrator(
         action: int,
         user_id: int,
         cart_sneaker_id: int,
-):
+) -> str:
     async with session.begin():
         cart_id = await get_user_cart_id_service(
             session=session,

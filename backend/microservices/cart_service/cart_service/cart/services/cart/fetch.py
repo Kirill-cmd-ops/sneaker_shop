@@ -6,7 +6,7 @@ from microservices.cart_service.cart_service.cart.domain.exceptions import CartN
 from microservices.cart_service.cart_service.cart.models import Cart
 
 
-async def get_cart_service(session: AsyncSession, user_id: int):
+async def get_cart_service(session: AsyncSession, user_id: int) -> Cart:
     cart = await session.scalar(
         select(Cart)
         .where(Cart.user_id == user_id)
@@ -24,7 +24,7 @@ async def get_cart_service(session: AsyncSession, user_id: int):
 async def get_user_cart_id_service(
         session: AsyncSession,
         user_id: int,
-):
+) -> int:
     cart_id = await session.scalar(select(Cart.id).filter(Cart.user_id == user_id))
     if not cart_id:
         raise CartNotFound
