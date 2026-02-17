@@ -22,7 +22,7 @@ async def create_sneaker_to_favorite_orchestrator(
         user_id: int,
         sneaker_id: int,
         size_id: int,
-):
+) -> str:
     async with session.begin():
         favorite_id = await get_user_favorite_id_service(
             session=session,
@@ -50,6 +50,6 @@ async def create_sneaker_to_favorite_orchestrator(
                 sneaker_id=sneaker_id,
                 size_id=size_id,
             )
-            return {"status": "Элемент добавлен"}
+            return "Элемент добавлен"
 
-    return {"status": "Такая запись уже есть в избранном"}
+    return "Такая запись уже есть в избранном"

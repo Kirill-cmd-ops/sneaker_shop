@@ -3,7 +3,7 @@ from sqlalchemy.exc import IntegrityError
 from microservices.favorite_service.favorite_service.favorite.models import Favorite, db_helper
 
 
-async def create_favorite_service(user_id: int):
+async def create_favorite_service(user_id: int) -> None:
     try:
         async with db_helper.session_context() as session:
             async with session.begin():

@@ -1,4 +1,3 @@
-from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from microservices.favorite_service.favorite_service.favorite.domain.exceptions import SneakerNotFound
@@ -8,7 +7,7 @@ from microservices.favorite_service.favorite_service.favorite.models import Snea
 async def check_sneaker_exists_service(
         session: AsyncSession,
         sneaker_id: int,
-):
+) -> None:
     sneaker = await session.get(Sneaker, sneaker_id)
     if not sneaker:
         raise SneakerNotFound()

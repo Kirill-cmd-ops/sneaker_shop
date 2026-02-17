@@ -8,7 +8,7 @@ from microservices.favorite_service.favorite_service.favorite.models import Snea
 async def create_sneaker_service(
         sneaker_data: Dict[str, Any],
         size_ids: list[Dict[str, Any]],
-):
+) -> None:
     try:
         async with db_helper.session_context() as session:
             async with session.begin():

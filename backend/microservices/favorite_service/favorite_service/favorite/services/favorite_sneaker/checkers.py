@@ -8,7 +8,7 @@ async def get_sneaker_in_favorite_service(
         session: AsyncSession,
         favorite_id: int,
         sneaker_id: int,
-):
+) -> FavoriteSneakerAssociation:
     return await session.scalar(
         select(FavoriteSneakerAssociation).where(
             FavoriteSneakerAssociation.favorite_id == favorite_id,

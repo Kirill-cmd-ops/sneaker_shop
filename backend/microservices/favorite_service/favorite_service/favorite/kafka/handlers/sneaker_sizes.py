@@ -15,7 +15,7 @@ from microservices.favorite_service.favorite_service.favorite.services.sneaker_s
 )
 
 
-async def handle_sneaker_sizes_event(key: str | None, value: dict):
+async def handle_sneaker_sizes_event(key: str | None, value: dict) -> None:
     event_type = value.get("event_type")
     if event_type == "sneaker_sizes_created":
         data = value.get("data")
