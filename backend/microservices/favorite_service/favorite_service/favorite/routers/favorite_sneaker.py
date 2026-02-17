@@ -1,3 +1,5 @@
+from typing import Any
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -26,15 +28,12 @@ router = APIRouter(
 )
 
 
-@router.post(
-    "/",
-    response_model=dict,
-)
+@router.post("/")
 async def create_sneaker_to_favorite(
         item_create: FavoriteSneakerCreate,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> str:
     sneaker_id = item_create.sneaker_id
     size_id = item_create.size_id
 
@@ -55,7 +54,7 @@ async def update_sneaker_in_favorite(
         size_id: int,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> dict[str, Any]:
     updated_item = await update_sneaker_in_favorite_service(
         session=session,
         favorite_sneaker_id=favorite_sneaker_id,
@@ -65,15 +64,12 @@ async def update_sneaker_in_favorite(
     return {"status": "Элемент обновлён", "item_id": updated_item.id}
 
 
-@router.delete(
-    "/{favorite_sneaker_id}",
-    response_model=dict,
-)
+@router.delete("/{favorite_sneaker_id}")
 async def delete_sneaker_from_favorite(
         favorite_sneaker_id: int,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> str:
     return await delete_sneaker_from_favorite_service(
         session=session,
         user_id=user_id,

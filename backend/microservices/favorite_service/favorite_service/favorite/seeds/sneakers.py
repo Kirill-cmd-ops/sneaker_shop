@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from microservices.favorite_service.favorite_service.favorite.models import Sneaker
 
 
-async def seed_sneakers(session: AsyncSession):
+async def seed_sneakers(session: AsyncSession) -> None:
     sneakers = [
         {
             "name": "Air Zoom Pegasus",

@@ -4,7 +4,7 @@ from microservices.favorite_service.favorite_service.favorite.services.sneaker.d
 from microservices.favorite_service.favorite_service.favorite.services.sneaker.update import update_sneaker_service
 
 
-async def handle_sneaker_event(key: str | None, value: dict):
+async def handle_sneaker_event(key: str | None, value: dict) -> None:
     event_type = value.get("event_type")
     if event_type == "sneaker_created":
         data = value.get("data")

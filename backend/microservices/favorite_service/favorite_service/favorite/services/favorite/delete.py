@@ -4,9 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from microservices.favorite_service.favorite_service.favorite.models import Favorite
 
 
-async def delete_favorite_service(session: AsyncSession, user_id: int):
+async def delete_favorite_service(session: AsyncSession, user_id: int) -> str:
     async with session.begin():
         stmt = delete(Favorite).where(Favorite.user_id == user_id)
         await session.execute(stmt)
 
-    return {"Избранное пользователя было удалено успешно"}
+    return "Избранное пользователя было удалено успешно"

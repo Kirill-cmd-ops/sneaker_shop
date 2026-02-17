@@ -4,7 +4,7 @@ from microservices.favorite_service.favorite_service.favorite.services.record.cr
 from microservices.favorite_service.favorite_service.favorite.services.record.delete import delete_record_service
 
 
-async def handle_size_event(key: str | None, value: dict):
+async def handle_size_event(key: str | None, value: dict) -> None:
     event_type = value.get("event_type")
     if event_type == "size_created":
         data = value.get("data")

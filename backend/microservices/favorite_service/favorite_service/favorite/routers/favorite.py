@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from microservices.favorite_service.favorite_service.favorite.config import settings
 
-from microservices.favorite_service.favorite_service.favorite.models import db_helper
+from microservices.favorite_service.favorite_service.favorite.models import db_helper, Favorite
 from microservices.favorite_service.favorite_service.favorite.dependencies.user_id import get_current_user_id
 
 from microservices.favorite_service.favorite_service.favorite.services.favorite.delete import delete_favorite_service
@@ -19,7 +19,7 @@ router = APIRouter(
 async def get_favorite(
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> Favorite:
     return await get_favorite_service(
         session=session,
         user_id=user_id,
@@ -30,7 +30,7 @@ async def get_favorite(
 async def delete_favorite(
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> str:
     return await delete_favorite_service(
         session=session,
         user_id=user_id,

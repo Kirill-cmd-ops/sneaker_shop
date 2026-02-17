@@ -9,7 +9,7 @@ async def delete_sneaker_from_favorite_service(
         session: AsyncSession,
         user_id: int,
         favorite_sneaker_id: int,
-):
+) -> str:
     async with session.begin():
         stmt = delete(FavoriteSneakerAssociation).where(
             FavoriteSneakerAssociation.id == favorite_sneaker_id,
@@ -19,4 +19,4 @@ async def delete_sneaker_from_favorite_service(
         )
         await session.execute(stmt)
 
-    return {"status": "Элемент удалён"}
+    return "Элемент удалён"
