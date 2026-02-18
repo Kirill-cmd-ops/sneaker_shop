@@ -8,7 +8,7 @@ from microservices.catalog_service.catalog_service.catalog.models import db_help
 async def create_record_service(
         table_name: Callable,
         data: Dict[str, Any],
-):
+) -> None:
     try:
         async with db_helper.session_context() as session:
             async with session.begin():

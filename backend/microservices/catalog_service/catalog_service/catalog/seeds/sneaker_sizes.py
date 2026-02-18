@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from microservices.catalog_service.catalog_service.catalog.models import SneakerSizeAssociation, Sneaker, Size
 
 
-async def seed_sneaker_sizes(session: AsyncSession):
+async def seed_sneaker_sizes(session: AsyncSession) -> None:
     sneaker_sizes = [
         # sneaker 1
         {"sneaker_id": 1, "size_id": 6, "quantity": 10},

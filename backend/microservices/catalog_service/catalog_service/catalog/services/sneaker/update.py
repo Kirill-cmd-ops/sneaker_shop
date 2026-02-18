@@ -8,7 +8,7 @@ from microservices.catalog_service.catalog_service.catalog.models import Sneaker
 async def update_sneaker_service(
         sneaker_id: int,
         sneaker_data: Dict[str, Any],
-):
+) -> None:
     try:
         async with db_helper.session_context() as session:
             async with session.begin():
