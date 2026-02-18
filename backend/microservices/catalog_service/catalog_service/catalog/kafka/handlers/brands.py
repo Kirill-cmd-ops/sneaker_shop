@@ -4,7 +4,7 @@ from microservices.catalog_service.catalog_service.catalog.services.record.creat
 from microservices.catalog_service.catalog_service.catalog.services.record.delete import delete_record_service
 
 
-async def handle_brand_event(key: str | None, value: dict):
+async def handle_brand_event(key: str | None, value: dict) -> None:
     event_type = value.get("event_type")
     if event_type == "brand_created":
         data = value.get("data")

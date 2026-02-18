@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -29,7 +29,7 @@ async def get_sneakers(
         size: Optional[float] = None,
         sort_by: Optional[str] = None,
         order: Optional[str] = "asc",
-):
+) -> Dict[str, Any]:
     return await get_sneakers_service(
         session=session,
         page=page,

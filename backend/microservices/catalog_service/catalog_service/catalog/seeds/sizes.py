@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from microservices.catalog_service.catalog_service.catalog.models import Size
 
 
-async def seed_sizes(session: AsyncSession):
+async def seed_sizes(session: AsyncSession) -> None:
     sizes = [{"eu_size": size} for size in range(35, 47)]
     stmt = insert(Size).values(sizes)
     await session.execute(stmt)
