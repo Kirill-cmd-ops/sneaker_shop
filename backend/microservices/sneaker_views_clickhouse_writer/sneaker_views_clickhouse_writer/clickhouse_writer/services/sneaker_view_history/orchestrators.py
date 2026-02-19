@@ -13,7 +13,7 @@ from microservices.sneaker_views_clickhouse_writer.sneaker_views_clickhouse_writ
 async def create_user_sneaker_view_history_orchestrator(
         user_id: int,
         sneaker_id: int,
-):
+) -> None:
     with db_helper.session_context() as session:
 
         record = await get_user_sneaker_view_history_service(
