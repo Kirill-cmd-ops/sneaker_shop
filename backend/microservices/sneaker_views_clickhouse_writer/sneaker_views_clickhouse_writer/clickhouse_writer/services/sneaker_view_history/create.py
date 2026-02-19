@@ -14,7 +14,7 @@ def create_user_sneaker_view_history_service(
         sign: int,
         version: int,
         view_timestamp: datetime = None,
-):
+) -> None:
     if view_timestamp is None:
         view_timestamp = datetime.utcnow()
 

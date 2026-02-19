@@ -12,7 +12,7 @@ async def get_user_sneaker_view_history_service(
         session: AsyncSession,
         user_id: int,
         sneaker_id: int,
-):
+) -> SneakerViewsHistory | None:
     stmt = (
         select(SneakerViewsHistory)
         .where(

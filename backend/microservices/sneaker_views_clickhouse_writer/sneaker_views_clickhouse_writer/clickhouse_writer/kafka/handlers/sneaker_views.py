@@ -6,7 +6,7 @@ from microservices.sneaker_views_clickhouse_writer.sneaker_views_clickhouse_writ
 async def handle_sneaker_viewed_event(
         key: str | None,
         value: dict,
-):
+) -> None:
     user_id = value.get("user_id")
     sneaker_id = value.get("sneaker_id")
 
