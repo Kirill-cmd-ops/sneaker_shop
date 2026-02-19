@@ -15,7 +15,7 @@ redis_factory = get_redis_factory(
 async def handle_sneaker_viewed_event(
         key: str | None,
         value: dict,
-):
+) -> None:
     async for redis_client in redis_factory():
         user_id = value.get("user_id")
         sneaker_id = value.get("sneaker_id")
