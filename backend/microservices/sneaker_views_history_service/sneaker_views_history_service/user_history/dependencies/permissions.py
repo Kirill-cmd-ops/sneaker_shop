@@ -1,3 +1,5 @@
+from typing import Callable, Awaitable
+
 import redis.asyncio as aioredis
 from fastapi import HTTPException, Depends
 from starlette.requests import Request
@@ -11,7 +13,7 @@ from infrastructure.redis_client.redis_connection.factory import get_redis_facto
 
 def check_role_permissions(
         permission: str,
-):
+) -> Callable[..., Awaitable[None]]:
     async def checker(
             request: Request,
             redis_client: aioredis.Redis = Depends(

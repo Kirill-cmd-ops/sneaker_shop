@@ -1,3 +1,5 @@
+from typing import Sequence
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
@@ -8,6 +10,8 @@ from microservices.sneaker_views_history_service.sneaker_views_history_service.u
 from microservices.sneaker_views_history_service.sneaker_views_history_service.user_history.dependencies.user_id import (
     get_current_user_id,
 )
+from microservices.sneaker_views_history_service.sneaker_views_history_service.user_history.models import \
+    SneakerViewsHistory
 from microservices.sneaker_views_history_service.sneaker_views_history_service.user_history.models.db_helper import \
     db_helper
 from microservices.sneaker_views_history_service.sneaker_views_history_service.user_history.services.sneaker_view_history.orchestrators import (
@@ -38,7 +42,7 @@ async def get_user_sneaker_view_recent_history(
                 db=settings.redis_config.redis_db,
             )
         ),
-):
+) -> Sequence[SneakerViewsHistory]:
     # redis_client = request.state.redis_client
 
     return await get_user_sneaker_view_recent_history_orchestrator(
