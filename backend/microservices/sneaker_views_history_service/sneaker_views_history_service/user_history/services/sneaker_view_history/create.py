@@ -1,7 +1,10 @@
 import time
+from typing import Sequence
 
 from infrastructure.redis_client.redis_connection.factory import get_redis_factory
 from microservices.sneaker_views_history_service.sneaker_views_history_service.user_history.config import settings
+from microservices.sneaker_views_history_service.sneaker_views_history_service.user_history.models import \
+    SneakerViewsHistory
 
 redis_factory = get_redis_factory(
     password=settings.redis_config.redis_password,
@@ -11,7 +14,7 @@ redis_factory = get_redis_factory(
 )
 
 
-async def create_sneaker_view_history_service(records):
+async def create_sneaker_view_history_service(records: Sequence[SneakerViewsHistory]) -> None:
     async for redis_client in redis_factory():
         user_data = {}
 

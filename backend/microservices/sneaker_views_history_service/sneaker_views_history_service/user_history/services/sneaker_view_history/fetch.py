@@ -1,4 +1,5 @@
 import asyncio
+from typing import Sequence
 
 from sqlalchemy import select, desc
 from sqlalchemy.orm import Session
@@ -11,7 +12,7 @@ async def get_user_sneaker_view_history_service(
         session: Session,
         user_id: int,
         limit: int | None = None,
-):
+) -> Sequence[SneakerViewsHistory]:
     stmt = (
         select(SneakerViewsHistory)
         .where(
