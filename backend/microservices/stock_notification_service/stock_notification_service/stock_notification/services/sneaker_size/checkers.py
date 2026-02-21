@@ -11,7 +11,7 @@ async def check_inactive_sneaker_size_service(
         session: AsyncSession,
         sneaker_id: int,
         size_id: int,
-):
+) -> None:
     current_sneaker_sizes = await session.scalar(
         select(SneakerSizeAssociation).where(
             SneakerSizeAssociation.sneaker_id == sneaker_id,

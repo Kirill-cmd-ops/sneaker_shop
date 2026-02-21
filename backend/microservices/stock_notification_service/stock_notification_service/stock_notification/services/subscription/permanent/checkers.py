@@ -14,7 +14,7 @@ async def check_active_permanent_subscription_service(
         user_id: int,
         sneaker_id: int,
         size_id: int,
-):
+) -> None:
     user_active_subscription = await session.scalar(
         select(UserSneakerSubscription).where(
             UserSneakerSubscription.user_id == user_id,

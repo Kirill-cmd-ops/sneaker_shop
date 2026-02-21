@@ -10,7 +10,7 @@ async def update_sneaker_size_quantity_with_notifications_orchestrator(
         sneaker_id: int,
         size_id: int,
         quantity: int,
-):
+) -> None:
     async with db_helper.session_context() as session:
         async with session.begin():
             should_notify = await update_sneaker_size_quantity_service(

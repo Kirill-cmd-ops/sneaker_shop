@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from microservices.stock_notification_service.stock_notification_service.stock_notification.models import Brand
 
 
-async def seed_brands(session: AsyncSession):
+async def seed_brands(session: AsyncSession) -> None:
     brands = [
         {"name": "Nike", "image_url": "/uploads/brands/nike.png"},
         {"name": "Adidas", "image_url": "/uploads/brands/adidas.png"},

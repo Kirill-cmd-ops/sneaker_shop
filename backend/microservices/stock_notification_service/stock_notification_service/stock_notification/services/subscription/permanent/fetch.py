@@ -1,4 +1,5 @@
-from fastapi import HTTPException
+from typing import Sequence
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -14,7 +15,7 @@ from microservices.stock_notification_service.stock_notification_service.stock_n
 async def get_active_permanent_subscriptions_for_user_service(
         user_id: int,
         session: AsyncSession,
-):
+) -> Sequence[UserSneakerSubscription]:
     result = await session.scalars(
         select(UserSneakerSubscription).where(
             UserSneakerSubscription.user_id == user_id,
@@ -22,16 +23,14 @@ async def get_active_permanent_subscriptions_for_user_service(
         )
     )
 
-    all_subscription_user = result.all()
-
-    return {"records": all_subscription_user}
+    return result.all()
 
 
 async def get_active_permanent_subscriptions_for_sneaker_service(
         session: AsyncSession,
         sneaker_id: int,
         size_id: int,
-):
+) -> Sequence[UserSneakerSubscription]:
     result = await session.scalars(
         select(UserSneakerSubscription)
         .where(
@@ -49,7 +48,7 @@ async def get_inactive_permanent_subscription_for_user_service(
         session: AsyncSession,
         user_id: int,
         subscription_id: int,
-):
+) -> UserSneakerSubscription:
     subscription = await session.scalar(
         select(UserSneakerSubscription).where(
             UserSneakerSubscription.user_id == user_id,

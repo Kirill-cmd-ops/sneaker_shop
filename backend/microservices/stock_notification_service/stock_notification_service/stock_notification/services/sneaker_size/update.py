@@ -22,7 +22,7 @@ async def update_sneaker_size_quantity_service(
         sneaker_id: int,
         size_id: int,
         quantity: int,
-):
+) -> bool:
     sneaker_size = await session.scalar(
         select(SneakerSizeAssociation)
         .where(SneakerSizeAssociation.sneaker_id == sneaker_id)
@@ -44,7 +44,7 @@ async def get_subscribed_emails(
         session: AsyncSession,
         sneaker_id: int,
         size_id: int,
-):
+) -> list:
     subscribed_users = await get_active_permanent_subscriptions_for_sneaker_service(
         session=session,
         sneaker_id=sneaker_id,
@@ -61,7 +61,7 @@ async def get_subscribed_emails(
     return list(set(list(subscribed_users) + list(subscribed_users_one_time)))
 
 
-async def send_notification_for_subscribed_emails(emails):
+async def send_notification_for_subscribed_emails(emails: list) -> None:
     for email in emails:
         process_sneaker_size_quantity_update.delay(
             hostname=settings.smtp_config.smtp_hostname,

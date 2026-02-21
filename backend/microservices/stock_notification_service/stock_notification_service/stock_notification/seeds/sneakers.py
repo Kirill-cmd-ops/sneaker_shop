@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from microservices.stock_notification_service.stock_notification_service.stock_notification.models import Sneaker
 
 
-async def seed_sneakers(session: AsyncSession):
+async def seed_sneakers(session: AsyncSession) -> None:
     sneakers = [
         {
             "name": "Air Zoom Pegasus",

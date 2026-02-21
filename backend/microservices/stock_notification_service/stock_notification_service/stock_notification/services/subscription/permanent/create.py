@@ -12,7 +12,7 @@ async def create_user_permanent_subscription_service(
         size_id: int,
         user_id: int,
         session: AsyncSession,
-):
+) -> UserSneakerSubscription:
     try:
         new_user_subscription = UserSneakerSubscription(
             user_id=user_id,
@@ -23,4 +23,4 @@ async def create_user_permanent_subscription_service(
     except IntegrityError:
         raise PermanentSubscriptionAlreadyExists()
 
-    return {"status": new_user_subscription}
+    return new_user_subscription

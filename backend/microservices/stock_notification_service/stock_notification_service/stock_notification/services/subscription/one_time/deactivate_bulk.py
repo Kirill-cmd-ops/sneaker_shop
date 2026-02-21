@@ -11,7 +11,7 @@ from microservices.stock_notification_service.stock_notification_service.stock_n
 async def deactivate_all_one_time_subscriptions_for_user_service(
         user_id: int,
         session: AsyncSession,
-):
+) -> str:
     async with session.begin():
         await session.execute(
             update(UserSneakerOneTimeSubscription)
@@ -23,13 +23,13 @@ async def deactivate_all_one_time_subscriptions_for_user_service(
             .values(status=SubscriptionStatus.INACTIVE_BY_USER)
         )
 
-    return {"records was deactivate"}
+    return "records was deactivate"
 
 
 async def deactivate_all_one_time_subscriptions_for_sneaker_service(
         session: AsyncSession,
         sneaker_id: int,
-):
+) -> None:
     await session.execute(
         update(UserSneakerOneTimeSubscription)
         .where(

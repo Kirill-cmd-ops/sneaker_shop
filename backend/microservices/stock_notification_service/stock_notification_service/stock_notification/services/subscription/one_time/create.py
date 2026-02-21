@@ -12,7 +12,7 @@ async def create_user_one_time_subscription_service(
         size_id: int,
         user_id: int,
         session: AsyncSession,
-):
+) -> UserSneakerOneTimeSubscription:
     try:
         new_user_one_time_subscription = UserSneakerOneTimeSubscription(
             user_id=user_id,
@@ -23,4 +23,4 @@ async def create_user_one_time_subscription_service(
     except IntegrityError:
         raise OneTimeSubscriptionAlreadyExists()
 
-    return {"status": new_user_one_time_subscription}
+    return new_user_one_time_subscription

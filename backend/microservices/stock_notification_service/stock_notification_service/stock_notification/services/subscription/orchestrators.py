@@ -1,9 +1,9 @@
+from typing import Any
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from microservices.stock_notification_service.stock_notification_service.stock_notification.models import db_helper
-from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas.subscription import (
-    SubscriptionCreate,
-)
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import db_helper, \
+    UserSneakerOneTimeSubscription, UserSneakerSubscription
 from microservices.stock_notification_service.stock_notification_service.stock_notification.services.sneaker.checkers import (
     check_sneaker_active_service,
 )
@@ -50,7 +50,7 @@ from microservices.stock_notification_service.stock_notification_service.stock_n
 )
 
 
-async def deactivate_all_subscriptions_for_sneaker_orchestrator(sneaker_id):
+async def deactivate_all_subscriptions_for_sneaker_orchestrator(sneaker_id: int) -> None:
     async with db_helper.session_context() as session:
         async with session.begin():
             await deactivate_all_permanent_subscriptions_for_sneaker_service(
@@ -63,7 +63,7 @@ async def deactivate_all_subscriptions_for_sneaker_orchestrator(sneaker_id):
             )
 
 
-async def reactivate_all_subscriptions_for_sneaker_orchestrator(sneaker_id):
+async def reactivate_all_subscriptions_for_sneaker_orchestrator(sneaker_id: int) -> None:
     async with db_helper.session_context() as session:
         async with session.begin():
             await reactivate_all_permanent_subscriptions_for_sneaker_service(
@@ -81,7 +81,7 @@ async def create_user_one_time_subscription_orchestrator(
         user_id: int,
         sneaker_id: int,
         size_id: int,
-):
+) -> dict[str, Any] | UserSneakerOneTimeSubscription:
     async with session.begin():
         # проверка активности sneaker
         await check_sneaker_active_service(
@@ -139,7 +139,7 @@ async def reactivate_all_one_time_subscriptions_for_user_orchestrator(
         session: AsyncSession,
         user_id: int,
         subscription_id: int,
-):
+) -> str:
     async with session.begin():
         subscription = (
             await get_one_time_subscription_for_user_service(
@@ -176,7 +176,7 @@ async def create_user_permanent_subscription_orchestrator(
         user_id: int,
         sneaker_id: int,
         size_id: int,
-):
+) -> dict[str, Any] | UserSneakerSubscription:
     async with session.begin():
         # проверка активности sneaker
         await check_sneaker_active_service(
@@ -233,7 +233,7 @@ async def reactivate_all_permanent_subscriptions_for_user_orchestrator(
         session: AsyncSession,
         user_id: int,
         subscription_id: int,
-):
+) -> str:
     async with session.begin():
         inactive_subscription = (
             await get_inactive_permanent_subscription_for_user_service(
