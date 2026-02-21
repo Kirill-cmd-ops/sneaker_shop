@@ -8,7 +8,7 @@ from microservices.stock_notification_service.stock_notification_service.stock_n
 async def check_sneaker_active_service(
         session: AsyncSession,
         sneaker_id: int,
-):
+) -> None:
     current_sneaker = await session.get(Sneaker, sneaker_id)
 
     if not current_sneaker:

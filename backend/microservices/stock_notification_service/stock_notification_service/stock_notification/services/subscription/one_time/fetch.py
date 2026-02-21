@@ -1,3 +1,5 @@
+from typing import Sequence
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -14,21 +16,21 @@ from microservices.stock_notification_service.stock_notification_service.stock_n
 async def get_active_one_time_subscriptions_for_user_service(
         user_id: int,
         session: AsyncSession,
-):
+) -> Sequence[UserSneakerOneTimeSubscription]:
     result = await session.scalars(
         select(UserSneakerOneTimeSubscription).where(
             UserSneakerOneTimeSubscription.user_id == user_id,
             UserSneakerOneTimeSubscription.status == SubscriptionStatus.ACTIVE,
         )
     )
-    return {"records": result.all()}
+    return result.all()
 
 
 async def get_one_time_subscription_for_user_service(
         session: AsyncSession,
         user_id: int,
         subscription_id: int,
-):
+) -> None:
     subscription = await session.scalar(
         select(UserSneakerOneTimeSubscription).where(
             UserSneakerOneTimeSubscription.user_id == user_id,
@@ -44,7 +46,7 @@ async def get_active_one_time_subscriptions_for_sneaker_service(
         session: AsyncSession,
         sneaker_id: int,
         size_id: int,
-):
+) -> Sequence[UserSneakerOneTimeSubscription]:
     result = await session.scalars(
         select(UserSneakerOneTimeSubscription)
         .where(

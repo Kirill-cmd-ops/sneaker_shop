@@ -10,7 +10,7 @@ from microservices.stock_notification_service.stock_notification_service.stock_n
 async def reactivate_all_permanent_subscriptions_for_sneaker_service(
         session: AsyncSession,
         sneaker_id: int,
-):
+) -> None:
     await session.execute(
         update(UserSneakerSubscription)
         .where(

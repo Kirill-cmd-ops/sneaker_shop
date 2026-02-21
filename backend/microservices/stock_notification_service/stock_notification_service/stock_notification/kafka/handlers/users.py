@@ -13,7 +13,7 @@ from microservices.stock_notification_service.stock_notification_service.stock_n
 )
 
 
-async def handle_user_event(key: str | None, value: dict):
+async def handle_user_event(key: str | None, value: dict) -> None:
     event_type = value.get("event_type")
     if event_type == "user_created":
         data = value.get("data")

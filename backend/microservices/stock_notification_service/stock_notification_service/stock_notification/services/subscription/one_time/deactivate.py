@@ -14,7 +14,7 @@ async def deactivate_user_one_time_subscription_service(
         subscription_id: int,
         user_id: int,
         session: AsyncSession,
-):
+) -> str:
     async with session.begin():
         subscription = await session.scalar(
             select(UserSneakerOneTimeSubscription).where(
@@ -30,4 +30,4 @@ async def deactivate_user_one_time_subscription_service(
 
         subscription.status = SubscriptionStatus.INACTIVE_BY_USER
 
-    return {"record was deactivate"}
+    return "record was deactivate"

@@ -18,7 +18,7 @@ def process_sneaker_size_quantity_update(
         recipient_gmail: str,
         email_title: str,
         body_title: str,
-):
+) -> None:
     send_message(
         hostname=hostname,
         port=port,

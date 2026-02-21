@@ -13,7 +13,7 @@ from microservices.stock_notification_service.stock_notification_service.stock_n
     seed_users
 
 
-async def run_seeds():
+async def run_seeds() -> None:
     async with db_helper.session_getter() as session:
         async with session.begin():
             await seed_brands(session=session)

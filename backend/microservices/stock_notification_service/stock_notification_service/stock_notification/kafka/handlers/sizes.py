@@ -1,5 +1,4 @@
-from microservices.stock_notification_service.stock_notification_service.stock_notification.models import db_helper, \
-    Size
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import Size
 from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas import SizeCreate
 from microservices.stock_notification_service.stock_notification_service.stock_notification.services.record.create import (
     create_record_service,
@@ -9,7 +8,7 @@ from microservices.stock_notification_service.stock_notification_service.stock_n
 )
 
 
-async def handle_size_event(key: str | None, value: dict):
+async def handle_size_event(key: str | None, value: dict) -> None:
     event_type = value.get("event_type")
     if event_type == "size_created":
         data = value.get("data")

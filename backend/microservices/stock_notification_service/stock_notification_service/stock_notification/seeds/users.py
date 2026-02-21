@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from microservices.stock_notification_service.stock_notification_service.stock_notification.models import User
 
 
-async def seed_users(session: AsyncSession):
+async def seed_users(session: AsyncSession) -> None:
     users = [
         {"email": "bondarenkokirill150208@gmail.com"},
         {"email": "pubginvolker@gmail.com"},

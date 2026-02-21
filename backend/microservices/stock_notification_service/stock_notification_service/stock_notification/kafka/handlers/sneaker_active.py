@@ -4,7 +4,7 @@ from microservices.stock_notification_service.stock_notification_service.stock_n
 )
 
 
-async def handle_sneaker_active_event(key: str | None, value: dict):
+async def handle_sneaker_active_event(key: str | None, value: dict) -> None:
     event_type = value.get("event_type")
     if event_type == "sneaker_updated":
         sneaker_id = value.get("sneaker_id")
