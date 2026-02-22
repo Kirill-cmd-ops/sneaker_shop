@@ -2,6 +2,7 @@ from aiokafka import AIOKafkaProducer
 from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import DeclarativeBase
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.dependencies.kafka_producer import (
@@ -36,7 +37,7 @@ async def create_size(
         size_create: SizeCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-):
+) -> DeclarativeBase:
     size_data = size_create.model_dump()
 
     new_size = await create_record_service(
@@ -58,7 +59,7 @@ async def delete_size(
         size_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-):
+) -> dict[str, str]:
     result = await delete_record_service(
         session=session,
         table_name=Size,
@@ -73,5 +74,5 @@ async def delete_size(
 async def get_brand(
         size_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> float | None:
     return await session.scalar(select(Size.eu_size).where(Size.id == size_id))

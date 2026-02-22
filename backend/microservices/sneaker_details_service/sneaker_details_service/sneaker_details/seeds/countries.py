@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import Country
 
 
-async def seed_countries(session: AsyncSession):
+async def seed_countries(session: AsyncSession) -> None:
     countries = [
         {"name": "Argentina"},
         {"name": "China"},

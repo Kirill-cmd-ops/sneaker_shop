@@ -13,7 +13,7 @@ async def delete_sneaker_associations_service(
         assoc_ids: list[int],
         sneaker_association_model: Type[Base],
         field_name: str,
-):
+) -> None:
     """
     Функция для одаления записи в ассоциативной таблице
     """

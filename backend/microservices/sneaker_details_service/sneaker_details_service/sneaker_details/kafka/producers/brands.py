@@ -1,15 +1,16 @@
 from typing import Dict, Any
 
+from aiokafka import AIOKafkaProducer
 from fastapi.encoders import jsonable_encoder
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 
 
 async def publish_brand_created(
-        producer,
+        producer: AIOKafkaProducer,
         brand_id: int,
         brand_data: Dict[str, Any],
-):
+) -> None:
     brand_create_payload = {
         "event_type": "brand_created",
         "data": brand_data,
@@ -22,7 +23,10 @@ async def publish_brand_created(
     )
 
 
-async def publish_brand_deleted(producer, brand_id: int):
+async def publish_brand_deleted(
+        producer: AIOKafkaProducer,
+        brand_id: int,
+) -> None:
     brand_delete_payload = {
         "event_type": "brand_deleted",
         "brand_id": brand_id,

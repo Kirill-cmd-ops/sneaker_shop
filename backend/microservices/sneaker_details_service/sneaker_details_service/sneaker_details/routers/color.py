@@ -1,5 +1,8 @@
+from typing import Any, Coroutine
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import DeclarativeBase
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import db_helper, Color
@@ -25,7 +28,7 @@ router = APIRouter(
 async def create_color(
         color_create: ColorCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> DeclarativeBase:
     color_data = color_create.model_dump()
 
     return await create_record_service(
@@ -39,7 +42,7 @@ async def create_color(
 async def delete_color(
         color_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> dict[str, str]:
     return await delete_record_service(
         session=session,
         table_name=Color,

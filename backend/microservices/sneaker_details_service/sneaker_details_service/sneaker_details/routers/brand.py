@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import DeclarativeBase
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.dependencies.kafka_producer import (
@@ -37,7 +38,7 @@ async def create_brand(
         brand_create: BrandCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-):
+) -> DeclarativeBase:
     brand_data = brand_create.model_dump()
 
     new_brand = await create_record_service(
@@ -59,7 +60,7 @@ async def delete_brand(
         brand_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-):
+) -> dict[str, str]:
     result = await delete_record_service(
         session=session,
         table_name=Brand,
@@ -74,5 +75,5 @@ async def delete_brand(
 async def get_brand(
         brand_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> str | None:
     return await session.scalar(select(Brand.name).where(Brand.id == brand_id))

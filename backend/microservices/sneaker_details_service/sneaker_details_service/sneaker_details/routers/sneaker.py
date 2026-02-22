@@ -20,7 +20,7 @@ from microservices.sneaker_details_service.sneaker_details_service.sneaker_detai
     publish_sneaker_updated,
     publish_sneaker_deleted,
 )
-from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import db_helper
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import db_helper, Sneaker
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import (
     SneakerCreate,
@@ -57,7 +57,7 @@ async def create_sneaker(
         sneaker_create: SneakerCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-):
+) -> Sneaker:
     sneaker_data = sneaker_create.model_dump(exclude={"size_ids", "color_ids", "material_ids"})
     sneaker_all_data = sneaker_create.model_dump()
 
@@ -92,7 +92,7 @@ async def delete_sneaker(
         sneaker_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-):
+) -> str:
     await delete_sneaker_service(
         session=session,
         sneaker_id=sneaker_id,
@@ -111,7 +111,7 @@ async def update_sneaker(
         sneaker_update: SneakerUpdate,
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-):
+) -> str:
     sneaker_data = sneaker_update.model_dump(exclude_unset=True)
 
     await update_sneaker_service(
@@ -134,7 +134,7 @@ async def get_sneaker(
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
         user_id: int = Depends(get_current_user_id),
-):
+) -> Sneaker:
     sneaker_info = await get_sneaker_service(
         session=session,
         sneaker_id=sneaker_id,

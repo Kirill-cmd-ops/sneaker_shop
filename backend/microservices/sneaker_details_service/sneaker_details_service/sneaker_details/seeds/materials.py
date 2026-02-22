@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import Material
 
 
-async def seed_materials(session: AsyncSession):
+async def seed_materials(session: AsyncSession) -> None:
     materials = [
         {"name": "Сетка (Mesh)"},
         {"name": "Кожа"},
