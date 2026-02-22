@@ -16,7 +16,7 @@ async def get_cart_service(session: AsyncSession, user_id: int) -> Cart:
         )
     )
     if cart is None:
-        raise CartNotFound
+        raise CartNotFound()
 
     return cart
 
@@ -27,6 +27,6 @@ async def get_user_cart_id_service(
 ) -> int:
     cart_id = await session.scalar(select(Cart.id).filter(Cart.user_id == user_id))
     if not cart_id:
-        raise CartNotFound
+        raise CartNotFound()
 
     return cart_id
