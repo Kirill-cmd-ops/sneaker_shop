@@ -1,13 +1,15 @@
 from typing import Dict, Any
 
+from aiokafka import AIOKafkaProducer
+
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 
 
 async def publish_sneaker_sizes_created(
-        producer,
+        producer: AIOKafkaProducer,
         sneaker_id: int,
         sneaker_sizes_data: Dict[str, Any],
-):
+) -> None:
     sneaker_sizes_create_payload = {
         "event_type": "sneaker_sizes_created",
         "data": sneaker_sizes_data,
@@ -20,11 +22,11 @@ async def publish_sneaker_sizes_created(
 
 
 async def publish_sneaker_size_updated(
-        producer,
+        producer: AIOKafkaProducer,
         sneaker_id: int,
         size_id: int,
         quantity: int,
-):
+) -> None:
     sneaker_sizes_update_payload = {
         "event_type": "sneaker_sizes_updated",
         "data": {"size_id": size_id, "quantity": quantity},
@@ -37,10 +39,10 @@ async def publish_sneaker_size_updated(
 
 
 async def publish_sneaker_sizes_deleted(
-        producer,
+        producer: AIOKafkaProducer,
         sneaker_id: int,
         size_ids: list[int],
-):
+) -> None:
     sneaker_sizes_delete_payload = {
         "event_type": "sneaker_sizes_deleted",
         "data": {"assoc_ids": size_ids},

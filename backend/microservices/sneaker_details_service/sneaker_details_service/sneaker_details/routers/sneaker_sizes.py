@@ -1,7 +1,10 @@
+from typing import Sequence
+
 from aiokafka import AIOKafkaProducer
 from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import DeclarativeBase
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 
@@ -58,7 +61,7 @@ async def add_sizes_to_sneaker(
         sneaker_sizes_create: SneakerSizesCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-):
+) -> str:
     sneaker_sizes_data = sneaker_sizes_create.model_dump()
     size_list = [size.model_dump() for size in sneaker_sizes_create.sizes]
 
@@ -85,7 +88,7 @@ async def delete_sizes_from_sneaker(
         size_ids: list[int],
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-):
+) -> str:
     await delete_sneaker_associations_service(
         session=session,
         sneaker_id=sneaker_id,
@@ -111,7 +114,7 @@ async def update_sneaker_size_quantity(
         sneaker_size_update: SneakerSizeUpdate,
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-):
+) -> str:
     size_id = sneaker_size_update.size.size_id
     quantity = sneaker_size_update.size.quantity
 
@@ -138,7 +141,7 @@ async def update_sneaker_size_quantity(
 async def get_sneaker_sizes(
         sneaker_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> Sequence[DeclarativeBase]:
     return await get_sneaker_associations_service(
         session=session,
         sneaker_association_model=SneakerSizeAssociation,

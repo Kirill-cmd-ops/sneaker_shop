@@ -10,14 +10,13 @@ from microservices.sneaker_details_service.sneaker_details_service.sneaker_detai
 )
 
 
-# TODO: добавить DomainException
 async def create_sneaker_service(
         session: AsyncSession,
         sneaker_data: Dict[str, Any],
         size_ids: list[Dict[str, Any]],
         color_ids: list[int],
         material_ids: list[int],
-):
+) -> Sneaker:
     async with session.begin():
         sneaker = Sneaker(**sneaker_data)
         session.add(sneaker)

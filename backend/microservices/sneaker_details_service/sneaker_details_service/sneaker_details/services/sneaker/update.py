@@ -12,7 +12,7 @@ async def update_sneaker_service(
         session: AsyncSession,
         sneaker_id: int,
         sneaker_data: Dict[str, Any],
-):
+) -> None:
     try:
         async with session.begin():
             sneaker = await session.get(Sneaker, sneaker_id)

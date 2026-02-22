@@ -1,11 +1,13 @@
+from aiokafka import AIOKafkaProducer
+
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 
 
 async def publish_sneaker_viewed(
-        producer,
+        producer: AIOKafkaProducer,
         sneaker_id: int,
         user_id: int,
-):
+) -> None:
     payload = {"user_id": user_id, "sneaker_id": sneaker_id}
 
     await producer.send_and_wait(

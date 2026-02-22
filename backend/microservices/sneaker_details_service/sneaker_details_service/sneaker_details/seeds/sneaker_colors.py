@@ -5,7 +5,7 @@ from microservices.sneaker_details_service.sneaker_details_service.sneaker_detai
 )
 
 
-async def seed_sneaker_colors(session: AsyncSession):
+async def seed_sneaker_colors(session: AsyncSession) -> None:
     sneaker_colors = [
         {"sneaker_id": 1, "color_id": 4},
         {"sneaker_id": 2, "color_id": 5},

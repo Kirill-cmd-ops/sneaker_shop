@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import DeclarativeBase
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import db_helper, Material
@@ -26,7 +27,7 @@ router = APIRouter(
 async def create_material(
         material_create: MaterialCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> DeclarativeBase:
     material_data = material_create.model_dump()
 
     return await create_record_service(
@@ -40,7 +41,7 @@ async def create_material(
 async def delete_material(
         material_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> dict[str, str]:
     return await delete_record_service(
         session=session,
         table_name=Material,

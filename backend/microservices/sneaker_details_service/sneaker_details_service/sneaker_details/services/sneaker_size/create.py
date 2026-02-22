@@ -13,7 +13,7 @@ async def add_sizes_to_sneaker_service(
         session: AsyncSession,
         sneaker_id: int,
         size_list: list[Dict[str, Any]],
-):
+) -> None:
     try:
         sneaker_sizes = [
             {

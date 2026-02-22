@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import DeclarativeBase
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import db_helper, Country
@@ -25,7 +26,7 @@ router = APIRouter(
 async def create_country(
         country_create: CountryCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> DeclarativeBase:
     country_data = country_create.model_dump()
 
     return await create_record_service(
@@ -39,7 +40,7 @@ async def create_country(
 async def delete_country(
         country_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> dict[str, str]:
     return await delete_record_service(
         session=session,
         table_name=Country,

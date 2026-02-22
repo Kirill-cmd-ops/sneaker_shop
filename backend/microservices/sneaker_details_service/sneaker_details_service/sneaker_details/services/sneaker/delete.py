@@ -9,7 +9,10 @@ from microservices.sneaker_details_service.sneaker_details_service.sneaker_detai
 )
 
 
-async def delete_sneaker_service(session: AsyncSession, sneaker_id: int):
+async def delete_sneaker_service(
+        session: AsyncSession,
+        sneaker_id: int,
+) -> None:
     assoc_tables = [
         SneakerSizeAssociation,
         SneakerColorAssociation,

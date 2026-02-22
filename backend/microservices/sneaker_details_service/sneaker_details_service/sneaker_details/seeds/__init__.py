@@ -16,7 +16,7 @@ from microservices.sneaker_details_service.sneaker_details_service.sneaker_detai
 )
 
 
-async def run_seeds():
+async def run_seeds() -> None:
     async with db_helper.session_getter() as session:
         async with session.begin():
             await seed_brands(session=session)

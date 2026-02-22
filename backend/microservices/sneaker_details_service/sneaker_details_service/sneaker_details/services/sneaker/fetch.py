@@ -9,7 +9,7 @@ from microservices.sneaker_details_service.sneaker_details_service.sneaker_detai
 async def get_sneaker_service(
         session: AsyncSession,
         sneaker_id: int,
-):
+) -> Sneaker:
     async with session.begin():
         stmt = (
             select(Sneaker)
