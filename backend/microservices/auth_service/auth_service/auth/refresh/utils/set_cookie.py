@@ -7,7 +7,7 @@ def set_value_in_cookie(
         secure,
         httponly,
         samesite,
-):
+) -> None:
     response.set_cookie(
         key=key,
         value=value,

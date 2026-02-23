@@ -1,3 +1,4 @@
+import redis.asyncio as aioredis
 from sqlalchemy import select, delete
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,7 +11,7 @@ async def update_role_permissions_db(
         user_role: str,
         list_permissions: list[int],
         session: AsyncSession,
-):
+) -> None:
     role_id = await session.scalar(select(Role.id).where(Role.name == user_role))
 
     if not role_id:
@@ -40,10 +41,10 @@ async def update_role_permissions_db(
 
 
 async def update_role_permissions_redis(
-        redis_client,
+        redis_client: aioredis.Redis,
         user_role: str,
         list_role_permissions: list[str],
-):
+) -> None:
     async with redis_client.pipeline() as pipe:
         await pipe.delete(f"role:{user_role}")
         if list_role_permissions:

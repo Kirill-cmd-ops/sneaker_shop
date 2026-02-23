@@ -29,7 +29,7 @@ async def update_role_permissions(
         request: Request,
         update_permissions: UpdatePermissions,
         session: AsyncSession = Depends(db_helper.session_getter),
-):
+) -> dict[str, str]:
     user_role = request.state.user_role
     redis_client = request.state.redis_client
 

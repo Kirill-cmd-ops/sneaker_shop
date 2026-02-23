@@ -26,7 +26,7 @@ async def update_refresh_token(
         token_aud: list[str],
         session: AsyncSession = Depends(db_helper.session_getter),
         refresh_token: str = Cookie(alias="refresh_session_cookie"),
-):
+) -> dict[str, str]:
     return await update_refresh_token_orchestrator(
         session=session,
         response=response,

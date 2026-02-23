@@ -18,7 +18,7 @@ def handle_request_verify(
         recipient_gmail: str,
         email_title: str,
         body_title: str,
-):
+) -> None:
     send_message(
         hostname=hostname,
         port=port,
@@ -43,7 +43,7 @@ def handle_request_reset(
         recipient_gmail: str,
         email_title: str,
         body_title: str,
-):
+) -> None:
     send_message(
         hostname=hostname,
         port=port,
@@ -68,7 +68,7 @@ def handle_after_verify(
         recipient_gmail: str,
         email_title: str,
         body_title: str,
-):
+) -> None:
     send_message(
         hostname=hostname,
         port=port,
@@ -93,7 +93,7 @@ def handle_after_register(
         recipient_gmail: str,
         email_title: str,
         body_title: str,
-):
+) -> None:
     send_message(
         hostname=hostname,
         port=port,
@@ -118,7 +118,7 @@ def handle_after_reset(
         recipient_gmail: str,
         email_title: str,
         body_title: str,
-):
+) -> None:
     send_message(
         hostname=hostname,
         port=port,

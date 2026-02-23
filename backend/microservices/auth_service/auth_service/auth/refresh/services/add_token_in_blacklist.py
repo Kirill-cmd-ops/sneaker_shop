@@ -10,7 +10,7 @@ from microservices.auth_service.auth_service.auth.models import Blacklist
 async def add_to_blacklist(
         session: AsyncSession,
         refresh_token_id,
-):
+) -> None:
     try:
         blacklist = Blacklist(
             refresh_token_id=refresh_token_id,

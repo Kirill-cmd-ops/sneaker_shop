@@ -1,3 +1,4 @@
+from aiokafka import AIOKafkaProducer
 from fastapi.encoders import jsonable_encoder
 
 from microservices.auth_service.auth_service.auth.config import settings
@@ -5,10 +6,10 @@ from microservices.auth_service.auth_service.auth.schemas import UserCreate, Use
 
 
 async def publish_user_created(
-        producer,
+        producer: AIOKafkaProducer,
         user_id: int,
         user_create: UserCreate,
-):
+) -> None:
     user_create_payload = {
         "event_type": "user_created",
         "data": user_create.dict(
@@ -24,10 +25,10 @@ async def publish_user_created(
 
 
 async def publish_user_updated(
-        producer,
+        producer: AIOKafkaProducer,
         user_id: int,
         user_update: UserUpdate,
-):
+) -> None:
     user_update_payload = {
         "event_type": "user_updated",
         "user_id": user_id,
@@ -44,7 +45,10 @@ async def publish_user_updated(
     )
 
 
-async def publish_user_deleted(producer, user_id: int):
+async def publish_user_deleted(
+        producer: AIOKafkaProducer,
+        user_id: int
+) -> None:
     user_delete_payload = {"event_type": "user_deleted", "user_id": user_id}
 
     await producer.send_and_wait(

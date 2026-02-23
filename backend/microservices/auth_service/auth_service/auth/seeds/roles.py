@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from microservices.auth_service.auth_service.auth.models import Role
 
 
-async def seed_roles(session: AsyncSession):
+async def seed_roles(session: AsyncSession) -> None:
     roles = [
         {"name": "user"},
         {"name": "content_manager"},

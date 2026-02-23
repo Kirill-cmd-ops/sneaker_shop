@@ -28,7 +28,7 @@ class MyJWTStrategy(JWTStrategy):
         self.issuer = issuer
         self.allowed_audience = allowed_audience
 
-    async def write_token(self, user: models.UP):
+    async def write_token(self, user: models.UP) -> str:
         if not set(self.token_audience).issubset(self.allowed_audience):
             raise ValueError(
                 "Значение aud некорректно для access токена, который вы пытаетесь создать"

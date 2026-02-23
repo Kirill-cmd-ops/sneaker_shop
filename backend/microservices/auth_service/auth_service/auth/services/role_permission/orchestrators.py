@@ -12,7 +12,7 @@ async def update_role_permissions_orchestrator(
         redis_client: aioredis.Redis,
         user_role: str,
         list_permissions: list[int],
-):
+) -> dict[str, str]:
     async with session.begin():
         if list_permissions:
             await update_role_permissions_db(

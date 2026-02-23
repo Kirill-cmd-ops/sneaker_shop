@@ -6,7 +6,7 @@ from microservices.auth_service.auth_service.auth.domain.exceptions import UserN
 from microservices.auth_service.auth_service.auth.models import db_helper, User, Role, UserRoleAssociation
 
 
-async def add_role_db(user_id: int, role_name: str):
+async def add_role_db(user_id: int, role_name: str) -> None:
     try:
         async with db_helper.session_context() as session:
             user_object = await session.get(User, user_id)
