@@ -1,3 +1,5 @@
+from typing import Sequence
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -7,7 +9,7 @@ from microservices.auth_service.auth_service.auth.models import Permission
 async def get_role_permissions_db(
         session: AsyncSession,
         list_permissions: list[int],
-):
+) -> Sequence[str]:
     result = await session.scalars(
         select(Permission.name).where(Permission.id.in_(list_permissions)),
     )

@@ -9,10 +9,10 @@ from microservices.auth_service.auth_service.auth.refresh.utils.encode_token imp
 
 async def check_refresh_token_valid_rotation(
         session: AsyncSession,
-        token_hash,
+        token_hash: str,
         rotate: bool = False,
         extra_days: int = 0,
-):
+) -> int:
     if rotate and extra_days > 0:
         return await session.scalar(
             select(RefreshToken.user_id).where(
@@ -32,7 +32,7 @@ async def check_refresh_token_valid_rotation(
         )
 
 
-async def check_refresh_token_valid(session: AsyncSession, refresh_token: str):
+async def check_refresh_token_valid(session: AsyncSession, refresh_token: str) -> int | None:
     token_hash = encode_refresh_token(refresh_token=refresh_token)
     user_id = await check_refresh_token_valid_rotation(
         session=session,
@@ -44,7 +44,7 @@ async def check_refresh_token_valid(session: AsyncSession, refresh_token: str):
     return user_id
 
 
-async def check_refresh_token_rotation(session: AsyncSession, refresh_token: str):
+async def check_refresh_token_rotation(session: AsyncSession, refresh_token: str) -> int | None:
     token_hash = encode_refresh_token(refresh_token=refresh_token)
     user_id = await check_refresh_token_valid_rotation(
         session=session,

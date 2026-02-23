@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from microservices.auth_service.auth_service.auth.models import Permission
 
 
-async def seed_permission(session: AsyncSession):
+async def seed_permission(session: AsyncSession) -> None:
     permissions = [
         {"name": "favorite.view"},
         {"name": "favorite.sneaker.add"},

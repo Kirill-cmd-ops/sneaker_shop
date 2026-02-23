@@ -9,7 +9,7 @@ async def hash_refresh_token_add_db(
         session: AsyncSession,
         refresh_token: str,
         user_id: int,
-):
+) -> None:
     token = RefreshToken(
         user_id=user_id,
         token_hash=refresh_token,

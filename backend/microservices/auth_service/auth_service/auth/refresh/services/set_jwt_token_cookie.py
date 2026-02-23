@@ -10,7 +10,7 @@ async def set_jwt_token(
         user_id: int | models.UP,
         token_aud: list[str],
         response: Response,
-):
+) -> None:
     strategy = MyJWTStrategy(
         secret=settings.auth_config.jwt_private_key,
         lifetime_seconds=settings.auth_config.lifetime_seconds,

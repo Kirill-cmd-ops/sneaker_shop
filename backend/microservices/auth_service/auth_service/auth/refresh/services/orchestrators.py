@@ -19,7 +19,7 @@ async def update_refresh_token_orchestrator(
         response: Response,
         token_aud: list[str],
         refresh_token: str,
-):
+) -> dict[str, str]:
     # 1) Проверка refresh токена
     user_id = await check_refresh_token_valid(
         session=session,

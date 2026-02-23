@@ -1,6 +1,6 @@
 import re
 import secrets
-from typing import Optional, Union, Any
+from typing import Optional, Union
 
 from aiokafka import AIOKafkaProducer
 from fastapi import Request
@@ -74,7 +74,9 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
                 reason="The password must not contain your email."
             )
 
-    async def on_after_register(self, user: User, request: Optional[Request] = None):
+    async def on_after_register(
+            self, user: User, request: Optional[Request] = None
+    ) -> None:
         producer: AIOKafkaProducer = request.app.state.kafka_producer
         await publish_user_registered(producer=producer, user_id=str(user.id))
         await add_role_db(
@@ -94,18 +96,9 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
             body_title=f"Благодарим за регистрацию на Sneaker Shop",
         )
 
-    async def on_after_update(
-            self,
-            user: models.UP,
-            update_dict: dict[str, Any],
-            request: Optional[Request] = None,
-    ) -> None:
-        # После обновления отправялем сообщение на email для пользователя, чтобы уведомить его об изменениях профиля
-        ...
-
     async def on_after_request_verify(
             self, user: User, token: str, request: Optional[Request] = None
-    ):
+    ) -> None:
         handle_request_verify.delay(
             hostname=settings.smtp_config.smtp_hostname,
             port=settings.smtp_config.smtp_port,
@@ -135,7 +128,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
 
     async def on_after_forgot_password(
             self, user: User, token: str, request: Optional[Request] = None
-    ):
+    ) -> None:
         handle_request_reset.delay(
             hostname=settings.smtp_config.smtp_hostname,
             port=settings.smtp_config.smtp_port,
@@ -162,12 +155,6 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
             email_title="Изменение пароля",
             body_title="Пароль был успешно изменен",
         )
-
-    async def on_before_delete(
-            self, user: models.UP, request: Optional[Request] = None
-    ) -> None:
-        # отправка подтверждающего письма на почту пользователя
-        ...
 
     async def on_after_login(
             self,

@@ -4,7 +4,7 @@ from microservices.auth_service.auth_service.auth.domain.exceptions import RoleN
 from microservices.auth_service.auth_service.auth.models import db_helper, Role, UserRoleAssociation
 
 
-async def get_user_role(user_id: int):
+async def get_user_role(user_id: int) -> str:
     async with db_helper.session_context() as session:
         role = await session.scalar(
             select(Role.name)
