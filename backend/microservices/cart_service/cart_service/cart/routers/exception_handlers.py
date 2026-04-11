@@ -9,17 +9,17 @@ from microservices.cart_service.cart_service.cart.domain.exceptions import (
 )
 
 
-async def cart_not_found_handler(request: Request, exc: CartNotFound) -> JSONResponse:
+def cart_not_found_handler(request: Request, exc: CartNotFound) -> JSONResponse:
     return JSONResponse(status_code=404, content={"detail": "Cart not Found"})
 
 
-async def sneaker_not_found_handler(request: Request, exc: SneakerNotFound) -> JSONResponse:
+def sneaker_not_found_handler(request: Request, exc: SneakerNotFound) -> JSONResponse:
     return JSONResponse(status_code=404, content={"detail": "Sneaker not found"})
 
 
-async def sneaker_size_not_available_handler(request: Request, exc: SneakerSizeNotAvailable) -> JSONResponse:
+def sneaker_size_not_available_handler(request: Request, exc: SneakerSizeNotAvailable) -> JSONResponse:
     return JSONResponse(status_code=409, content={"detail": "Sneaker size not available"})
 
 
-async def sneaker_not_found_in_cart_handler(request: Request, exc: SneakerNotFoundInCart) -> JSONResponse:
+def sneaker_not_found_in_cart_handler(request: Request, exc: SneakerNotFoundInCart) -> JSONResponse:
     return JSONResponse(status_code=404, content={"detail": "Sneaker not found in cart"})
