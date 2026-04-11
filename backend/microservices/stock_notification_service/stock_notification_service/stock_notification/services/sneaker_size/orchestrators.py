@@ -28,4 +28,4 @@ async def update_sneaker_size_quantity_with_notifications_orchestrator(
                 )
 
     if emails:
-        await send_notification_for_subscribed_emails(emails=emails)
+        send_notification_for_subscribed_emails(emails=emails)
