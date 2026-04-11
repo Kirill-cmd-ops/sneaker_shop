@@ -61,7 +61,7 @@ async def get_subscribed_emails(
     return list(set(list(subscribed_users) + list(subscribed_users_one_time)))
 
 
-async def send_notification_for_subscribed_emails(emails: list) -> None:
+def send_notification_for_subscribed_emails(emails: list) -> None:
     for email in emails:
         process_sneaker_size_quantity_update.delay(
             hostname=settings.smtp_config.smtp_hostname,
