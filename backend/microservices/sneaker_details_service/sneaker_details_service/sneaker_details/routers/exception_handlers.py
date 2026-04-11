@@ -6,25 +6,25 @@ from microservices.sneaker_details_service.sneaker_details_service.sneaker_detai
     SneakerSizeAlreadyExists, SneakerSizeNotFound
 
 
-async def record_already_exists_handler(request: Request, exc: RecordAlreadyExists) -> JSONResponse:
+def record_already_exists_handler(request: Request, exc: RecordAlreadyExists) -> JSONResponse:
     return JSONResponse(status_code=409, content={"detail": "Record already exists"})
 
 
-async def sneaker_not_found_handler(request: Request, exc: SneakerNotFound) -> JSONResponse:
+def sneaker_not_found_handler(request: Request, exc: SneakerNotFound) -> JSONResponse:
     return JSONResponse(status_code=404, content={"detail": "Sneaker not found"})
 
 
-async def sneaker_already_exists_handler(request: Request, exc: SneakerAlreadyExists) -> JSONResponse:
+def sneaker_already_exists_handler(request: Request, exc: SneakerAlreadyExists) -> JSONResponse:
     return JSONResponse(status_code=409, content={"detail": "Sneaker already exists"})
 
 
-async def sneaker_association_already_exists_handler(request: Request, exc: SneakerAssociationAlreadyExists) -> JSONResponse:
+def sneaker_association_already_exists_handler(request: Request, exc: SneakerAssociationAlreadyExists) -> JSONResponse:
     return JSONResponse(status_code=409, content={"detail": "Sneaker association already exists"})
 
 
-async def sneaker_size_already_exists_handler(request: Request, exc: SneakerSizeAlreadyExists) -> JSONResponse:
+def sneaker_size_already_exists_handler(request: Request, exc: SneakerSizeAlreadyExists) -> JSONResponse:
     return JSONResponse(status_code=409, content={"detail": "Sneaker size already exists"})
 
 
-async def sneaker_size_not_found_handler(request: Request, exc: SneakerSizeNotFound) -> JSONResponse:
+def sneaker_size_not_found_handler(request: Request, exc: SneakerSizeNotFound) -> JSONResponse:
     return JSONResponse(status_code=404, content={"detail": "Sneaker size not found"})
