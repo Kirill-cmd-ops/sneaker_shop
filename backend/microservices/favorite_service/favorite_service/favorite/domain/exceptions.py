@@ -16,3 +16,7 @@ class SneakerSizeNotAvailable(DomainException):
 
 class SneakerNotFoundInFavorite(DomainException):
     ...
+
+
+class FavoriteSneakerAlreadyExists(DomainException):
+    ...

@@ -1,12 +1,14 @@
-from typing import Any
-
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from microservices.favorite_service.favorite_service.favorite.models import (
+    FavoriteSneakerAssociation,
     db_helper,
 )
-from microservices.favorite_service.favorite_service.favorite.schemas import FavoriteSneakerCreate
+from microservices.favorite_service.favorite_service.favorite.schemas import (
+    FavoriteSneakerCreate,
+    FavoriteSneakerResponse,
+)
 
 from microservices.favorite_service.favorite_service.favorite.dependencies.user_id import get_current_user_id
 from microservices.favorite_service.favorite_service.favorite.config import settings
@@ -28,12 +30,16 @@ router = APIRouter(
 )
 
 
-@router.post("/")
+@router.post(
+    "/",
+    response_model=FavoriteSneakerResponse,
+    status_code=status.HTTP_201_CREATED,
+)
 async def create_sneaker_to_favorite(
         item_create: FavoriteSneakerCreate,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> str:
+) -> FavoriteSneakerAssociation:
     sneaker_id = item_create.sneaker_id
     size_id = item_create.size_id
 
@@ -47,30 +53,33 @@ async def create_sneaker_to_favorite(
 
 @router.put(
     "/{favorite_sneaker_id}",
-    response_model=dict,
+    response_model=FavoriteSneakerResponse,
 )
 async def update_sneaker_in_favorite(
         favorite_sneaker_id: int,
         size_id: int,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> dict[str, Any]:
-    updated_item = await update_sneaker_in_favorite_service(
+) -> FavoriteSneakerAssociation:
+    return await update_sneaker_in_favorite_service(
         session=session,
         favorite_sneaker_id=favorite_sneaker_id,
         size_id=size_id,
         user_id=user_id,
     )
-    return {"status": "Элемент обновлён", "item_id": updated_item.id}
 
 
-@router.delete("/{favorite_sneaker_id}")
+@router.delete(
+    "/{favorite_sneaker_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
+)
 async def delete_sneaker_from_favorite(
         favorite_sneaker_id: int,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> str:
-    return await delete_sneaker_from_favorite_service(
+) -> None:
+    await delete_sneaker_from_favorite_service(
         session=session,
         user_id=user_id,
         favorite_sneaker_id=favorite_sneaker_id,

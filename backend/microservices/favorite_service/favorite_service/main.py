@@ -4,8 +4,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from microservices.favorite_service.favorite_service.favorite.config import settings
-from microservices.favorite_service.favorite_service.favorite.domain.exceptions import FavoriteNotFound, \
-    SneakerNotFound, SneakerSizeNotAvailable, SneakerNotFoundInFavorite
+from microservices.favorite_service.favorite_service.favorite.domain.exceptions import (
+    FavoriteNotFound,
+    FavoriteSneakerAlreadyExists,
+    SneakerNotFound,
+    SneakerNotFoundInFavorite,
+    SneakerSizeNotAvailable,
+)
 from microservices.favorite_service.favorite_service.favorite.kafka.handlers.brands import handle_brand_event
 from microservices.favorite_service.favorite_service.favorite.kafka.handlers.favorites import (
     handle_favorite_event,
@@ -22,9 +27,13 @@ from microservices.favorite_service.favorite_service.add_middleware import add_m
 from microservices.favorite_service.favorite_service import router as favorite_router
 
 from infrastructure.kafka.consumer import start_consumer, close_consumer
-from microservices.favorite_service.favorite_service.favorite.routers.exception_handlers import \
-    favorite_not_found_handler, sneaker_not_found_handler, sneaker_size_not_available_handler, \
-    sneaker_not_found_in_favorite_handler
+from microservices.favorite_service.favorite_service.favorite.routers.exception_handlers import (
+    favorite_not_found_handler,
+    favorite_sneaker_already_exists_handler,
+    sneaker_not_found_handler,
+    sneaker_not_found_in_favorite_handler,
+    sneaker_size_not_available_handler,
+)
 
 
 @asynccontextmanager
@@ -113,3 +122,4 @@ app.add_exception_handler(FavoriteNotFound, favorite_not_found_handler)
 app.add_exception_handler(SneakerNotFound, sneaker_not_found_handler)
 app.add_exception_handler(SneakerSizeNotAvailable, sneaker_size_not_available_handler)
 app.add_exception_handler(SneakerNotFoundInFavorite, sneaker_not_found_in_favorite_handler)
+app.add_exception_handler(FavoriteSneakerAlreadyExists, favorite_sneaker_already_exists_handler)

@@ -1,5 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from microservices.favorite_service.favorite_service.favorite.domain.exceptions import (
+    FavoriteSneakerAlreadyExists,
+)
+from microservices.favorite_service.favorite_service.favorite.models import FavoriteSneakerAssociation
 from microservices.favorite_service.favorite_service.favorite.services.favorite.fetch import (
     get_user_favorite_id_service,
 )
@@ -22,7 +26,7 @@ async def create_sneaker_to_favorite_orchestrator(
         user_id: int,
         sneaker_id: int,
         size_id: int,
-) -> str:
+) -> FavoriteSneakerAssociation:
     async with session.begin():
         favorite_id = await get_user_favorite_id_service(
             session=session,
@@ -44,12 +48,11 @@ async def create_sneaker_to_favorite_orchestrator(
         )
 
         if sneaker_record is None:
-            await add_sneaker_to_favorite_service(
+            return await add_sneaker_to_favorite_service(
                 session=session,
                 favorite_id=favorite_id,
                 sneaker_id=sneaker_id,
                 size_id=size_id,
             )
-            return "Элемент добавлен"
 
-    return "Такая запись уже есть в избранном"
+    raise FavoriteSneakerAlreadyExists()
