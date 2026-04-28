@@ -16,3 +16,7 @@ class SneakerSizeNotAvailable(DomainException):
 
 class SneakerNotFoundInCart(DomainException):
     ...
+
+
+class CartSneakerAlreadyExists(DomainException):
+    ...

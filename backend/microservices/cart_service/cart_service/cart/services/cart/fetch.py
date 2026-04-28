@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from microservices.cart_service.cart_service.cart.domain.exceptions import CartNotFound
-from microservices.cart_service.cart_service.cart.models import Cart
+from microservices.cart_service.cart_service.cart.models import Cart, CartSneakerAssociation
 
 
 async def get_cart_service(session: AsyncSession, user_id: int) -> Cart:
@@ -11,7 +11,9 @@ async def get_cart_service(session: AsyncSession, user_id: int) -> Cart:
         select(Cart)
         .where(Cart.user_id == user_id)
         .options(
-            selectinload(Cart.sneaker_associations),
+            selectinload(Cart.sneaker_associations).selectinload(
+                CartSneakerAssociation.sneaker
+            ),
             selectinload(Cart.sneakers),
         )
     )

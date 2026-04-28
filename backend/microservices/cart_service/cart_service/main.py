@@ -5,8 +5,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from microservices.cart_service.cart_service.cart.config import settings
-from microservices.cart_service.cart_service.cart.domain.exceptions import CartNotFound, \
-    SneakerNotFound, SneakerSizeNotAvailable, SneakerNotFoundInCart
+from microservices.cart_service.cart_service.cart.domain.exceptions import (
+    CartNotFound,
+    CartSneakerAlreadyExists,
+    SneakerNotFound,
+    SneakerNotFoundInCart,
+    SneakerSizeNotAvailable,
+)
 from microservices.cart_service.cart_service.cart.kafka.handlers.brands import handle_brand_event
 from microservices.cart_service.cart_service.cart.kafka.handlers.sizes import handle_size_event
 from microservices.cart_service.cart_service.cart.kafka.handlers.sneakers import handle_sneaker_event
@@ -20,9 +25,13 @@ from microservices.cart_service.cart_service import router as cart_router
 from infrastructure.kafka.consumer import start_consumer, close_consumer
 
 from microservices.cart_service.cart_service.cart.kafka.handlers.carts import handle_cart_event
-from microservices.cart_service.cart_service.cart.routers.exception_handlers import cart_not_found_handler, \
-    sneaker_not_found_handler, sneaker_size_not_available_handler, \
-    sneaker_not_found_in_cart_handler
+from microservices.cart_service.cart_service.cart.routers.exception_handlers import (
+    cart_not_found_handler,
+    cart_sneaker_already_exists_handler,
+    sneaker_not_found_handler,
+    sneaker_not_found_in_cart_handler,
+    sneaker_size_not_available_handler,
+)
 
 
 @asynccontextmanager
@@ -111,3 +120,4 @@ app.add_exception_handler(CartNotFound, cart_not_found_handler)
 app.add_exception_handler(SneakerNotFound, sneaker_not_found_handler)
 app.add_exception_handler(SneakerSizeNotAvailable, sneaker_size_not_available_handler)
 app.add_exception_handler(SneakerNotFoundInCart, sneaker_not_found_in_cart_handler)
+app.add_exception_handler(CartSneakerAlreadyExists, cart_sneaker_already_exists_handler)

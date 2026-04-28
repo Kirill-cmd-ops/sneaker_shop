@@ -299,6 +299,8 @@ services:
       dockerfile: Dockerfile
     container_name: cart_service
     depends_on:
+      cart_test_db:
+        condition: service_healthy
       cart_db:
         condition: service_healthy
       kafka:

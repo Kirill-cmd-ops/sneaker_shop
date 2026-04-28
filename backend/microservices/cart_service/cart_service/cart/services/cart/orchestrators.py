@@ -7,11 +7,16 @@ from microservices.cart_service.cart_service.cart.services.cart.price import get
 
 
 async def get_cart_orchestrator(session: AsyncSession, user_id: int) -> dict[str, Any]:
-    items = await get_cart_service(
+    cart = await get_cart_service(
         session=session,
         user_id=user_id,
     )
 
-    total_price = get_cart_total_service(items=items)
+    total_price = get_cart_total_service(items=cart)
 
-    return {"Цена корзины: ": total_price, "Кроссовки": items}
+    return {
+        "id": cart.id,
+        "user_id": cart.user_id,
+        "total_price": total_price,
+        "items": cart.sneaker_associations,
+    }
