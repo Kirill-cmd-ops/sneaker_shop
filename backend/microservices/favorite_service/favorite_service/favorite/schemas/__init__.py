@@ -1,4 +1,6 @@
 __all__ = (
+    "FavoriteResponse",
+    "FavoriteSneakerResponse",
     "FavoriteSneakerCreate",
     "SneakerUpdate",
     "SneakerCreate",
@@ -9,7 +11,11 @@ __all__ = (
     "SizeCreate",
 )
 
-from .favorite_sneaker import FavoriteSneakerCreate
+from .favorite import FavoriteResponse
+from .favorite_sneaker import (
+    FavoriteSneakerCreate,
+    FavoriteSneakerResponse,
+)
 from .sneaker_association import SneakerAssocsDelete
 
 from .sneaker import (

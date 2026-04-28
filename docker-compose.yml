@@ -261,6 +261,8 @@ services:
       dockerfile: Dockerfile
     container_name: favorite_service
     depends_on:
+      favorite_test_db:
+        condition: service_healthy
       favorite_db:
         condition: service_healthy
       kafka:
@@ -590,16 +592,16 @@ services:
       - kafka-data:/bitnami/kafka
 
 
-  frontend:
-    build:
-      context: ./frontend
-    container_name: nextjs
-    platform: linux/arm64
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app/frontend
-      - /app/frontend/node_modules
+#  frontend:
+#    build:
+#      context: ./frontend
+#    container_name: nextjs
+#    platform: linux/arm64
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#      - ./frontend:/app/frontend
+#      - /app/frontend/node_modules
 
 
   redis:

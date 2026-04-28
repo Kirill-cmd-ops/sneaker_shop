@@ -1,8 +1,13 @@
 from fastapi import Request
 from starlette.responses import JSONResponse
 
-from microservices.favorite_service.favorite_service.favorite.domain.exceptions import FavoriteNotFound, \
-    SneakerNotFound, SneakerSizeNotAvailable, SneakerNotFoundInFavorite
+from microservices.favorite_service.favorite_service.favorite.domain.exceptions import (
+    FavoriteNotFound,
+    FavoriteSneakerAlreadyExists,
+    SneakerNotFound,
+    SneakerNotFoundInFavorite,
+    SneakerSizeNotAvailable,
+)
 
 
 def favorite_not_found_handler(request: Request, exc: FavoriteNotFound) -> JSONResponse:
@@ -19,3 +24,7 @@ def sneaker_size_not_available_handler(request: Request, exc: SneakerSizeNotAvai
 
 def sneaker_not_found_in_favorite_handler(request: Request, exc: SneakerNotFoundInFavorite) -> JSONResponse:
     return JSONResponse(status_code=404, content={"detail": "Sneaker not found in favorite"})
+
+
+def favorite_sneaker_already_exists_handler(request: Request, exc: FavoriteSneakerAlreadyExists) -> JSONResponse:
+    return JSONResponse(status_code=409, content={"detail": "Sneaker already exists in favorite"})
