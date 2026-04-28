@@ -1,5 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from microservices.cart_service.cart_service.cart.domain.exceptions import (
+    CartSneakerAlreadyExists,
+)
+from microservices.cart_service.cart_service.cart.models import CartSneakerAssociation
 from microservices.cart_service.cart_service.cart.services.cart.fetch import get_user_cart_id_service
 from microservices.cart_service.cart_service.cart.services.cart_sneaker.create import add_sneaker_to_cart_service
 from microservices.cart_service.cart_service.cart.services.cart_sneaker.fetch import get_sneaker_in_cart_service
@@ -18,7 +22,7 @@ async def add_sneaker_to_cart_orchestrator(
         user_id: int,
         sneaker_id: int,
         size_id: int,
-) -> str:
+) -> CartSneakerAssociation:
     async with session.begin():
         cart_id = await get_user_cart_id_service(
             session=session,
@@ -41,15 +45,14 @@ async def add_sneaker_to_cart_orchestrator(
         )
 
         if sneaker_record is None:
-            await add_sneaker_to_cart_service(
+            return await add_sneaker_to_cart_service(
                 session=session,
                 cart_id=cart_id,
                 sneaker_id=sneaker_id,
                 size_id=size_id,
             )
-            return "Элемент добавлен"
 
-    return "Товар уже есть в корзине"
+    raise CartSneakerAlreadyExists()
 
 
 async def update_sneaker_quantity_in_cart_orchestrator(
@@ -57,7 +60,7 @@ async def update_sneaker_quantity_in_cart_orchestrator(
         action: int,
         user_id: int,
         cart_sneaker_id: int,
-) -> str:
+) -> CartSneakerAssociation:
     async with session.begin():
         cart_id = await get_user_cart_id_service(
             session=session,
@@ -65,15 +68,13 @@ async def update_sneaker_quantity_in_cart_orchestrator(
         )
 
         if action == 1:
-            result = await increment_sneaker_quantity_in_cart_service(
-                cart_sneaker_id=cart_sneaker_id,
-                cart_id=cart_id,
-                session=session,
+            return await increment_sneaker_quantity_in_cart_service(
+                session,
+                cart_sneaker_id,
+                cart_id,
             )
-        else:
-            result = await decrement_sneaker_quantity_in_cart_service(
-                cart_sneaker_id=cart_sneaker_id,
-                cart_id=cart_id,
-                session=session,
-            )
-    return result
+        return await decrement_sneaker_quantity_in_cart_service(
+            session,
+            cart_sneaker_id,
+            cart_id,
+        )
