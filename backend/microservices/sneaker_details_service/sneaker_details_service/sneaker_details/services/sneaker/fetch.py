@@ -2,7 +2,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
 
-from microservices.favorite_service.favorite_service.favorite.domain.exceptions import SneakerNotFound
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.domain.exceptions import (
+    SneakerNotFound,
+)
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import Sneaker
 
 

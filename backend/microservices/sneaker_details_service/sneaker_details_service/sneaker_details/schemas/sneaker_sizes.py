@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class SizeQuantity(BaseModel):
@@ -12,3 +12,13 @@ class SneakerSizesCreate(BaseModel):
 
 class SneakerSizeUpdate(BaseModel):
     size: SizeQuantity
+
+
+class SneakerSizeResponse(BaseModel):
+    id: int
+    sneaker_id: int
+    size_id: int
+    quantity: int
+    is_active: bool
+
+    model_config = ConfigDict(from_attributes=True)

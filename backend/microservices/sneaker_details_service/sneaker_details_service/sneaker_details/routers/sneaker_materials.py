@@ -1,8 +1,5 @@
-from typing import Sequence
-
-from fastapi import Depends, APIRouter
+from fastapi import Depends, APIRouter, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import DeclarativeBase
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 
@@ -12,6 +9,7 @@ from microservices.sneaker_details_service.sneaker_details_service.sneaker_detai
 )
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import (
     SneakerAssocsCreate,
+    SneakerMaterialResponse,
 )
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.dependencies.permissions import (
     check_role_permissions,
@@ -38,34 +36,36 @@ router = APIRouter(
 
 @router.post(
     "/{sneaker_id}/materials",
+    response_model=list[SneakerMaterialResponse],
+    status_code=status.HTTP_201_CREATED,
     dependencies=(Depends(check_role_permissions("details.sneaker.material.create")),),
 )
 async def add_materials_to_sneaker(
         sneaker_id: int,
         sneaker_associations_create: SneakerAssocsCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> str:
+) -> list[SneakerMaterialAssociation]:
     material_ids = sneaker_associations_create.assoc_ids
 
-    await create_sneaker_associations_service(
+    return await create_sneaker_associations_service(
         session=session,
         sneaker_id=sneaker_id,
         assoc_ids=material_ids,
         sneaker_association_model=SneakerMaterialAssociation,
         field_name="material_id",
     )
-    return "Запись нового материала прошла успешно"
 
 
 @router.delete(
     "/{sneaker_id}/materials",
+    status_code=status.HTTP_204_NO_CONTENT,
     dependencies=(Depends(check_role_permissions("details.sneaker.material.delete")),),
 )
 async def delete_materials_from_sneaker(
         sneaker_id: int,
         material_ids: list[int],
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> str:
+) -> None:
     await delete_sneaker_associations_service(
         session=session,
         sneaker_id=sneaker_id,
@@ -73,17 +73,17 @@ async def delete_materials_from_sneaker(
         sneaker_association_model=SneakerMaterialAssociation,
         field_name="material_id",
     )
-    return "Материалы товара успешно удалены"
 
 
 @router.get(
     "/{sneaker_id}/materials",
+    response_model=list[SneakerMaterialResponse],
     dependencies=(Depends(check_role_permissions("details.sneaker.material.view")),),
 )
 async def get_sneaker_materials(
         sneaker_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> Sequence[DeclarativeBase]:
+) -> list[SneakerMaterialAssociation]:
     return await get_sneaker_associations_service(
         session=session,
         sneaker_association_model=SneakerMaterialAssociation,

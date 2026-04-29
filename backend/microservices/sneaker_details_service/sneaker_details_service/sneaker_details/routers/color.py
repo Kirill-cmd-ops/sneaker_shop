@@ -1,12 +1,12 @@
-from typing import Any, Coroutine
-
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import DeclarativeBase
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.models import db_helper, Color
-from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas.color import ColorCreate
+from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas.color import (
+    ColorCreate,
+    ColorResponse,
+)
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.record.create import (
     create_record_service,
 )
@@ -24,11 +24,15 @@ router = APIRouter(
 )
 
 
-@router.post("/")
+@router.post(
+    "/",
+    response_model=ColorResponse,
+    status_code=status.HTTP_201_CREATED,
+)
 async def create_color(
         color_create: ColorCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> DeclarativeBase:
+) -> Color:
     color_data = color_create.model_dump()
 
     return await create_record_service(
@@ -38,12 +42,15 @@ async def create_color(
     )
 
 
-@router.delete("/{color_id}")
+@router.delete(
+    "/{color_id}", 
+    status_code=status.HTTP_204_NO_CONTENT,
+)
 async def delete_color(
         color_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> dict[str, str]:
-    return await delete_record_service(
+) -> None:
+    await delete_record_service(
         session=session,
         table_name=Color,
         record_id=color_id,

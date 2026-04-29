@@ -1,6 +1,6 @@
-from typing import Type
+from typing import Any, Type
 
-from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy import insert, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -15,10 +15,14 @@ async def create_sneaker_associations_service(
         assoc_ids: list[int],
         sneaker_association_model: Type[Base],
         field_name: str,
-) -> None:
+) -> list[Any]:
     """
-    Функция для создания записи в ассоциативных таблицах
+    Функция для создания записи в ассоциативных таблицах.
+    Возвращает строки связей для этого sneaker и переданных id (после вставки).
     """
+    if not assoc_ids:
+        return []
+
     try:
         sneaker_associations = [
             {
@@ -31,5 +35,12 @@ async def create_sneaker_associations_service(
             await session.execute(
                 insert(sneaker_association_model).values(sneaker_associations)
             )
+            fk_column = getattr(sneaker_association_model, field_name)
+            stmt = select(sneaker_association_model).where(
+                sneaker_association_model.sneaker_id == sneaker_id,
+                fk_column.in_(assoc_ids),
+            )
+            result = await session.execute(stmt)
+            return list(result.scalars().all())
     except IntegrityError:
         raise SneakerAssociationAlreadyExists()
