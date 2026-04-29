@@ -6,10 +6,17 @@ from fastapi import FastAPI
 
 from infrastructure.kafka.consumer import start_consumer, close_consumer
 from microservices.stock_notification_service.stock_notification_service.stock_notification.config import settings
-from microservices.stock_notification_service.stock_notification_service.stock_notification.domain.exceptions import \
-    SneakerNotFound, SneakerAlreadyExists, SneakerIsInactive, OneTimeSubscriptionIsActive, \
-    OneTimeSubscriptionAlreadyExists, OneTimeSubscriptionNotFound, PermanentSubscriptionIsActive, \
-    PermanentSubscriptionAlreadyExists
+from microservices.stock_notification_service.stock_notification_service.stock_notification.domain.exceptions import (
+    OneTimeSubscriptionAlreadyExists,
+    OneTimeSubscriptionIsActive,
+    OneTimeSubscriptionNotFound,
+    PermanentSubscriptionAlreadyExists,
+    PermanentSubscriptionIsActive,
+    PermanentSubscriptionNotFound,
+    SneakerAlreadyExists,
+    SneakerIsInactive,
+    SneakerNotFound,
+)
 from microservices.stock_notification_service.stock_notification_service.stock_notification.kafka.handlers.brands import (
     handle_brand_event,
 )
@@ -134,10 +141,10 @@ app.include_router(stock_notification_router)
 
 app.add_exception_handler(SneakerNotFound, sneaker_not_found_handler)
 app.add_exception_handler(SneakerAlreadyExists, sneaker_already_exists_handler)
-app.add_exception_handler(SneakerAlreadyExists, sneaker_is_inactive_handler)
-app.add_exception_handler(SneakerIsInactive, one_time_subscription_is_active_handler)
-app.add_exception_handler(OneTimeSubscriptionIsActive, one_time_subscription_already_exists_handler)
-app.add_exception_handler(OneTimeSubscriptionAlreadyExists, one_time_subscription_not_found_handler)
-app.add_exception_handler(OneTimeSubscriptionNotFound, permanent_subscription_is_active_handler)
-app.add_exception_handler(PermanentSubscriptionIsActive, permanent_subscription_already_exists_handler)
-app.add_exception_handler(PermanentSubscriptionAlreadyExists, permanent_subscription_not_found_handler)
+app.add_exception_handler(SneakerIsInactive, sneaker_is_inactive_handler)
+app.add_exception_handler(OneTimeSubscriptionIsActive, one_time_subscription_is_active_handler)
+app.add_exception_handler(OneTimeSubscriptionAlreadyExists, one_time_subscription_already_exists_handler)
+app.add_exception_handler(OneTimeSubscriptionNotFound, one_time_subscription_not_found_handler)
+app.add_exception_handler(PermanentSubscriptionIsActive, permanent_subscription_is_active_handler)
+app.add_exception_handler(PermanentSubscriptionAlreadyExists, permanent_subscription_already_exists_handler)
+app.add_exception_handler(PermanentSubscriptionNotFound, permanent_subscription_not_found_handler)

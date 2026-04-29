@@ -1,16 +1,17 @@
-from typing import Any, Sequence
-
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from microservices.stock_notification_service.stock_notification_service.stock_notification.config import settings
 from microservices.stock_notification_service.stock_notification_service.stock_notification.dependencies.user_id import (
     get_current_user_id,
 )
-from microservices.stock_notification_service.stock_notification_service.stock_notification.models import db_helper, \
-    UserSneakerSubscription
+from microservices.stock_notification_service.stock_notification_service.stock_notification.models import (
+    db_helper,
+    UserSneakerSubscription,
+)
 from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas.subscription import (
     SubscriptionCreate,
+    UserSneakerPermanentSubscriptionResponse,
 )
 from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.orchestrators import (
     create_user_permanent_subscription_orchestrator,
@@ -35,12 +36,16 @@ router = APIRouter(
 )
 
 
-@router.post("/")
+@router.post(
+    "/",
+    status_code=status.HTTP_201_CREATED,
+    response_model=UserSneakerPermanentSubscriptionResponse,
+)
 async def create_user_permanent_subscription(
         subscription_create: SubscriptionCreate,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> dict[str, Any] | UserSneakerSubscription:
+) -> UserSneakerSubscription:
     sneaker_id = subscription_create.sneaker_id
     size_id = subscription_create.size_id
 
@@ -52,12 +57,30 @@ async def create_user_permanent_subscription(
     )
 
 
-@router.patch("/{subscription_id}/deactivate")
+@router.patch(
+    "/deactivate",
+    response_model=list[UserSneakerPermanentSubscriptionResponse],
+)
+async def deactivate_all_permanent_subscriptions_for_user(
+        user_id: int = Depends(get_current_user_id),
+        session: AsyncSession = Depends(db_helper.session_getter),
+) -> list[UserSneakerSubscription]:
+    subscriptions = await deactivate_all_permanent_subscriptions_for_user_service(
+        user_id=user_id,
+        session=session,
+    )
+    return subscriptions
+
+
+@router.patch(
+    "/{subscription_id}/deactivate",
+    response_model=UserSneakerPermanentSubscriptionResponse,
+)
 async def deactivate_user_permanent_subscription(
         subscription_id: int,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> str:
+) -> UserSneakerSubscription:
     return await deactivate_user_permanent_subscription_service(
         subscription_id=subscription_id,
         user_id=user_id,
@@ -65,23 +88,15 @@ async def deactivate_user_permanent_subscription(
     )
 
 
-@router.patch("/deactivate")
-async def deactivate_all_permanent_subscriptions_for_user(
-        user_id: int = Depends(get_current_user_id),
-        session: AsyncSession = Depends(db_helper.session_getter),
-) -> str:
-    return await deactivate_all_permanent_subscriptions_for_user_service(
-        user_id=user_id,
-        session=session,
-    )
-
-
-@router.patch("/{subscription_id}/reactivate")
+@router.patch(
+    "/{subscription_id}/reactivate",
+    response_model=UserSneakerPermanentSubscriptionResponse,
+)
 async def reactivate_all_permanent_subscriptions_for_user(
         subscription_id: int,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> str:
+) -> UserSneakerSubscription:
     return await reactivate_all_permanent_subscriptions_for_user_orchestrator(
         session=session,
         user_id=user_id,
@@ -89,11 +104,14 @@ async def reactivate_all_permanent_subscriptions_for_user(
     )
 
 
-@router.get("/")
+@router.get(
+    "/",
+    response_model=list[UserSneakerPermanentSubscriptionResponse],
+)
 async def get_active_permanent_subscriptions_for_user(
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> Sequence[UserSneakerSubscription]:
+) -> list[UserSneakerSubscription]:
     return await get_active_permanent_subscriptions_for_user_service(
         user_id=user_id,
         session=session,

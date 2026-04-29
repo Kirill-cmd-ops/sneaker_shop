@@ -373,6 +373,8 @@ services:
       dockerfile: Dockerfile
     container_name: sneaker_details_service
     depends_on:
+      sneaker_details_test_db:
+        condition: service_healthy
       sneaker_details_db:
         condition: service_healthy
       kafka:
@@ -477,6 +479,8 @@ services:
       dockerfile: Dockerfile
     container_name: stock_notification_service
     depends_on:
+      stock_notification_test_db:
+        condition: service_healthy
       stock_notification_db:
         condition: service_healthy
       kafka:

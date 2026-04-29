@@ -8,6 +8,9 @@ __all__ = (
     "SneakerAssocsDelete",
     "SizeCreate",
     "BrandCreate",
+    "UserSneakerOneTimeSubscriptionResponse",
+    "UserSneakerPermanentSubscriptionResponse",
+    "SubscriptionCreate",
 )
 
 from .sneaker import (
@@ -26,3 +29,8 @@ from .sneaker_association import SneakerAssocsDelete
 
 from .size import SizeCreate
 from .brand import BrandCreate
+from .subscription import (
+    UserSneakerOneTimeSubscriptionResponse,
+    UserSneakerPermanentSubscriptionResponse,
+    SubscriptionCreate,
+)
