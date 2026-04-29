@@ -11,7 +11,7 @@ async def update_sneaker_size_quantity_service(
         sneaker_id: int,
         size_id: int,
         quantity: int,
-) -> None:
+) -> SneakerSizeAssociation:
     async with session.begin():
         sneaker_size = await session.scalar(
             select(SneakerSizeAssociation)
@@ -25,3 +25,5 @@ async def update_sneaker_size_quantity_service(
         sneaker_size.quantity = quantity
 
         session.add(sneaker_size)
+    
+    return sneaker_size

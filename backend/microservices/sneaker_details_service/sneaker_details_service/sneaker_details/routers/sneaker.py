@@ -1,5 +1,5 @@
 from aiokafka import AIOKafkaProducer
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.dependencies.user_id import (
@@ -24,6 +24,7 @@ from microservices.sneaker_details_service.sneaker_details_service.sneaker_detai
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import (
     SneakerCreate,
+    SneakerResponse,
     SneakerUpdate,
 )
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.services.sneaker.create import (
@@ -51,6 +52,8 @@ router = APIRouter(
 
 @router.post(
     "/",
+    response_model=SneakerResponse,
+    status_code=status.HTTP_201_CREATED,
     dependencies=(Depends(check_role_permissions("details.sneaker.create")),),
 )
 async def create_sneaker(
@@ -86,24 +89,25 @@ async def create_sneaker(
 
 @router.delete(
     "/{sneaker_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
     dependencies=(Depends(check_role_permissions("details.sneaker.delete")),),
 )
 async def delete_sneaker(
         sneaker_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-) -> str:
+) -> None:
     await delete_sneaker_service(
         session=session,
         sneaker_id=sneaker_id,
     )
 
     await publish_sneaker_deleted(producer=producer, sneaker_id=sneaker_id)
-    return "Товар успешно удален"
 
 
 @router.patch(
     "/{sneaker_id}",
+    response_model=SneakerResponse,
     dependencies=(Depends(check_role_permissions("details.sneaker.update")),),
 )
 async def update_sneaker(
@@ -111,10 +115,10 @@ async def update_sneaker(
         sneaker_update: SneakerUpdate,
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-) -> str:
+) -> Sneaker:
     sneaker_data = sneaker_update.model_dump(exclude_unset=True)
 
-    await update_sneaker_service(
+    sneaker = await update_sneaker_service(
         session=session,
         sneaker_id=sneaker_id,
         sneaker_data=sneaker_data,
@@ -125,23 +129,20 @@ async def update_sneaker(
         sneaker_id=sneaker_id,
         sneaker_data=sneaker_data,
     )
-    return "Товар успешно обновлен"
+    return sneaker
 
 
-@router.get("/{sneaker_id}")
+@router.get("/{sneaker_id}", response_model=SneakerResponse)
 async def get_sneaker(
         sneaker_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-        user_id: int = Depends(get_current_user_id),
+        user_id: int | None = Depends(get_current_user_id),
 ) -> Sneaker:
-    sneaker_info = await get_sneaker_service(
+    sneaker = await get_sneaker_service(
         session=session,
         sneaker_id=sneaker_id,
     )
-
-    if not sneaker_info:
-        raise HTTPException(status_code=404, detail="Кроссовки не найдены")
 
     if user_id is not None:
         await publish_sneaker_viewed(
@@ -149,4 +150,4 @@ async def get_sneaker(
             sneaker_id=sneaker_id,
             user_id=user_id,
         )
-    return sneaker_info
+    return sneaker

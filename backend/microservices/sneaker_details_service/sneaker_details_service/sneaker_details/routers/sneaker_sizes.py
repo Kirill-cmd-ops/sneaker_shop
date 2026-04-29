@@ -1,10 +1,6 @@
-from typing import Sequence
-
 from aiokafka import AIOKafkaProducer
-from fastapi import APIRouter
-from fastapi.params import Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import DeclarativeBase
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 
@@ -19,6 +15,7 @@ from microservices.sneaker_details_service.sneaker_details_service.sneaker_detai
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import (
     SneakerSizesCreate,
+    SneakerSizeResponse,
     SneakerSizeUpdate,
 )
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.dependencies.permissions import (
@@ -54,6 +51,8 @@ router = APIRouter(
 
 @router.post(
     "/{sneaker_id}/sizes",
+    response_model=list[SneakerSizeResponse],
+    status_code=status.HTTP_201_CREATED,
     dependencies=(Depends(check_role_permissions("details.sneaker.size.create")),),
 )
 async def add_sizes_to_sneaker(
@@ -61,11 +60,11 @@ async def add_sizes_to_sneaker(
         sneaker_sizes_create: SneakerSizesCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-) -> str:
+) -> list[SneakerSizeAssociation]:
     sneaker_sizes_data = sneaker_sizes_create.model_dump()
     size_list = [size.model_dump() for size in sneaker_sizes_create.sizes]
 
-    await add_sizes_to_sneaker_service(
+    associations = await add_sizes_to_sneaker_service(
         session=session,
         sneaker_id=sneaker_id,
         size_list=size_list,
@@ -76,11 +75,12 @@ async def add_sizes_to_sneaker(
         sneaker_id=sneaker_id,
         sneaker_sizes_data=sneaker_sizes_data,
     )
-    return "Запись нового размера прошла успешно"
+    return associations
 
 
 @router.delete(
     "/{sneaker_id}/sizes",
+    status_code=status.HTTP_204_NO_CONTENT,
     dependencies=(Depends(check_role_permissions("details.sneaker.size.delete")),),
 )
 async def delete_sizes_from_sneaker(
@@ -88,7 +88,7 @@ async def delete_sizes_from_sneaker(
         size_ids: list[int],
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-) -> str:
+) -> None:
     await delete_sneaker_associations_service(
         session=session,
         sneaker_id=sneaker_id,
@@ -102,11 +102,11 @@ async def delete_sizes_from_sneaker(
         sneaker_id=sneaker_id,
         size_ids=size_ids,
     )
-    return "Размеры товара успешно удалены"
 
 
 @router.patch(
     "/{sneaker_id}/sizes",
+    response_model=SneakerSizeResponse,
     dependencies=(Depends(check_role_permissions("details.sneaker.size.update")),),
 )
 async def update_sneaker_size_quantity(
@@ -114,11 +114,11 @@ async def update_sneaker_size_quantity(
         sneaker_size_update: SneakerSizeUpdate,
         session: AsyncSession = Depends(db_helper.session_getter),
         producer: AIOKafkaProducer = Depends(get_kafka_producer),
-) -> str:
+) -> SneakerSizeAssociation:
     size_id = sneaker_size_update.size.size_id
     quantity = sneaker_size_update.size.quantity
 
-    await update_sneaker_size_quantity_service(
+    sneaker_size = await update_sneaker_size_quantity_service(
         session=session,
         sneaker_id=sneaker_id,
         size_id=size_id,
@@ -131,17 +131,18 @@ async def update_sneaker_size_quantity(
         size_id=size_id,
         quantity=quantity,
     )
-    return "Размер был изменен корректно"
-
+    return sneaker_size
+    
 
 @router.get(
     "/{sneaker_id}/sizes",
+    response_model=list[SneakerSizeResponse],
     dependencies=(Depends(check_role_permissions("details.sneaker.size.view")),),
 )
 async def get_sneaker_sizes(
         sneaker_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> Sequence[DeclarativeBase]:
+) -> list[SneakerSizeAssociation]:
     return await get_sneaker_associations_service(
         session=session,
         sneaker_association_model=SneakerSizeAssociation,

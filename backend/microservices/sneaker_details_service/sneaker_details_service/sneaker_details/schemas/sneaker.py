@@ -1,7 +1,8 @@
+from datetime import datetime
 from decimal import Decimal
 from typing import Optional
 
-from pydantic import BaseModel, Field, condecimal
+from pydantic import BaseModel, ConfigDict, Field, condecimal
 
 
 class SneakerSizeQuantity(BaseModel):
@@ -33,3 +34,18 @@ class SneakerCreate(BaseModel):
     size_ids: list[SneakerSizeQuantity] = []
     color_ids: list[int] = []
     material_ids: list[int] = []
+
+
+class SneakerResponse(BaseModel):
+    id: int
+    name: str
+    description: str
+    price: float
+    brand_id: int
+    country_id: int
+    image_url: str
+    is_active: bool
+    created_at: datetime
+    gender: str
+
+    model_config = ConfigDict(from_attributes=True)

@@ -1,13 +1,11 @@
-from typing import Sequence
-
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import DeclarativeBase
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.config import settings
 
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.schemas import (
     SneakerAssocsCreate,
+    SneakerColorResponse,
 )
 from microservices.sneaker_details_service.sneaker_details_service.sneaker_details.dependencies.permissions import (
     check_role_permissions,
@@ -39,34 +37,36 @@ router = APIRouter(
 
 @router.post(
     "/{sneaker_id}/colors",
+    response_model=list[SneakerColorResponse],
+    status_code=status.HTTP_201_CREATED,
     dependencies=(Depends(check_role_permissions("details.sneaker.color.create")),),
 )
 async def add_colors_to_sneaker(
         sneaker_id: int,
         sneaker_associations_create: SneakerAssocsCreate,
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> str:
+) -> list[SneakerColorAssociation]:
     color_ids = sneaker_associations_create.assoc_ids
 
-    await create_sneaker_associations_service(
+    return await create_sneaker_associations_service(
         session=session,
         sneaker_id=sneaker_id,
         assoc_ids=color_ids,
         sneaker_association_model=SneakerColorAssociation,
         field_name="color_id",
     )
-    return "Запись нового цвета прошла успешно"
 
 
 @router.delete(
     "/{sneaker_id}/colors",
+    status_code=status.HTTP_204_NO_CONTENT,
     dependencies=(Depends(check_role_permissions("details.sneaker.color.delete")),),
 )
 async def delete_colors_from_sneaker(
         sneaker_id: int,
         color_ids: list[int],
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> str:
+) -> None:
     await delete_sneaker_associations_service(
         session=session,
         sneaker_id=sneaker_id,
@@ -74,17 +74,17 @@ async def delete_colors_from_sneaker(
         sneaker_association_model=SneakerColorAssociation,
         field_name="color_id",
     )
-    return "Цвета товара успешно удалены"
 
 
 @router.get(
     "/{sneaker_id}/colors",
+    response_model=list[SneakerColorResponse],
     dependencies=(Depends(check_role_permissions("details.sneaker.color.view")),),
 )
 async def get_sneaker_colors(
         sneaker_id: int,
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> Sequence[DeclarativeBase]:
+) -> list[SneakerColorAssociation]:
     return await get_sneaker_associations_service(
         session=session,
         sneaker_association_model=SneakerColorAssociation,
