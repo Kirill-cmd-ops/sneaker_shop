@@ -1,10 +1,11 @@
-from typing import Optional, Dict, Any
+from typing import Optional
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from microservices.catalog_service.catalog_service.catalog.config import settings
 from microservices.catalog_service.catalog_service.catalog.models import db_helper
+from microservices.catalog_service.catalog_service.catalog.schemas import SneakerListResponse
 from microservices.catalog_service.catalog_service.catalog.services.sneaker.fetch import get_sneakers_service
 
 router = APIRouter(
@@ -16,7 +17,7 @@ router = APIRouter(
 )
 
 
-@router.get("/")
+@router.get("/", response_model=SneakerListResponse)
 async def get_sneakers(
         session: AsyncSession = Depends(db_helper.session_getter),
         page: Optional[int] = 1,
@@ -29,7 +30,7 @@ async def get_sneakers(
         size: Optional[float] = None,
         sort_by: Optional[str] = None,
         order: Optional[str] = "asc",
-) -> Dict[str, Any]:
+):
     return await get_sneakers_service(
         session=session,
         page=page,

@@ -1,12 +1,11 @@
+from datetime import datetime
 from decimal import Decimal
 from typing import Optional
 
-from pydantic import BaseModel, Field, condecimal
+from pydantic import BaseModel, ConfigDict, Field, condecimal
 
-
-class SneakerSizeQuantity(BaseModel):
-    size_id: int
-    quantity: int = 0
+from .brand import BrandResponse
+from .sneaker_sizes import SneakerSizeQuantity, SneakerSizeResponse
 
 
 class SneakerUpdate(BaseModel):
@@ -27,3 +26,25 @@ class SneakerCreate(BaseModel):
     gender: str = Field(default="унисекс")
 
     size_ids: list[SneakerSizeQuantity] = []
+
+
+class SneakerResponse(BaseModel):
+    id: int
+    name: str
+    price: Decimal
+    brand_id: int
+    image_url: str
+    is_active: bool
+    created_at: datetime
+    gender: str
+    brand: BrandResponse
+    size_associations: list[SneakerSizeResponse] = Field(
+        default_factory=list,
+    )
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class SneakerListResponse(BaseModel):
+    total_count: int
+    items: list[SneakerResponse]

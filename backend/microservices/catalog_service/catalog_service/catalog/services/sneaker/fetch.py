@@ -1,10 +1,14 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from microservices.catalog_service.catalog_service.catalog.models import Sneaker, Brand, SneakerSizeAssociation, Size
+from typing import Optional
 
 from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-from typing import Optional, Dict, Any
+
+from microservices.catalog_service.catalog_service.catalog.models import Brand, Size, Sneaker, SneakerSizeAssociation
+from microservices.catalog_service.catalog_service.catalog.schemas import (
+    SneakerResponse,
+    SneakerListResponse,
+)
 
 
 async def get_sneakers_service(
@@ -19,7 +23,7 @@ async def get_sneakers_service(
         size: Optional[float] = None,
         sort_by: Optional[str] = None,
         order: Optional[str] = "asc",
-) -> Dict[str, Any]:
+) -> SneakerListResponse:
     """
     Получение списка кроссовок с фильтрацией и пагинацией.
     """
@@ -88,7 +92,10 @@ async def get_sneakers_service(
         result = await session.execute(stmt)
         sneakers = result.unique().scalars().all()
 
-    return {
-        "total_count": total_count,
-        "items": sneakers,
-    }
+    return SneakerListResponse(
+        total_count=int(total_count or 0),
+        items=[
+            SneakerResponse.model_validate(row, from_attributes=True)
+            for row in sneakers
+        ],
+    )

@@ -1,6 +1,6 @@
-from pydantic import Field
+from pydantic import BaseModel, Field, ConfigDict
 
-from microservices.catalog_service.catalog_service.catalog.schemas.mixins.record import RecordCreateMixin
+from microservices.catalog_service.catalog_service.catalog.schemas.mixins import RecordCreateMixin
 
 
 class BrandGeneral(RecordCreateMixin):
@@ -8,3 +8,11 @@ class BrandGeneral(RecordCreateMixin):
 
 
 class BrandCreate(BrandGeneral): ...
+
+
+class BrandResponse(BaseModel):
+    id: int
+    name: str
+    image_url: str
+    
+    model_config = ConfigDict(from_attributes=True)
