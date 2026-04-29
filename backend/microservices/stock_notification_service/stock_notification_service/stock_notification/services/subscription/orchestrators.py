@@ -81,7 +81,7 @@ async def create_user_one_time_subscription_orchestrator(
         user_id: int,
         sneaker_id: int,
         size_id: int,
-) -> dict[str, Any] | UserSneakerOneTimeSubscription:
+) -> UserSneakerOneTimeSubscription:
     async with session.begin():
         # проверка активности sneaker
         await check_sneaker_active_service(
@@ -139,7 +139,7 @@ async def reactivate_all_one_time_subscriptions_for_user_orchestrator(
         session: AsyncSession,
         user_id: int,
         subscription_id: int,
-) -> str:
+) -> str:   
     async with session.begin():
         subscription = (
             await get_one_time_subscription_for_user_service(
@@ -233,7 +233,7 @@ async def reactivate_all_permanent_subscriptions_for_user_orchestrator(
         session: AsyncSession,
         user_id: int,
         subscription_id: int,
-) -> str:
+) -> UserSneakerSubscription:
     async with session.begin():
         inactive_subscription = (
             await get_inactive_permanent_subscription_for_user_service(

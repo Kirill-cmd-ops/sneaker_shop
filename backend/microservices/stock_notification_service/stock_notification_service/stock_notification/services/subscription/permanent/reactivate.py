@@ -1,5 +1,3 @@
-from typing import Any
-
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -15,7 +13,7 @@ async def reactivate_permanent_subscription_by_id_service(
         subscription_id: int,
         user_id: int,
         session: AsyncSession,
-) -> str:
+) -> UserSneakerSubscription:
     subscription = await session.scalar(
         select(UserSneakerSubscription).where(
             UserSneakerSubscription.user_id == user_id,
@@ -29,7 +27,7 @@ async def reactivate_permanent_subscription_by_id_service(
 
     subscription.status = SubscriptionStatus.ACTIVE
 
-    return "record was reactivate"
+    return subscription
 
 
 async def reactivate_permanent_subscription_by_sneaker_size_service(
@@ -37,7 +35,7 @@ async def reactivate_permanent_subscription_by_sneaker_size_service(
         user_id: int,
         sneaker_id: int,
         size_id: int,
-) -> dict[str, Any] | None:
+) -> UserSneakerSubscription | None:
     stmt = (
         update(UserSneakerSubscription)
         .where(
@@ -52,5 +50,5 @@ async def reactivate_permanent_subscription_by_sneaker_size_service(
 
     update_subscription = await session.scalar(stmt)
     if update_subscription:
-        return {"status": "Подписка была создана", "subscription": update_subscription}
+        return update_subscription
     return None

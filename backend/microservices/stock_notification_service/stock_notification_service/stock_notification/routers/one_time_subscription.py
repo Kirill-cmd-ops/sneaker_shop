@@ -1,6 +1,4 @@
-from typing import Any, Sequence
-
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from microservices.stock_notification_service.stock_notification_service.stock_notification.config import settings
@@ -10,8 +8,9 @@ from microservices.stock_notification_service.stock_notification_service.stock_n
 from microservices.stock_notification_service.stock_notification_service.stock_notification.models import (
     db_helper, UserSneakerOneTimeSubscription,
 )
-from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas.subscription import (
+from microservices.stock_notification_service.stock_notification_service.stock_notification.schemas import (
     SubscriptionCreate,
+    UserSneakerOneTimeSubscriptionResponse,
 )
 from microservices.stock_notification_service.stock_notification_service.stock_notification.services.subscription.one_time.deactivate import (
     deactivate_user_one_time_subscription_service,
@@ -36,12 +35,16 @@ router = APIRouter(
 )
 
 
-@router.post("/")
+@router.post(
+    "/",
+    status_code=status.HTTP_201_CREATED,
+    response_model=UserSneakerOneTimeSubscriptionResponse,
+)
 async def create_user_one_time_subscription(
         subscription_create: SubscriptionCreate,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> dict[str, Any] | UserSneakerOneTimeSubscription:
+) -> UserSneakerOneTimeSubscription:
     sneaker_id = subscription_create.sneaker_id
     size_id = subscription_create.size_id
 
@@ -53,12 +56,30 @@ async def create_user_one_time_subscription(
     )
 
 
-@router.patch("/{subscription_id}/deactivate")
+@router.patch(
+    "/deactivate",
+    response_model=list[UserSneakerOneTimeSubscriptionResponse],
+)
+async def deactivate_all_one_time_subscriptions_for_user(
+        user_id: int = Depends(get_current_user_id),
+        session: AsyncSession = Depends(db_helper.session_getter),
+) -> list[UserSneakerOneTimeSubscription]:
+    subscriptions = await deactivate_all_one_time_subscriptions_for_user_service(
+        user_id=user_id,
+        session=session,
+    )
+    return subscriptions
+
+
+@router.patch(
+    "/{subscription_id}/deactivate",
+    response_model=UserSneakerOneTimeSubscriptionResponse,
+)
 async def deactivate_user_one_time_subscription(
         subscription_id: int,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> str:
+) -> UserSneakerOneTimeSubscription:
     return await deactivate_user_one_time_subscription_service(
         subscription_id=subscription_id,
         user_id=user_id,
@@ -66,23 +87,15 @@ async def deactivate_user_one_time_subscription(
     )
 
 
-@router.patch("/deactivate")
-async def deactivate_all_one_time_subscriptions_for_user(
-        user_id: int = Depends(get_current_user_id),
-        session: AsyncSession = Depends(db_helper.session_getter),
-) -> str:
-    return await deactivate_all_one_time_subscriptions_for_user_service(
-        user_id=user_id,
-        session=session,
-    )
-
-
-@router.patch("/{subscription_id}/reactivate")
+@router.patch(
+    "/{subscription_id}/reactivate",
+    response_model=UserSneakerOneTimeSubscriptionResponse,
+)
 async def reactivate_all_one_time_subscriptions_for_user(
         subscription_id: int,
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> str:
+) -> UserSneakerOneTimeSubscription:
     return await reactivate_all_one_time_subscriptions_for_user_orchestrator(
         session=session,
         user_id=user_id,
@@ -90,12 +103,16 @@ async def reactivate_all_one_time_subscriptions_for_user(
     )
 
 
-@router.get("/")
+@router.get(
+    "/", 
+    response_model=list[UserSneakerOneTimeSubscriptionResponse]
+)
 async def get_active_one_time_subscriptions_for_user(
         user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(db_helper.session_getter),
-) -> Sequence[UserSneakerOneTimeSubscription]:
-    return await get_active_one_time_subscriptions_for_user_service(
+) -> list[UserSneakerOneTimeSubscription]:
+    subscriptions = await get_active_one_time_subscriptions_for_user_service(
         user_id=user_id,
         session=session,
     )
+    return list(subscriptions)
