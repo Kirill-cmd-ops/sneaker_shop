@@ -337,6 +337,8 @@ services:
       dockerfile: Dockerfile
     container_name: catalog_service
     depends_on:
+      catalog_test_db:
+        condition: service_healthy
       catalog_db:
         condition: service_healthy
       kafka:
