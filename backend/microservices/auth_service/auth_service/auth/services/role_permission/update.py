@@ -29,15 +29,17 @@ async def update_role_permissions_db(
         {"role_id": role_id, "permission_id": perm}
         for perm in (new_permissions - old_permissions)
     ]
-    await session.execute(insert(RolePermissionAssociation).values(permissions))
+    if permissions:
+        await session.execute(insert(RolePermissionAssociation).values(permissions))
 
     remove_permissions = old_permissions - new_permissions
-    await session.execute(
-        delete(RolePermissionAssociation).where(
-            RolePermissionAssociation.role_id == role_id,
-            RolePermissionAssociation.permission_id.in_(remove_permissions),
+    if remove_permissions:
+        await session.execute(
+            delete(RolePermissionAssociation).where(
+                RolePermissionAssociation.role_id == role_id,
+                RolePermissionAssociation.permission_id.in_(remove_permissions),
+            )
         )
-    )
 
 
 async def update_role_permissions_redis(
@@ -49,4 +51,4 @@ async def update_role_permissions_redis(
         await pipe.delete(f"role:{user_role}")
         if list_role_permissions:
             await pipe.sadd(f"role:{user_role}", *list_role_permissions)
-            await pipe.execute()
+        await pipe.execute()

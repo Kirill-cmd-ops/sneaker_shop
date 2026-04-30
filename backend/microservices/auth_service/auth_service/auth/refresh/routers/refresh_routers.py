@@ -9,6 +9,7 @@ from microservices.auth_service.auth_service.auth.models import db_helper
 from microservices.auth_service.auth_service.auth.refresh.services.orchestrators import (
     update_refresh_token_orchestrator,
 )
+from microservices.auth_service.auth_service.auth.schemas import RefreshSessionResponse
 
 refresh_router = APIRouter(
     prefix=settings.api.build_path(
@@ -20,16 +21,17 @@ refresh_router = APIRouter(
 )
 
 
-@refresh_router.post("/")
+@refresh_router.post("/", response_model=RefreshSessionResponse)
 async def update_refresh_token(
         response: Response,
         token_aud: list[str],
         session: AsyncSession = Depends(db_helper.session_getter),
         refresh_token: str = Cookie(alias="refresh_session_cookie"),
-) -> dict[str, str]:
-    return await update_refresh_token_orchestrator(
+) -> RefreshSessionResponse:
+    new_refresh_token = await update_refresh_token_orchestrator(
         session=session,
         response=response,
         token_aud=token_aud,
         refresh_token=refresh_token,
     )
+    return RefreshSessionResponse(refresh_token=new_refresh_token)
