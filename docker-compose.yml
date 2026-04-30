@@ -261,9 +261,9 @@ services:
       dockerfile: Dockerfile
     container_name: favorite_service
     depends_on:
-      favorite_test_db:
-        condition: service_healthy
       favorite_db:
+        condition: service_healthy
+      favorite_test_db:
         condition: service_healthy
       kafka:
         condition: service_healthy
@@ -286,6 +286,8 @@ services:
     depends_on:
       favorite_db:
         condition: service_healthy
+      favorite_test_db:
+        condition: service_healthy
     working_dir: /app/backend
     entrypoint: [ "alembic", "-c", "microservices/favorite_service/alembic.ini" ]
     volumes:
@@ -299,9 +301,9 @@ services:
       dockerfile: Dockerfile
     container_name: cart_service
     depends_on:
-      cart_test_db:
-        condition: service_healthy
       cart_db:
+        condition: service_healthy
+      cart_test_db:
         condition: service_healthy
       kafka:
         condition: service_healthy
@@ -324,6 +326,8 @@ services:
     depends_on:
       cart_db:
         condition: service_healthy
+      cart_test_db:
+        condition: service_healthy
     working_dir: /app/backend
     entrypoint: [ "alembic", "-c", "microservices/cart_service/alembic.ini" ]
     volumes:
@@ -337,9 +341,9 @@ services:
       dockerfile: Dockerfile
     container_name: catalog_service
     depends_on:
-      catalog_test_db:
-        condition: service_healthy
       catalog_db:
+        condition: service_healthy
+      catalog_test_db:
         condition: service_healthy
       kafka:
         condition: service_healthy
@@ -360,6 +364,8 @@ services:
     depends_on:
       catalog_db:
         condition: service_healthy
+      catalog_test_db:
+        condition: service_healthy
     working_dir: /app/backend
     entrypoint: [ "alembic", "-c", "microservices/catalog_service/alembic.ini" ]
     volumes:
@@ -373,9 +379,9 @@ services:
       dockerfile: Dockerfile
     container_name: sneaker_details_service
     depends_on:
-      sneaker_details_test_db:
-        condition: service_healthy
       sneaker_details_db:
+        condition: service_healthy
+      sneaker_details_test_db:
         condition: service_healthy
       kafka:
         condition: service_healthy
@@ -397,6 +403,8 @@ services:
     container_name: sneaker_details_alembic_migrations
     depends_on:
       sneaker_details_db:
+        condition: service_healthy
+      sneaker_details_test_db:
         condition: service_healthy
     working_dir: /app/backend
     entrypoint: [ "alembic", "-c", "microservices/sneaker_details_service/alembic.ini" ]
@@ -479,9 +487,9 @@ services:
       dockerfile: Dockerfile
     container_name: stock_notification_service
     depends_on:
-      stock_notification_test_db:
-        condition: service_healthy
       stock_notification_db:
+        condition: service_healthy
+      stock_notification_test_db:
         condition: service_healthy
       kafka:
         condition: service_healthy
@@ -503,6 +511,8 @@ services:
     container_name: stock_notification_alembic_migrations
     depends_on:
       stock_notification_db:
+        condition: service_healthy
+      stock_notification_test_db:
         condition: service_healthy
     working_dir: /app/backend
     entrypoint: [ "alembic", "-c", "microservices/stock_notification_service/alembic.ini" ]

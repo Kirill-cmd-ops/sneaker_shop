@@ -19,14 +19,14 @@ async def update_refresh_token_orchestrator(
         response: Response,
         token_aud: list[str],
         refresh_token: str,
-) -> dict[str, str]:
+) -> str:
     # 1) Проверка refresh токена
     user_id = await check_refresh_token_valid(
         session=session,
         refresh_token=refresh_token,
     )
 
-    # 2) Создание нового access токена и прокид в cookie
+    # 2) Новый access JWT только в cookie (в теле ответа не отдаём)
     await set_jwt_token(
         user_id=user_id,
         token_aud=token_aud,
@@ -72,4 +72,4 @@ async def update_refresh_token_orchestrator(
         samesite=settings.cookie.cookie_samesite,
     )
 
-    return {"result": "ok"}
+    return new_refresh_token
